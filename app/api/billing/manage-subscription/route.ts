@@ -1,5 +1,5 @@
-import { stripe } from "@/lib/stripe/index";
-import { absoluteUrl } from "@/lib/utils";
+import { stripe } from '@/lib/stripe/index';
+import { absoluteUrl } from '@/lib/utils';
 
 interface ManageStripeSubscriptionActionProps {
   isSubscribed: boolean;
@@ -14,7 +14,7 @@ export async function POST(req: Request) {
   const body: ManageStripeSubscriptionActionProps = await req.json();
   const { isSubscribed, stripeCustomerId, userId, stripePriceId, email } = body;
   console.log(body);
-  const billingUrl = absoluteUrl("/account/billing");
+  const billingUrl = absoluteUrl('/account/billing');
 
   if (isSubscribed && stripeCustomerId) {
     const stripeSession = await stripe.billingPortal.sessions.create({
@@ -28,11 +28,11 @@ export async function POST(req: Request) {
   }
 
   const stripeSession = await stripe.checkout.sessions.create({
-    success_url: billingUrl.concat("?success=true"),
+    success_url: billingUrl.concat('?success=true'),
     cancel_url: billingUrl,
-    payment_method_types: ["card"],
-    mode: "subscription",
-    billing_address_collection: "auto",
+    payment_method_types: ['card'],
+    mode: 'subscription',
+    billing_address_collection: 'auto',
     customer_email: email,
     line_items: [
       {

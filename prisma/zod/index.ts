@@ -1,5 +1,5 @@
-import { z } from "zod";
-import type { Prisma } from "@prisma/client";
+import { z } from 'zod';
+import type { Prisma } from '@prisma/client';
 
 /////////////////////////////////////////
 // HELPER FUNCTIONS
@@ -10,62 +10,62 @@ import type { Prisma } from "@prisma/client";
 /////////////////////////////////////////
 
 export const TransactionIsolationLevelSchema = z.enum([
-  "ReadUncommitted",
-  "ReadCommitted",
-  "RepeatableRead",
-  "Serializable",
+  'ReadUncommitted',
+  'ReadCommitted',
+  'RepeatableRead',
+  'Serializable',
 ]);
 
 export const AccountScalarFieldEnumSchema = z.enum([
-  "id",
-  "userId",
-  "type",
-  "provider",
-  "providerAccountId",
-  "refresh_token",
-  "access_token",
-  "expires_at",
-  "token_type",
-  "scope",
-  "id_token",
-  "session_state",
-  "refresh_token_expires_in",
+  'id',
+  'userId',
+  'type',
+  'provider',
+  'providerAccountId',
+  'refresh_token',
+  'access_token',
+  'expires_at',
+  'token_type',
+  'scope',
+  'id_token',
+  'session_state',
+  'refresh_token_expires_in',
 ]);
 
 export const SessionScalarFieldEnumSchema = z.enum([
-  "id",
-  "sessionToken",
-  "userId",
-  "expires",
+  'id',
+  'sessionToken',
+  'userId',
+  'expires',
 ]);
 
 export const UserScalarFieldEnumSchema = z.enum([
-  "id",
-  "name",
-  "email",
-  "emailVerified",
-  "image",
+  'id',
+  'name',
+  'email',
+  'emailVerified',
+  'image',
 ]);
 
 export const VerificationTokenScalarFieldEnumSchema = z.enum([
-  "identifier",
-  "token",
-  "expires",
+  'identifier',
+  'token',
+  'expires',
 ]);
 
 export const SubscriptionScalarFieldEnumSchema = z.enum([
-  "userId",
-  "stripeCustomerId",
-  "stripeSubscriptionId",
-  "stripePriceId",
-  "stripeCurrentPeriodEnd",
+  'userId',
+  'stripeCustomerId',
+  'stripeSubscriptionId',
+  'stripePriceId',
+  'stripeCurrentPeriodEnd',
 ]);
 
-export const SortOrderSchema = z.enum(["asc", "desc"]);
+export const SortOrderSchema = z.enum(['asc', 'desc']);
 
-export const QueryModeSchema = z.enum(["default", "insensitive"]);
+export const QueryModeSchema = z.enum(['default', 'insensitive']);
 
-export const NullsOrderSchema = z.enum(["first", "last"]);
+export const NullsOrderSchema = z.enum(['first', 'last']);
 /////////////////////////////////////////
 // MODELS
 /////////////////////////////////////////
@@ -106,7 +106,7 @@ export const AccountWithRelationsSchema: z.ZodType<AccountWithRelations> =
   AccountSchema.merge(
     z.object({
       user: z.lazy(() => UserWithRelationsSchema),
-    }),
+    })
   );
 
 /////////////////////////////////////////
@@ -136,7 +136,7 @@ export const SessionWithRelationsSchema: z.ZodType<SessionWithRelations> =
   SessionSchema.merge(
     z.object({
       user: z.lazy(() => UserWithRelationsSchema),
-    }),
+    })
   );
 
 /////////////////////////////////////////
@@ -170,7 +170,7 @@ export const UserWithRelationsSchema: z.ZodType<UserWithRelations> =
       accounts: z.lazy(() => AccountWithRelationsSchema).array(),
       sessions: z.lazy(() => SessionWithRelationsSchema).array(),
       subscription: z.lazy(() => SubscriptionWithRelationsSchema).nullable(),
-    }),
+    })
   );
 
 /////////////////////////////////////////
@@ -213,7 +213,7 @@ export const SubscriptionWithRelationsSchema: z.ZodType<SubscriptionWithRelation
   SubscriptionSchema.merge(
     z.object({
       user: z.lazy(() => UserWithRelationsSchema),
-    }),
+    })
   );
 
 /////////////////////////////////////////
@@ -524,7 +524,7 @@ export const AccountWhereUniqueInputSchema: z.ZodType<Prisma.AccountWhereUniqueI
       z.object({
         id: z.string().cuid(),
         provider_providerAccountId: z.lazy(
-          () => AccountProviderProviderAccountIdCompoundUniqueInputSchema,
+          () => AccountProviderProviderAccountIdCompoundUniqueInputSchema
         ),
       }),
       z.object({
@@ -532,7 +532,7 @@ export const AccountWhereUniqueInputSchema: z.ZodType<Prisma.AccountWhereUniqueI
       }),
       z.object({
         provider_providerAccountId: z.lazy(
-          () => AccountProviderProviderAccountIdCompoundUniqueInputSchema,
+          () => AccountProviderProviderAccountIdCompoundUniqueInputSchema
         ),
       }),
     ])
@@ -542,7 +542,7 @@ export const AccountWhereUniqueInputSchema: z.ZodType<Prisma.AccountWhereUniqueI
           id: z.string().cuid().optional(),
           provider_providerAccountId: z
             .lazy(
-              () => AccountProviderProviderAccountIdCompoundUniqueInputSchema,
+              () => AccountProviderProviderAccountIdCompoundUniqueInputSchema
             )
             .optional(),
           AND: z
@@ -612,7 +612,7 @@ export const AccountWhereUniqueInputSchema: z.ZodType<Prisma.AccountWhereUniqueI
             ])
             .optional(),
         })
-        .strict(),
+        .strict()
     ) as z.ZodType<Prisma.AccountWhereUniqueInput>;
 
 export const AccountOrderByWithAggregationInputSchema: z.ZodType<Prisma.AccountOrderByWithAggregationInput> =
@@ -866,7 +866,7 @@ export const SessionWhereUniqueInputSchema: z.ZodType<Prisma.SessionWhereUniqueI
             ])
             .optional(),
         })
-        .strict(),
+        .strict()
     ) as z.ZodType<Prisma.SessionWhereUniqueInput>;
 
 export const SessionOrderByWithAggregationInputSchema: z.ZodType<Prisma.SessionOrderByWithAggregationInput> =
@@ -1066,7 +1066,7 @@ export const UserWhereUniqueInputSchema: z.ZodType<Prisma.UserWhereUniqueInput> 
             .optional()
             .nullable(),
         })
-        .strict(),
+        .strict()
     ) as z.ZodType<Prisma.UserWhereUniqueInput>;
 
 export const UserOrderByWithAggregationInputSchema: z.ZodType<Prisma.UserOrderByWithAggregationInput> =
@@ -1200,7 +1200,7 @@ export const VerificationTokenWhereUniqueInputSchema: z.ZodType<Prisma.Verificat
       z.object({
         token: z.string(),
         identifier_token: z.lazy(
-          () => VerificationTokenIdentifierTokenCompoundUniqueInputSchema,
+          () => VerificationTokenIdentifierTokenCompoundUniqueInputSchema
         ),
       }),
       z.object({
@@ -1208,7 +1208,7 @@ export const VerificationTokenWhereUniqueInputSchema: z.ZodType<Prisma.Verificat
       }),
       z.object({
         identifier_token: z.lazy(
-          () => VerificationTokenIdentifierTokenCompoundUniqueInputSchema,
+          () => VerificationTokenIdentifierTokenCompoundUniqueInputSchema
         ),
       }),
     ])
@@ -1218,7 +1218,7 @@ export const VerificationTokenWhereUniqueInputSchema: z.ZodType<Prisma.Verificat
           token: z.string().optional(),
           identifier_token: z
             .lazy(
-              () => VerificationTokenIdentifierTokenCompoundUniqueInputSchema,
+              () => VerificationTokenIdentifierTokenCompoundUniqueInputSchema
             )
             .optional(),
           AND: z
@@ -1244,7 +1244,7 @@ export const VerificationTokenWhereUniqueInputSchema: z.ZodType<Prisma.Verificat
             .union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()])
             .optional(),
         })
-        .strict(),
+        .strict()
     ) as z.ZodType<Prisma.VerificationTokenWhereUniqueInput>;
 
 export const VerificationTokenOrderByWithAggregationInputSchema: z.ZodType<Prisma.VerificationTokenOrderByWithAggregationInput> =
@@ -1381,7 +1381,7 @@ export const SubscriptionWhereUniqueInputSchema: z.ZodType<Prisma.SubscriptionWh
     .union([
       z.object({
         userId_stripeCustomerId: z.lazy(
-          () => SubscriptionUserIdStripeCustomerIdCompoundUniqueInputSchema,
+          () => SubscriptionUserIdStripeCustomerIdCompoundUniqueInputSchema
         ),
         userId: z.string(),
         stripeCustomerId: z.string(),
@@ -1389,46 +1389,46 @@ export const SubscriptionWhereUniqueInputSchema: z.ZodType<Prisma.SubscriptionWh
       }),
       z.object({
         userId_stripeCustomerId: z.lazy(
-          () => SubscriptionUserIdStripeCustomerIdCompoundUniqueInputSchema,
+          () => SubscriptionUserIdStripeCustomerIdCompoundUniqueInputSchema
         ),
         userId: z.string(),
         stripeCustomerId: z.string(),
       }),
       z.object({
         userId_stripeCustomerId: z.lazy(
-          () => SubscriptionUserIdStripeCustomerIdCompoundUniqueInputSchema,
+          () => SubscriptionUserIdStripeCustomerIdCompoundUniqueInputSchema
         ),
         userId: z.string(),
         stripeSubscriptionId: z.string(),
       }),
       z.object({
         userId_stripeCustomerId: z.lazy(
-          () => SubscriptionUserIdStripeCustomerIdCompoundUniqueInputSchema,
+          () => SubscriptionUserIdStripeCustomerIdCompoundUniqueInputSchema
         ),
         userId: z.string(),
       }),
       z.object({
         userId_stripeCustomerId: z.lazy(
-          () => SubscriptionUserIdStripeCustomerIdCompoundUniqueInputSchema,
+          () => SubscriptionUserIdStripeCustomerIdCompoundUniqueInputSchema
         ),
         stripeCustomerId: z.string(),
         stripeSubscriptionId: z.string(),
       }),
       z.object({
         userId_stripeCustomerId: z.lazy(
-          () => SubscriptionUserIdStripeCustomerIdCompoundUniqueInputSchema,
+          () => SubscriptionUserIdStripeCustomerIdCompoundUniqueInputSchema
         ),
         stripeCustomerId: z.string(),
       }),
       z.object({
         userId_stripeCustomerId: z.lazy(
-          () => SubscriptionUserIdStripeCustomerIdCompoundUniqueInputSchema,
+          () => SubscriptionUserIdStripeCustomerIdCompoundUniqueInputSchema
         ),
         stripeSubscriptionId: z.string(),
       }),
       z.object({
         userId_stripeCustomerId: z.lazy(
-          () => SubscriptionUserIdStripeCustomerIdCompoundUniqueInputSchema,
+          () => SubscriptionUserIdStripeCustomerIdCompoundUniqueInputSchema
         ),
       }),
       z.object({
@@ -1466,7 +1466,7 @@ export const SubscriptionWhereUniqueInputSchema: z.ZodType<Prisma.SubscriptionWh
           stripeSubscriptionId: z.string().optional(),
           userId_stripeCustomerId: z
             .lazy(
-              () => SubscriptionUserIdStripeCustomerIdCompoundUniqueInputSchema,
+              () => SubscriptionUserIdStripeCustomerIdCompoundUniqueInputSchema
             )
             .optional(),
           AND: z
@@ -1503,7 +1503,7 @@ export const SubscriptionWhereUniqueInputSchema: z.ZodType<Prisma.SubscriptionWh
             ])
             .optional(),
         })
-        .strict(),
+        .strict()
     ) as z.ZodType<Prisma.SubscriptionWhereUniqueInput>;
 
 export const SubscriptionOrderByWithAggregationInputSchema: z.ZodType<Prisma.SubscriptionOrderByWithAggregationInput> =

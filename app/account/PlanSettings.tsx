@@ -1,14 +1,14 @@
-"use client";
-import { AccountCard, AccountCardBody, AccountCardFooter } from "./AccountCard";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { AuthSession } from "@/lib/auth/utils";
+'use client';
+import { AccountCard, AccountCardBody, AccountCardFooter } from './AccountCard';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { AuthSession } from '@/lib/auth/utils';
 
 interface PlanSettingsProps {
   stripeSubscriptionId: string | null;
   stripeCurrentPeriodEnd: Date | null;
   stripeCustomerId: string | null;
-  isSubscribed: boolean | "" | null;
+  isSubscribed: boolean | '' | null;
   isCanceled: boolean;
   id?: string | undefined;
   name?: string | undefined;
@@ -21,47 +21,47 @@ export default function PlanSettings({
   session,
 }: {
   subscriptionPlan: PlanSettingsProps;
-  session: AuthSession["session"];
+  session: AuthSession['session'];
 }) {
   return (
     <AccountCard
       params={{
-        header: "Your Plan",
+        header: 'Your Plan',
         description: subscriptionPlan.isSubscribed
           ? `You are currently on the ${subscriptionPlan.name} plan.`
           : `You are not subscribed to any plan.`.concat(
               !session?.user?.email || session?.user?.email.length < 5
-                ? " Please add your email to upgrade your account."
-                : "",
+                ? ' Please add your email to upgrade your account.'
+                : ''
             ),
       }}
     >
       <AccountCardBody>
         {subscriptionPlan.isSubscribed ? (
-          <h3 className="font-semibold text-lg">
+          <h3 className='text-lg font-semibold'>
             ${subscriptionPlan.price ? subscriptionPlan.price / 100 : 0} / month
           </h3>
         ) : null}
         {subscriptionPlan.stripeCurrentPeriodEnd ? (
-          <p className="text-sm mb-4 text-muted-foreground ">
-            Your plan will{" "}
+          <p className='mb-4 text-sm text-muted-foreground '>
+            Your plan will{' '}
             {!subscriptionPlan.isSubscribed
               ? null
               : subscriptionPlan.isCanceled
-                ? "cancel"
-                : "renew"}
-            {" on "}
-            <span className="font-semibold">
+                ? 'cancel'
+                : 'renew'}
+            {' on '}
+            <span className='font-semibold'>
               {subscriptionPlan.stripeCurrentPeriodEnd.toLocaleDateString(
-                "en-us",
+                'en-us'
               )}
             </span>
           </p>
         ) : null}
       </AccountCardBody>
-      <AccountCardFooter description="Manage your subscription on Stripe.">
-        <Link href="/account/billing">
-          <Button variant="outline">Go to billing</Button>
+      <AccountCardFooter description='Manage your subscription on Stripe.'>
+        <Link href='/account/billing'>
+          <Button variant='outline'>Go to billing</Button>
         </Link>
       </AccountCardFooter>
     </AccountCard>

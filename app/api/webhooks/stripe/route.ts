@@ -1,11 +1,11 @@
-import { db } from "@/lib/db/index";
-import { stripe } from "@/lib/stripe/index";
-import { headers } from "next/headers";
-import type Stripe from "stripe";
+import { db } from '@/lib/db/index';
+import { stripe } from '@/lib/stripe/index';
+import { headers } from 'next/headers';
+import type Stripe from 'stripe';
 
 export async function POST(request: Request) {
   const body = await request.text();
-  const signature = headers().get("Stripe-Signature") ?? "";
+  const signature = headers().get('Stripe-Signature') ?? '';
 
   let event: Stripe.Event;
 
@@ -13,13 +13,13 @@ export async function POST(request: Request) {
     event = stripe.webhooks.constructEvent(
       body,
       signature,
-      process.env.STRIPE_WEBHOOK_SECRET || "",
+      process.env.STRIPE_WEBHOOK_SECRET || ''
     );
     console.log(event.type);
   } catch (err) {
     return new Response(
-      `Webhook Error: ${err instanceof Error ? err.message : "Unknown Error"}`,
-      { status: 400 },
+      `Webhook Error: ${err instanceof Error ? err.message : 'Unknown Error'}`,
+      { status: 400 }
     );
   }
 
@@ -27,16 +27,16 @@ export async function POST(request: Request) {
   // console.log("this is the session metadata -> ", session);
 
   if (!session?.metadata?.userId && session.customer == null) {
-    console.error("session customer", session.customer);
-    console.error("no metadata for userid");
+    console.error('session customer', session.customer);
+    console.error('no metadata for userid');
     return new Response(null, {
       status: 200,
     });
   }
 
-  if (event.type === "checkout.session.completed") {
+  if (event.type === 'checkout.session.completed') {
     const subscription = await stripe.subscriptions.retrieve(
-      session.subscription as string,
+      session.subscription as string
     );
     const updatedData = {
       stripeSubscriptionId: subscription.id,
@@ -52,7 +52,7 @@ export async function POST(request: Request) {
         create: { ...updatedData, userId: session.metadata.userId },
       });
     } else if (
-      typeof session.customer === "string" &&
+      typeof session.customer === 'string' &&
       session.customer != null
     ) {
       await db.subscription.update({
@@ -62,10 +62,10 @@ export async function POST(request: Request) {
     }
   }
 
-  if (event.type === "invoice.payment_succeeded") {
+  if (event.type === 'invoice.payment_succeeded') {
     // Retrieve the subscription details from Stripe.
     const subscription = await stripe.subscriptions.retrieve(
-      session.subscription as string,
+      session.subscription as string
     );
 
     // Update the price id and set the new period end.
@@ -76,7 +76,7 @@ export async function POST(request: Request) {
       data: {
         stripePriceId: subscription.items.data[0].price.id,
         stripeCurrentPeriodEnd: new Date(
-          subscription.current_period_end * 1000,
+          subscription.current_period_end * 1000
         ),
       },
     });
