@@ -1,29 +1,19 @@
 'use client';
-import { useSession, signIn, signOut } from 'next-auth/react';
+import { signIn, signOut } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
+import { AuthSession } from '@/lib/auth/utils';
 
-export default function SignIn() {
-  const { data: session, status } = useSession();
+type Props = {
+  session: AuthSession['session'];
+};
 
-  if (status === 'loading') return <div>Loading...</div>;
-
+export default function SignIn({ session }: Props) {
   if (session) {
     return (
-      <div className='space-y-3'>
-        <p>
-          Signed in as{' '}
-          <span className='font-medium'>{session.user?.email}</span>
-        </p>
-        <Button variant={'destructive'} onClick={() => signOut()}>
-          Sign out
-        </Button>
-      </div>
+      <Button variant={'destructive'} onClick={() => signOut()}>
+        Sign out
+      </Button>
     );
   }
-  return (
-    <div className='space-y-3'>
-      <p>Not signed in </p>
-      <Button onClick={() => signIn()}>Sign in</Button>
-    </div>
-  );
+  return <Button onClick={() => signIn()}>Sign in</Button>;
 }

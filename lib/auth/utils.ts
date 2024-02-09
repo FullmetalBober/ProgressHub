@@ -2,7 +2,7 @@ import { db } from '@/lib/db/index';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { DefaultSession, getServerSession, NextAuthOptions } from 'next-auth';
 import { redirect } from 'next/navigation';
-import GoogleProvider from 'next-auth/providers/google';
+// import GoogleProvider from 'next-auth/providers/google';
 import GithubProvider from 'next-auth/providers/github';
 import { env } from '@/lib/env.mjs';
 
@@ -33,10 +33,10 @@ export const authOptions: NextAuthOptions = {
     },
   },
   providers: [
-    GoogleProvider({
-      clientId: env.GOOGLE_CLIENT_ID,
-      clientSecret: env.GOOGLE_CLIENT_SECRET,
-    }),
+    // GoogleProvider({
+    //   clientId: env.GOOGLE_CLIENT_ID,
+    //   clientSecret: env.GOOGLE_CLIENT_SECRET,
+    // }),
     GithubProvider({
       clientId: env.GITHUB_CLIENT_ID,
       clientSecret: env.GITHUB_CLIENT_SECRET,
