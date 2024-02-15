@@ -2,11 +2,11 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Analytics } from '@vercel/analytics/react';
+import NextAuthProvider from '@/lib/auth/Provider';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { Toaster } from '@/components/ui/toaster';
-import Navbar from '@/components/Navbar';
-import Sidebar from '@/components/Sidebar';
-import NextAuthProvider from '@/lib/auth/Provider';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -31,15 +31,14 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <NextAuthProvider>
-            <div className='flex h-screen'>
-              <Sidebar />
-              <main className='flex-1 overflow-y-auto p-8 pt-2 md:p-8'>
-                <Navbar />
-                {children}
-              </main>
-            </div>
+            {/* <div className=''> */}
+            <Header />
+            <main className='flex-1 overflow-y-auto p-8 pt-2 md:p-8'>
+              {children}
+            </main>
+            <Footer />
+            {/* </div> */}
           </NextAuthProvider>
-
           <Toaster />
         </ThemeProvider>
         <SpeedInsights />
