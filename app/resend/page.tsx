@@ -1,6 +1,6 @@
 'use client';
-import Link from 'next/link';
 import { emailSchema } from '@/lib/email/utils';
+import Link from 'next/link';
 import { useRef, useState } from 'react';
 import { z } from 'zod';
 

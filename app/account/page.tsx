@@ -1,7 +1,7 @@
-import UserSettings from './UserSettings';
-import PlanSettings from './PlanSettings';
 import { checkAuth, getUserAuth } from '@/lib/auth/utils';
 import { getUserSubscriptionPlan } from '@/lib/stripe/subscription';
+import PlanSettings from './PlanSettings';
+import UserSettings from './UserSettings';
 
 export default async function Account() {
   await checkAuth();

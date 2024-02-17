@@ -1,8 +1,8 @@
 'use client';
-import { AccountCard, AccountCardBody, AccountCardFooter } from './AccountCard';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
 import { AuthSession } from '@/lib/auth/utils';
+import Link from 'next/link';
+import { AccountCard, AccountCardBody, AccountCardFooter } from './AccountCard';
 
 interface PlanSettingsProps {
   stripeSubscriptionId: string | null;

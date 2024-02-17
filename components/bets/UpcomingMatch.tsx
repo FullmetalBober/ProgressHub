@@ -1,7 +1,7 @@
-import Image from 'next/image';
 import { ArrowRightIcon, CalendarIcon } from 'lucide-react';
-import { Card, CardContent, CardFooter } from '../ui/card';
+import Image from 'next/image';
 import { Button } from '../ui/button';
+import { Card, CardContent, CardFooter } from '../ui/card';
 
 type Props = {
   team1: string;

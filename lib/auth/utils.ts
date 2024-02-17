@@ -3,8 +3,8 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { DefaultSession, getServerSession, NextAuthOptions } from 'next-auth';
 import { redirect } from 'next/navigation';
 // import GoogleProvider from 'next-auth/providers/google';
-import GithubProvider from 'next-auth/providers/github';
 import { env } from '@/lib/env.mjs';
+import GithubProvider from 'next-auth/providers/github';
 
 declare module 'next-auth' {
   interface Session {

@@ -1,9 +1,9 @@
-import Image from 'next/image';
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import Image from 'next/image';
+import Link from 'next/link';
 
-export default async function Home() {
+export default function Home() {
   return (
     <>
       <section className='w-full py-12 lg:py-24 xl:py-32'>

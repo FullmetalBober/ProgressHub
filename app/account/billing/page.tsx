@@ -1,5 +1,3 @@
-import SuccessToast from './SuccessToast';
-import { ManageUserSubscriptionButton } from './ManageSubscription';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -15,6 +13,8 @@ import { getUserSubscriptionPlan } from '@/lib/stripe/subscription';
 import { CheckCircle2Icon } from 'lucide-react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { ManageUserSubscriptionButton } from './ManageSubscription';
+import SuccessToast from './SuccessToast';
 
 export default async function Billing() {
   await checkAuth();

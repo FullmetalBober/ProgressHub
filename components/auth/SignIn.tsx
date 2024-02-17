@@ -1,7 +1,7 @@
 'use client';
-import { signIn, signOut } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { AuthSession } from '@/lib/auth/utils';
+import { signIn, signOut } from 'next-auth/react';
 
 type Props = {
   session: AuthSession['session'];

@@ -1,10 +1,10 @@
 'use client';
-import { AccountCard, AccountCardFooter, AccountCardBody } from './AccountCard';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
-import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTransition } from 'react';
+import { AccountCard, AccountCardBody, AccountCardFooter } from './AccountCard';
 
 export default function UpdateNameCard({ name }: { name: string }) {
   const { toast } = useToast();
