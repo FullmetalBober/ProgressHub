@@ -1,4 +1,6 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# ProgressHub
+
+ProgressHub is a web application that helps you track your progress on your project goals.
 
 ## Getting Started
 
@@ -20,20 +22,27 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-## Learn More
+## Storybook
 
-To learn more about Next.js, take a look at the following resources:
+### Storybook Local
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This project uses [Storybook](https://storybook.js.org/) to develop UI components in isolation. You can start Storybook by running:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```bash
+npm run storybook
+# or
+yarn storybook
+# or
+pnpm storybook
+# or
+bun storybook
+```
 
-## Deploy on Vercel
+Open [http://localhost:6006](http://localhost:6006) with your browser to see the result.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Storybook Web
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+You can also view the Storybook web version by visiting [https://progresshub-docs.vercel.app](https://progresshub-docs.vercel.app).
 
 ## License
 
