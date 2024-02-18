@@ -56,15 +56,17 @@ model User {
   accounts      Account[]
   sessions      Session[]
 
-  subscription Subscription?
+  subscription      Subscription?
+  VerificationToken VerificationToken?
 }
 
 model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
+  userId  String   @unique
+  token   String   @unique
+  expires DateTime
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([identifier, token])
+  @@unique([userId, token])
 }
 
 model Subscription {

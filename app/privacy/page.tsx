@@ -2,11 +2,11 @@ import List from '@/components/ui/list';
 import Typography from '@/components/ui/typography';
 import Link from 'next/link';
 
-export default function PrivacyPolicy() {
+export default function PrivacyPage() {
   return (
     <>
       <Typography variant='h1'>Privacy Policy</Typography>
-      <Typography variant='p'>Last updated: February 17, 2024</Typography>
+      <Typography variant='p'>Last updated: February 18, 2024</Typography>
       <Typography variant='p'>
         This Privacy Policy describes Our policies and procedures on the
         collection, use and disclosure of Your information when You use the
@@ -182,10 +182,7 @@ export default function PrivacyPolicy() {
       </Typography>
       <List>
         <li>Google</li>
-        <li>Facebook</li>
-        <li>Instagram</li>
-        <li>Twitter</li>
-        <li>LinkedIn</li>
+        <li>GitHub</li>
       </List>
       <Typography variant='p'>
         If You decide to register through or otherwise grant us access to a

@@ -31,13 +31,11 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <NextAuthProvider>
-            {/* <div className=''> */}
-            <Header />
-            <main className='flex-1 overflow-y-auto p-8 pt-2 md:p-8'>
-              {children}
-            </main>
-            <Footer />
-            {/* </div> */}
+            <div className='flex flex-col h-screen justify-between'>
+              <Header />
+              <main className='mb-auto p-8 pt-2 md:p-8'>{children}</main>
+              <Footer />
+            </div>
           </NextAuthProvider>
           <Toaster />
         </ThemeProvider>

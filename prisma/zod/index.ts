@@ -48,7 +48,7 @@ export const UserScalarFieldEnumSchema = z.enum([
 ]);
 
 export const VerificationTokenScalarFieldEnumSchema = z.enum([
-  'identifier',
+  'userId',
   'token',
   'expires',
 ]);
@@ -160,6 +160,7 @@ export type UserRelations = {
   accounts: AccountWithRelations[];
   sessions: SessionWithRelations[];
   subscription?: SubscriptionWithRelations | null;
+  VerificationToken?: VerificationTokenWithRelations | null;
 };
 
 export type UserWithRelations = z.infer<typeof UserSchema> & UserRelations;
@@ -170,6 +171,9 @@ export const UserWithRelationsSchema: z.ZodType<UserWithRelations> =
       accounts: z.lazy(() => AccountWithRelationsSchema).array(),
       sessions: z.lazy(() => SessionWithRelationsSchema).array(),
       subscription: z.lazy(() => SubscriptionWithRelationsSchema).nullable(),
+      VerificationToken: z
+        .lazy(() => VerificationTokenWithRelationsSchema)
+        .nullable(),
     })
   );
 
@@ -178,12 +182,31 @@ export const UserWithRelationsSchema: z.ZodType<UserWithRelations> =
 /////////////////////////////////////////
 
 export const VerificationTokenSchema = z.object({
-  identifier: z.string(),
+  userId: z.string(),
   token: z.string(),
   expires: z.coerce.date(),
 });
 
 export type VerificationToken = z.infer<typeof VerificationTokenSchema>;
+
+// VERIFICATION TOKEN RELATION SCHEMA
+//------------------------------------------------------
+
+export type VerificationTokenRelations = {
+  user: UserWithRelations;
+};
+
+export type VerificationTokenWithRelations = z.infer<
+  typeof VerificationTokenSchema
+> &
+  VerificationTokenRelations;
+
+export const VerificationTokenWithRelationsSchema: z.ZodType<VerificationTokenWithRelations> =
+  VerificationTokenSchema.merge(
+    z.object({
+      user: z.lazy(() => UserWithRelationsSchema),
+    })
+  );
 
 /////////////////////////////////////////
 // SUBSCRIPTION SCHEMA
@@ -295,6 +318,9 @@ export const UserIncludeSchema: z.ZodType<Prisma.UserInclude> = z
     subscription: z
       .union([z.boolean(), z.lazy(() => SubscriptionArgsSchema)])
       .optional(),
+    VerificationToken: z
+      .union([z.boolean(), z.lazy(() => VerificationTokenArgsSchema)])
+      .optional(),
     _count: z
       .union([z.boolean(), z.lazy(() => UserCountOutputTypeArgsSchema)])
       .optional(),
@@ -339,6 +365,9 @@ export const UserSelectSchema: z.ZodType<Prisma.UserSelect> = z
     subscription: z
       .union([z.boolean(), z.lazy(() => SubscriptionArgsSchema)])
       .optional(),
+    VerificationToken: z
+      .union([z.boolean(), z.lazy(() => VerificationTokenArgsSchema)])
+      .optional(),
     _count: z
       .union([z.boolean(), z.lazy(() => UserCountOutputTypeArgsSchema)])
       .optional(),
@@ -348,12 +377,28 @@ export const UserSelectSchema: z.ZodType<Prisma.UserSelect> = z
 // VERIFICATION TOKEN
 //------------------------------------------------------
 
+export const VerificationTokenIncludeSchema: z.ZodType<Prisma.VerificationTokenInclude> =
+  z
+    .object({
+      user: z.union([z.boolean(), z.lazy(() => UserArgsSchema)]).optional(),
+    })
+    .strict();
+
+export const VerificationTokenArgsSchema: z.ZodType<Prisma.VerificationTokenDefaultArgs> =
+  z
+    .object({
+      select: z.lazy(() => VerificationTokenSelectSchema).optional(),
+      include: z.lazy(() => VerificationTokenIncludeSchema).optional(),
+    })
+    .strict();
+
 export const VerificationTokenSelectSchema: z.ZodType<Prisma.VerificationTokenSelect> =
   z
     .object({
-      identifier: z.boolean().optional(),
+      userId: z.boolean().optional(),
       token: z.boolean().optional(),
       expires: z.boolean().optional(),
+      user: z.union([z.boolean(), z.lazy(() => UserArgsSchema)]).optional(),
     })
     .strict();
 
@@ -963,6 +1008,13 @@ export const UserWhereInputSchema: z.ZodType<Prisma.UserWhereInput> = z
       ])
       .optional()
       .nullable(),
+    VerificationToken: z
+      .union([
+        z.lazy(() => VerificationTokenNullableRelationFilterSchema),
+        z.lazy(() => VerificationTokenWhereInputSchema),
+      ])
+      .optional()
+      .nullable(),
   })
   .strict() as z.ZodType<Prisma.UserWhereInput>;
 
@@ -1002,6 +1054,9 @@ export const UserOrderByWithRelationInputSchema: z.ZodType<Prisma.UserOrderByWit
         .optional(),
       subscription: z
         .lazy(() => SubscriptionOrderByWithRelationInputSchema)
+        .optional(),
+      VerificationToken: z
+        .lazy(() => VerificationTokenOrderByWithRelationInputSchema)
         .optional(),
     })
     .strict() as z.ZodType<Prisma.UserOrderByWithRelationInput>;
@@ -1062,6 +1117,13 @@ export const UserWhereUniqueInputSchema: z.ZodType<Prisma.UserWhereUniqueInput> 
             .union([
               z.lazy(() => SubscriptionNullableRelationFilterSchema),
               z.lazy(() => SubscriptionWhereInputSchema),
+            ])
+            .optional()
+            .nullable(),
+          VerificationToken: z
+            .union([
+              z.lazy(() => VerificationTokenNullableRelationFilterSchema),
+              z.lazy(() => VerificationTokenWhereInputSchema),
             ])
             .optional()
             .nullable(),
@@ -1175,12 +1237,18 @@ export const VerificationTokenWhereInputSchema: z.ZodType<Prisma.VerificationTok
           z.lazy(() => VerificationTokenWhereInputSchema).array(),
         ])
         .optional(),
-      identifier: z
+      userId: z
         .union([z.lazy(() => StringFilterSchema), z.string()])
         .optional(),
       token: z.union([z.lazy(() => StringFilterSchema), z.string()]).optional(),
       expires: z
         .union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()])
+        .optional(),
+      user: z
+        .union([
+          z.lazy(() => UserRelationFilterSchema),
+          z.lazy(() => UserWhereInputSchema),
+        ])
         .optional(),
     })
     .strict() as z.ZodType<Prisma.VerificationTokenWhereInput>;
@@ -1188,9 +1256,10 @@ export const VerificationTokenWhereInputSchema: z.ZodType<Prisma.VerificationTok
 export const VerificationTokenOrderByWithRelationInputSchema: z.ZodType<Prisma.VerificationTokenOrderByWithRelationInput> =
   z
     .object({
-      identifier: z.lazy(() => SortOrderSchema).optional(),
+      userId: z.lazy(() => SortOrderSchema).optional(),
       token: z.lazy(() => SortOrderSchema).optional(),
       expires: z.lazy(() => SortOrderSchema).optional(),
+      user: z.lazy(() => UserOrderByWithRelationInputSchema).optional(),
     })
     .strict() as z.ZodType<Prisma.VerificationTokenOrderByWithRelationInput>;
 
@@ -1198,28 +1267,47 @@ export const VerificationTokenWhereUniqueInputSchema: z.ZodType<Prisma.Verificat
   z
     .union([
       z.object({
+        userId: z.string(),
         token: z.string(),
-        identifier_token: z.lazy(
-          () => VerificationTokenIdentifierTokenCompoundUniqueInputSchema
+        userId_token: z.lazy(
+          () => VerificationTokenUserIdTokenCompoundUniqueInputSchema
+        ),
+      }),
+      z.object({
+        userId: z.string(),
+        token: z.string(),
+      }),
+      z.object({
+        userId: z.string(),
+        userId_token: z.lazy(
+          () => VerificationTokenUserIdTokenCompoundUniqueInputSchema
+        ),
+      }),
+      z.object({
+        userId: z.string(),
+      }),
+      z.object({
+        token: z.string(),
+        userId_token: z.lazy(
+          () => VerificationTokenUserIdTokenCompoundUniqueInputSchema
         ),
       }),
       z.object({
         token: z.string(),
       }),
       z.object({
-        identifier_token: z.lazy(
-          () => VerificationTokenIdentifierTokenCompoundUniqueInputSchema
+        userId_token: z.lazy(
+          () => VerificationTokenUserIdTokenCompoundUniqueInputSchema
         ),
       }),
     ])
     .and(
       z
         .object({
+          userId: z.string().optional(),
           token: z.string().optional(),
-          identifier_token: z
-            .lazy(
-              () => VerificationTokenIdentifierTokenCompoundUniqueInputSchema
-            )
+          userId_token: z
+            .lazy(() => VerificationTokenUserIdTokenCompoundUniqueInputSchema)
             .optional(),
           AND: z
             .union([
@@ -1237,11 +1325,14 @@ export const VerificationTokenWhereUniqueInputSchema: z.ZodType<Prisma.Verificat
               z.lazy(() => VerificationTokenWhereInputSchema).array(),
             ])
             .optional(),
-          identifier: z
-            .union([z.lazy(() => StringFilterSchema), z.string()])
-            .optional(),
           expires: z
             .union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()])
+            .optional(),
+          user: z
+            .union([
+              z.lazy(() => UserRelationFilterSchema),
+              z.lazy(() => UserWhereInputSchema),
+            ])
             .optional(),
         })
         .strict()
@@ -1250,7 +1341,7 @@ export const VerificationTokenWhereUniqueInputSchema: z.ZodType<Prisma.Verificat
 export const VerificationTokenOrderByWithAggregationInputSchema: z.ZodType<Prisma.VerificationTokenOrderByWithAggregationInput> =
   z
     .object({
-      identifier: z.lazy(() => SortOrderSchema).optional(),
+      userId: z.lazy(() => SortOrderSchema).optional(),
       token: z.lazy(() => SortOrderSchema).optional(),
       expires: z.lazy(() => SortOrderSchema).optional(),
       _count: z
@@ -1288,7 +1379,7 @@ export const VerificationTokenScalarWhereWithAggregatesInputSchema: z.ZodType<Pr
             .array(),
         ])
         .optional(),
-      identifier: z
+      userId: z
         .union([z.lazy(() => StringWithAggregatesFilterSchema), z.string()])
         .optional(),
       token: z
@@ -2147,6 +2238,9 @@ export const UserCreateInputSchema: z.ZodType<Prisma.UserCreateInput> = z
     subscription: z
       .lazy(() => SubscriptionCreateNestedOneWithoutUserInputSchema)
       .optional(),
+    VerificationToken: z
+      .lazy(() => VerificationTokenCreateNestedOneWithoutUserInputSchema)
+      .optional(),
   })
   .strict() as z.ZodType<Prisma.UserCreateInput>;
 
@@ -2166,6 +2260,11 @@ export const UserUncheckedCreateInputSchema: z.ZodType<Prisma.UserUncheckedCreat
         .optional(),
       subscription: z
         .lazy(() => SubscriptionUncheckedCreateNestedOneWithoutUserInputSchema)
+        .optional(),
+      VerificationToken: z
+        .lazy(
+          () => VerificationTokenUncheckedCreateNestedOneWithoutUserInputSchema
+        )
         .optional(),
     })
     .strict() as z.ZodType<Prisma.UserUncheckedCreateInput>;
@@ -2215,6 +2314,9 @@ export const UserUpdateInputSchema: z.ZodType<Prisma.UserUpdateInput> = z
     subscription: z
       .lazy(() => SubscriptionUpdateOneWithoutUserNestedInputSchema)
       .optional(),
+    VerificationToken: z
+      .lazy(() => VerificationTokenUpdateOneWithoutUserNestedInputSchema)
+      .optional(),
   })
   .strict() as z.ZodType<Prisma.UserUpdateInput>;
 
@@ -2263,6 +2365,11 @@ export const UserUncheckedUpdateInputSchema: z.ZodType<Prisma.UserUncheckedUpdat
         .optional(),
       subscription: z
         .lazy(() => SubscriptionUncheckedUpdateOneWithoutUserNestedInputSchema)
+        .optional(),
+      VerificationToken: z
+        .lazy(
+          () => VerificationTokenUncheckedUpdateOneWithoutUserNestedInputSchema
+        )
         .optional(),
     })
     .strict() as z.ZodType<Prisma.UserUncheckedUpdateInput>;
@@ -2361,16 +2468,18 @@ export const UserUncheckedUpdateManyInputSchema: z.ZodType<Prisma.UserUncheckedU
 export const VerificationTokenCreateInputSchema: z.ZodType<Prisma.VerificationTokenCreateInput> =
   z
     .object({
-      identifier: z.string(),
       token: z.string(),
       expires: z.coerce.date(),
+      user: z.lazy(
+        () => UserCreateNestedOneWithoutVerificationTokenInputSchema
+      ),
     })
     .strict() as z.ZodType<Prisma.VerificationTokenCreateInput>;
 
 export const VerificationTokenUncheckedCreateInputSchema: z.ZodType<Prisma.VerificationTokenUncheckedCreateInput> =
   z
     .object({
-      identifier: z.string(),
+      userId: z.string(),
       token: z.string(),
       expires: z.coerce.date(),
     })
@@ -2379,12 +2488,6 @@ export const VerificationTokenUncheckedCreateInputSchema: z.ZodType<Prisma.Verif
 export const VerificationTokenUpdateInputSchema: z.ZodType<Prisma.VerificationTokenUpdateInput> =
   z
     .object({
-      identifier: z
-        .union([
-          z.string(),
-          z.lazy(() => StringFieldUpdateOperationsInputSchema),
-        ])
-        .optional(),
       token: z
         .union([
           z.string(),
@@ -2397,13 +2500,18 @@ export const VerificationTokenUpdateInputSchema: z.ZodType<Prisma.VerificationTo
           z.lazy(() => DateTimeFieldUpdateOperationsInputSchema),
         ])
         .optional(),
+      user: z
+        .lazy(
+          () => UserUpdateOneRequiredWithoutVerificationTokenNestedInputSchema
+        )
+        .optional(),
     })
     .strict() as z.ZodType<Prisma.VerificationTokenUpdateInput>;
 
 export const VerificationTokenUncheckedUpdateInputSchema: z.ZodType<Prisma.VerificationTokenUncheckedUpdateInput> =
   z
     .object({
-      identifier: z
+      userId: z
         .union([
           z.string(),
           z.lazy(() => StringFieldUpdateOperationsInputSchema),
@@ -2427,7 +2535,7 @@ export const VerificationTokenUncheckedUpdateInputSchema: z.ZodType<Prisma.Verif
 export const VerificationTokenCreateManyInputSchema: z.ZodType<Prisma.VerificationTokenCreateManyInput> =
   z
     .object({
-      identifier: z.string(),
+      userId: z.string(),
       token: z.string(),
       expires: z.coerce.date(),
     })
@@ -2436,12 +2544,6 @@ export const VerificationTokenCreateManyInputSchema: z.ZodType<Prisma.Verificati
 export const VerificationTokenUpdateManyMutationInputSchema: z.ZodType<Prisma.VerificationTokenUpdateManyMutationInput> =
   z
     .object({
-      identifier: z
-        .union([
-          z.string(),
-          z.lazy(() => StringFieldUpdateOperationsInputSchema),
-        ])
-        .optional(),
       token: z
         .union([
           z.string(),
@@ -2460,7 +2562,7 @@ export const VerificationTokenUpdateManyMutationInputSchema: z.ZodType<Prisma.Ve
 export const VerificationTokenUncheckedUpdateManyInputSchema: z.ZodType<Prisma.VerificationTokenUncheckedUpdateManyInput> =
   z
     .object({
-      identifier: z
+      userId: z
         .union([
           z.string(),
           z.lazy(() => StringFieldUpdateOperationsInputSchema),
@@ -3009,6 +3111,20 @@ export const SubscriptionNullableRelationFilterSchema: z.ZodType<Prisma.Subscrip
     })
     .strict() as z.ZodType<Prisma.SubscriptionNullableRelationFilter>;
 
+export const VerificationTokenNullableRelationFilterSchema: z.ZodType<Prisma.VerificationTokenNullableRelationFilter> =
+  z
+    .object({
+      is: z
+        .lazy(() => VerificationTokenWhereInputSchema)
+        .optional()
+        .nullable(),
+      isNot: z
+        .lazy(() => VerificationTokenWhereInputSchema)
+        .optional()
+        .nullable(),
+    })
+    .strict() as z.ZodType<Prisma.VerificationTokenNullableRelationFilter>;
+
 export const AccountOrderByRelationAggregateInputSchema: z.ZodType<Prisma.AccountOrderByRelationAggregateInput> =
   z
     .object({
@@ -3079,18 +3195,18 @@ export const DateTimeNullableWithAggregatesFilterSchema: z.ZodType<Prisma.DateTi
     })
     .strict() as z.ZodType<Prisma.DateTimeNullableWithAggregatesFilter>;
 
-export const VerificationTokenIdentifierTokenCompoundUniqueInputSchema: z.ZodType<Prisma.VerificationTokenIdentifierTokenCompoundUniqueInput> =
+export const VerificationTokenUserIdTokenCompoundUniqueInputSchema: z.ZodType<Prisma.VerificationTokenUserIdTokenCompoundUniqueInput> =
   z
     .object({
-      identifier: z.string(),
+      userId: z.string(),
       token: z.string(),
     })
-    .strict() as z.ZodType<Prisma.VerificationTokenIdentifierTokenCompoundUniqueInput>;
+    .strict() as z.ZodType<Prisma.VerificationTokenUserIdTokenCompoundUniqueInput>;
 
 export const VerificationTokenCountOrderByAggregateInputSchema: z.ZodType<Prisma.VerificationTokenCountOrderByAggregateInput> =
   z
     .object({
-      identifier: z.lazy(() => SortOrderSchema).optional(),
+      userId: z.lazy(() => SortOrderSchema).optional(),
       token: z.lazy(() => SortOrderSchema).optional(),
       expires: z.lazy(() => SortOrderSchema).optional(),
     })
@@ -3099,7 +3215,7 @@ export const VerificationTokenCountOrderByAggregateInputSchema: z.ZodType<Prisma
 export const VerificationTokenMaxOrderByAggregateInputSchema: z.ZodType<Prisma.VerificationTokenMaxOrderByAggregateInput> =
   z
     .object({
-      identifier: z.lazy(() => SortOrderSchema).optional(),
+      userId: z.lazy(() => SortOrderSchema).optional(),
       token: z.lazy(() => SortOrderSchema).optional(),
       expires: z.lazy(() => SortOrderSchema).optional(),
     })
@@ -3108,7 +3224,7 @@ export const VerificationTokenMaxOrderByAggregateInputSchema: z.ZodType<Prisma.V
 export const VerificationTokenMinOrderByAggregateInputSchema: z.ZodType<Prisma.VerificationTokenMinOrderByAggregateInput> =
   z
     .object({
-      identifier: z.lazy(() => SortOrderSchema).optional(),
+      userId: z.lazy(() => SortOrderSchema).optional(),
       token: z.lazy(() => SortOrderSchema).optional(),
       expires: z.lazy(() => SortOrderSchema).optional(),
     })
@@ -3341,6 +3457,22 @@ export const SubscriptionCreateNestedOneWithoutUserInputSchema: z.ZodType<Prisma
     })
     .strict() as z.ZodType<Prisma.SubscriptionCreateNestedOneWithoutUserInput>;
 
+export const VerificationTokenCreateNestedOneWithoutUserInputSchema: z.ZodType<Prisma.VerificationTokenCreateNestedOneWithoutUserInput> =
+  z
+    .object({
+      create: z
+        .union([
+          z.lazy(() => VerificationTokenCreateWithoutUserInputSchema),
+          z.lazy(() => VerificationTokenUncheckedCreateWithoutUserInputSchema),
+        ])
+        .optional(),
+      connectOrCreate: z
+        .lazy(() => VerificationTokenCreateOrConnectWithoutUserInputSchema)
+        .optional(),
+      connect: z.lazy(() => VerificationTokenWhereUniqueInputSchema).optional(),
+    })
+    .strict() as z.ZodType<Prisma.VerificationTokenCreateNestedOneWithoutUserInput>;
+
 export const AccountUncheckedCreateNestedManyWithoutUserInputSchema: z.ZodType<Prisma.AccountUncheckedCreateNestedManyWithoutUserInput> =
   z
     .object({
@@ -3414,6 +3546,22 @@ export const SubscriptionUncheckedCreateNestedOneWithoutUserInputSchema: z.ZodTy
       connect: z.lazy(() => SubscriptionWhereUniqueInputSchema).optional(),
     })
     .strict() as z.ZodType<Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput>;
+
+export const VerificationTokenUncheckedCreateNestedOneWithoutUserInputSchema: z.ZodType<Prisma.VerificationTokenUncheckedCreateNestedOneWithoutUserInput> =
+  z
+    .object({
+      create: z
+        .union([
+          z.lazy(() => VerificationTokenCreateWithoutUserInputSchema),
+          z.lazy(() => VerificationTokenUncheckedCreateWithoutUserInputSchema),
+        ])
+        .optional(),
+      connectOrCreate: z
+        .lazy(() => VerificationTokenCreateOrConnectWithoutUserInputSchema)
+        .optional(),
+      connect: z.lazy(() => VerificationTokenWhereUniqueInputSchema).optional(),
+    })
+    .strict() as z.ZodType<Prisma.VerificationTokenUncheckedCreateNestedOneWithoutUserInput>;
 
 export const NullableDateTimeFieldUpdateOperationsInputSchema: z.ZodType<Prisma.NullableDateTimeFieldUpdateOperationsInput> =
   z
@@ -3606,6 +3754,40 @@ export const SubscriptionUpdateOneWithoutUserNestedInputSchema: z.ZodType<Prisma
     })
     .strict() as z.ZodType<Prisma.SubscriptionUpdateOneWithoutUserNestedInput>;
 
+export const VerificationTokenUpdateOneWithoutUserNestedInputSchema: z.ZodType<Prisma.VerificationTokenUpdateOneWithoutUserNestedInput> =
+  z
+    .object({
+      create: z
+        .union([
+          z.lazy(() => VerificationTokenCreateWithoutUserInputSchema),
+          z.lazy(() => VerificationTokenUncheckedCreateWithoutUserInputSchema),
+        ])
+        .optional(),
+      connectOrCreate: z
+        .lazy(() => VerificationTokenCreateOrConnectWithoutUserInputSchema)
+        .optional(),
+      upsert: z
+        .lazy(() => VerificationTokenUpsertWithoutUserInputSchema)
+        .optional(),
+      disconnect: z
+        .union([z.boolean(), z.lazy(() => VerificationTokenWhereInputSchema)])
+        .optional(),
+      delete: z
+        .union([z.boolean(), z.lazy(() => VerificationTokenWhereInputSchema)])
+        .optional(),
+      connect: z.lazy(() => VerificationTokenWhereUniqueInputSchema).optional(),
+      update: z
+        .union([
+          z.lazy(
+            () => VerificationTokenUpdateToOneWithWhereWithoutUserInputSchema
+          ),
+          z.lazy(() => VerificationTokenUpdateWithoutUserInputSchema),
+          z.lazy(() => VerificationTokenUncheckedUpdateWithoutUserInputSchema),
+        ])
+        .optional(),
+    })
+    .strict() as z.ZodType<Prisma.VerificationTokenUpdateOneWithoutUserNestedInput>;
+
 export const AccountUncheckedUpdateManyWithoutUserNestedInputSchema: z.ZodType<Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput> =
   z
     .object({
@@ -3789,6 +3971,84 @@ export const SubscriptionUncheckedUpdateOneWithoutUserNestedInputSchema: z.ZodTy
         .optional(),
     })
     .strict() as z.ZodType<Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput>;
+
+export const VerificationTokenUncheckedUpdateOneWithoutUserNestedInputSchema: z.ZodType<Prisma.VerificationTokenUncheckedUpdateOneWithoutUserNestedInput> =
+  z
+    .object({
+      create: z
+        .union([
+          z.lazy(() => VerificationTokenCreateWithoutUserInputSchema),
+          z.lazy(() => VerificationTokenUncheckedCreateWithoutUserInputSchema),
+        ])
+        .optional(),
+      connectOrCreate: z
+        .lazy(() => VerificationTokenCreateOrConnectWithoutUserInputSchema)
+        .optional(),
+      upsert: z
+        .lazy(() => VerificationTokenUpsertWithoutUserInputSchema)
+        .optional(),
+      disconnect: z
+        .union([z.boolean(), z.lazy(() => VerificationTokenWhereInputSchema)])
+        .optional(),
+      delete: z
+        .union([z.boolean(), z.lazy(() => VerificationTokenWhereInputSchema)])
+        .optional(),
+      connect: z.lazy(() => VerificationTokenWhereUniqueInputSchema).optional(),
+      update: z
+        .union([
+          z.lazy(
+            () => VerificationTokenUpdateToOneWithWhereWithoutUserInputSchema
+          ),
+          z.lazy(() => VerificationTokenUpdateWithoutUserInputSchema),
+          z.lazy(() => VerificationTokenUncheckedUpdateWithoutUserInputSchema),
+        ])
+        .optional(),
+    })
+    .strict() as z.ZodType<Prisma.VerificationTokenUncheckedUpdateOneWithoutUserNestedInput>;
+
+export const UserCreateNestedOneWithoutVerificationTokenInputSchema: z.ZodType<Prisma.UserCreateNestedOneWithoutVerificationTokenInput> =
+  z
+    .object({
+      create: z
+        .union([
+          z.lazy(() => UserCreateWithoutVerificationTokenInputSchema),
+          z.lazy(() => UserUncheckedCreateWithoutVerificationTokenInputSchema),
+        ])
+        .optional(),
+      connectOrCreate: z
+        .lazy(() => UserCreateOrConnectWithoutVerificationTokenInputSchema)
+        .optional(),
+      connect: z.lazy(() => UserWhereUniqueInputSchema).optional(),
+    })
+    .strict() as z.ZodType<Prisma.UserCreateNestedOneWithoutVerificationTokenInput>;
+
+export const UserUpdateOneRequiredWithoutVerificationTokenNestedInputSchema: z.ZodType<Prisma.UserUpdateOneRequiredWithoutVerificationTokenNestedInput> =
+  z
+    .object({
+      create: z
+        .union([
+          z.lazy(() => UserCreateWithoutVerificationTokenInputSchema),
+          z.lazy(() => UserUncheckedCreateWithoutVerificationTokenInputSchema),
+        ])
+        .optional(),
+      connectOrCreate: z
+        .lazy(() => UserCreateOrConnectWithoutVerificationTokenInputSchema)
+        .optional(),
+      upsert: z
+        .lazy(() => UserUpsertWithoutVerificationTokenInputSchema)
+        .optional(),
+      connect: z.lazy(() => UserWhereUniqueInputSchema).optional(),
+      update: z
+        .union([
+          z.lazy(
+            () => UserUpdateToOneWithWhereWithoutVerificationTokenInputSchema
+          ),
+          z.lazy(() => UserUpdateWithoutVerificationTokenInputSchema),
+          z.lazy(() => UserUncheckedUpdateWithoutVerificationTokenInputSchema),
+        ])
+        .optional(),
+    })
+    .strict() as z.ZodType<Prisma.UserUpdateOneRequiredWithoutVerificationTokenNestedInput>;
 
 export const UserCreateNestedOneWithoutSubscriptionInputSchema: z.ZodType<Prisma.UserCreateNestedOneWithoutSubscriptionInput> =
   z
@@ -4086,6 +4346,9 @@ export const UserCreateWithoutAccountsInputSchema: z.ZodType<Prisma.UserCreateWi
       subscription: z
         .lazy(() => SubscriptionCreateNestedOneWithoutUserInputSchema)
         .optional(),
+      VerificationToken: z
+        .lazy(() => VerificationTokenCreateNestedOneWithoutUserInputSchema)
+        .optional(),
     })
     .strict() as z.ZodType<Prisma.UserCreateWithoutAccountsInput>;
 
@@ -4102,6 +4365,11 @@ export const UserUncheckedCreateWithoutAccountsInputSchema: z.ZodType<Prisma.Use
         .optional(),
       subscription: z
         .lazy(() => SubscriptionUncheckedCreateNestedOneWithoutUserInputSchema)
+        .optional(),
+      VerificationToken: z
+        .lazy(
+          () => VerificationTokenUncheckedCreateNestedOneWithoutUserInputSchema
+        )
         .optional(),
     })
     .strict() as z.ZodType<Prisma.UserUncheckedCreateWithoutAccountsInput>;
@@ -4186,6 +4454,9 @@ export const UserUpdateWithoutAccountsInputSchema: z.ZodType<Prisma.UserUpdateWi
       subscription: z
         .lazy(() => SubscriptionUpdateOneWithoutUserNestedInputSchema)
         .optional(),
+      VerificationToken: z
+        .lazy(() => VerificationTokenUpdateOneWithoutUserNestedInputSchema)
+        .optional(),
     })
     .strict() as z.ZodType<Prisma.UserUpdateWithoutAccountsInput>;
 
@@ -4232,6 +4503,11 @@ export const UserUncheckedUpdateWithoutAccountsInputSchema: z.ZodType<Prisma.Use
       subscription: z
         .lazy(() => SubscriptionUncheckedUpdateOneWithoutUserNestedInputSchema)
         .optional(),
+      VerificationToken: z
+        .lazy(
+          () => VerificationTokenUncheckedUpdateOneWithoutUserNestedInputSchema
+        )
+        .optional(),
     })
     .strict() as z.ZodType<Prisma.UserUncheckedUpdateWithoutAccountsInput>;
 
@@ -4249,6 +4525,9 @@ export const UserCreateWithoutSessionsInputSchema: z.ZodType<Prisma.UserCreateWi
       subscription: z
         .lazy(() => SubscriptionCreateNestedOneWithoutUserInputSchema)
         .optional(),
+      VerificationToken: z
+        .lazy(() => VerificationTokenCreateNestedOneWithoutUserInputSchema)
+        .optional(),
     })
     .strict() as z.ZodType<Prisma.UserCreateWithoutSessionsInput>;
 
@@ -4265,6 +4544,11 @@ export const UserUncheckedCreateWithoutSessionsInputSchema: z.ZodType<Prisma.Use
         .optional(),
       subscription: z
         .lazy(() => SubscriptionUncheckedCreateNestedOneWithoutUserInputSchema)
+        .optional(),
+      VerificationToken: z
+        .lazy(
+          () => VerificationTokenUncheckedCreateNestedOneWithoutUserInputSchema
+        )
         .optional(),
     })
     .strict() as z.ZodType<Prisma.UserUncheckedCreateWithoutSessionsInput>;
@@ -4349,6 +4633,9 @@ export const UserUpdateWithoutSessionsInputSchema: z.ZodType<Prisma.UserUpdateWi
       subscription: z
         .lazy(() => SubscriptionUpdateOneWithoutUserNestedInputSchema)
         .optional(),
+      VerificationToken: z
+        .lazy(() => VerificationTokenUpdateOneWithoutUserNestedInputSchema)
+        .optional(),
     })
     .strict() as z.ZodType<Prisma.UserUpdateWithoutSessionsInput>;
 
@@ -4394,6 +4681,11 @@ export const UserUncheckedUpdateWithoutSessionsInputSchema: z.ZodType<Prisma.Use
         .optional(),
       subscription: z
         .lazy(() => SubscriptionUncheckedUpdateOneWithoutUserNestedInputSchema)
+        .optional(),
+      VerificationToken: z
+        .lazy(
+          () => VerificationTokenUncheckedUpdateOneWithoutUserNestedInputSchema
+        )
         .optional(),
     })
     .strict() as z.ZodType<Prisma.UserUncheckedUpdateWithoutSessionsInput>;
@@ -4526,6 +4818,33 @@ export const SubscriptionCreateOrConnectWithoutUserInputSchema: z.ZodType<Prisma
       ]),
     })
     .strict() as z.ZodType<Prisma.SubscriptionCreateOrConnectWithoutUserInput>;
+
+export const VerificationTokenCreateWithoutUserInputSchema: z.ZodType<Prisma.VerificationTokenCreateWithoutUserInput> =
+  z
+    .object({
+      token: z.string(),
+      expires: z.coerce.date(),
+    })
+    .strict() as z.ZodType<Prisma.VerificationTokenCreateWithoutUserInput>;
+
+export const VerificationTokenUncheckedCreateWithoutUserInputSchema: z.ZodType<Prisma.VerificationTokenUncheckedCreateWithoutUserInput> =
+  z
+    .object({
+      token: z.string(),
+      expires: z.coerce.date(),
+    })
+    .strict() as z.ZodType<Prisma.VerificationTokenUncheckedCreateWithoutUserInput>;
+
+export const VerificationTokenCreateOrConnectWithoutUserInputSchema: z.ZodType<Prisma.VerificationTokenCreateOrConnectWithoutUserInput> =
+  z
+    .object({
+      where: z.lazy(() => VerificationTokenWhereUniqueInputSchema),
+      create: z.union([
+        z.lazy(() => VerificationTokenCreateWithoutUserInputSchema),
+        z.lazy(() => VerificationTokenUncheckedCreateWithoutUserInputSchema),
+      ]),
+    })
+    .strict() as z.ZodType<Prisma.VerificationTokenCreateOrConnectWithoutUserInput>;
 
 export const AccountUpsertWithWhereUniqueWithoutUserInputSchema: z.ZodType<Prisma.AccountUpsertWithWhereUniqueWithoutUserInput> =
   z
@@ -4790,6 +5109,243 @@ export const SubscriptionUncheckedUpdateWithoutUserInputSchema: z.ZodType<Prisma
     })
     .strict() as z.ZodType<Prisma.SubscriptionUncheckedUpdateWithoutUserInput>;
 
+export const VerificationTokenUpsertWithoutUserInputSchema: z.ZodType<Prisma.VerificationTokenUpsertWithoutUserInput> =
+  z
+    .object({
+      update: z.union([
+        z.lazy(() => VerificationTokenUpdateWithoutUserInputSchema),
+        z.lazy(() => VerificationTokenUncheckedUpdateWithoutUserInputSchema),
+      ]),
+      create: z.union([
+        z.lazy(() => VerificationTokenCreateWithoutUserInputSchema),
+        z.lazy(() => VerificationTokenUncheckedCreateWithoutUserInputSchema),
+      ]),
+      where: z.lazy(() => VerificationTokenWhereInputSchema).optional(),
+    })
+    .strict() as z.ZodType<Prisma.VerificationTokenUpsertWithoutUserInput>;
+
+export const VerificationTokenUpdateToOneWithWhereWithoutUserInputSchema: z.ZodType<Prisma.VerificationTokenUpdateToOneWithWhereWithoutUserInput> =
+  z
+    .object({
+      where: z.lazy(() => VerificationTokenWhereInputSchema).optional(),
+      data: z.union([
+        z.lazy(() => VerificationTokenUpdateWithoutUserInputSchema),
+        z.lazy(() => VerificationTokenUncheckedUpdateWithoutUserInputSchema),
+      ]),
+    })
+    .strict() as z.ZodType<Prisma.VerificationTokenUpdateToOneWithWhereWithoutUserInput>;
+
+export const VerificationTokenUpdateWithoutUserInputSchema: z.ZodType<Prisma.VerificationTokenUpdateWithoutUserInput> =
+  z
+    .object({
+      token: z
+        .union([
+          z.string(),
+          z.lazy(() => StringFieldUpdateOperationsInputSchema),
+        ])
+        .optional(),
+      expires: z
+        .union([
+          z.coerce.date(),
+          z.lazy(() => DateTimeFieldUpdateOperationsInputSchema),
+        ])
+        .optional(),
+    })
+    .strict() as z.ZodType<Prisma.VerificationTokenUpdateWithoutUserInput>;
+
+export const VerificationTokenUncheckedUpdateWithoutUserInputSchema: z.ZodType<Prisma.VerificationTokenUncheckedUpdateWithoutUserInput> =
+  z
+    .object({
+      token: z
+        .union([
+          z.string(),
+          z.lazy(() => StringFieldUpdateOperationsInputSchema),
+        ])
+        .optional(),
+      expires: z
+        .union([
+          z.coerce.date(),
+          z.lazy(() => DateTimeFieldUpdateOperationsInputSchema),
+        ])
+        .optional(),
+    })
+    .strict() as z.ZodType<Prisma.VerificationTokenUncheckedUpdateWithoutUserInput>;
+
+export const UserCreateWithoutVerificationTokenInputSchema: z.ZodType<Prisma.UserCreateWithoutVerificationTokenInput> =
+  z
+    .object({
+      id: z.string().cuid().optional(),
+      name: z.string().optional().nullable(),
+      email: z.string().optional().nullable(),
+      emailVerified: z.coerce.date().optional().nullable(),
+      image: z.string().optional().nullable(),
+      accounts: z
+        .lazy(() => AccountCreateNestedManyWithoutUserInputSchema)
+        .optional(),
+      sessions: z
+        .lazy(() => SessionCreateNestedManyWithoutUserInputSchema)
+        .optional(),
+      subscription: z
+        .lazy(() => SubscriptionCreateNestedOneWithoutUserInputSchema)
+        .optional(),
+    })
+    .strict() as z.ZodType<Prisma.UserCreateWithoutVerificationTokenInput>;
+
+export const UserUncheckedCreateWithoutVerificationTokenInputSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutVerificationTokenInput> =
+  z
+    .object({
+      id: z.string().cuid().optional(),
+      name: z.string().optional().nullable(),
+      email: z.string().optional().nullable(),
+      emailVerified: z.coerce.date().optional().nullable(),
+      image: z.string().optional().nullable(),
+      accounts: z
+        .lazy(() => AccountUncheckedCreateNestedManyWithoutUserInputSchema)
+        .optional(),
+      sessions: z
+        .lazy(() => SessionUncheckedCreateNestedManyWithoutUserInputSchema)
+        .optional(),
+      subscription: z
+        .lazy(() => SubscriptionUncheckedCreateNestedOneWithoutUserInputSchema)
+        .optional(),
+    })
+    .strict() as z.ZodType<Prisma.UserUncheckedCreateWithoutVerificationTokenInput>;
+
+export const UserCreateOrConnectWithoutVerificationTokenInputSchema: z.ZodType<Prisma.UserCreateOrConnectWithoutVerificationTokenInput> =
+  z
+    .object({
+      where: z.lazy(() => UserWhereUniqueInputSchema),
+      create: z.union([
+        z.lazy(() => UserCreateWithoutVerificationTokenInputSchema),
+        z.lazy(() => UserUncheckedCreateWithoutVerificationTokenInputSchema),
+      ]),
+    })
+    .strict() as z.ZodType<Prisma.UserCreateOrConnectWithoutVerificationTokenInput>;
+
+export const UserUpsertWithoutVerificationTokenInputSchema: z.ZodType<Prisma.UserUpsertWithoutVerificationTokenInput> =
+  z
+    .object({
+      update: z.union([
+        z.lazy(() => UserUpdateWithoutVerificationTokenInputSchema),
+        z.lazy(() => UserUncheckedUpdateWithoutVerificationTokenInputSchema),
+      ]),
+      create: z.union([
+        z.lazy(() => UserCreateWithoutVerificationTokenInputSchema),
+        z.lazy(() => UserUncheckedCreateWithoutVerificationTokenInputSchema),
+      ]),
+      where: z.lazy(() => UserWhereInputSchema).optional(),
+    })
+    .strict() as z.ZodType<Prisma.UserUpsertWithoutVerificationTokenInput>;
+
+export const UserUpdateToOneWithWhereWithoutVerificationTokenInputSchema: z.ZodType<Prisma.UserUpdateToOneWithWhereWithoutVerificationTokenInput> =
+  z
+    .object({
+      where: z.lazy(() => UserWhereInputSchema).optional(),
+      data: z.union([
+        z.lazy(() => UserUpdateWithoutVerificationTokenInputSchema),
+        z.lazy(() => UserUncheckedUpdateWithoutVerificationTokenInputSchema),
+      ]),
+    })
+    .strict() as z.ZodType<Prisma.UserUpdateToOneWithWhereWithoutVerificationTokenInput>;
+
+export const UserUpdateWithoutVerificationTokenInputSchema: z.ZodType<Prisma.UserUpdateWithoutVerificationTokenInput> =
+  z
+    .object({
+      id: z
+        .union([
+          z.string().cuid(),
+          z.lazy(() => StringFieldUpdateOperationsInputSchema),
+        ])
+        .optional(),
+      name: z
+        .union([
+          z.string(),
+          z.lazy(() => NullableStringFieldUpdateOperationsInputSchema),
+        ])
+        .optional()
+        .nullable(),
+      email: z
+        .union([
+          z.string(),
+          z.lazy(() => NullableStringFieldUpdateOperationsInputSchema),
+        ])
+        .optional()
+        .nullable(),
+      emailVerified: z
+        .union([
+          z.coerce.date(),
+          z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema),
+        ])
+        .optional()
+        .nullable(),
+      image: z
+        .union([
+          z.string(),
+          z.lazy(() => NullableStringFieldUpdateOperationsInputSchema),
+        ])
+        .optional()
+        .nullable(),
+      accounts: z
+        .lazy(() => AccountUpdateManyWithoutUserNestedInputSchema)
+        .optional(),
+      sessions: z
+        .lazy(() => SessionUpdateManyWithoutUserNestedInputSchema)
+        .optional(),
+      subscription: z
+        .lazy(() => SubscriptionUpdateOneWithoutUserNestedInputSchema)
+        .optional(),
+    })
+    .strict() as z.ZodType<Prisma.UserUpdateWithoutVerificationTokenInput>;
+
+export const UserUncheckedUpdateWithoutVerificationTokenInputSchema: z.ZodType<Prisma.UserUncheckedUpdateWithoutVerificationTokenInput> =
+  z
+    .object({
+      id: z
+        .union([
+          z.string().cuid(),
+          z.lazy(() => StringFieldUpdateOperationsInputSchema),
+        ])
+        .optional(),
+      name: z
+        .union([
+          z.string(),
+          z.lazy(() => NullableStringFieldUpdateOperationsInputSchema),
+        ])
+        .optional()
+        .nullable(),
+      email: z
+        .union([
+          z.string(),
+          z.lazy(() => NullableStringFieldUpdateOperationsInputSchema),
+        ])
+        .optional()
+        .nullable(),
+      emailVerified: z
+        .union([
+          z.coerce.date(),
+          z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema),
+        ])
+        .optional()
+        .nullable(),
+      image: z
+        .union([
+          z.string(),
+          z.lazy(() => NullableStringFieldUpdateOperationsInputSchema),
+        ])
+        .optional()
+        .nullable(),
+      accounts: z
+        .lazy(() => AccountUncheckedUpdateManyWithoutUserNestedInputSchema)
+        .optional(),
+      sessions: z
+        .lazy(() => SessionUncheckedUpdateManyWithoutUserNestedInputSchema)
+        .optional(),
+      subscription: z
+        .lazy(() => SubscriptionUncheckedUpdateOneWithoutUserNestedInputSchema)
+        .optional(),
+    })
+    .strict() as z.ZodType<Prisma.UserUncheckedUpdateWithoutVerificationTokenInput>;
+
 export const UserCreateWithoutSubscriptionInputSchema: z.ZodType<Prisma.UserCreateWithoutSubscriptionInput> =
   z
     .object({
@@ -4803,6 +5359,9 @@ export const UserCreateWithoutSubscriptionInputSchema: z.ZodType<Prisma.UserCrea
         .optional(),
       sessions: z
         .lazy(() => SessionCreateNestedManyWithoutUserInputSchema)
+        .optional(),
+      VerificationToken: z
+        .lazy(() => VerificationTokenCreateNestedOneWithoutUserInputSchema)
         .optional(),
     })
     .strict() as z.ZodType<Prisma.UserCreateWithoutSubscriptionInput>;
@@ -4820,6 +5379,11 @@ export const UserUncheckedCreateWithoutSubscriptionInputSchema: z.ZodType<Prisma
         .optional(),
       sessions: z
         .lazy(() => SessionUncheckedCreateNestedManyWithoutUserInputSchema)
+        .optional(),
+      VerificationToken: z
+        .lazy(
+          () => VerificationTokenUncheckedCreateNestedOneWithoutUserInputSchema
+        )
         .optional(),
     })
     .strict() as z.ZodType<Prisma.UserUncheckedCreateWithoutSubscriptionInput>;
@@ -4904,6 +5468,9 @@ export const UserUpdateWithoutSubscriptionInputSchema: z.ZodType<Prisma.UserUpda
       sessions: z
         .lazy(() => SessionUpdateManyWithoutUserNestedInputSchema)
         .optional(),
+      VerificationToken: z
+        .lazy(() => VerificationTokenUpdateOneWithoutUserNestedInputSchema)
+        .optional(),
     })
     .strict() as z.ZodType<Prisma.UserUpdateWithoutSubscriptionInput>;
 
@@ -4949,6 +5516,11 @@ export const UserUncheckedUpdateWithoutSubscriptionInputSchema: z.ZodType<Prisma
         .optional(),
       sessions: z
         .lazy(() => SessionUncheckedUpdateManyWithoutUserNestedInputSchema)
+        .optional(),
+      VerificationToken: z
+        .lazy(
+          () => VerificationTokenUncheckedUpdateOneWithoutUserNestedInputSchema
+        )
         .optional(),
     })
     .strict() as z.ZodType<Prisma.UserUncheckedUpdateWithoutSubscriptionInput>;
@@ -5671,6 +6243,7 @@ export const VerificationTokenFindFirstArgsSchema: z.ZodType<Prisma.Verification
   z
     .object({
       select: VerificationTokenSelectSchema.optional(),
+      include: VerificationTokenIncludeSchema.optional(),
       where: VerificationTokenWhereInputSchema.optional(),
       orderBy: z
         .union([
@@ -5694,6 +6267,7 @@ export const VerificationTokenFindFirstOrThrowArgsSchema: z.ZodType<Prisma.Verif
   z
     .object({
       select: VerificationTokenSelectSchema.optional(),
+      include: VerificationTokenIncludeSchema.optional(),
       where: VerificationTokenWhereInputSchema.optional(),
       orderBy: z
         .union([
@@ -5717,6 +6291,7 @@ export const VerificationTokenFindManyArgsSchema: z.ZodType<Prisma.VerificationT
   z
     .object({
       select: VerificationTokenSelectSchema.optional(),
+      include: VerificationTokenIncludeSchema.optional(),
       where: VerificationTokenWhereInputSchema.optional(),
       orderBy: z
         .union([
@@ -5773,6 +6348,7 @@ export const VerificationTokenFindUniqueArgsSchema: z.ZodType<Prisma.Verificatio
   z
     .object({
       select: VerificationTokenSelectSchema.optional(),
+      include: VerificationTokenIncludeSchema.optional(),
       where: VerificationTokenWhereUniqueInputSchema,
     })
     .strict() as z.ZodType<Prisma.VerificationTokenFindUniqueArgs>;
@@ -5781,6 +6357,7 @@ export const VerificationTokenFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.Veri
   z
     .object({
       select: VerificationTokenSelectSchema.optional(),
+      include: VerificationTokenIncludeSchema.optional(),
       where: VerificationTokenWhereUniqueInputSchema,
     })
     .strict() as z.ZodType<Prisma.VerificationTokenFindUniqueOrThrowArgs>;
@@ -6127,6 +6704,7 @@ export const VerificationTokenCreateArgsSchema: z.ZodType<Prisma.VerificationTok
   z
     .object({
       select: VerificationTokenSelectSchema.optional(),
+      include: VerificationTokenIncludeSchema.optional(),
       data: z.union([
         VerificationTokenCreateInputSchema,
         VerificationTokenUncheckedCreateInputSchema,
@@ -6138,6 +6716,7 @@ export const VerificationTokenUpsertArgsSchema: z.ZodType<Prisma.VerificationTok
   z
     .object({
       select: VerificationTokenSelectSchema.optional(),
+      include: VerificationTokenIncludeSchema.optional(),
       where: VerificationTokenWhereUniqueInputSchema,
       create: z.union([
         VerificationTokenCreateInputSchema,
@@ -6165,6 +6744,7 @@ export const VerificationTokenDeleteArgsSchema: z.ZodType<Prisma.VerificationTok
   z
     .object({
       select: VerificationTokenSelectSchema.optional(),
+      include: VerificationTokenIncludeSchema.optional(),
       where: VerificationTokenWhereUniqueInputSchema,
     })
     .strict() as z.ZodType<Prisma.VerificationTokenDeleteArgs>;
@@ -6173,6 +6753,7 @@ export const VerificationTokenUpdateArgsSchema: z.ZodType<Prisma.VerificationTok
   z
     .object({
       select: VerificationTokenSelectSchema.optional(),
+      include: VerificationTokenIncludeSchema.optional(),
       data: z.union([
         VerificationTokenUpdateInputSchema,
         VerificationTokenUncheckedUpdateInputSchema,
