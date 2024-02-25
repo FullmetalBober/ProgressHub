@@ -1,12 +1,15 @@
 import { cn } from '@/lib/utils';
-import { Icons } from '../Icons';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
+import GithubAuth from './GithubAuth';
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-export default function SignInForm({ className, ...props }: UserAuthFormProps) {
+export default async function SignInForm({
+  className,
+  ...props
+}: UserAuthFormProps) {
   // const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   // async function onSubmit(event: React.SyntheticEvent) {
@@ -56,13 +59,7 @@ export default function SignInForm({ className, ...props }: UserAuthFormProps) {
           </span>
         </div>
       </div>
-      <Button variant='outline' type='button' disabled={isLoading}>
-        {/* {isLoading ? (
-          <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
-        ) : ( */}
-        <Icons.gitHub className='mr-2 h-4 w-4' />
-        {/* )} */} GitHub
-      </Button>
+      <GithubAuth />
     </div>
   );
 }
