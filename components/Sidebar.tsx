@@ -3,7 +3,8 @@ import Link from 'next/link';
 import SidebarItems from './SidebarItems';
 import { Avatar, AvatarFallback } from './ui/avatar';
 
-import { AuthSession, auth } from '@/lib/auth/utils';
+import { auth } from '@/lib/auth/utils';
+import { Session } from 'next-auth';
 
 const Sidebar = async () => {
   const session = await auth();
@@ -24,9 +25,9 @@ const Sidebar = async () => {
 
 export default Sidebar;
 
-const UserDetails = ({ session }: { session: AuthSession }) => {
-  if (session.session === null) return null;
-  const { user } = session.session;
+const UserDetails = ({ session }: { session: Session | null }) => {
+  if (session === null) return null;
+  const { user } = session;
 
   if (!user?.name || user.name.length == 0) return null;
 

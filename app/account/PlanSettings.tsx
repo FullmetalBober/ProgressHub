@@ -1,6 +1,6 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import { AuthSession } from '@/lib/auth/utils';
+import { Session } from 'next-auth';
 import Link from 'next/link';
 import { AccountCard, AccountCardBody, AccountCardFooter } from './AccountCard';
 
@@ -21,7 +21,7 @@ export default function PlanSettings({
   session,
 }: {
   subscriptionPlan: PlanSettingsProps;
-  session: AuthSession['session'];
+  session: Session | null;
 }) {
   return (
     <AccountCard
