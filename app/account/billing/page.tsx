@@ -85,9 +85,9 @@ export default async function Billing() {
               </ul>
             </CardContent>
             <CardFooter className='flex items-end justify-center'>
-              {session?.user.email ? (
+              {session?.user?.email ? (
                 <ManageUserSubscriptionButton
-                  userId={session.user.id}
+                  userId={session.user.id || ''}
                   email={session.user.email || ''}
                   stripePriceId={plan.stripePriceId}
                   stripeCustomerId={subscriptionPlan?.stripeCustomerId}

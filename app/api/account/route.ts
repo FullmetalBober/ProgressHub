@@ -8,7 +8,7 @@ export async function PUT(request: Request) {
   const body = (await request.json()) as { name?: string; email?: string };
 
   await prisma.user.update({
-    where: { id: session.user.id },
+    where: { id: session.user?.id },
     data: { ...body },
   });
   revalidatePath('/account');
