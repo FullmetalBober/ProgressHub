@@ -1,16 +1,16 @@
 import { storeSubscriptionPlans } from '@/config/subscriptions';
-import { getUserAuth } from '@/lib/auth/utils';
-import { db } from '@/lib/db/index';
+import { prisma } from '@/lib/db/index';
 import { stripe } from '@/lib/stripe/index';
+import { auth } from '../auth/utils';
 
 export async function getUserSubscriptionPlan() {
-  const { session } = await getUserAuth();
+  const session = await auth();
 
   if (!session || !session.user) {
     throw new Error('User not found.');
   }
 
-  const subscription = await db.subscription.findFirst({
+  const subscription = await prisma.subscription.findFirst({
     where: {
       userId: session.user.id,
     },

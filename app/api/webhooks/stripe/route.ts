@@ -1,4 +1,4 @@
-import { db } from '@/lib/db/index';
+import { prisma } from '@/lib/db/index';
 import { stripe } from '@/lib/stripe/index';
 import { headers } from 'next/headers';
 import type Stripe from 'stripe';
@@ -46,7 +46,7 @@ export async function POST(request: Request) {
     };
 
     if (session?.metadata?.userId != null) {
-      await db.subscription.upsert({
+      await prisma.subscription.upsert({
         where: { userId: session.metadata.userId },
         update: { ...updatedData, userId: session.metadata.userId },
         create: { ...updatedData, userId: session.metadata.userId },
@@ -55,7 +55,7 @@ export async function POST(request: Request) {
       typeof session.customer === 'string' &&
       session.customer != null
     ) {
-      await db.subscription.update({
+      await prisma.subscription.update({
         where: { stripeCustomerId: session.customer },
         data: updatedData,
       });
@@ -69,7 +69,7 @@ export async function POST(request: Request) {
     );
 
     // Update the price id and set the new period end.
-    await db.subscription.update({
+    await prisma.subscription.update({
       where: {
         stripeSubscriptionId: subscription.id,
       },

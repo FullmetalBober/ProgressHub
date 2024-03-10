@@ -1,9 +1,10 @@
 'use server';
 
-import { getUserAuth } from '@/lib/auth/utils';
-import { db } from '@/lib/db/index';
+import { prisma } from '@/lib/db/index';
 import { WorkspaceCreateInputSchema } from '@/prisma/zod';
+import { Prisma } from '@prisma/client';
 import { redirect } from 'next/navigation';
+import { auth } from '../auth/utils';
 import { sanitizeFormData, setUserForm } from './utils';
 
 export async function createWorkspace(formData: FormData) {
@@ -13,37 +14,43 @@ export async function createWorkspace(formData: FormData) {
 
   const validatedFields = WorkspaceCreateInputSchema.safeParse(data);
   if (!validatedFields.success) {
-    console.log(validatedFields.error.flatten());
     return {
       errors: validatedFields.error.flatten().fieldErrors,
     };
   }
-  const workspace = await db.workspace.create({
+  const workspace = await prisma.workspace.create({
     data: {
       ...validatedFields.data,
+      members: {
+        create: {
+          userId: validatedFields.data.ownerId,
+          role: 'OWNER',
+        },
+      },
     },
   });
 
   redirect(`/${workspace.id}`);
 }
 
-export async function getWorkspaces() {
-  const { session } = await getUserAuth();
+export async function getWorkspaces(opt?: Prisma.User$workspacesArgs) {
+  const session = await auth();
+
   if (!session)
     return {
       errors: {
-        auth: 'You must be logged in to create a workspace',
+        auth: 'You must be logged in to get a workspace',
       },
     };
 
-  const user = await db.user.findUnique({
+  const user = await prisma.user.findUnique({
     where: {
-      id: session.user.id,
+      id: session?.user?.id,
     },
-    select: {
-      Workspaces: true,
+    include: {
+      workspaces: opt || true,
     },
   });
 
-  return { workspaces: user?.Workspaces };
+  return { workspaces: user?.workspaces };
 }

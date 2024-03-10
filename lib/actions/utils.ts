@@ -1,8 +1,8 @@
-import { getUserAuth } from '../auth/utils';
+import { auth } from '../auth/utils';
 
 export async function setUserForm(formData: FormData, field: string) {
-  const { session } = await getUserAuth();
-  if (!session) return;
+  const session = await auth();
+  if (!session?.user?.id) return;
 
   formData.append(field, session.user.id);
 }

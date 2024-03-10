@@ -1,55 +1,35 @@
-import { db } from '@/lib/db/index';
-import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { DefaultSession, getServerSession, NextAuthOptions } from 'next-auth';
-import { redirect } from 'next/navigation';
-// import GoogleProvider from 'next-auth/providers/google';
+import { prisma } from '@/lib/db/index';
 import { env } from '@/lib/env.mjs';
+import { PrismaAdapter } from '@auth/prisma-adapter';
+import NextAuth from 'next-auth';
 import GithubProvider from 'next-auth/providers/github';
+import { redirect } from 'next/navigation';
 
-declare module 'next-auth' {
-  interface Session {
-    user: DefaultSession['user'] & {
-      id: string;
-    };
-  }
-}
-
-export type AuthSession = {
-  session: {
-    user: {
-      id: string;
-      name?: string;
-      email?: string;
-    };
-  } | null;
-};
-
-export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(db),
-  callbacks: {
-    session: ({ session, user }) => {
-      session.user.id = user.id;
-      return session;
-    },
-  },
+export const {
+  handlers: { GET, POST },
+  auth,
+} = NextAuth({
+  adapter: PrismaAdapter(prisma),
   providers: [
-    // GoogleProvider({
-    //   clientId: env.GOOGLE_CLIENT_ID,
-    //   clientSecret: env.GOOGLE_CLIENT_SECRET,
-    // }),
     GithubProvider({
       clientId: env.GITHUB_CLIENT_ID,
       clientSecret: env.GITHUB_CLIENT_SECRET,
     }),
   ],
-};
-
-export const getUserAuth = async () => {
-  const session = await getServerSession(authOptions);
-  return { session } as AuthSession;
-};
+  callbacks: {
+    jwt: async ({ user, token }) => {
+      if (user) {
+        token.uid = user.id;
+      }
+      return token;
+    },
+  },
+  session: {
+    strategy: 'jwt',
+  },
+});
 
 export const checkAuth = async () => {
-  const { session } = await getUserAuth();
+  const session = await auth();
   if (!session) redirect('/api/auth/signin');
 };

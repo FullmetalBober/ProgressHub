@@ -1,10 +1,10 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import { AuthSession } from '@/lib/auth/utils';
+import { Session } from 'next-auth';
 import { signIn, signOut } from 'next-auth/react';
 
 type Props = {
-  session: AuthSession['session'];
+  session: Session;
 };
 
 export default function SignIn({ session }: Props) {

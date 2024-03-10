@@ -1,15 +1,26 @@
 import { PrismaClient } from '@prisma/client';
+// import { PrismaClient as PrismaClientEdge } from '@prisma/client/edge';
+// import { withAccelerate } from '@prisma/extension-accelerate';
+
+const prismaClientSingleton = () => {
+  return new PrismaClient();
+};
+
+// const prismaClientEdgeSingleton = () => {
+//   return new PrismaClientEdge().$extends(withAccelerate());
+// };
 
 declare global {
-  // allow global `var` declarations
-  // eslint-disable-next-line no-var
-  var db: PrismaClient | undefined;
+  var prisma: undefined | ReturnType<typeof prismaClientSingleton>;
+  // var prismaEdge: undefined | ReturnType<typeof prismaClientEdgeSingleton>;
 }
 
-export const db =
-  global.db ||
-  new PrismaClient({
-    log: ['query'],
-  });
+const prisma = globalThis.prisma ?? prismaClientSingleton();
+// const prismaEdge = globalThis.prismaEdge ?? prismaClientEdgeSingleton();
 
-if (process.env.NODE_ENV !== 'production') global.db = db;
+export { prisma };
+
+if (process.env.NODE_ENV !== 'production') {
+  globalThis.prisma = prisma;
+  // globalThis.prismaEdge = prismaEdge;
+}

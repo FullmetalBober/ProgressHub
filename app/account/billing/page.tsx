@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { storeSubscriptionPlans } from '@/config/subscriptions';
-import { checkAuth, getUserAuth } from '@/lib/auth/utils';
+import { auth, checkAuth } from '@/lib/auth/utils';
 import { getUserSubscriptionPlan } from '@/lib/stripe/subscription';
 import { CheckCircle2Icon } from 'lucide-react';
 import Link from 'next/link';
@@ -18,7 +18,7 @@ import SuccessToast from './SuccessToast';
 
 export default async function Billing() {
   await checkAuth();
-  const { session } = await getUserAuth();
+  const session = await auth();
   const subscriptionPlan = await getUserSubscriptionPlan();
 
   if (!session) return redirect('/');

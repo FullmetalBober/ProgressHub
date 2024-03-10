@@ -3,11 +3,11 @@ import Link from 'next/link';
 import SidebarItems from './SidebarItems';
 import { Avatar, AvatarFallback } from './ui/avatar';
 
-import { AuthSession, getUserAuth } from '@/lib/auth/utils';
+import { AuthSession, auth } from '@/lib/auth/utils';
 
 const Sidebar = async () => {
-  const session = await getUserAuth();
-  if (session.session === null) return null;
+  const session = await auth();
+  if (session === null) return null;
 
   return (
     <aside className='hidden h-screen min-w-52 border-r border-border bg-muted p-4 pt-8 shadow-inner md:block'>

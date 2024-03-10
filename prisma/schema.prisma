@@ -13,26 +13,26 @@ generator zod {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // directUrl = env("DIRECT_URL")
 }
 
 model Account {
-  id                       String  @id @default(cuid())
-  userId                   String
-  type                     String
-  provider                 String
-  providerAccountId        String
-  refresh_token            String? @db.Text
-  access_token             String? @db.Text
-  expires_at               Int?
-  token_type               String?
-  scope                    String?
-  id_token                 String? @db.Text
-  session_state            String?
-  refresh_token_expires_in Int?
-  user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -46,46 +46,59 @@ model Session {
 }
 
 model VerificationToken {
-  userId  String   @unique
-  token   String   @unique
-  expires DateTime
-  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  identifier String
+  token      String   @unique
+  expires    DateTime
 
-  @@unique([userId, token])
+  @@unique([identifier, token])
 }
 
-model Subscription {
-  userId                 String    @unique
-  user                   User      @relation(fields: [userId], references: [id])
-  stripeCustomerId       String    @unique @map(name: "stripe_customer_id")
-  stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
-  stripePriceId          String?   @map(name: "stripe_price_id")
-  stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
+// model Subscription {
+//   userId                 String    @unique
+//   user                   User      @relation(fields: [userId], references: [id])
+//   stripeCustomerId       String    @unique @map(name: "stripe_customer_id")
+//   stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
+//   stripePriceId          String?   @map(name: "stripe_price_id")
+//   stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
 
-  @@id([userId, stripeCustomerId])
-}
+//   @@id([userId, stripeCustomerId])
+// }
 
 model User {
-  id                String             @id @default(cuid())
+  id            String             @id @default(cuid())
   /// @zod.string.trim().min(1).max(255)
-  name              String
+  name          String?
   /// @zod.string.trim().min(1).max(255)
-  email             String             @unique
-  emailVerified     DateTime?
-  image             String?
-  accounts          Account[]
-  sessions          Session[]
-  subscription      Subscription?
-  VerificationToken VerificationToken?
-  Workspaces        Workspace[]
+  email         String?            @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  workspaces    WorkspaceMembers[]
 }
 
 model Workspace {
-  id      String  @id @default(cuid())
-  name    String  @unique /// @zod.string.trim().min(1).max(255)
+  id      String             @id @default(cuid())
+  name    String             @unique /// @zod.string.trim().min(1).max(255)
   ownerId String
-  members User[]
+  members WorkspaceMembers[]
   issues  Issue[]
+}
+
+enum Role {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+model WorkspaceMembers {
+  id          String    @id @default(cuid())
+  role        Role
+  userId      String
+  workspaceId String
+  user        User      @relation(fields: [userId], references: [id])
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
+  createdAt   DateTime  @default(now())
 }
 
 model Issue {

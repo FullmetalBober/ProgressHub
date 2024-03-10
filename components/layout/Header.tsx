@@ -1,10 +1,10 @@
-import { getUserAuth } from '@/lib/auth/utils';
+import { auth } from '@/lib/auth/utils';
 import { MountainIcon } from 'lucide-react';
 import Link from 'next/link';
 import SignOutBtn from '../auth/SignOut';
 
 export default async function Header() {
-  const { session } = await getUserAuth();
+  const session = await auth();
 
   return (
     <header className='w-full py-6 container flex items-center justify-between px-4 md:px-6'>
