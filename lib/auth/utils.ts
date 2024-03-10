@@ -9,6 +9,8 @@ export const {
   handlers: { GET, POST },
   auth,
 } = NextAuth({
+  //! Should be removed in future
+  trustHost: true,
   adapter: PrismaAdapter(prisma),
   providers: [
     GithubProvider({
