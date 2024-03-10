@@ -5,10 +5,19 @@ import { WorkspaceCreateInputSchema } from '@/prisma/zod';
 import { Prisma } from '@prisma/client';
 import { redirect } from 'next/navigation';
 import { auth } from '../auth/utils';
-import { sanitizeFormData, setUserForm } from './utils';
+import { sanitizeFormData } from './utils';
 
 export async function createWorkspace(formData: FormData) {
-  await setUserForm(formData, 'ownerId');
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  if (!userId) {
+    return {
+      errors: {
+        auth: 'You must be logged in to create a workspace',
+      },
+    };
+  }
 
   const data = sanitizeFormData(formData);
 
@@ -23,7 +32,7 @@ export async function createWorkspace(formData: FormData) {
       ...validatedFields.data,
       members: {
         create: {
-          userId: validatedFields.data.ownerId,
+          userId: userId,
           role: 'OWNER',
         },
       },

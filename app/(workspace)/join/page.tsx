@@ -24,7 +24,7 @@ export default function JoinPage() {
       </CardContent>
       <CardFooter className='flex justify-between'>
         <Button variant='outline' asChild>
-          <Link href='/workspace/create'>Create a new workspace</Link>
+          <Link href='/create'>Create a new workspace</Link>
         </Button>
       </CardFooter>
     </Card>

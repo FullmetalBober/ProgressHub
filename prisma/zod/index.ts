@@ -52,7 +52,7 @@ export const UserScalarFieldEnumSchema = z.enum([
   'image',
 ]);
 
-export const WorkspaceScalarFieldEnumSchema = z.enum(['id', 'name', 'ownerId']);
+export const WorkspaceScalarFieldEnumSchema = z.enum(['id', 'name', 'image']);
 
 export const WorkspaceMembersScalarFieldEnumSchema = z.enum([
   'id',
@@ -218,7 +218,7 @@ export const UserWithRelationsSchema: z.ZodType<UserWithRelations> =
 export const WorkspaceSchema = z.object({
   id: z.string().cuid(),
   name: z.string().trim().min(1).max(255),
-  ownerId: z.string(),
+  image: z.string().nullable(),
 });
 
 export type Workspace = z.infer<typeof WorkspaceSchema>;
@@ -529,7 +529,7 @@ export const WorkspaceSelectSchema: z.ZodType<Prisma.WorkspaceSelect> = z
   .object({
     id: z.boolean().optional(),
     name: z.boolean().optional(),
-    ownerId: z.boolean().optional(),
+    image: z.boolean().optional(),
     members: z
       .union([z.boolean(), z.lazy(() => WorkspaceMembersFindManyArgsSchema)])
       .optional(),
@@ -1573,9 +1573,10 @@ export const WorkspaceWhereInputSchema: z.ZodType<Prisma.WorkspaceWhereInput> =
         .optional(),
       id: z.union([z.lazy(() => StringFilterSchema), z.string()]).optional(),
       name: z.union([z.lazy(() => StringFilterSchema), z.string()]).optional(),
-      ownerId: z
-        .union([z.lazy(() => StringFilterSchema), z.string()])
-        .optional(),
+      image: z
+        .union([z.lazy(() => StringNullableFilterSchema), z.string()])
+        .optional()
+        .nullable(),
       members: z
         .lazy(() => WorkspaceMembersListRelationFilterSchema)
         .optional(),
@@ -1588,7 +1589,12 @@ export const WorkspaceOrderByWithRelationInputSchema: z.ZodType<Prisma.Workspace
     .object({
       id: z.lazy(() => SortOrderSchema).optional(),
       name: z.lazy(() => SortOrderSchema).optional(),
-      ownerId: z.lazy(() => SortOrderSchema).optional(),
+      image: z
+        .union([
+          z.lazy(() => SortOrderSchema),
+          z.lazy(() => SortOrderInputSchema),
+        ])
+        .optional(),
       members: z
         .lazy(() => WorkspaceMembersOrderByRelationAggregateInputSchema)
         .optional(),
@@ -1631,9 +1637,10 @@ export const WorkspaceWhereUniqueInputSchema: z.ZodType<Prisma.WorkspaceWhereUni
               z.lazy(() => WorkspaceWhereInputSchema).array(),
             ])
             .optional(),
-          ownerId: z
-            .union([z.lazy(() => StringFilterSchema), z.string()])
-            .optional(),
+          image: z
+            .union([z.lazy(() => StringNullableFilterSchema), z.string()])
+            .optional()
+            .nullable(),
           members: z
             .lazy(() => WorkspaceMembersListRelationFilterSchema)
             .optional(),
@@ -1647,7 +1654,12 @@ export const WorkspaceOrderByWithAggregationInputSchema: z.ZodType<Prisma.Worksp
     .object({
       id: z.lazy(() => SortOrderSchema).optional(),
       name: z.lazy(() => SortOrderSchema).optional(),
-      ownerId: z.lazy(() => SortOrderSchema).optional(),
+      image: z
+        .union([
+          z.lazy(() => SortOrderSchema),
+          z.lazy(() => SortOrderInputSchema),
+        ])
+        .optional(),
       _count: z
         .lazy(() => WorkspaceCountOrderByAggregateInputSchema)
         .optional(),
@@ -1681,9 +1693,13 @@ export const WorkspaceScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.Wor
       name: z
         .union([z.lazy(() => StringWithAggregatesFilterSchema), z.string()])
         .optional(),
-      ownerId: z
-        .union([z.lazy(() => StringWithAggregatesFilterSchema), z.string()])
-        .optional(),
+      image: z
+        .union([
+          z.lazy(() => StringNullableWithAggregatesFilterSchema),
+          z.string(),
+        ])
+        .optional()
+        .nullable(),
     })
     .strict() as z.ZodType<Prisma.WorkspaceScalarWhereWithAggregatesInput>;
 
@@ -3148,7 +3164,7 @@ export const WorkspaceCreateInputSchema: z.ZodType<Prisma.WorkspaceCreateInput> 
     .object({
       id: z.string().cuid().optional(),
       name: z.string().trim().min(1).max(255),
-      ownerId: z.string(),
+      image: z.string().optional().nullable(),
       members: z
         .lazy(() => WorkspaceMembersCreateNestedManyWithoutWorkspaceInputSchema)
         .optional(),
@@ -3163,7 +3179,7 @@ export const WorkspaceUncheckedCreateInputSchema: z.ZodType<Prisma.WorkspaceUnch
     .object({
       id: z.string().cuid().optional(),
       name: z.string().trim().min(1).max(255),
-      ownerId: z.string(),
+      image: z.string().optional().nullable(),
       members: z
         .lazy(
           () =>
@@ -3191,12 +3207,13 @@ export const WorkspaceUpdateInputSchema: z.ZodType<Prisma.WorkspaceUpdateInput> 
           z.lazy(() => StringFieldUpdateOperationsInputSchema),
         ])
         .optional(),
-      ownerId: z
+      image: z
         .union([
           z.string(),
-          z.lazy(() => StringFieldUpdateOperationsInputSchema),
+          z.lazy(() => NullableStringFieldUpdateOperationsInputSchema),
         ])
-        .optional(),
+        .optional()
+        .nullable(),
       members: z
         .lazy(() => WorkspaceMembersUpdateManyWithoutWorkspaceNestedInputSchema)
         .optional(),
@@ -3221,12 +3238,13 @@ export const WorkspaceUncheckedUpdateInputSchema: z.ZodType<Prisma.WorkspaceUnch
           z.lazy(() => StringFieldUpdateOperationsInputSchema),
         ])
         .optional(),
-      ownerId: z
+      image: z
         .union([
           z.string(),
-          z.lazy(() => StringFieldUpdateOperationsInputSchema),
+          z.lazy(() => NullableStringFieldUpdateOperationsInputSchema),
         ])
-        .optional(),
+        .optional()
+        .nullable(),
       members: z
         .lazy(
           () =>
@@ -3244,7 +3262,7 @@ export const WorkspaceCreateManyInputSchema: z.ZodType<Prisma.WorkspaceCreateMan
     .object({
       id: z.string().cuid().optional(),
       name: z.string().trim().min(1).max(255),
-      ownerId: z.string(),
+      image: z.string().optional().nullable(),
     })
     .strict() as z.ZodType<Prisma.WorkspaceCreateManyInput>;
 
@@ -3263,12 +3281,13 @@ export const WorkspaceUpdateManyMutationInputSchema: z.ZodType<Prisma.WorkspaceU
           z.lazy(() => StringFieldUpdateOperationsInputSchema),
         ])
         .optional(),
-      ownerId: z
+      image: z
         .union([
           z.string(),
-          z.lazy(() => StringFieldUpdateOperationsInputSchema),
+          z.lazy(() => NullableStringFieldUpdateOperationsInputSchema),
         ])
-        .optional(),
+        .optional()
+        .nullable(),
     })
     .strict() as z.ZodType<Prisma.WorkspaceUpdateManyMutationInput>;
 
@@ -3287,12 +3306,13 @@ export const WorkspaceUncheckedUpdateManyInputSchema: z.ZodType<Prisma.Workspace
           z.lazy(() => StringFieldUpdateOperationsInputSchema),
         ])
         .optional(),
-      ownerId: z
+      image: z
         .union([
           z.string(),
-          z.lazy(() => StringFieldUpdateOperationsInputSchema),
+          z.lazy(() => NullableStringFieldUpdateOperationsInputSchema),
         ])
-        .optional(),
+        .optional()
+        .nullable(),
     })
     .strict() as z.ZodType<Prisma.WorkspaceUncheckedUpdateManyInput>;
 
@@ -4406,7 +4426,7 @@ export const WorkspaceCountOrderByAggregateInputSchema: z.ZodType<Prisma.Workspa
     .object({
       id: z.lazy(() => SortOrderSchema).optional(),
       name: z.lazy(() => SortOrderSchema).optional(),
-      ownerId: z.lazy(() => SortOrderSchema).optional(),
+      image: z.lazy(() => SortOrderSchema).optional(),
     })
     .strict() as z.ZodType<Prisma.WorkspaceCountOrderByAggregateInput>;
 
@@ -4415,7 +4435,7 @@ export const WorkspaceMaxOrderByAggregateInputSchema: z.ZodType<Prisma.Workspace
     .object({
       id: z.lazy(() => SortOrderSchema).optional(),
       name: z.lazy(() => SortOrderSchema).optional(),
-      ownerId: z.lazy(() => SortOrderSchema).optional(),
+      image: z.lazy(() => SortOrderSchema).optional(),
     })
     .strict() as z.ZodType<Prisma.WorkspaceMaxOrderByAggregateInput>;
 
@@ -4424,7 +4444,7 @@ export const WorkspaceMinOrderByAggregateInputSchema: z.ZodType<Prisma.Workspace
     .object({
       id: z.lazy(() => SortOrderSchema).optional(),
       name: z.lazy(() => SortOrderSchema).optional(),
-      ownerId: z.lazy(() => SortOrderSchema).optional(),
+      image: z.lazy(() => SortOrderSchema).optional(),
     })
     .strict() as z.ZodType<Prisma.WorkspaceMinOrderByAggregateInput>;
 
@@ -7585,7 +7605,7 @@ export const WorkspaceCreateWithoutMembersInputSchema: z.ZodType<Prisma.Workspac
     .object({
       id: z.string().cuid().optional(),
       name: z.string().trim().min(1).max(255),
-      ownerId: z.string(),
+      image: z.string().optional().nullable(),
       issues: z
         .lazy(() => IssueCreateNestedManyWithoutWorkspaceInputSchema)
         .optional(),
@@ -7597,7 +7617,7 @@ export const WorkspaceUncheckedCreateWithoutMembersInputSchema: z.ZodType<Prisma
     .object({
       id: z.string().cuid().optional(),
       name: z.string().trim().min(1).max(255),
-      ownerId: z.string(),
+      image: z.string().optional().nullable(),
       issues: z
         .lazy(() => IssueUncheckedCreateNestedManyWithoutWorkspaceInputSchema)
         .optional(),
@@ -7774,12 +7794,13 @@ export const WorkspaceUpdateWithoutMembersInputSchema: z.ZodType<Prisma.Workspac
           z.lazy(() => StringFieldUpdateOperationsInputSchema),
         ])
         .optional(),
-      ownerId: z
+      image: z
         .union([
           z.string(),
-          z.lazy(() => StringFieldUpdateOperationsInputSchema),
+          z.lazy(() => NullableStringFieldUpdateOperationsInputSchema),
         ])
-        .optional(),
+        .optional()
+        .nullable(),
       issues: z
         .lazy(() => IssueUpdateManyWithoutWorkspaceNestedInputSchema)
         .optional(),
@@ -7801,12 +7822,13 @@ export const WorkspaceUncheckedUpdateWithoutMembersInputSchema: z.ZodType<Prisma
           z.lazy(() => StringFieldUpdateOperationsInputSchema),
         ])
         .optional(),
-      ownerId: z
+      image: z
         .union([
           z.string(),
-          z.lazy(() => StringFieldUpdateOperationsInputSchema),
+          z.lazy(() => NullableStringFieldUpdateOperationsInputSchema),
         ])
-        .optional(),
+        .optional()
+        .nullable(),
       issues: z
         .lazy(() => IssueUncheckedUpdateManyWithoutWorkspaceNestedInputSchema)
         .optional(),
@@ -7818,7 +7840,7 @@ export const WorkspaceCreateWithoutIssuesInputSchema: z.ZodType<Prisma.Workspace
     .object({
       id: z.string().cuid().optional(),
       name: z.string().trim().min(1).max(255),
-      ownerId: z.string(),
+      image: z.string().optional().nullable(),
       members: z
         .lazy(() => WorkspaceMembersCreateNestedManyWithoutWorkspaceInputSchema)
         .optional(),
@@ -7830,7 +7852,7 @@ export const WorkspaceUncheckedCreateWithoutIssuesInputSchema: z.ZodType<Prisma.
     .object({
       id: z.string().cuid().optional(),
       name: z.string().trim().min(1).max(255),
-      ownerId: z.string(),
+      image: z.string().optional().nullable(),
       members: z
         .lazy(
           () =>
@@ -7936,12 +7958,13 @@ export const WorkspaceUpdateWithoutIssuesInputSchema: z.ZodType<Prisma.Workspace
           z.lazy(() => StringFieldUpdateOperationsInputSchema),
         ])
         .optional(),
-      ownerId: z
+      image: z
         .union([
           z.string(),
-          z.lazy(() => StringFieldUpdateOperationsInputSchema),
+          z.lazy(() => NullableStringFieldUpdateOperationsInputSchema),
         ])
-        .optional(),
+        .optional()
+        .nullable(),
       members: z
         .lazy(() => WorkspaceMembersUpdateManyWithoutWorkspaceNestedInputSchema)
         .optional(),
@@ -7963,12 +7986,13 @@ export const WorkspaceUncheckedUpdateWithoutIssuesInputSchema: z.ZodType<Prisma.
           z.lazy(() => StringFieldUpdateOperationsInputSchema),
         ])
         .optional(),
-      ownerId: z
+      image: z
         .union([
           z.string(),
-          z.lazy(() => StringFieldUpdateOperationsInputSchema),
+          z.lazy(() => NullableStringFieldUpdateOperationsInputSchema),
         ])
-        .optional(),
+        .optional()
+        .nullable(),
       members: z
         .lazy(
           () =>

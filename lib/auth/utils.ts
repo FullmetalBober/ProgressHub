@@ -16,17 +16,6 @@ export const {
       clientSecret: env.GITHUB_CLIENT_SECRET,
     }),
   ],
-  callbacks: {
-    jwt: async ({ user, token }) => {
-      if (user) {
-        token.uid = user.id;
-      }
-      return token;
-    },
-  },
-  session: {
-    strategy: 'jwt',
-  },
 });
 
 export const checkAuth = async () => {

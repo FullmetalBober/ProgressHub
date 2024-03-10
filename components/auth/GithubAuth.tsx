@@ -10,7 +10,7 @@ export default function GithubAuth() {
       variant='outline'
       type='button'
       // disabled={isLoading}
-      onClick={() => signIn('github', { callbackUrl: '/dashboard' })}
+      onClick={() => signIn('github', { callbackUrl: '/' })}
     >
       {/* {isLoading ? (
     <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />

@@ -1,3 +1,7 @@
+import { auth } from '@/lib/auth/utils';
+import { prisma } from '@/lib/db/index';
+import Link from 'next/link';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
 import {
   DropdownMenu,
@@ -13,7 +17,16 @@ export default async function SideBar({
 }: {
   workspaceId: string;
 }) {
-  console.log(workspaceId);
+  const session = await auth();
+
+  const workspaces = await prisma.workspace.findMany({
+    where: { members: { some: { userId: session?.user?.id } } },
+  });
+
+  const currentWorkspace = workspaces.find(w => w.id === workspaceId);
+  const otherWorkspaces = workspaces.filter(w => w.id !== workspaceId);
+
+  const user = session?.user;
   return (
     <aside className='pb-12'>
       <div className='space-y-4 py-4'>
@@ -23,15 +36,43 @@ export default async function SideBar({
           </h2> */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant='ghost'>Open</Button>
+              <Button variant='ghost'>
+                <Avatar className='mr-2 h-5 w-5'>
+                  <AvatarImage
+                    src={
+                      currentWorkspace?.image || 'https://github.com/shadcn.png'
+                    }
+                    alt={currentWorkspace?.name}
+                  />
+                  <AvatarFallback>{currentWorkspace?.name[0]}</AvatarFallback>
+                </Avatar>
+                {currentWorkspace?.name}
+              </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuLabel>{user?.email}</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Billing</DropdownMenuItem>
-              <DropdownMenuItem>Team</DropdownMenuItem>
-              <DropdownMenuItem>Subscription</DropdownMenuItem>
+              {otherWorkspaces.map(workspace => (
+                <Link key={workspace.id} href={`/${workspace.id}`}>
+                  <DropdownMenuItem>
+                    {' '}
+                    <Avatar className='mr-2 h-5 w-5'>
+                      <AvatarImage
+                        src={
+                          workspace?.image || 'https://github.com/shadcn.png'
+                        }
+                        alt={workspace?.name}
+                      />
+                      <AvatarFallback>{workspace?.name[0]}</AvatarFallback>
+                    </Avatar>
+                    {workspace.name}
+                  </DropdownMenuItem>
+                </Link>
+              ))}
+              <DropdownMenuSeparator />
+              <Link href='/join'>
+                <DropdownMenuItem>Create or join a workspace</DropdownMenuItem>
+              </Link>
             </DropdownMenuContent>
           </DropdownMenu>
           <div className='space-y-1'>

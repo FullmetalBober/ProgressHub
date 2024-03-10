@@ -80,7 +80,7 @@ model User {
 model Workspace {
   id      String             @id @default(cuid())
   name    String             @unique /// @zod.string.trim().min(1).max(255)
-  ownerId String
+  image   String?
   members WorkspaceMembers[]
   issues  Issue[]
 }

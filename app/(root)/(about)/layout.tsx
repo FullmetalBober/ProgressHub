@@ -33,9 +33,8 @@ export default async function RootLayout({
         id: true,
       },
     });
-
     if (workspace) return redirect(`/${workspace.id}`);
-    else return redirect('/workspace/create');
+    return redirect('/create');
   }
 
   return <>{children}</>;

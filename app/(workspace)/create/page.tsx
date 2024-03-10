@@ -36,7 +36,7 @@ export default function CreateWorkspacePage() {
       </CardContent>
       <CardFooter className='flex justify-between'>
         <Button variant='ghost' className='w-full' asChild>
-          <Link href='/workspace/join'>Join an existing workspace</Link>
+          <Link href='/join'>Join an existing workspace</Link>
         </Button>
       </CardFooter>
     </Card>
