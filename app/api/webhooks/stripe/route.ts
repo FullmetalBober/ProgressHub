@@ -46,6 +46,8 @@ export async function POST(request: Request) {
     };
 
     if (session?.metadata?.userId != null) {
+      //TODO: Fix the type of subscription
+      //@ts-ignore
       await prisma.subscription.upsert({
         where: { userId: session.metadata.userId },
         update: { ...updatedData, userId: session.metadata.userId },
@@ -55,6 +57,8 @@ export async function POST(request: Request) {
       typeof session.customer === 'string' &&
       session.customer != null
     ) {
+      //TODO: Fix the type of subscription
+      //@ts-ignore
       await prisma.subscription.update({
         where: { stripeCustomerId: session.customer },
         data: updatedData,
@@ -69,6 +73,8 @@ export async function POST(request: Request) {
     );
 
     // Update the price id and set the new period end.
+    //TODO: Fix the type of subscription
+    //@ts-ignore
     await prisma.subscription.update({
       where: {
         stripeSubscriptionId: subscription.id,

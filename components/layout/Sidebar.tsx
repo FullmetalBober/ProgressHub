@@ -1,13 +1,39 @@
 import { Button } from '../ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu';
 
-export default async function SideBar() {
+export default async function SideBar({
+  workspaceId,
+}: {
+  workspaceId: string;
+}) {
+  console.log(workspaceId);
   return (
     <aside className='pb-12'>
       <div className='space-y-4 py-4'>
         <div className='px-3 py-2'>
-          <h2 className='mb-2 px-4 text-lg font-semibold tracking-tight'>
+          {/* <h2 className='mb-2 px-4 text-lg font-semibold tracking-tight'>
             Discover
-          </h2>
+          </h2> */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant='ghost'>Open</Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Profile</DropdownMenuItem>
+              <DropdownMenuItem>Billing</DropdownMenuItem>
+              <DropdownMenuItem>Team</DropdownMenuItem>
+              <DropdownMenuItem>Subscription</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <div className='space-y-1'>
             <Button variant='secondary' className='w-full justify-start'>
               <svg

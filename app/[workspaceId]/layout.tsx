@@ -9,13 +9,15 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: { workspaceId: string };
 }>) {
   return (
     <div className='flex flex-col h-screen justify-between'>
       <div className='mb-auto p-8 pt-2 md:p-8 grid lg:grid-cols-5'>
-        <SideBar />
+        <SideBar workspaceId={params.workspaceId} />
         <main className='col-span-3 lg:col-span-4'>{children}</main>
       </div>
       <Footer />
