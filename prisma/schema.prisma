@@ -75,11 +75,13 @@ model User {
   accounts      Account[]
   sessions      Session[]
   workspaces    WorkspaceMembers[]
+  issues        Issue[]
 }
 
 model Workspace {
   id      String             @id @default(cuid())
-  name    String             @unique /// @zod.string.trim().min(1).max(255)
+  /// @zod.string.trim().min(1).max(255)
+  name    String             @unique
   image   String?
   members WorkspaceMembers[]
   issues  Issue[]
@@ -106,12 +108,12 @@ model Issue {
   /// @zod.string.trim().min(1).max(255)
   title       String
   /// @zod.string.trim().min(1).max(255)
-  description String?
+  description String    @default("")
   status      String
   workspaceId String
   workspace   Workspace @relation(fields: [workspaceId], references: [id])
-  assigneeId  String?
-  reporterId  String
+  assigneeId  String
+  assignee    User      @relation(fields: [assigneeId], references: [id])
   comments    Comment[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt

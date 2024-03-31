@@ -1,16 +1,18 @@
+import IssuesTable from '@/components/issues/IssuesTable';
 import { Metadata } from 'next';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 
 export const metadata: Metadata = {
-  title: 'Dashboard',
+  title: 'Issues',
 };
 
 export default async function DashboardPage({ params }: { params: Params }) {
   const { workspaceId } = params;
 
-  // const cookieStore = cookies();
+  const issues =
+    (await prisma?.issue.findMany({
+      where: { workspaceId },
+    })) || [];
 
-  // cookieStore.set('lastVisitedWorkspace', workspaceId.toString());
-
-  return <>Dashboard</>;
+  return <IssuesTable issues={issues} />;
 }

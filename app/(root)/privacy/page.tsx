@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default function PrivacyPage() {
   return (
-    <>
+    <section>
       <Typography variant='h1'>Privacy Policy</Typography>
       <Typography variant='p'>Last updated: February 18, 2024</Typography>
       <Typography variant='p'>
@@ -550,6 +550,6 @@ export default function PrivacyPage() {
       <List>
         <li>By email: vladyslav.mankivskyi@gmail.com</li>
       </List>
-    </>
+    </section>
   );
 }
