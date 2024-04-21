@@ -1,5 +1,6 @@
 import Footer from '@/components/layout/Footer';
 import SideBar from '@/components/layout/Sidebar';
+import { auth } from '@/lib/auth/utils';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -14,6 +15,27 @@ export default async function RootLayout({
   children: React.ReactNode;
   params: { workspaceId: string };
 }>) {
+  let isUserMember = false;
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  if (userId) {
+    const workspaceUsers = await prisma?.workspaceMembers.findFirst({
+      where: {
+        workspaceId: params.workspaceId,
+        userId: userId,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (workspaceUsers) isUserMember = true;
+  }
+
+  //TODO: Add a better UI for this
+  if (!isUserMember) return <main>You are not a member of this workspace</main>;
+
   return (
     <div className='flex flex-col h-screen justify-between'>
       <div className='mb-auto p-8 pt-2 md:p-8 grid lg:grid-cols-5'>

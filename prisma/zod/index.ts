@@ -117,6 +117,16 @@ export const AccountSchema = z.object({
 
 export type Account = z.infer<typeof AccountSchema>;
 
+/////////////////////////////////////////
+// ACCOUNT CUSTOM VALIDATORS SCHEMA
+/////////////////////////////////////////
+
+export const AccountCustomValidatorsSchema = AccountSchema.strip();
+
+export type AccountCustomValidators = z.infer<
+  typeof AccountCustomValidatorsSchema
+>;
+
 // ACCOUNT RELATION SCHEMA
 //------------------------------------------------------
 
@@ -146,6 +156,16 @@ export const SessionSchema = z.object({
 });
 
 export type Session = z.infer<typeof SessionSchema>;
+
+/////////////////////////////////////////
+// SESSION CUSTOM VALIDATORS SCHEMA
+/////////////////////////////////////////
+
+export const SessionCustomValidatorsSchema = SessionSchema.strip();
+
+export type SessionCustomValidators = z.infer<
+  typeof SessionCustomValidatorsSchema
+>;
 
 // SESSION RELATION SCHEMA
 //------------------------------------------------------
@@ -177,6 +197,17 @@ export const VerificationTokenSchema = z.object({
 export type VerificationToken = z.infer<typeof VerificationTokenSchema>;
 
 /////////////////////////////////////////
+// VERIFICATION TOKEN CUSTOM VALIDATORS SCHEMA
+/////////////////////////////////////////
+
+export const VerificationTokenCustomValidatorsSchema =
+  VerificationTokenSchema.strip();
+
+export type VerificationTokenCustomValidators = z.infer<
+  typeof VerificationTokenCustomValidatorsSchema
+>;
+
+/////////////////////////////////////////
 // USER SCHEMA
 /////////////////////////////////////////
 
@@ -189,6 +220,14 @@ export const UserSchema = z.object({
 });
 
 export type User = z.infer<typeof UserSchema>;
+
+/////////////////////////////////////////
+// USER CUSTOM VALIDATORS SCHEMA
+/////////////////////////////////////////
+
+export const UserCustomValidatorsSchema = UserSchema.strip();
+
+export type UserCustomValidators = z.infer<typeof UserCustomValidatorsSchema>;
 
 // USER RELATION SCHEMA
 //------------------------------------------------------
@@ -224,6 +263,16 @@ export const WorkspaceSchema = z.object({
 
 export type Workspace = z.infer<typeof WorkspaceSchema>;
 
+/////////////////////////////////////////
+// WORKSPACE CUSTOM VALIDATORS SCHEMA
+/////////////////////////////////////////
+
+export const WorkspaceCustomValidatorsSchema = WorkspaceSchema.strip();
+
+export type WorkspaceCustomValidators = z.infer<
+  typeof WorkspaceCustomValidatorsSchema
+>;
+
 // WORKSPACE RELATION SCHEMA
 //------------------------------------------------------
 
@@ -256,6 +305,17 @@ export const WorkspaceMembersSchema = z.object({
 });
 
 export type WorkspaceMembers = z.infer<typeof WorkspaceMembersSchema>;
+
+/////////////////////////////////////////
+// WORKSPACE MEMBERS CUSTOM VALIDATORS SCHEMA
+/////////////////////////////////////////
+
+export const WorkspaceMembersCustomValidatorsSchema =
+  WorkspaceMembersSchema.strip();
+
+export type WorkspaceMembersCustomValidators = z.infer<
+  typeof WorkspaceMembersCustomValidatorsSchema
+>;
 
 // WORKSPACE MEMBERS RELATION SCHEMA
 //------------------------------------------------------
@@ -295,6 +355,14 @@ export const IssueSchema = z.object({
 
 export type Issue = z.infer<typeof IssueSchema>;
 
+/////////////////////////////////////////
+// ISSUE CUSTOM VALIDATORS SCHEMA
+/////////////////////////////////////////
+
+export const IssueCustomValidatorsSchema = IssueSchema.strip();
+
+export type IssueCustomValidators = z.infer<typeof IssueCustomValidatorsSchema>;
+
 // ISSUE RELATION SCHEMA
 //------------------------------------------------------
 
@@ -329,6 +397,16 @@ export const CommentSchema = z.object({
 });
 
 export type Comment = z.infer<typeof CommentSchema>;
+
+/////////////////////////////////////////
+// COMMENT CUSTOM VALIDATORS SCHEMA
+/////////////////////////////////////////
+
+export const CommentCustomValidatorsSchema = CommentSchema.strip();
+
+export type CommentCustomValidators = z.infer<
+  typeof CommentCustomValidatorsSchema
+>;
 
 // COMMENT RELATION SCHEMA
 //------------------------------------------------------

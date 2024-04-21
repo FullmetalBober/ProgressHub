@@ -1,6 +1,8 @@
 'use client';
 
-import { Issue } from '@prisma/client';
+import { IssueUncheckedCreateInputSchema } from '@/prisma/zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Prisma } from '@prisma/client';
 import { SquarePen } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { Button } from '../ui/button';
@@ -22,16 +24,32 @@ import {
 } from '../ui/form';
 import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
+import StatusComboboxFormField from './StatusComboboxFormField';
 
 export default function CreateIssueModal({
   workspaceId,
 }: {
   workspaceId: string;
 }) {
-  const form = useForm<Issue>();
+  const form = useForm<Prisma.IssueUncheckedCreateInput>({
+    resolver: zodResolver(IssueUncheckedCreateInputSchema),
+    defaultValues: {
+      workspaceId,
+      title: '',
+      description: '',
+      status: 'backlog',
+    },
+  });
 
-  function onSubmit(data: Issue) {
+  async function onSubmit(data: Prisma.IssueUncheckedCreateInput) {
     console.log(data);
+    // data.workspaceId = workspaceId;
+
+    // const formData = new FormData();
+    // Object.keys(data).forEach(key => formData.append(key, data[key]));
+
+    // const res = await createIssue(formData);
+    // console.log(res);
   }
 
   return (
@@ -50,20 +68,6 @@ export default function CreateIssueModal({
                 Create a new issue in the current workspace.
               </DialogDescription>
             </DialogHeader>
-            {/* <div className='grid gap-4 py-4'>
-          <div className='grid grid-cols-4 items-center gap-4'>
-            <Label htmlFor='name' className='text-right'>
-              Name
-            </Label>
-            <Input id='name' value='Pedro Duarte' className='col-span-3' />
-          </div>
-          <div className='grid grid-cols-4 items-center gap-4'>
-            <Label htmlFor='username' className='text-right'>
-              Username
-            </Label>
-            <Input id='username' value='@peduarte' className='col-span-3' />
-          </div>
-        </div> */}
             <FormField
               control={form.control}
               name='title'
@@ -94,6 +98,8 @@ export default function CreateIssueModal({
                 </FormItem>
               )}
             />
+
+            <StatusComboboxFormField form={form} />
 
             <DialogFooter>
               <Button type='submit'>Create issue</Button>

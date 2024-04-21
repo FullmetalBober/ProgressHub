@@ -9,9 +9,9 @@ export async function setUserForm(formData: FormData, field: string) {
 
 export function sanitizeFormData(formData: FormData) {
   const data = Object.fromEntries(formData.entries());
-  for (const key in data) {
-    if (data[key] === '' || key.includes('$ACTION_ID_')) delete data[key];
-  }
+  // for (const key in data) {
+  //   if (data[key] === '' || key.includes('$ACTION_ID_')) delete data[key];
+  // }
 
   return data;
 }
