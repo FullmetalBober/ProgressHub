@@ -110,6 +110,22 @@ model WorkspaceMembers {
   createdAt   DateTime  @default(now())
 }
 
+enum Status {
+  BACKLOG
+  TODO
+  IN_PROGRESS
+  DONE
+  CANCELED
+}
+
+enum Priority {
+  NO_PRIORITY
+  URGENT
+  HIGH
+  MEDIUM
+  LOW
+}
+
 /// @zod.strip()
 model Issue {
   id          String    @id @default(cuid())
@@ -117,7 +133,8 @@ model Issue {
   title       String
   /// @zod.string.trim().min(1).max(255)
   description String    @default("")
-  status      String
+  status      Status    @default(BACKLOG)
+  priority    Priority  @default(NO_PRIORITY)
   workspaceId String
   workspace   Workspace @relation(fields: [workspaceId], references: [id])
   assigneeId  String

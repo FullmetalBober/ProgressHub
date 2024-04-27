@@ -2,6 +2,7 @@ import { auth } from '@/lib/auth/utils';
 import { prisma } from '@/lib/db/index';
 import { FolderKanban, Inbox, SquareDot } from 'lucide-react';
 import Link from 'next/link';
+import CustomAvatar from '../CustomAvatar';
 import CreateIssueModal from '../issues/CreateIssueModal';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
@@ -24,10 +25,17 @@ export default async function SideBar({
 
   const workspaces = await prisma.workspace.findMany({
     where: { members: { some: { userId: session?.user?.id } } },
+    include: {
+      members: {
+        select: { user: true },
+      },
+    },
   });
 
   const currentWorkspace = workspaces.find(w => w.id === workspaceId);
   const otherWorkspaces = workspaces.filter(w => w.id !== workspaceId);
+
+  // console.log('currentWorkspace', currentWorkspace.members);
 
   const user = session?.user;
   return (
@@ -42,18 +50,11 @@ export default async function SideBar({
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant='ghost'>
-                    <Avatar className='mr-2 h-5 w-5'>
-                      <AvatarImage
-                        src={
-                          currentWorkspace?.image ||
-                          'https://github.com/shadcn.png'
-                        }
-                        alt={currentWorkspace?.name}
-                      />
-                      <AvatarFallback>
-                        {currentWorkspace?.name[0]}
-                      </AvatarFallback>
-                    </Avatar>
+                    <CustomAvatar
+                      src={currentWorkspace?.image}
+                      name={currentWorkspace?.name}
+                      className='mr-2 h-5 w-5'
+                    />
                     {currentWorkspace?.name}
                   </Button>
                 </DropdownMenuTrigger>
@@ -61,7 +62,10 @@ export default async function SideBar({
                   <DropdownMenuLabel>{user?.email}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   {otherWorkspaces.map(workspace => (
-                    <Link key={workspace.id} href={`/${workspace.id}`}>
+                    <Link
+                      key={workspace.id}
+                      href={`/workspace/${workspace.id}`}
+                    >
                       <DropdownMenuItem>
                         {' '}
                         <Avatar className='mr-2 h-5 w-5'>

@@ -24,6 +24,7 @@ import {
 } from '../ui/form';
 import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
+import PriorityComboboxFormField from './PriorityComboboxFormField';
 import StatusComboboxFormField from './StatusComboboxFormField';
 
 export default function CreateIssueModal({
@@ -37,7 +38,8 @@ export default function CreateIssueModal({
       workspaceId,
       title: '',
       description: '',
-      status: 'backlog',
+      status: 'BACKLOG',
+      priority: 'NO_PRIORITY',
     },
   });
 
@@ -99,7 +101,11 @@ export default function CreateIssueModal({
               )}
             />
 
-            <StatusComboboxFormField form={form} />
+            <div className='flex gap-2'>
+              <StatusComboboxFormField form={form} />
+
+              <PriorityComboboxFormField form={form} />
+            </div>
 
             <DialogFooter>
               <Button type='submit'>Create issue</Button>

@@ -8,30 +8,30 @@ import {
 import { UseFormReturn } from 'react-hook-form';
 import ComboboxFormField from '../form/ComboboxFormField';
 
-const statuses = [
+const priorities = [
   {
-    value: 'BACKLOG',
-    label: 'Backlog',
+    value: 'NO_PRIORITY',
+    label: 'No priority',
     icon: HelpCircle,
   },
   {
-    value: 'TODO',
-    label: 'Todo',
+    value: 'URGENT',
+    label: 'Urgent',
     icon: Circle,
   },
   {
-    value: 'IN_PROGRESS',
-    label: 'In Progress',
+    value: 'HIGH',
+    label: 'High',
     icon: ArrowUpCircle,
   },
   {
-    value: 'DONE',
-    label: 'Done',
+    value: 'MEDIUM',
+    label: 'Medium',
     icon: CheckCircle2,
   },
   {
-    value: 'CANCELED',
-    label: 'Canceled',
+    value: 'LOW',
+    label: 'Low',
     icon: XCircle,
   },
 ];
@@ -42,6 +42,10 @@ export default function StatusComboboxFormField({
   form: UseFormReturn;
 }) {
   return (
-    <ComboboxFormField form={form} fieldName='status' properties={statuses} />
+    <ComboboxFormField
+      form={form}
+      fieldName='priority'
+      properties={priorities}
+    />
   );
 }
