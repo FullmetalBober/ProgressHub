@@ -15,12 +15,12 @@ declare global {
   // var prismaEdge: undefined | ReturnType<typeof prismaClientEdgeSingleton>;
 }
 
-const prisma = globalThis.prisma ?? prismaClientSingleton();
-// const prismaEdge = globalThis.prismaEdge ?? prismaClientEdgeSingleton();
+const prisma = global.prisma ?? prismaClientSingleton();
+// const prismaEdge = global.prismaEdge ?? prismaClientEdgeSingleton();
 
 export { prisma };
 
 if (process.env.NODE_ENV !== 'production') {
-  globalThis.prisma = prisma;
-  // globalThis.prismaEdge = prismaEdge;
+  global.prisma = prisma;
+  // global.prismaEdge = prismaEdge;
 }
