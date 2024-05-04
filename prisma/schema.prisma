@@ -128,10 +128,10 @@ enum Priority {
 
 /// @zod.strip()
 model Issue {
-  id          String    @id @default(cuid())
+  id          Int       @id @default(autoincrement())
   /// @zod.string.trim().min(1).max(255)
   title       String
-  /// @zod.string.trim().min(1).max(255)
+  /// @zod.string.trim().min(0).max(2550)
   description String    @default("")
   status      Status    @default(BACKLOG)
   priority    Priority  @default(NO_PRIORITY)
@@ -149,7 +149,7 @@ model Comment {
   id        String   @id @default(cuid())
   /// @zod.string.trim().min(1).max(255)
   body      String
-  issueId   String
+  issueId   Int
   issue     Issue    @relation(fields: [issueId], references: [id])
   authorId  String
   createdAt DateTime @default(now())

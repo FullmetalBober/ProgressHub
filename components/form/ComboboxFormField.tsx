@@ -1,4 +1,7 @@
+'use client';
+
 import { cn } from '@/lib/utils';
+import { useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { Button } from '../ui/button';
 import {
@@ -23,8 +26,10 @@ export default function ComboboxFormField({
 }: {
   form: UseFormReturn;
   fieldName: string;
-  properties: Properties[];
+  properties: Property[];
 }) {
+  const [open, setOpen] = useState(false);
+
   const value = form.watch(fieldName);
   const selectedStatus = properties.find(priority => priority.value === value);
 
@@ -34,19 +39,22 @@ export default function ComboboxFormField({
       name={fieldName}
       render={({ field }) => (
         <FormItem className='flex flex-col'>
-          <Popover>
+          <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
               <FormControl>
                 <Button
                   variant='outline'
                   role='combobox'
                   size='sm'
-                  className='justify-start'
+                  className='justify-start flex items-center'
+                  aria-expanded={open}
                 >
                   {field.value ? (
                     <>
                       {selectedStatus && (
-                        <selectedStatus.icon className='mr-2 h-4 w-4 shrink-0' />
+                        <div className='*:mr-2 *:h-4 *:w-4 *:shrink-0'>
+                          {selectedStatus.icon}
+                        </div>
                       )}
                       {selectedStatus?.label}
                     </>
@@ -57,7 +65,7 @@ export default function ComboboxFormField({
                 </Button>
               </FormControl>
             </PopoverTrigger>
-            <PopoverContent className='w-[200px] p-0'>
+            <PopoverContent className='p-0'>
               <Command>
                 <CommandInput placeholder='Change status...' />
                 {/* <CommandEmpty>No result found.</CommandEmpty> */}
@@ -68,16 +76,19 @@ export default function ComboboxFormField({
                       key={status.value}
                       onSelect={() => {
                         form.setValue(fieldName, status.value);
+                        setOpen(false);
                       }}
                     >
-                      <status.icon
+                      <div
                         className={cn(
-                          'mr-2 h-4 w-4',
+                          '*:mr-2 *:h-4 *:w-4',
                           status.value === selectedStatus?.value
-                            ? 'opacity-100'
-                            : 'opacity-40'
+                            ? '*:opacity-100'
+                            : '*:opacity-40'
                         )}
-                      />
+                      >
+                        {status.icon}
+                      </div>
                       <span>{status.label}</span>
                     </CommandItem>
                   ))}

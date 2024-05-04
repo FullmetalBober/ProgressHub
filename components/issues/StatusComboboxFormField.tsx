@@ -12,27 +12,27 @@ const statuses = [
   {
     value: 'BACKLOG',
     label: 'Backlog',
-    icon: HelpCircle,
+    icon: <HelpCircle />,
   },
   {
     value: 'TODO',
     label: 'Todo',
-    icon: Circle,
+    icon: <Circle />,
   },
   {
     value: 'IN_PROGRESS',
     label: 'In Progress',
-    icon: ArrowUpCircle,
+    icon: <ArrowUpCircle />,
   },
   {
     value: 'DONE',
     label: 'Done',
-    icon: CheckCircle2,
+    icon: <CheckCircle2 />,
   },
   {
     value: 'CANCELED',
     label: 'Canceled',
-    icon: XCircle,
+    icon: <XCircle />,
   },
 ];
 

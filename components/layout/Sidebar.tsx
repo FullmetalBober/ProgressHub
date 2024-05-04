@@ -37,7 +37,12 @@ export default async function SideBar({
 
   // console.log('currentWorkspace', currentWorkspace.members);
 
+  const workspaceUsers = currentWorkspace?.members.map(m => m.user);
+
   const user = session?.user;
+  if (!user?.id) return <div>You are not logged in</div>;
+  if (!currentWorkspace) return <div>Workspace not found</div>;
+  if (!workspaceUsers) return <div>Workspace users not found</div>;
   return (
     <aside className='pb-12'>
       <div className='space-y-4 py-4'>
@@ -91,7 +96,11 @@ export default async function SideBar({
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              <CreateIssueModal workspaceId={workspaceId} />
+              <CreateIssueModal
+                workspaceId={workspaceId}
+                userId={user.id}
+                users={workspaceUsers}
+              />
             </div>
 
             <SidebarButton

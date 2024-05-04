@@ -8,24 +8,18 @@ export async function createIssue(formData: FormData) {
   const session = await auth();
   const userId = session?.user?.id;
 
-  if (!userId) {
-    return {
-      errors: {
-        auth: 'You must be logged in to create a workspace',
-      },
-    };
-  }
+  if (!userId) throw new Error('You must be logged in to create an issue');
 
   const body = sanitizeFormData(formData);
   body.assigneeId = userId;
 
   const validatedFields = IssueUncheckedCreateInputSchema.safeParse(body);
 
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-    };
-  }
+  if (!validatedFields.success)
+    throw new Error(
+      validatedFields.error.errors.map(e => e.message).join(', ')
+    );
+
   const { data } = validatedFields;
 
   const userRole = await prisma?.workspaceMembers.findFirst({
@@ -38,13 +32,8 @@ export async function createIssue(formData: FormData) {
     },
   });
 
-  if (!userRole || userRole.role !== 'ADMIN') {
-    return {
-      errors: {
-        auth: 'You must be an admin to create an issue',
-      },
-    };
-  }
+  if (!userRole || (userRole.role !== 'ADMIN' && userRole.role !== 'OWNER'))
+    throw new Error('You must be an admin to create an issue');
 
   return prisma?.issue.create({
     data,
