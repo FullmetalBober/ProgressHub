@@ -2,6 +2,7 @@
 
 import prisma from '@/lib/db/index';
 import { WorkspaceCreateInputSchema } from '@/prisma/zod';
+import { Prisma } from '@prisma/client';
 import { redirect } from 'next/navigation';
 import { auth } from '../auth/utils';
 import { sanitizeFormData } from './utils';
