@@ -13,6 +13,9 @@ export default async function DashboardPage({ params }: { params: Params }) {
   const issues =
     (await prisma?.issue.findMany({
       where: { workspaceId },
+      include: {
+        assignee: true,
+      },
     })) || [];
 
   return <IssuesTable issues={issues} />;
