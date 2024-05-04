@@ -1,6 +1,7 @@
 import Footer from '@/components/layout/Footer';
 import SideBar from '@/components/layout/Sidebar';
 import { auth } from '@/lib/auth/utils';
+import prisma from '@/lib/db';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -20,7 +21,7 @@ export default async function RootLayout({
   const userId = session?.user?.id;
 
   if (userId) {
-    const workspaceUsers = await prisma?.workspaceMembers.findFirst({
+    const workspaceUsers = await prisma.workspaceMembers.findFirst({
       where: {
         workspaceId: params.workspaceId,
         userId: userId,

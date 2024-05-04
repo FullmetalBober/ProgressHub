@@ -2,6 +2,7 @@
 
 import { IssueUncheckedCreateInputSchema } from '@/prisma/zod';
 import { auth } from '../auth/utils';
+import prisma from '../db';
 import { sanitizeFormData } from './utils';
 
 export async function createIssue(formData: FormData) {
@@ -22,7 +23,7 @@ export async function createIssue(formData: FormData) {
 
   const { data } = validatedFields;
 
-  const userRole = await prisma?.workspaceMembers.findFirst({
+  const userRole = await prisma.workspaceMembers.findFirst({
     where: {
       workspaceId: data.workspaceId,
       userId,
@@ -35,7 +36,7 @@ export async function createIssue(formData: FormData) {
   if (!userRole || (userRole.role !== 'ADMIN' && userRole.role !== 'OWNER'))
     throw new Error('You must be an admin to create an issue');
 
-  return prisma?.issue.create({
+  return prisma.issue.create({
     data,
   });
 }
