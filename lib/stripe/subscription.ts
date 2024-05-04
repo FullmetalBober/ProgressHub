@@ -1,5 +1,5 @@
 import { storeSubscriptionPlans } from '@/config/subscriptions';
-import { prisma } from '@/lib/db/index';
+import prisma from '@/lib/db/index';
 import { stripe } from '@/lib/stripe/index';
 import { auth } from '../auth/utils';
 

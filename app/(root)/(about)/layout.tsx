@@ -1,5 +1,5 @@
 import { auth } from '@/lib/auth/utils';
-import { prisma } from '@/lib/db/index';
+import prisma from '@/lib/db/index';
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';

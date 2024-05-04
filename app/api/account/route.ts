@@ -1,5 +1,5 @@
 import { auth } from '@/lib/auth/utils';
-import { prisma } from '@/lib/db/index';
+import prisma from '@/lib/db/index';
 import { revalidatePath } from 'next/cache';
 
 export async function PUT(request: Request) {

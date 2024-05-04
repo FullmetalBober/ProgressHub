@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/db/index';
+import prisma from '@/lib/db/index';
 import { stripe } from '@/lib/stripe/index';
 import { headers } from 'next/headers';
 import type Stripe from 'stripe';

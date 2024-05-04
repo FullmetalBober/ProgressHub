@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/db/index';
+import prisma from '@/lib/db/index';
 import { env } from '@/lib/env.mjs';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import NextAuth from 'next-auth';

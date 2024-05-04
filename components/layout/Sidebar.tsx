@@ -1,5 +1,5 @@
 import { auth } from '@/lib/auth/utils';
-import { prisma } from '@/lib/db/index';
+import prisma from '@/lib/db/index';
 import { FolderKanban, Inbox, SquareDot } from 'lucide-react';
 import Link from 'next/link';
 import CustomAvatar from '../CustomAvatar';

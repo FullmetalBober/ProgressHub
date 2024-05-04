@@ -1,5 +1,5 @@
 import IssuesTable from '@/components/issues/IssuesTable';
-import { prisma } from '@/lib/db/index';
+import prisma from '@/lib/db/index';
 import { Metadata } from 'next';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 
