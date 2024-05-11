@@ -39,7 +39,7 @@ export async function createWorkspace(formData: FormData) {
     },
   });
 
-  redirect(`/${workspace.id}`);
+  redirect(`/workspace/${workspace.id}`);
 }
 
 export async function getWorkspaces(opt?: Prisma.User$workspacesArgs) {

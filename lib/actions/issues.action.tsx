@@ -3,15 +3,13 @@
 import { IssueUncheckedCreateInputSchema } from '@/prisma/zod';
 import { auth } from '../auth/utils';
 import prisma from '../db';
-import { sanitizeFormData } from './utils';
 
-export async function createIssue(formData: FormData) {
+export async function createIssue(body: { [key: string]: unknown }) {
   const session = await auth();
   const userId = session?.user?.id;
 
   if (!userId) throw new Error('You must be logged in to create an issue');
 
-  const body = sanitizeFormData(formData);
   body.assigneeId = userId;
 
   const validatedFields = IssueUncheckedCreateInputSchema.safeParse(body);
@@ -23,20 +21,47 @@ export async function createIssue(formData: FormData) {
 
   const { data } = validatedFields;
 
-  const userRole = await prisma.workspaceMembers.findFirst({
+  const { workspaceId } = data;
+
+  const workspace = await prisma.workspace.findUnique({
     where: {
-      workspaceId: data.workspaceId,
-      userId,
+      id: workspaceId,
     },
     select: {
-      role: true,
+      members: {
+        where: {
+          userId,
+        },
+        select: {
+          role: true,
+        },
+      },
+      issueCount: true,
     },
   });
+
+  const userRole = workspace?.members[0];
 
   if (!userRole || (userRole.role !== 'ADMIN' && userRole.role !== 'OWNER'))
     throw new Error('You must be an admin to create an issue');
 
-  return prisma.issue.create({
-    data,
-  });
+  data.identifier = workspace.issueCount + 1;
+
+  const [issue] = await prisma.$transaction([
+    prisma.issue.create({
+      data,
+    }),
+    prisma.workspace.update({
+      where: {
+        id: workspaceId,
+      },
+      data: {
+        issueCount: {
+          increment: 1,
+        },
+      },
+    }),
+  ]);
+
+  return issue;
 }

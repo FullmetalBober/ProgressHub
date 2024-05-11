@@ -49,6 +49,7 @@ export default function CreateIssueModal({
     // mode: 'onChange',
     defaultValues: {
       workspaceId,
+      identifier: -1,
       title: '',
       description: '',
       status: 'BACKLOG',
@@ -59,10 +60,8 @@ export default function CreateIssueModal({
 
   //! Prisma.IssueUncheckedCreateInput
   async function onSubmit(data: any) {
-    const formData = new FormData();
-    Object.keys(data).forEach(key => formData.append(key, data[key]));
     try {
-      const res = await createIssue(formData);
+      const res = await createIssue(data);
 
       toast({
         title: 'Issue created successfully!',
