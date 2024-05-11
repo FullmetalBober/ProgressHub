@@ -41,7 +41,7 @@ export default async function RootLayout({
     <div className='flex flex-col h-screen justify-between'>
       <div className='mb-auto p-8 pt-2 md:p-8 grid lg:grid-cols-5'>
         <SideBar workspaceId={params.workspaceId} />
-        <main className='col-span-3 lg:col-span-4'>{children}</main>
+        <main className='lg:col-span-4'>{children}</main>
       </div>
       <Footer />
     </div>

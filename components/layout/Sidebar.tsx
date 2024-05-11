@@ -3,6 +3,7 @@ import prisma from '@/lib/db/index';
 import { FolderKanban, Inbox, SquareDot } from 'lucide-react';
 import Link from 'next/link';
 import CustomAvatar from '../CustomAvatar';
+import SignOut from '../auth/SignOut';
 import CreateIssueModal from '../issues/CreateIssueModal';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
@@ -67,12 +68,8 @@ export default async function SideBar({
                   <DropdownMenuLabel>{user?.email}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   {otherWorkspaces.map(workspace => (
-                    <Link
-                      key={workspace.id}
-                      href={`/workspace/${workspace.id}`}
-                    >
-                      <DropdownMenuItem>
-                        {' '}
+                    <DropdownMenuItem key={workspace.id} asChild>
+                      <Link href={`/workspace/${workspace.id}`}>
                         <Avatar className='mr-2 h-5 w-5'>
                           <AvatarImage
                             src={
@@ -84,15 +81,16 @@ export default async function SideBar({
                           <AvatarFallback>{workspace?.name[0]}</AvatarFallback>
                         </Avatar>
                         {workspace.name}
-                      </DropdownMenuItem>
-                    </Link>
+                      </Link>
+                    </DropdownMenuItem>
                   ))}
                   <DropdownMenuSeparator />
-                  <Link href='/join'>
-                    <DropdownMenuItem>
-                      Create or join a workspace
-                    </DropdownMenuItem>
-                  </Link>
+                  <DropdownMenuItem asChild>
+                    <Link href='/join'>Create or join a workspace</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className='w-full' asChild>
+                    <SignOut />
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
 

@@ -40,7 +40,7 @@ const columns: ColumnDef<
     // header: ({ column }) => (
     //   <DataTableColumnHeader column={column} title='Task' />
     // ),
-    cell: ({ row }) => <div className='w-[80px]'>{row.getValue('id')}</div>,
+    // cell: ({ row }) => <div className='w-[80px]'>{row.getValue('id')}</div>,
     enableSorting: false,
     enableHiding: false,
   },
@@ -77,7 +77,7 @@ const columns: ColumnDef<
       }
 
       return (
-        <div className='flex w-[100px] items-center'>
+        <div className='flex items-center'>
           {status.icon && (
             <div className='*:mr-2 *:h-4 *:w-4 *:text-muted-foreground'>
               {status.icon}

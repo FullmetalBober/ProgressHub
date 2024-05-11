@@ -38,10 +38,14 @@ export default async function SignInForm({
               autoCapitalize='none'
               autoComplete='email'
               autoCorrect='off'
-              disabled={isLoading}
+              // disabled={isLoading}
+              disabled={true}
             />
           </div>
-          <Button disabled={isLoading}>
+          <Button
+            //  disabled={isLoading}
+            disabled={true}
+          >
             {/* {isLoading && ( */}
             {/* <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
             )} */}
