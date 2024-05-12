@@ -3,31 +3,22 @@
 import prisma from '@/lib/db/index';
 import { WorkspaceCreateInputSchema } from '@/prisma/zod';
 import { Prisma } from '@prisma/client';
-import { redirect } from 'next/navigation';
 import { auth } from '../auth/utils';
-import { sanitizeFormData } from './utils';
 
-export async function createWorkspace(formData: FormData) {
+export async function createWorkspace(body: { [key: string]: unknown }) {
   const session = await auth();
   const userId = session?.user?.id;
 
-  if (!userId) {
-    return {
-      errors: {
-        auth: 'You must be logged in to create a workspace',
-      },
-    };
-  }
+  if (!userId) throw new Error('You must be logged in to create an issue');
 
-  const data = sanitizeFormData(formData);
+  const validatedFields = WorkspaceCreateInputSchema.safeParse(body);
 
-  const validatedFields = WorkspaceCreateInputSchema.safeParse(data);
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-    };
-  }
-  const workspace = await prisma.workspace.create({
+  if (!validatedFields.success)
+    throw new Error(
+      validatedFields.error.errors.map(e => e.message).join(', ')
+    );
+
+  return prisma.workspace.create({
     data: {
       ...validatedFields.data,
       members: {
@@ -38,8 +29,6 @@ export async function createWorkspace(formData: FormData) {
       },
     },
   });
-
-  redirect(`/workspace/${workspace.id}`);
 }
 
 export async function getWorkspaces(opt?: Prisma.User$workspacesArgs) {

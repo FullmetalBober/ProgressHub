@@ -75,8 +75,6 @@ export default function CreateIssueModal({
           'There was a problem with your request. Please try again later.',
       });
     }
-
-    // if (res.ok) router.push(`/workspace/${workspaceId}/issues/${res.data.id}`);
   }
 
   const isFormDisabled = form.formState.isSubmitting;

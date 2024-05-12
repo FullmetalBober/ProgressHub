@@ -7,8 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { createWorkspace } from '@/lib/actions/workspaces.action';
+import CreateWorkspaceForm from '@/components/workspace/CreateWorkspaceForm';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -27,12 +26,7 @@ export default function CreateWorkspacePage() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form action={createWorkspace} className='grid gap-3'>
-          <Input placeholder='Enter workspace name' name='name' required />
-          <Button className='w-full' type='submit'>
-            Create workspace
-          </Button>
-        </form>
+        <CreateWorkspaceForm />
       </CardContent>
       <CardFooter className='flex justify-between'>
         <Button variant='ghost' className='w-full' asChild>
