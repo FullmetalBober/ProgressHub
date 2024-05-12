@@ -66,7 +66,7 @@ export default function CreateIssueModal({
       toast({
         title: 'Issue created successfully!',
       });
-      router.push(`/workspace/${workspaceId}/issues/${res?.id}`);
+      router.push(`/workspace/${workspaceId}/issues/${res?.identifier}`);
     } catch (error) {
       toast({
         variant: 'destructive',

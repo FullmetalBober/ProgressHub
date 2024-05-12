@@ -141,7 +141,7 @@ const columns: ColumnDef<
   // },
 ];
 
-const navigateBy: keyof Issue = 'id';
+const navigateBy: keyof Issue = 'identifier';
 
 export default function IssuesTable({
   issues,
