@@ -1,9 +1,10 @@
 'use client';
 
+import TiptapEditor from '@/tiptap/TiptapEditor';
 import { Issue } from '@prisma/client';
-import { EditorContent, useEditor } from '@tiptap/react';
+import { useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import { Input } from '../ui/input';
+// import { Input } from '../ui/input';
 
 export default function EditIssue({ issue }: { issue: Issue }) {
   const editor = useEditor({
@@ -18,8 +19,9 @@ export default function EditIssue({ issue }: { issue: Issue }) {
 
   return (
     <div>
-      <Input value={issue.title} variant='ghost' textSize='lg' />
-      <EditorContent editor={editor} />
+      {/* <Input value={issue.title} variant='ghost' textSize='lg' /> */}
+      {/* <EditorContent editor={editor} /> */}
+      <TiptapEditor room='1' />
     </div>
   );
 }
