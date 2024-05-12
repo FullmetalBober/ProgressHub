@@ -83,7 +83,13 @@ importers:
       '@tiptap/core':
         specifier: ^2.3.2
         version: 2.3.2(@tiptap/pm@2.3.2)
+      '@tiptap/extension-bullet-list':
+        specifier: ^2.3.2
+        version: 2.3.2(@tiptap/core@2.3.2(@tiptap/pm@2.3.2))
       '@tiptap/extension-character-count':
+        specifier: ^2.3.2
+        version: 2.3.2(@tiptap/core@2.3.2(@tiptap/pm@2.3.2))(@tiptap/pm@2.3.2)
+      '@tiptap/extension-code-block':
         specifier: ^2.3.2
         version: 2.3.2(@tiptap/core@2.3.2(@tiptap/pm@2.3.2))(@tiptap/pm@2.3.2)
       '@tiptap/extension-code-block-lowlight':
@@ -98,21 +104,39 @@ importers:
       '@tiptap/extension-color':
         specifier: ^2.3.2
         version: 2.3.2(@tiptap/core@2.3.2(@tiptap/pm@2.3.2))(@tiptap/extension-text-style@2.3.2(@tiptap/core@2.3.2(@tiptap/pm@2.3.2)))
+      '@tiptap/extension-document':
+        specifier: ^2.3.2
+        version: 2.3.2(@tiptap/core@2.3.2(@tiptap/pm@2.3.2))
+      '@tiptap/extension-dropcursor':
+        specifier: ^2.3.2
+        version: 2.3.2(@tiptap/core@2.3.2(@tiptap/pm@2.3.2))(@tiptap/pm@2.3.2)
       '@tiptap/extension-focus':
         specifier: ^2.3.2
         version: 2.3.2(@tiptap/core@2.3.2(@tiptap/pm@2.3.2))(@tiptap/pm@2.3.2)
       '@tiptap/extension-font-family':
         specifier: ^2.3.2
         version: 2.3.2(@tiptap/core@2.3.2(@tiptap/pm@2.3.2))(@tiptap/extension-text-style@2.3.2(@tiptap/core@2.3.2(@tiptap/pm@2.3.2)))
+      '@tiptap/extension-heading':
+        specifier: ^2.3.2
+        version: 2.3.2(@tiptap/core@2.3.2(@tiptap/pm@2.3.2))
       '@tiptap/extension-highlight':
         specifier: ^2.3.2
         version: 2.3.2(@tiptap/core@2.3.2(@tiptap/pm@2.3.2))
+      '@tiptap/extension-horizontal-rule':
+        specifier: ^2.3.2
+        version: 2.3.2(@tiptap/core@2.3.2(@tiptap/pm@2.3.2))(@tiptap/pm@2.3.2)
       '@tiptap/extension-image':
         specifier: ^2.3.2
         version: 2.3.2(@tiptap/core@2.3.2(@tiptap/pm@2.3.2))
       '@tiptap/extension-link':
         specifier: ^2.3.2
         version: 2.3.2(@tiptap/core@2.3.2(@tiptap/pm@2.3.2))(@tiptap/pm@2.3.2)
+      '@tiptap/extension-ordered-list':
+        specifier: ^2.3.2
+        version: 2.3.2(@tiptap/core@2.3.2(@tiptap/pm@2.3.2))
+      '@tiptap/extension-paragraph':
+        specifier: ^2.3.2
+        version: 2.3.2(@tiptap/core@2.3.2(@tiptap/pm@2.3.2))
       '@tiptap/extension-placeholder':
         specifier: ^2.3.2
         version: 2.3.2(@tiptap/core@2.3.2(@tiptap/pm@2.3.2))(@tiptap/pm@2.3.2)
@@ -161,6 +185,9 @@ importers:
       '@tiptap/starter-kit':
         specifier: ^2.3.2
         version: 2.3.2(@tiptap/pm@2.3.2)
+      '@tiptap/suggestion':
+        specifier: ^2.3.2
+        version: 2.3.2(@tiptap/core@2.3.2(@tiptap/pm@2.3.2))(@tiptap/pm@2.3.2)
       '@vercel/analytics':
         specifier: ^1.2.2
         version: 1.2.2(next@14.2.3(@babel/core@7.24.4)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
@@ -203,6 +230,9 @@ importers:
       react:
         specifier: ^18.3.1
         version: 18.3.1
+      react-colorful:
+        specifier: ^5.6.1
+        version: 5.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
@@ -224,6 +254,12 @@ importers:
       tailwindcss-animate:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.3)
+      tippy.js:
+        specifier: ^6.3.7
+        version: 6.3.7
+      uuid:
+        specifier: ^9.0.1
+        version: 9.0.1
       yjs:
         specifier: ^13.6.15
         version: 13.6.15
@@ -273,6 +309,9 @@ importers:
       '@types/react-dom':
         specifier: ^18.3.0
         version: 18.3.0
+      '@types/uuid':
+        specifier: ^9.0.8
+        version: 9.0.8
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.19(postcss@8.4.38)

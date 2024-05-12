@@ -1,17 +1,20 @@
-import { ReactNodeViewRenderer } from '@tiptap/react'
-import { mergeAttributes, Range } from '@tiptap/core'
+import { mergeAttributes, Range } from '@tiptap/core';
+import { ReactNodeViewRenderer } from '@tiptap/react';
 
-import { ImageBlockView } from './components/ImageBlockView'
-import { Image } from '../Image'
+import { Image } from '../Image';
+import { ImageBlockView } from './components/ImageBlockView';
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     imageBlock: {
-      setImageBlock: (attributes: { src: string }) => ReturnType
-      setImageBlockAt: (attributes: { src: string; pos: number | Range }) => ReturnType
-      setImageBlockAlign: (align: 'left' | 'center' | 'right') => ReturnType
-      setImageBlockWidth: (width: number) => ReturnType
-    }
+      setImageBlock: (attributes: { src: string }) => ReturnType;
+      setImageBlockAt: (attributes: {
+        src: string;
+        pos: number | Range;
+      }) => ReturnType;
+      setImageBlockAlign: (align: 'left' | 'center' | 'right') => ReturnType;
+      setImageBlockWidth: (width: number) => ReturnType;
+    };
   }
 }
 
@@ -54,7 +57,7 @@ export const ImageBlock = Image.extend({
           alt: attributes.alt,
         }),
       },
-    }
+    };
   },
 
   parseHTML() {
@@ -62,11 +65,14 @@ export const ImageBlock = Image.extend({
       {
         tag: 'img[src*="tiptap.dev"]:not([src^="data:"]), img[src*="windows.net"]:not([src^="data:"])',
       },
-    ]
+    ];
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ['img', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)]
+    return [
+      'img',
+      mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
+    ];
   },
 
   addCommands() {
@@ -74,13 +80,19 @@ export const ImageBlock = Image.extend({
       setImageBlock:
         attrs =>
         ({ commands }) => {
-          return commands.insertContent({ type: 'imageBlock', attrs: { src: attrs.src } })
+          return commands.insertContent({
+            type: 'imageBlock',
+            attrs: { src: attrs.src },
+          });
         },
 
       setImageBlockAt:
         attrs =>
         ({ commands }) => {
-          return commands.insertContentAt(attrs.pos, { type: 'imageBlock', attrs: { src: attrs.src } })
+          return commands.insertContentAt(attrs.pos, {
+            type: 'imageBlock',
+            attrs: { src: attrs.src },
+          });
         },
 
       setImageBlockAlign:
@@ -91,13 +103,15 @@ export const ImageBlock = Image.extend({
       setImageBlockWidth:
         width =>
         ({ commands }) =>
-          commands.updateAttributes('imageBlock', { width: `${Math.max(0, Math.min(100, width))}%` }),
-    }
+          commands.updateAttributes('imageBlock', {
+            width: `${Math.max(0, Math.min(100, width))}%`,
+          }),
+    };
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(ImageBlockView)
+    return ReactNodeViewRenderer(ImageBlockView);
   },
-})
+});
 
-export default ImageBlock
+export default ImageBlock;

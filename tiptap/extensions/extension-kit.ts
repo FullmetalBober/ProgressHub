@@ -1,13 +1,17 @@
-'use client'
+'use client';
 
-import { HocuspocusProvider } from '@hocuspocus/provider'
+import { HocuspocusProvider } from '@hocuspocus/provider';
 
-import { API } from '@/tiptap/lib/api'
+import { API } from '@/tiptap/lib/api';
 
+import { CodeBlockLowlight } from '@tiptap/extension-code-block-lowlight';
+import { common, createLowlight } from 'lowlight';
 import {
   BlockquoteFigure,
   CharacterCount,
   Color,
+  Column,
+  Columns,
   Document,
   Dropcursor,
   Emoji,
@@ -28,36 +32,35 @@ import {
   Subscript,
   Superscript,
   Table,
-  TableOfContents,
   TableCell,
   TableHeader,
+  TableOfContents,
   TableRow,
+  TaskItem,
+  TaskList,
   TextAlign,
   TextStyle,
   TrailingNode,
   Typography,
   Underline,
-  emojiSuggestion,
-  Columns,
-  Column,
-  TaskItem,
-  TaskList,
-} from '.'
-import { CodeBlockLowlight } from '@tiptap/extension-code-block-lowlight'
-import { ImageUpload } from './ImageUpload'
-import { TableOfContentsNode } from './TableOfContentsNode'
-import { createLowlight, common } from 'lowlight'
+} from '.';
+import { ImageUpload } from './ImageUpload';
+import { TableOfContentsNode } from './TableOfContentsNode';
 
-const lowlight = createLowlight(common)
+const lowlight = createLowlight(common);
 
 interface ExtensionKitProps {
-  provider?: HocuspocusProvider | null
-  userId?: string
-  userName?: string
-  userColor?: string
+  provider?: HocuspocusProvider | null;
+  userId?: string;
+  userName?: string;
+  userColor?: string;
 }
 
-export const ExtensionKit = ({ provider, userId, userName = 'Maxi' }: ExtensionKitProps) => [
+export const ExtensionKit = ({
+  provider,
+  userId,
+  userName = 'Maxi',
+}: ExtensionKitProps) => [
   Document,
   Columns,
   TaskList,
@@ -104,30 +107,32 @@ export const ExtensionKit = ({ provider, userId, userName = 'Maxi' }: ExtensionK
     allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
     onDrop: (currentEditor, files, pos) => {
       files.forEach(async () => {
-        const url = await API.uploadImage()
+        const url = await API.uploadImage();
 
-        currentEditor.chain().setImageBlockAt({ pos, src: url }).focus().run()
-      })
+        currentEditor.chain().setImageBlockAt({ pos, src: url }).focus().run();
+      });
     },
     onPaste: (currentEditor, files) => {
       files.forEach(async () => {
-        const url = await API.uploadImage()
+        const url = await API.uploadImage();
 
         return currentEditor
           .chain()
-          .setImageBlockAt({ pos: currentEditor.state.selection.anchor, src: url })
+          .setImageBlockAt({
+            pos: currentEditor.state.selection.anchor,
+            src: url,
+          })
           .focus()
-          .run()
-      })
+          .run();
+      });
     },
   }),
   Emoji.configure({
     enableEmoticons: true,
-    suggestion: emojiSuggestion,
   }),
   TextAlign.extend({
     addKeyboardShortcuts() {
-      return {}
+      return {};
     },
   }).configure({
     types: ['heading', 'paragraph'],
@@ -152,6 +157,6 @@ export const ExtensionKit = ({ provider, userId, userName = 'Maxi' }: ExtensionK
     width: 2,
     class: 'ProseMirror-dropcursor border-black',
   }),
-]
+];
 
-export default ExtensionKit
+export default ExtensionKit;

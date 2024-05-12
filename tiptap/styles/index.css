@@ -1,5 +1,5 @@
 .ProseMirror {
-  @apply caret-black dark:caret-white outline-0 pr-8 pl-20 py-16 z-0 lg:pl-8 lg:pr-8;
+  @apply z-0 py-16 pl-20 pr-8 caret-black outline-0 dark:caret-white lg:pl-8 lg:pr-8;
 
   .selection {
     @apply inline;
@@ -19,10 +19,10 @@
   }
 
   .ProseMirror-gapcursor {
-    @apply relative w-full max-w-2xl mx-auto;
+    @apply relative mx-auto w-full max-w-2xl;
 
     &:after {
-      @apply border-t-black/40 dark:border-t-white/40 w-full -top-[1.5em] max-w-2xl mx-auto left-0 right-0;
+      @apply -top-[1.5em] left-0 right-0 mx-auto w-full max-w-2xl border-t-black/40 dark:border-t-white/40;
     }
   }
 }
