@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { User } from '@prisma/client';
 import { SquarePen } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '../ui/button';
 import {
@@ -43,6 +44,8 @@ export default function CreateIssueModal({
   const router = useRouter();
   const { toast } = useToast();
 
+  const [open, setOpen] = useState(false);
+
   //! Prisma.IssueUncheckedCreateInput
   const form = useForm<any>({
     resolver: zodResolver(IssueUncheckedCreateInputSchema),
@@ -66,6 +69,8 @@ export default function CreateIssueModal({
       toast({
         title: 'Issue created successfully!',
       });
+      setOpen(false);
+      form.reset();
       router.push(`/workspace/${workspaceId}/issues/${res?.identifier}`);
     } catch (error) {
       toast({
@@ -79,7 +84,7 @@ export default function CreateIssueModal({
 
   const isFormDisabled = form.formState.isSubmitting;
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant='secondary'>
           <SquarePen />

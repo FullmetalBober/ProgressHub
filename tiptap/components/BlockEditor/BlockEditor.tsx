@@ -16,6 +16,7 @@ import { EditorContent } from '@tiptap/react';
 import 'cal-sans';
 import { useMemo, useRef } from 'react';
 import '../../app/globals.css';
+import '../../styles/index.css';
 import { TextMenu } from '../menus/TextMenu';
 import { TiptapProps } from './types';
 
