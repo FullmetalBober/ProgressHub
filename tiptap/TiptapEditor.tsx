@@ -6,9 +6,16 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { Doc as YDoc } from 'yjs';
 
+import { User } from 'next-auth';
 import { BlockEditor } from './components/BlockEditor';
 
-export default function TiptapEditor({ room }: { room: string }) {
+export default function TiptapEditor({
+  room,
+  user,
+}: {
+  room: string;
+  user: User;
+}) {
   const [provider, setProvider] = useState<TiptapCollabProvider | null>(null);
   const [collabToken, setCollabToken] = useState<string | null>(null);
   const searchParams = useSearchParams();
@@ -53,5 +60,12 @@ export default function TiptapEditor({ room }: { room: string }) {
 
   if (hasCollab && (!collabToken || !provider)) return;
 
-  return <BlockEditor hasCollab={hasCollab} ydoc={ydoc} provider={provider} />;
+  return (
+    <BlockEditor
+      hasCollab={hasCollab}
+      ydoc={ydoc}
+      provider={provider}
+      user={user}
+    />
+  );
 }

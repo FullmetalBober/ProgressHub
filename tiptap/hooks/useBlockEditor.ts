@@ -8,8 +8,9 @@ import type { Doc as YDoc } from 'yjs';
 
 import { ExtensionKit } from '@/tiptap/extensions/extension-kit';
 import { initialContent } from '@/tiptap/lib/data/initialContent';
+import { User } from 'next-auth';
 import { EditorUser } from '../components/BlockEditor/types';
-import { userColors, userNames } from '../lib/constants';
+import { userColors } from '../lib/constants';
 import { randomElement } from '../lib/utils';
 import { useSidebar } from './useSidebar';
 
@@ -22,9 +23,11 @@ declare global {
 export const useBlockEditor = ({
   ydoc,
   provider,
+  user,
 }: {
   ydoc: YDoc;
   provider?: TiptapCollabProvider | null | undefined;
+  user: User;
 }) => {
   const leftSidebar = useSidebar();
   const [collabState, setCollabState] = useState<WebSocketStatus>(
@@ -51,7 +54,7 @@ export const useBlockEditor = ({
         CollaborationCursor.configure({
           provider,
           user: {
-            name: randomElement(userNames),
+            name: user.name,
             color: randomElement(userColors),
           },
         }),

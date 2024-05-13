@@ -20,11 +20,11 @@ import '../../styles/index.css';
 import { TextMenu } from '../menus/TextMenu';
 import { TiptapProps } from './types';
 
-export const BlockEditor = ({ ydoc, provider }: TiptapProps) => {
+export const BlockEditor = ({ ydoc, provider, user }: TiptapProps) => {
   const menuContainerRef = useRef(null);
   const editorRef = useRef<HTMLDivElement | null>(null);
 
-  const { editor } = useBlockEditor({ ydoc, provider });
+  const { editor } = useBlockEditor({ ydoc, provider, user });
 
   const providerValue = useMemo(() => {
     return {};

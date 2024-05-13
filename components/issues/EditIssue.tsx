@@ -1,27 +1,20 @@
-'use client';
-
 import TiptapEditor from '@/tiptap/TiptapEditor';
 import { Issue } from '@prisma/client';
-import { useEditor } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
+import { User } from 'next-auth';
 // import { Input } from '../ui/input';
 
-export default function EditIssue({ issue }: { issue: Issue }) {
-  const editor = useEditor({
-    extensions: [StarterKit],
-    content: '<p>Hello World! 🌎️</p>',
-    editorProps: {
-      attributes: {
-        class: 'prose dark:prose-invert m-4 [&>p]:my-2 focus:outline-none',
-      },
-    },
-  });
-
+export default function EditIssue({
+  issue,
+  user,
+}: {
+  issue: Issue;
+  user: User;
+}) {
   return (
     <div>
       {/* <Input value={issue.title} variant='ghost' textSize='lg' /> */}
       {/* <EditorContent editor={editor} /> */}
-      <TiptapEditor room='1' />
+      <TiptapEditor room='1' user={user} />
     </div>
   );
 }
