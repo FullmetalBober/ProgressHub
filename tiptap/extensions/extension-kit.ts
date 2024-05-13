@@ -14,7 +14,6 @@ import {
   Columns,
   Document,
   Dropcursor,
-  Emoji,
   Figcaption,
   FileHandler,
   Focus,
@@ -126,9 +125,6 @@ export const ExtensionKit = ({
           .run();
       });
     },
-  }),
-  Emoji.configure({
-    enableEmoticons: true,
   }),
   TextAlign.extend({
     addKeyboardShortcuts() {

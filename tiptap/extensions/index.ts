@@ -2,7 +2,6 @@
 
 // TODO: File causes circular dependency issue in ESLint
 /* eslint-disable */
-export { Emoji, gitHubEmojis } from '@tiptap-pro/extension-emoji';
 export { FileHandler } from '@tiptap-pro/extension-file-handler';
 export { TableOfContents } from '@tiptap-pro/extension-table-of-contents';
 export { BulletList } from '@tiptap/extension-bullet-list';
