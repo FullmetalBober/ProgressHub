@@ -34,6 +34,7 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-switch": "^1.0.3",
     "@radix-ui/react-toast": "^1.1.5",
+    "@sentry/nextjs": "8",
     "@stripe/stripe-js": "^2.4.0",
     "@t3-oss/env-nextjs": "^0.8.0",
     "@tanstack/react-table": "^8.16.0",
