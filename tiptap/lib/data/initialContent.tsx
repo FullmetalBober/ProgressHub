@@ -411,12 +411,6 @@ export const initialContent = {
                 class: null,
                 textAlign: 'left',
               },
-              content: [
-                {
-                  type: 'text',
-                  text: '@tiptap-pro/extension-drag-handle-react',
-                },
-              ],
             },
           ],
         },
