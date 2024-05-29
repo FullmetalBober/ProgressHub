@@ -33,7 +33,6 @@ import {
   Table,
   TableCell,
   TableHeader,
-  TableOfContents,
   TableRow,
   TaskItem,
   TaskList,
@@ -44,7 +43,6 @@ import {
   Underline,
 } from '.';
 import { ImageUpload } from './ImageUpload';
-import { TableOfContentsNode } from './TableOfContentsNode';
 
 const lowlight = createLowlight(common);
 
@@ -96,8 +94,6 @@ export const ExtensionKit = ({
   Highlight.configure({ multicolor: true }),
   Underline,
   CharacterCount.configure({ limit: 50000 }),
-  TableOfContents,
-  TableOfContentsNode,
   ImageUpload.configure({
     clientId: provider?.document?.clientID,
   }),

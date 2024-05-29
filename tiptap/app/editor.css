@@ -66,14 +66,6 @@
     }
   }
 
-  .node-aiWriter,
-  .node-aiImage,
-  .node-tableOfContentsNode {
-    &.has-focus [data-node-view-wrapper] > * {
-      @apply rounded-lg shadow-[0_0_0_2px] shadow-black/30 transition-all dark:shadow-white/30;
-    }
-  }
-
   .ProseMirror-gapcursor + .node-imageBlock,
   .ProseMirror-gapcursor + .node-imageUpload,
   .ProseMirror-gapcursor + [data-type='blockquoteFigure'] {

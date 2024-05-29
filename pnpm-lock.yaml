@@ -74,9 +74,6 @@ importers:
       '@tiptap-pro/extension-file-handler':
         specifier: ^2.8.6
         version: 2.8.6(@tiptap/core@2.3.2(@tiptap/pm@2.3.2))(@tiptap/pm@2.3.2)
-      '@tiptap-pro/extension-table-of-contents':
-        specifier: ^2.8.6
-        version: 2.8.6(@tiptap/core@2.3.2(@tiptap/pm@2.3.2))(@tiptap/pm@2.3.2)
       '@tiptap/core':
         specifier: ^2.3.2
         version: 2.3.2(@tiptap/pm@2.3.2)
@@ -2750,12 +2747,6 @@ packages:
 
   '@tiptap-pro/extension-file-handler@2.8.6':
     resolution: {integrity: sha512-VojMwSzi6AP2mcBGuysCat80UPKRP+4tjCBdzxGy11IGUgkzH0JDdmazfU8OHXCJlj9Mk36jobQFOhx/kwb5pA==}
-    peerDependencies:
-      '@tiptap/core': ^2.0.0
-      '@tiptap/pm': ^2.0.0
-
-  '@tiptap-pro/extension-table-of-contents@2.8.6':
-    resolution: {integrity: sha512-PwZda5jxnpLfbBdoOl5wr8LcTYbMWUWJ5OHfWRwzK2mFMIgpjAyTgNd9PlECQD6S8Zmh64NQjcogbA1F8hMDIA==}
     peerDependencies:
       '@tiptap/core': ^2.0.0
       '@tiptap/pm': ^2.0.0
@@ -7465,10 +7456,6 @@ packages:
     resolution: {integrity: sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==}
     engines: {node: '>= 0.4.0'}
 
-  uuid@8.3.2:
-    resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
-    hasBin: true
-
   uuid@9.0.1:
     resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
     hasBin: true
@@ -10853,12 +10840,6 @@ snapshots:
     dependencies:
       '@tiptap/core': 2.3.2(@tiptap/pm@2.3.2)
       '@tiptap/pm': 2.3.2
-
-  '@tiptap-pro/extension-table-of-contents@2.8.6(@tiptap/core@2.3.2(@tiptap/pm@2.3.2))(@tiptap/pm@2.3.2)':
-    dependencies:
-      '@tiptap/core': 2.3.2(@tiptap/pm@2.3.2)
-      '@tiptap/pm': 2.3.2
-      uuid: 8.3.2
 
   '@tiptap/core@2.3.2(@tiptap/pm@2.3.2)':
     dependencies:
@@ -16142,8 +16123,6 @@ snapshots:
   utila@0.4.0: {}
 
   utils-merge@1.0.1: {}
-
-  uuid@8.3.2: {}
 
   uuid@9.0.1: {}
 
