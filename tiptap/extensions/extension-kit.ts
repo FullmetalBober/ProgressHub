@@ -2,8 +2,6 @@
 
 import { HocuspocusProvider } from '@hocuspocus/provider';
 
-import { API } from '@/tiptap/lib/api';
-
 import { CodeBlockLowlight } from '@tiptap/extension-code-block-lowlight';
 import { common, createLowlight } from 'lowlight';
 import {
@@ -15,7 +13,6 @@ import {
   Document,
   Dropcursor,
   Figcaption,
-  FileHandler,
   Focus,
   FontFamily,
   FontSize,
@@ -98,30 +95,6 @@ export const ExtensionKit = ({
     clientId: provider?.document?.clientID,
   }),
   ImageBlock,
-  FileHandler.configure({
-    allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
-    onDrop: (currentEditor, files, pos) => {
-      files.forEach(async () => {
-        const url = await API.uploadImage();
-
-        currentEditor.chain().setImageBlockAt({ pos, src: url }).focus().run();
-      });
-    },
-    onPaste: (currentEditor, files) => {
-      files.forEach(async () => {
-        const url = await API.uploadImage();
-
-        return currentEditor
-          .chain()
-          .setImageBlockAt({
-            pos: currentEditor.state.selection.anchor,
-            src: url,
-          })
-          .focus()
-          .run();
-      });
-    },
-  }),
   TextAlign.extend({
     addKeyboardShortcuts() {
       return {};
