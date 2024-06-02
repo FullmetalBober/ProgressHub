@@ -1,5 +1,6 @@
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { Toaster } from '@/components/ui/toaster';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import NextAuthProvider from '@/lib/auth/Provider';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
@@ -28,8 +29,10 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <NextAuthProvider>{children}</NextAuthProvider>
-          <Toaster />
+          <TooltipProvider>
+            <NextAuthProvider>{children}</NextAuthProvider>
+            <Toaster />
+          </TooltipProvider>
         </ThemeProvider>
         <SpeedInsights />
         <Analytics />

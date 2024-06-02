@@ -5,6 +5,7 @@ import { Issue, User } from '@prisma/client';
 import { ColumnDef } from '@tanstack/react-table';
 import CustomAvatar from '../CustomAvatar';
 import { DataTable } from '../ui/data-table';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 
 const columns: ColumnDef<
   Issue & {
@@ -51,9 +52,14 @@ const columns: ColumnDef<
       // const label = labels.find(label => label.value === row.original.label);
 
       return (
-        <span className='max-w-[500px] truncate font-medium'>
-          {row.getValue('title')}
-        </span>
+        <Tooltip>
+          <TooltipTrigger className='max-w-[225px] md:max-w-[500px] lg:max-w-[800px] truncate font-medium'>
+            {row.getValue('title')}
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{row.getValue('title')}</p>
+          </TooltipContent>
+        </Tooltip>
       );
       // <div className='flex space-x-2'>
       // {label && <Badge variant='outline'>{label.label}</Badge>}
