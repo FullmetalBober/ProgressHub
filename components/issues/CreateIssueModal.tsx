@@ -26,7 +26,6 @@ import {
   FormMessage,
 } from '../ui/form';
 import { Input } from '../ui/input';
-import { Textarea } from '../ui/textarea';
 import { useToast } from '../ui/use-toast';
 import AssigneeComboboxFormField from './AssigneeComboboxFormField';
 import PriorityComboboxFormField from './PriorityComboboxFormField';
@@ -113,7 +112,7 @@ export default function CreateIssueModal({
               )}
             />
 
-            <FormField
+            {/* <FormField
               control={form.control}
               name='description'
               render={({ field }) => (
@@ -128,7 +127,7 @@ export default function CreateIssueModal({
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
             <div className='flex gap-2 flex-wrap'>
               <StatusComboboxFormField form={form} />

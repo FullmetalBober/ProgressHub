@@ -7,7 +7,6 @@ import { Editor, useEditor } from '@tiptap/react';
 import type { Doc as YDoc } from 'yjs';
 
 import { ExtensionKit } from '@/tiptap/extensions/extension-kit';
-import { initialContent } from '@/tiptap/lib/data/initialContent';
 import { User } from 'next-auth';
 import { EditorUser } from '../components/BlockEditor/types';
 import { userColors } from '../lib/constants';
@@ -37,13 +36,6 @@ export const useBlockEditor = ({
   const editor = useEditor(
     {
       autofocus: true,
-      onCreate: ({ editor }) => {
-        provider?.on('synced', () => {
-          if (editor.isEmpty) {
-            editor.commands.setContent(initialContent);
-          }
-        });
-      },
       extensions: [
         ...ExtensionKit({
           provider,

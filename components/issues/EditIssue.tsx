@@ -14,7 +14,7 @@ export default function EditIssue({
     <div>
       {/* <Input value={issue.title} variant='ghost' textSize='lg' /> */}
       {/* <EditorContent editor={editor} /> */}
-      <TiptapEditor room='1' user={user} />
+      <TiptapEditor room={issue.id} user={user} />
     </div>
   );
 }
