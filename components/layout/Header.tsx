@@ -22,21 +22,21 @@ export default async function Header() {
         >
           Home
         </Link>
-        <Link
+        {/*//! <Link
           className='font-medium text-gray-900 transition-colors hover:text-gray-900/90 dark:text-gray-50 dark:hover:text-gray-50/90'
           href='#'
         >
           Features
-        </Link>
-        <Link
+        </Link> */}
+        {/*//! <Link
           className='font-medium text-gray-900 transition-colors hover:text-gray-900/90 dark:text-gray-50 dark:hover:text-gray-50/90'
           href='#'
         >
           Pricing
-        </Link>
+        </Link> */}
         <Link
           className='font-medium text-gray-900 transition-colors hover:text-gray-900/90 dark:text-gray-50 dark:hover:text-gray-50/90'
-          href='#'
+          href='/contact'
         >
           Contact
         </Link>

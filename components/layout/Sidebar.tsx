@@ -1,6 +1,6 @@
 import { auth } from '@/lib/auth/utils';
 import prisma from '@/lib/db/index';
-import { FolderKanban, Inbox, SquareDot } from 'lucide-react';
+import { FolderKanban } from 'lucide-react';
 import Link from 'next/link';
 import CustomAvatar from '../CustomAvatar';
 import SignOut from '../auth/SignOut';
@@ -101,7 +101,7 @@ export default async function SideBar({
               />
             </div>
 
-            <SidebarButton
+            {/*//! <SidebarButton
               icon={<Inbox />}
               label='Inbox'
               href={`/workspace/${workspaceId}/inbox`}
@@ -111,7 +111,7 @@ export default async function SideBar({
               icon={<SquareDot />}
               label='My issues'
               href={`/workspace/${workspaceId}/my-issues`}
-            />
+            /> */}
 
             <SidebarButton
               icon={<FolderKanban />}
