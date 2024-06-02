@@ -23,12 +23,12 @@ export default function Footer() {
             >
               Terms of Service
             </Link> */}
-            <Link
+            {/*//! <Link
               className='dark:hover:underline/gray-400 text-xs tracking-wide text-gray-500 transition-colors hover:underline dark:text-gray-400'
               href='/contact'
             >
               Contact Us
-            </Link>
+            </Link> */}
           </nav>
         </div>
       </div>

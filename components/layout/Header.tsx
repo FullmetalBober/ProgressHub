@@ -34,12 +34,12 @@ export default async function Header() {
         >
           Pricing
         </Link> */}
-        <Link
+        {/*//! <Link
           className='font-medium text-gray-900 transition-colors hover:text-gray-900/90 dark:text-gray-50 dark:hover:text-gray-50/90'
           href='/contact'
         >
           Contact
-        </Link>
+        </Link> */}
       </nav>
       <div className='flex items-center space-x-4'>
         {!session && (
