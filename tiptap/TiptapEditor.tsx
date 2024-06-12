@@ -2,8 +2,7 @@
 
 import { TiptapCollabProvider } from '@hocuspocus/provider';
 import 'iframe-resizer/js/iframeResizer.contentWindow';
-import { useSearchParams } from 'next/navigation';
-import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
+import { useLayoutEffect, useMemo, useState } from 'react';
 import { Doc as YDoc } from 'yjs';
 
 import { env } from '@/lib/env.mjs';
@@ -13,60 +12,27 @@ import { BlockEditor } from './components/BlockEditor';
 export default function TiptapEditor({
   room,
   user,
+  collabToken,
 }: {
   room: string;
   user: User;
+  collabToken: string;
 }) {
-  const [provider, setProvider] = useState<TiptapCollabProvider | null>(null);
-  const [collabToken, setCollabToken] = useState<string | null>(null);
-  const searchParams = useSearchParams();
-
-  const hasCollab = parseInt(searchParams.get('noCollab') as string) !== 1;
-
-  useEffect(() => {
-    // fetch data
-    const dataFetch = async () => {
-      const data = await (
-        await fetch('/api/collaboration', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-      ).json();
-
-      const { token } = data;
-
-      // set state when the data received
-      setCollabToken(token);
-    };
-
-    dataFetch();
-  }, []);
-
   const ydoc = useMemo(() => new YDoc(), []);
+  const [provider, setProvider] = useState<TiptapCollabProvider | null>(null);
 
   useLayoutEffect(() => {
-    if (hasCollab && collabToken) {
-      setProvider(
-        new TiptapCollabProvider({
-          name: room,
-          baseUrl: env.NEXT_PUBLIC_TIPTAP_COLLAB_BASE_URL,
-          token: collabToken,
-          document: ydoc,
-        })
-      );
-    }
-  }, [setProvider, collabToken, ydoc, room, hasCollab]);
+    setProvider(
+      new TiptapCollabProvider({
+        name: room,
+        baseUrl: env.NEXT_PUBLIC_TIPTAP_COLLAB_BASE_URL,
+        token: collabToken,
+        document: ydoc,
+      })
+    );
+  }, [setProvider, ydoc, room]);
 
-  if (hasCollab && (!collabToken || !provider)) return;
+  if (!provider) return;
 
-  return (
-    <BlockEditor
-      hasCollab={hasCollab}
-      ydoc={ydoc}
-      provider={provider}
-      user={user}
-    />
-  );
+  return <BlockEditor ydoc={ydoc} provider={provider} user={user} />;
 }

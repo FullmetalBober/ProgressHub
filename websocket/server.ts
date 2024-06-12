@@ -2,7 +2,7 @@ import prisma from '@/lib/db';
 import { Database } from '@hocuspocus/extension-database';
 import { Logger } from '@hocuspocus/extension-logger';
 import { Server } from '@hocuspocus/server';
-import jsonwebtoken from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 
 const server = Server.configure({
   port: process.env.NODE_ENV === 'production' ? Number(process.env.PORT) : 1234,
@@ -45,10 +45,7 @@ const server = Server.configure({
     }),
   ],
   async onAuthenticate({ token }) {
-    jsonwebtoken.verify(
-      token,
-      process.env.TIPTAP_COLLAB_SECRET ?? 'supersecret'
-    );
+    jwt.verify(token, process.env.TIPTAP_COLLAB_SECRET ?? 'secret');
   },
 });
 
