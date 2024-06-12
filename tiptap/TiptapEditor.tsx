@@ -6,6 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { Doc as YDoc } from 'yjs';
 
+import { env } from '@/lib/env.mjs';
 import { User } from 'next-auth';
 import { BlockEditor } from './components/BlockEditor';
 
@@ -49,8 +50,8 @@ export default function TiptapEditor({
     if (hasCollab && collabToken) {
       setProvider(
         new TiptapCollabProvider({
-          name: `${process.env.NEXT_PUBLIC_COLLAB_DOC_PREFIX}${room}`,
-          appId: process.env.NEXT_PUBLIC_TIPTAP_COLLAB_APP_ID ?? '',
+          name: room,
+          baseUrl: env.NEXT_PUBLIC_TIPTAP_COLLAB_BASE_URL,
           token: collabToken,
           document: ydoc,
         })

@@ -10,11 +10,12 @@ export default function EditIssue({
   issue: Issue;
   user: User;
 }) {
+  const roomDescription = `description.${issue.id}`;
   return (
     <div>
       {/* <Input value={issue.title} variant='ghost' textSize='lg' /> */}
       {/* <EditorContent editor={editor} /> */}
-      <TiptapEditor room={issue.id} user={user} />
+      <TiptapEditor room={roomDescription} user={user} />
     </div>
   );
 }

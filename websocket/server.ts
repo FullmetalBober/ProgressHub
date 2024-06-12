@@ -6,8 +6,7 @@ import jsonwebtoken from 'jsonwebtoken';
 
 const server = Server.configure({
   port: Number(process.env.PORT) ?? 1324,
-  // address: process.env.HOCUSPOCUS_URL ?? '127.0.0.1',
-  // name: 'hocuspocus-fra1-01',
+  address: process.env.NODE_ENV !== 'production' ? '127.0.0.1' : undefined,
   extensions: [
     new Logger(),
     new Database({
