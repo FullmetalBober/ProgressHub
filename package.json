@@ -6,6 +6,7 @@
   "packageManager": "pnpm@9.1.3",
   "scripts": {
     "dev": "next dev",
+    "websocket": "node --import=tsx --watch websocket-server/server.ts",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -22,7 +23,10 @@
     "@auth/core": "^0.26.3",
     "@auth/prisma-adapter": "^1.6.0",
     "@fontsource/inter": "^5.0.18",
+    "@hocuspocus/extension-database": "^2.13.1",
+    "@hocuspocus/extension-logger": "^2.13.1",
     "@hocuspocus/provider": "^2.12.2",
+    "@hocuspocus/server": "^2.13.1",
     "@hookform/resolvers": "^3.3.4",
     "@prisma/client": "^5.14.0",
     "@prisma/extension-accelerate": "^1.0.0",
@@ -122,6 +126,7 @@
     "@types/react-dom": "^18.3.0",
     "@types/uuid": "^9.0.8",
     "autoprefixer": "^10.4.19",
+    "concurrently": "^8.2.2",
     "eslint": "^8.57.0",
     "eslint-config-next": "14.2.3",
     "eslint-plugin-storybook": "^0.8.0",
@@ -132,6 +137,7 @@
     "prisma": "^5.14.0",
     "storybook": "^7.6.18",
     "tailwindcss": "^3.4.3",
+    "tsx": "^4.15.2",
     "typescript": "^5.4.5"
   }
 }

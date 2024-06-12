@@ -133,8 +133,7 @@ model Issue {
   identifier  Int
   /// @zod.string.trim().min(1).max(255)
   title       String
-  /// @zod.string.trim().min(0).max(2550)
-  description String    @default("")
+  description Bytes?
   status      Status    @default(BACKLOG)
   priority    Priority  @default(NO_PRIORITY)
   workspaceId String

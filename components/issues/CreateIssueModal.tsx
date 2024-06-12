@@ -53,7 +53,6 @@ export default function CreateIssueModal({
       workspaceId,
       identifier: -1,
       title: '',
-      description: '',
       status: 'BACKLOG',
       priority: 'NO_PRIORITY',
       assigneeId: userId,

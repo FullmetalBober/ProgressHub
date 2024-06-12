@@ -270,7 +270,7 @@ export const IssueSchema = z.object({
   id: z.string().cuid(),
   identifier: z.number().int(),
   title: z.string().trim().min(1).max(255),
-  description: z.string().trim().min(0).max(2550),
+  description: z.instanceof(Buffer).nullable(),
   workspaceId: z.string(),
   assigneeId: z.string(),
   createdAt: z.coerce.date(),
@@ -988,7 +988,7 @@ export const IssueWhereInputSchema: z.ZodType<Prisma.IssueWhereInput> = z.object
   id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   identifier: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   title: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  description: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  description: z.union([ z.lazy(() => BytesNullableFilterSchema),z.instanceof(Buffer) ]).optional().nullable(),
   status: z.union([ z.lazy(() => EnumStatusFilterSchema),z.lazy(() => StatusSchema) ]).optional(),
   priority: z.union([ z.lazy(() => EnumPriorityFilterSchema),z.lazy(() => PrioritySchema) ]).optional(),
   workspaceId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
@@ -1004,7 +1004,7 @@ export const IssueOrderByWithRelationInputSchema: z.ZodType<Prisma.IssueOrderByW
   id: z.lazy(() => SortOrderSchema).optional(),
   identifier: z.lazy(() => SortOrderSchema).optional(),
   title: z.lazy(() => SortOrderSchema).optional(),
-  description: z.lazy(() => SortOrderSchema).optional(),
+  description: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   status: z.lazy(() => SortOrderSchema).optional(),
   priority: z.lazy(() => SortOrderSchema).optional(),
   workspaceId: z.lazy(() => SortOrderSchema).optional(),
@@ -1036,7 +1036,7 @@ export const IssueWhereUniqueInputSchema: z.ZodType<Prisma.IssueWhereUniqueInput
   NOT: z.union([ z.lazy(() => IssueWhereInputSchema),z.lazy(() => IssueWhereInputSchema).array() ]).optional(),
   identifier: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
   title: z.union([ z.lazy(() => StringFilterSchema),z.string().trim().min(1).max(255) ]).optional(),
-  description: z.union([ z.lazy(() => StringFilterSchema),z.string().trim().min(0).max(2550) ]).optional(),
+  description: z.union([ z.lazy(() => BytesNullableFilterSchema),z.instanceof(Buffer) ]).optional().nullable(),
   status: z.union([ z.lazy(() => EnumStatusFilterSchema),z.lazy(() => StatusSchema) ]).optional(),
   priority: z.union([ z.lazy(() => EnumPriorityFilterSchema),z.lazy(() => PrioritySchema) ]).optional(),
   workspaceId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
@@ -1052,7 +1052,7 @@ export const IssueOrderByWithAggregationInputSchema: z.ZodType<Prisma.IssueOrder
   id: z.lazy(() => SortOrderSchema).optional(),
   identifier: z.lazy(() => SortOrderSchema).optional(),
   title: z.lazy(() => SortOrderSchema).optional(),
-  description: z.lazy(() => SortOrderSchema).optional(),
+  description: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   status: z.lazy(() => SortOrderSchema).optional(),
   priority: z.lazy(() => SortOrderSchema).optional(),
   workspaceId: z.lazy(() => SortOrderSchema).optional(),
@@ -1073,7 +1073,7 @@ export const IssueScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.IssueSc
   id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   identifier: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
   title: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
-  description: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  description: z.union([ z.lazy(() => BytesNullableWithAggregatesFilterSchema),z.instanceof(Buffer) ]).optional().nullable(),
   status: z.union([ z.lazy(() => EnumStatusWithAggregatesFilterSchema),z.lazy(() => StatusSchema) ]).optional(),
   priority: z.union([ z.lazy(() => EnumPriorityWithAggregatesFilterSchema),z.lazy(() => PrioritySchema) ]).optional(),
   workspaceId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
@@ -1526,7 +1526,7 @@ export const IssueCreateInputSchema: z.ZodType<Prisma.IssueCreateInput> = z.obje
   id: z.string().cuid().optional(),
   identifier: z.number().int(),
   title: z.string().trim().min(1).max(255),
-  description: z.string().trim().min(0).max(2550).optional(),
+  description: z.instanceof(Buffer).optional().nullable(),
   status: z.lazy(() => StatusSchema).optional(),
   priority: z.lazy(() => PrioritySchema).optional(),
   createdAt: z.coerce.date().optional(),
@@ -1540,7 +1540,7 @@ export const IssueUncheckedCreateInputSchema: z.ZodType<Prisma.IssueUncheckedCre
   id: z.string().cuid().optional(),
   identifier: z.number().int(),
   title: z.string().trim().min(1).max(255),
-  description: z.string().trim().min(0).max(2550).optional(),
+  description: z.instanceof(Buffer).optional().nullable(),
   status: z.lazy(() => StatusSchema).optional(),
   priority: z.lazy(() => PrioritySchema).optional(),
   workspaceId: z.string(),
@@ -1554,7 +1554,7 @@ export const IssueUpdateInputSchema: z.ZodType<Prisma.IssueUpdateInput> = z.obje
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  description: z.union([ z.string().trim().min(0).max(2550),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
   priority: z.union([ z.lazy(() => PrioritySchema),z.lazy(() => EnumPriorityFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -1568,7 +1568,7 @@ export const IssueUncheckedUpdateInputSchema: z.ZodType<Prisma.IssueUncheckedUpd
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  description: z.union([ z.string().trim().min(0).max(2550),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
   priority: z.union([ z.lazy(() => PrioritySchema),z.lazy(() => EnumPriorityFieldUpdateOperationsInputSchema) ]).optional(),
   workspaceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
@@ -1582,7 +1582,7 @@ export const IssueCreateManyInputSchema: z.ZodType<Prisma.IssueCreateManyInput> 
   id: z.string().cuid().optional(),
   identifier: z.number().int(),
   title: z.string().trim().min(1).max(255),
-  description: z.string().trim().min(0).max(2550).optional(),
+  description: z.instanceof(Buffer).optional().nullable(),
   status: z.lazy(() => StatusSchema).optional(),
   priority: z.lazy(() => PrioritySchema).optional(),
   workspaceId: z.string(),
@@ -1595,7 +1595,7 @@ export const IssueUpdateManyMutationInputSchema: z.ZodType<Prisma.IssueUpdateMan
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  description: z.union([ z.string().trim().min(0).max(2550),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
   priority: z.union([ z.lazy(() => PrioritySchema),z.lazy(() => EnumPriorityFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -1606,7 +1606,7 @@ export const IssueUncheckedUpdateManyInputSchema: z.ZodType<Prisma.IssueUnchecke
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  description: z.union([ z.string().trim().min(0).max(2550),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
   priority: z.union([ z.lazy(() => PrioritySchema),z.lazy(() => EnumPriorityFieldUpdateOperationsInputSchema) ]).optional(),
   workspaceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
@@ -2098,6 +2098,13 @@ export const EnumRoleWithAggregatesFilterSchema: z.ZodType<Prisma.EnumRoleWithAg
   _max: z.lazy(() => NestedEnumRoleFilterSchema).optional()
 }).strict() as z.ZodType<Prisma.EnumRoleWithAggregatesFilter>;
 
+export const BytesNullableFilterSchema: z.ZodType<Prisma.BytesNullableFilter> = z.object({
+  equals: z.instanceof(Buffer).optional().nullable(),
+  in: z.instanceof(Buffer).array().optional().nullable(),
+  notIn: z.instanceof(Buffer).array().optional().nullable(),
+  not: z.union([ z.instanceof(Buffer),z.lazy(() => NestedBytesNullableFilterSchema) ]).optional().nullable(),
+}).strict() as z.ZodType<Prisma.BytesNullableFilter>;
+
 export const EnumStatusFilterSchema: z.ZodType<Prisma.EnumStatusFilter> = z.object({
   equals: z.lazy(() => StatusSchema).optional(),
   in: z.lazy(() => StatusSchema).array().optional(),
@@ -2173,6 +2180,16 @@ export const IssueMinOrderByAggregateInputSchema: z.ZodType<Prisma.IssueMinOrder
 export const IssueSumOrderByAggregateInputSchema: z.ZodType<Prisma.IssueSumOrderByAggregateInput> = z.object({
   identifier: z.lazy(() => SortOrderSchema).optional()
 }).strict() as z.ZodType<Prisma.IssueSumOrderByAggregateInput>;
+
+export const BytesNullableWithAggregatesFilterSchema: z.ZodType<Prisma.BytesNullableWithAggregatesFilter> = z.object({
+  equals: z.instanceof(Buffer).optional().nullable(),
+  in: z.instanceof(Buffer).array().optional().nullable(),
+  notIn: z.instanceof(Buffer).array().optional().nullable(),
+  not: z.union([ z.instanceof(Buffer),z.lazy(() => NestedBytesNullableWithAggregatesFilterSchema) ]).optional().nullable(),
+  _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
+  _min: z.lazy(() => NestedBytesNullableFilterSchema).optional(),
+  _max: z.lazy(() => NestedBytesNullableFilterSchema).optional()
+}).strict() as z.ZodType<Prisma.BytesNullableWithAggregatesFilter>;
 
 export const EnumStatusWithAggregatesFilterSchema: z.ZodType<Prisma.EnumStatusWithAggregatesFilter> = z.object({
   equals: z.lazy(() => StatusSchema).optional(),
@@ -2596,6 +2613,10 @@ export const CommentUncheckedCreateNestedManyWithoutIssueInputSchema: z.ZodType<
   connect: z.union([ z.lazy(() => CommentWhereUniqueInputSchema),z.lazy(() => CommentWhereUniqueInputSchema).array() ]).optional(),
 }).strict() as z.ZodType<Prisma.CommentUncheckedCreateNestedManyWithoutIssueInput>;
 
+export const NullableBytesFieldUpdateOperationsInputSchema: z.ZodType<Prisma.NullableBytesFieldUpdateOperationsInput> = z.object({
+  set: z.instanceof(Buffer).optional().nullable()
+}).strict() as z.ZodType<Prisma.NullableBytesFieldUpdateOperationsInput>;
+
 export const EnumStatusFieldUpdateOperationsInputSchema: z.ZodType<Prisma.EnumStatusFieldUpdateOperationsInput> = z.object({
   set: z.lazy(() => StatusSchema).optional()
 }).strict() as z.ZodType<Prisma.EnumStatusFieldUpdateOperationsInput>;
@@ -2867,6 +2888,13 @@ export const NestedEnumRoleWithAggregatesFilterSchema: z.ZodType<Prisma.NestedEn
   _max: z.lazy(() => NestedEnumRoleFilterSchema).optional()
 }).strict() as z.ZodType<Prisma.NestedEnumRoleWithAggregatesFilter>;
 
+export const NestedBytesNullableFilterSchema: z.ZodType<Prisma.NestedBytesNullableFilter> = z.object({
+  equals: z.instanceof(Buffer).optional().nullable(),
+  in: z.instanceof(Buffer).array().optional().nullable(),
+  notIn: z.instanceof(Buffer).array().optional().nullable(),
+  not: z.union([ z.instanceof(Buffer),z.lazy(() => NestedBytesNullableFilterSchema) ]).optional().nullable(),
+}).strict() as z.ZodType<Prisma.NestedBytesNullableFilter>;
+
 export const NestedEnumStatusFilterSchema: z.ZodType<Prisma.NestedEnumStatusFilter> = z.object({
   equals: z.lazy(() => StatusSchema).optional(),
   in: z.lazy(() => StatusSchema).array().optional(),
@@ -2880,6 +2908,16 @@ export const NestedEnumPriorityFilterSchema: z.ZodType<Prisma.NestedEnumPriority
   notIn: z.lazy(() => PrioritySchema).array().optional(),
   not: z.union([ z.lazy(() => PrioritySchema),z.lazy(() => NestedEnumPriorityFilterSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.NestedEnumPriorityFilter>;
+
+export const NestedBytesNullableWithAggregatesFilterSchema: z.ZodType<Prisma.NestedBytesNullableWithAggregatesFilter> = z.object({
+  equals: z.instanceof(Buffer).optional().nullable(),
+  in: z.instanceof(Buffer).array().optional().nullable(),
+  notIn: z.instanceof(Buffer).array().optional().nullable(),
+  not: z.union([ z.instanceof(Buffer),z.lazy(() => NestedBytesNullableWithAggregatesFilterSchema) ]).optional().nullable(),
+  _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
+  _min: z.lazy(() => NestedBytesNullableFilterSchema).optional(),
+  _max: z.lazy(() => NestedBytesNullableFilterSchema).optional()
+}).strict() as z.ZodType<Prisma.NestedBytesNullableWithAggregatesFilter>;
 
 export const NestedEnumStatusWithAggregatesFilterSchema: z.ZodType<Prisma.NestedEnumStatusWithAggregatesFilter> = z.object({
   equals: z.lazy(() => StatusSchema).optional(),
@@ -3109,7 +3147,7 @@ export const IssueCreateWithoutAssigneeInputSchema: z.ZodType<Prisma.IssueCreate
   id: z.string().cuid().optional(),
   identifier: z.number().int(),
   title: z.string().trim().min(1).max(255),
-  description: z.string().trim().min(0).max(2550).optional(),
+  description: z.instanceof(Buffer).optional().nullable(),
   status: z.lazy(() => StatusSchema).optional(),
   priority: z.lazy(() => PrioritySchema).optional(),
   createdAt: z.coerce.date().optional(),
@@ -3122,7 +3160,7 @@ export const IssueUncheckedCreateWithoutAssigneeInputSchema: z.ZodType<Prisma.Is
   id: z.string().cuid().optional(),
   identifier: z.number().int(),
   title: z.string().trim().min(1).max(255),
-  description: z.string().trim().min(0).max(2550).optional(),
+  description: z.instanceof(Buffer).optional().nullable(),
   status: z.lazy(() => StatusSchema).optional(),
   priority: z.lazy(() => PrioritySchema).optional(),
   workspaceId: z.string(),
@@ -3251,7 +3289,7 @@ export const IssueScalarWhereInputSchema: z.ZodType<Prisma.IssueScalarWhereInput
   id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   identifier: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   title: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  description: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  description: z.union([ z.lazy(() => BytesNullableFilterSchema),z.instanceof(Buffer) ]).optional().nullable(),
   status: z.union([ z.lazy(() => EnumStatusFilterSchema),z.lazy(() => StatusSchema) ]).optional(),
   priority: z.union([ z.lazy(() => EnumPriorityFilterSchema),z.lazy(() => PrioritySchema) ]).optional(),
   workspaceId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
@@ -3288,7 +3326,7 @@ export const IssueCreateWithoutWorkspaceInputSchema: z.ZodType<Prisma.IssueCreat
   id: z.string().cuid().optional(),
   identifier: z.number().int(),
   title: z.string().trim().min(1).max(255),
-  description: z.string().trim().min(0).max(2550).optional(),
+  description: z.instanceof(Buffer).optional().nullable(),
   status: z.lazy(() => StatusSchema).optional(),
   priority: z.lazy(() => PrioritySchema).optional(),
   createdAt: z.coerce.date().optional(),
@@ -3301,7 +3339,7 @@ export const IssueUncheckedCreateWithoutWorkspaceInputSchema: z.ZodType<Prisma.I
   id: z.string().cuid().optional(),
   identifier: z.number().int(),
   title: z.string().trim().min(1).max(255),
-  description: z.string().trim().min(0).max(2550).optional(),
+  description: z.instanceof(Buffer).optional().nullable(),
   status: z.lazy(() => StatusSchema).optional(),
   priority: z.lazy(() => PrioritySchema).optional(),
   assigneeId: z.string(),
@@ -3626,7 +3664,7 @@ export const IssueCreateWithoutCommentsInputSchema: z.ZodType<Prisma.IssueCreate
   id: z.string().cuid().optional(),
   identifier: z.number().int(),
   title: z.string().trim().min(1).max(255),
-  description: z.string().trim().min(0).max(2550).optional(),
+  description: z.instanceof(Buffer).optional().nullable(),
   status: z.lazy(() => StatusSchema).optional(),
   priority: z.lazy(() => PrioritySchema).optional(),
   createdAt: z.coerce.date().optional(),
@@ -3639,7 +3677,7 @@ export const IssueUncheckedCreateWithoutCommentsInputSchema: z.ZodType<Prisma.Is
   id: z.string().cuid().optional(),
   identifier: z.number().int(),
   title: z.string().trim().min(1).max(255),
-  description: z.string().trim().min(0).max(2550).optional(),
+  description: z.instanceof(Buffer).optional().nullable(),
   status: z.lazy(() => StatusSchema).optional(),
   priority: z.lazy(() => PrioritySchema).optional(),
   workspaceId: z.string(),
@@ -3668,7 +3706,7 @@ export const IssueUpdateWithoutCommentsInputSchema: z.ZodType<Prisma.IssueUpdate
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  description: z.union([ z.string().trim().min(0).max(2550),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
   priority: z.union([ z.lazy(() => PrioritySchema),z.lazy(() => EnumPriorityFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -3681,7 +3719,7 @@ export const IssueUncheckedUpdateWithoutCommentsInputSchema: z.ZodType<Prisma.Is
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  description: z.union([ z.string().trim().min(0).max(2550),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
   priority: z.union([ z.lazy(() => PrioritySchema),z.lazy(() => EnumPriorityFieldUpdateOperationsInputSchema) ]).optional(),
   workspaceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
@@ -3721,7 +3759,7 @@ export const IssueCreateManyAssigneeInputSchema: z.ZodType<Prisma.IssueCreateMan
   id: z.string().cuid().optional(),
   identifier: z.number().int(),
   title: z.string().trim().min(1).max(255),
-  description: z.string().trim().min(0).max(2550).optional(),
+  description: z.instanceof(Buffer).optional().nullable(),
   status: z.lazy(() => StatusSchema).optional(),
   priority: z.lazy(() => PrioritySchema).optional(),
   workspaceId: z.string(),
@@ -3814,7 +3852,7 @@ export const IssueUpdateWithoutAssigneeInputSchema: z.ZodType<Prisma.IssueUpdate
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  description: z.union([ z.string().trim().min(0).max(2550),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
   priority: z.union([ z.lazy(() => PrioritySchema),z.lazy(() => EnumPriorityFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -3827,7 +3865,7 @@ export const IssueUncheckedUpdateWithoutAssigneeInputSchema: z.ZodType<Prisma.Is
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  description: z.union([ z.string().trim().min(0).max(2550),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
   priority: z.union([ z.lazy(() => PrioritySchema),z.lazy(() => EnumPriorityFieldUpdateOperationsInputSchema) ]).optional(),
   workspaceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
@@ -3840,7 +3878,7 @@ export const IssueUncheckedUpdateManyWithoutAssigneeInputSchema: z.ZodType<Prism
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  description: z.union([ z.string().trim().min(0).max(2550),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
   priority: z.union([ z.lazy(() => PrioritySchema),z.lazy(() => EnumPriorityFieldUpdateOperationsInputSchema) ]).optional(),
   workspaceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
@@ -3859,7 +3897,7 @@ export const IssueCreateManyWorkspaceInputSchema: z.ZodType<Prisma.IssueCreateMa
   id: z.string().cuid().optional(),
   identifier: z.number().int(),
   title: z.string().trim().min(1).max(255),
-  description: z.string().trim().min(0).max(2550).optional(),
+  description: z.instanceof(Buffer).optional().nullable(),
   status: z.lazy(() => StatusSchema).optional(),
   priority: z.lazy(() => PrioritySchema).optional(),
   assigneeId: z.string(),
@@ -3892,7 +3930,7 @@ export const IssueUpdateWithoutWorkspaceInputSchema: z.ZodType<Prisma.IssueUpdat
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  description: z.union([ z.string().trim().min(0).max(2550),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
   priority: z.union([ z.lazy(() => PrioritySchema),z.lazy(() => EnumPriorityFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -3905,7 +3943,7 @@ export const IssueUncheckedUpdateWithoutWorkspaceInputSchema: z.ZodType<Prisma.I
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  description: z.union([ z.string().trim().min(0).max(2550),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
   priority: z.union([ z.lazy(() => PrioritySchema),z.lazy(() => EnumPriorityFieldUpdateOperationsInputSchema) ]).optional(),
   assigneeId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
@@ -3918,7 +3956,7 @@ export const IssueUncheckedUpdateManyWithoutWorkspaceInputSchema: z.ZodType<Pris
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  description: z.union([ z.string().trim().min(0).max(2550),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
   priority: z.union([ z.lazy(() => PrioritySchema),z.lazy(() => EnumPriorityFieldUpdateOperationsInputSchema) ]).optional(),
   assigneeId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
