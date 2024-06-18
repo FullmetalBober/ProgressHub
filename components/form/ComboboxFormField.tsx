@@ -9,6 +9,7 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
+  CommandList,
 } from '../ui/command';
 import { FormControl, FormField, FormItem } from '../ui/form';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
@@ -69,30 +70,32 @@ export default function ComboboxFormField({
               <Command>
                 <CommandInput placeholder='Change status...' />
                 {/* <CommandEmpty>No result found.</CommandEmpty> */}
-                <CommandGroup>
-                  {properties.map(status => (
-                    <CommandItem
-                      value={status.label}
-                      key={status.value}
-                      onSelect={() => {
-                        form.setValue(fieldName, status.value);
-                        setOpen(false);
-                      }}
-                    >
-                      <div
-                        className={cn(
-                          '*:mr-2 *:h-4 *:w-4',
-                          status.value === selectedStatus?.value
-                            ? '*:opacity-100'
-                            : '*:opacity-40'
-                        )}
+                <CommandList>
+                  <CommandGroup>
+                    {properties.map(status => (
+                      <CommandItem
+                        value={status.label}
+                        key={status.value}
+                        onSelect={() => {
+                          form.setValue(fieldName, status.value);
+                          setOpen(false);
+                        }}
                       >
-                        {status.icon}
-                      </div>
-                      <span>{status.label}</span>
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
+                        <div
+                          className={cn(
+                            '*:mr-2 *:h-4 *:w-4',
+                            status.value === selectedStatus?.value
+                              ? '*:opacity-100'
+                              : '*:opacity-40'
+                          )}
+                        >
+                          {status.icon}
+                        </div>
+                        <span>{status.label}</span>
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </CommandList>
               </Command>
             </PopoverContent>
           </Popover>

@@ -30,7 +30,7 @@ export default function TiptapEditor({
         document: ydoc,
       })
     );
-  }, [setProvider, ydoc, room]);
+  }, [setProvider, ydoc, room, collabToken]);
 
   if (!provider) return;
 

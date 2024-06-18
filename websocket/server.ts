@@ -28,7 +28,6 @@ const server = Server.configure({
         return Promise.resolve(null);
       },
       store: async ({ documentName, state }) => {
-        console.log('store', documentName);
         const [entity, id] = documentName.split('.');
 
         if (entity === 'description') {
