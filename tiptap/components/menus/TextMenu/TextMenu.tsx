@@ -8,7 +8,6 @@ import { memo } from 'react';
 import { ContentTypePicker } from './components/ContentTypePicker';
 import { EditLinkPopover } from './components/EditLinkPopover';
 import { FontFamilyPicker } from './components/FontFamilyPicker';
-import { FontSizePicker } from './components/FontSizePicker';
 import { useTextmenuCommands } from './hooks/useTextmenuCommands';
 import { useTextmenuContentTypes } from './hooks/useTextmenuContentTypes';
 import { useTextmenuStates } from './hooks/useTextmenuStates';
@@ -18,7 +17,6 @@ import { useTextmenuStates } from './hooks/useTextmenuStates';
 const MemoButton = memo(Toolbar.Button);
 const MemoColorPicker = memo(ColorPicker);
 const MemoFontFamilyPicker = memo(FontFamilyPicker);
-const MemoFontSizePicker = memo(FontSizePicker);
 const MemoContentTypePicker = memo(ContentTypePicker);
 
 export type TextMenuProps = {
@@ -43,10 +41,6 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
         <MemoFontFamilyPicker
           onChange={commands.onSetFont}
           value={states.currentFont || ''}
-        />
-        <MemoFontSizePicker
-          onChange={commands.onSetFontSize}
-          value={states.currentSize || ''}
         />
         <Toolbar.Divider />
         <MemoButton

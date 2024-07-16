@@ -31,7 +31,6 @@ export { QuoteCaption } from './BlockquoteFigure/QuoteCaption';
 export { Document } from './Document';
 export { Figcaption } from './Figcaption';
 export { Figure } from './Figure';
-export { FontSize } from './FontSize';
 export { Heading } from './Heading';
 export { HorizontalRule } from './HorizontalRule';
 export { ImageBlock } from './ImageBlock';
