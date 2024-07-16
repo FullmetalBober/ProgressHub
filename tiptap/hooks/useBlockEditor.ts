@@ -35,6 +35,7 @@ export const useBlockEditor = ({
 
   const editor = useEditor(
     {
+      immediatelyRender: false,
       autofocus: true,
       extensions: [
         ...ExtensionKit({
