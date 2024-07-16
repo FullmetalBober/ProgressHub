@@ -8,7 +8,9 @@ export const metadata: Metadata = {
   title: 'Issue',
 };
 
-export default async function IssuePage({ params }: { params: Params }) {
+export default async function IssuePage({
+  params,
+}: Readonly<{ params: Params }>) {
   const { workspaceId, issueId } = params;
   const identifier = Number(issueId);
   const session = await auth();

@@ -151,11 +151,11 @@ const navigateBy: keyof Issue = 'identifier';
 
 export default function IssuesTable({
   issues,
-}: {
+}: Readonly<{
   issues: (Issue & {
     assignee: User;
   })[];
-}) {
+}>) {
   const workspaceId = issues[0]?.workspaceId;
 
   return (

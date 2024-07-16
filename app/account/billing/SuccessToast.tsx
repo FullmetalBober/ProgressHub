@@ -8,7 +8,7 @@ export default function SuccessToast() {
   const searchParams = useSearchParams();
   const { toast } = useToast();
 
-  const success = searchParams.get('success') as Boolean | null;
+  const success = searchParams.get('success') as boolean | null;
   useEffect(() => {
     if (success) {
       toast({ description: 'Successfully updated subscription.' });

@@ -6,10 +6,10 @@ import ComboboxFormField from '../form/ComboboxFormField';
 export default function AssigneeComboboxFormField({
   form,
   users,
-}: {
+}: Readonly<{
   form: UseFormReturn;
   users: User[];
-}) {
+}>) {
   const properties = users.map(user => ({
     value: user.id,
     label: user.email || user.name || user.id,

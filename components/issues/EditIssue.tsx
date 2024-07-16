@@ -8,10 +8,10 @@ import { User } from 'next-auth';
 export default function EditIssue({
   issue,
   user,
-}: {
+}: Readonly<{
   issue: Issue;
   user: User;
-}) {
+}>) {
   const roomDescription = `description.${issue.id}`;
   const tiptapToken = jwt.sign({}, env.TIPTAP_COLLAB_SECRET);
 

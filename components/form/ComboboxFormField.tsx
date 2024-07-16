@@ -24,11 +24,11 @@ export default function ComboboxFormField({
   form,
   fieldName,
   properties,
-}: {
+}: Readonly<{
   form: UseFormReturn;
   fieldName: string;
   properties: Property[];
-}) {
+}>) {
   const [open, setOpen] = useState(false);
 
   const value = form.watch(fieldName);

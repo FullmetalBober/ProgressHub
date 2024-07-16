@@ -19,9 +19,9 @@ import SidebarButton from './SidebarButton';
 
 export default async function SideBar({
   workspaceId,
-}: {
+}: Readonly<{
   workspaceId: string;
-}) {
+}>) {
   const session = await auth();
 
   const workspaces = await prisma.workspace.findMany({
@@ -35,8 +35,6 @@ export default async function SideBar({
 
   const currentWorkspace = workspaces.find(w => w.id === workspaceId);
   const otherWorkspaces = workspaces.filter(w => w.id !== workspaceId);
-
-  // console.log('currentWorkspace', currentWorkspace.members);
 
   const workspaceUsers = currentWorkspace?.members.map(m => m.user);
 

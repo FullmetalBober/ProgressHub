@@ -1,7 +1,7 @@
 export default function Loading() {
   return (
     <div className='grid animate-pulse place-items-center p-4 text-neutral-300'>
-      <div role='status'>
+      <output>
         <svg
           aria-hidden='true'
           className='h-8 w-8 animate-spin fill-neutral-600 text-neutral-200 dark:text-neutral-600'
@@ -19,7 +19,7 @@ export default function Loading() {
           />
         </svg>
         <span className='sr-only'>Loading...</span>
-      </div>
+      </output>
     </div>
   );
 }

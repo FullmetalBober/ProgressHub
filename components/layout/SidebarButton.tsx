@@ -8,11 +8,11 @@ export default function SidebarButton({
   icon,
   label,
   href,
-}: {
+}: Readonly<{
   icon: React.ReactNode;
   label: string;
   href: string;
-}) {
+}>) {
   const pathname = usePathname();
 
   const isActive = pathname === href;

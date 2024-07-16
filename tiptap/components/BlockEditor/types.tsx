@@ -4,7 +4,7 @@ import type { Doc as YDoc } from 'yjs';
 
 export interface TiptapProps {
   ydoc: YDoc;
-  provider?: TiptapCollabProvider | null | undefined;
+  provider?: TiptapCollabProvider | null;
   user: User;
 }
 

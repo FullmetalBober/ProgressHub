@@ -13,11 +13,11 @@ export default function TiptapEditor({
   room,
   user,
   collabToken,
-}: {
+}: Readonly<{
   room: string;
   user: User;
   collabToken: string;
-}) {
+}>) {
   const ydoc = useMemo(() => new YDoc(), []);
   const [provider, setProvider] = useState<TiptapCollabProvider | null>(null);
 

@@ -10,19 +10,19 @@ interface PlanSettingsProps {
   stripeCustomerId: string | null;
   isSubscribed: boolean | '' | null;
   isCanceled: boolean;
-  id?: string | undefined;
-  name?: string | undefined;
-  description?: string | undefined;
-  stripePriceId?: string | undefined;
-  price?: number | undefined;
+  id?: string;
+  name?: string;
+  description?: string;
+  stripePriceId?: string;
+  price?: number;
 }
 export default function PlanSettings({
   subscriptionPlan,
   session,
-}: {
+}: Readonly<{
   subscriptionPlan: PlanSettingsProps;
   session: Session | null;
-}) {
+}>) {
   return (
     <AccountCard
       params={{

@@ -24,7 +24,6 @@ export async function POST(request: Request) {
   }
 
   const session = event.data.object as Stripe.Checkout.Session;
-  // console.log("this is the session metadata -> ", session);
 
   if (!session?.metadata?.userId && session.customer == null) {
     console.error('session customer', session.customer);

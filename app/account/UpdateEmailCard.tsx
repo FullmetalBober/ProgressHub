@@ -5,9 +5,11 @@ import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { AccountCard, AccountCardBody, AccountCardFooter } from './AccountCard';
 
-export default function UpdateEmailCard({ email }: { email: string }) {
+export default function UpdateEmailCard({
+  email,
+}: Readonly<{ email: string }>) {
   const { toast } = useToast();
-  const [isPending, startTransition] = useTransition();
+  const [_isPending, startTransition] = useTransition();
   const router = useRouter();
 
   const handleSubmit = async (event: React.SyntheticEvent) => {

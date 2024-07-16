@@ -21,7 +21,7 @@ export function ManageUserSubscriptionButton({
   isSubscribed,
   stripeCustomerId,
   stripePriceId,
-}: ManageUserSubscriptionButtonProps) {
+}: Readonly<ManageUserSubscriptionButtonProps>) {
   const [isPending, startTransition] = React.useTransition();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

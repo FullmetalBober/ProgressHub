@@ -7,7 +7,9 @@ export const metadata: Metadata = {
   title: 'Issues',
 };
 
-export default async function DashboardPage({ params }: { params: Params }) {
+export default async function DashboardPage({
+  params,
+}: Readonly<{ params: Params }>) {
   const { workspaceId } = params;
 
   const issues =

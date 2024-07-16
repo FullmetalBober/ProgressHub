@@ -7,7 +7,7 @@ type Props = {
   session: Session;
 };
 
-export default function SignIn({ session }: Props) {
+export default function SignIn({ session }: Readonly<Props>) {
   if (session) {
     return (
       <Button variant={'destructive'} onClick={() => signOut()}>

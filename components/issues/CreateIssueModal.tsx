@@ -35,11 +35,11 @@ export default function CreateIssueModal({
   workspaceId,
   userId,
   users,
-}: {
+}: Readonly<{
   workspaceId: string;
   userId: string;
   users: User[];
-}) {
+}>) {
   const router = useRouter();
   const { toast } = useToast();
 
