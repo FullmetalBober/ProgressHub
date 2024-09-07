@@ -1,15 +1,18 @@
 import { env } from '@/lib/env.mjs';
-import TiptapEditor from '@/tiptap/TiptapEditor';
 import { Issue } from '@prisma/client';
 import jwt from 'jsonwebtoken';
 import { User } from 'next-auth';
 // import { Input } from '../ui/input';
+import dynamic from 'next/dynamic';
+const TiptapEditor = dynamic(() => import('@/tiptap/TiptapEditor'), {
+  ssr: false,
+});
 
 export default function EditIssue({
   issue,
   user,
 }: Readonly<{
-  issue: Issue;
+  issue: Omit<Issue, 'description'>;
   user: User;
 }>) {
   const roomDescription = `description.${issue.id}`;

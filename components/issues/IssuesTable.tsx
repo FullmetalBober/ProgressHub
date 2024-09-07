@@ -8,7 +8,7 @@ import { DataTable } from '../ui/data-table';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 
 const columns: ColumnDef<
-  Issue & {
+  Omit<Issue, 'description'> & {
     assignee: User;
   }
 >[] = [
@@ -152,7 +152,7 @@ const navigateBy: keyof Issue = 'identifier';
 export default function IssuesTable({
   issues,
 }: Readonly<{
-  issues: (Issue & {
+  issues: (Omit<Issue, 'description'> & {
     assignee: User;
   })[];
 }>) {

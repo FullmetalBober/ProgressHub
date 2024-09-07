@@ -24,6 +24,9 @@ export default async function IssuePage({
           workspaceId,
         },
       },
+      omit: {
+        description: true,
+      },
     });
 
   if (!session?.user) return <div>Not authenticated</div>;

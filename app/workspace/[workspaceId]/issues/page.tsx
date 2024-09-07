@@ -18,6 +18,9 @@ export default async function DashboardPage({
       include: {
         assignee: true,
       },
+      omit: {
+        description: true,
+      },
     })) || [];
 
   return <IssuesTable issues={issues} />;

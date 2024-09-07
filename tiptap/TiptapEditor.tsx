@@ -1,12 +1,11 @@
 'use client';
 
+import { env } from '@/lib/env.mjs';
 import { TiptapCollabProvider } from '@hocuspocus/provider';
 import 'iframe-resizer/js/iframeResizer.contentWindow';
+import { User } from 'next-auth';
 import { useLayoutEffect, useMemo, useState } from 'react';
 import { Doc as YDoc } from 'yjs';
-
-import { env } from '@/lib/env.mjs';
-import { User } from 'next-auth';
 import { BlockEditor } from './components/BlockEditor';
 
 export default function TiptapEditor({

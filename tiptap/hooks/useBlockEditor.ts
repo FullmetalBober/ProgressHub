@@ -11,7 +11,6 @@ import { User } from 'next-auth';
 import { EditorUser } from '../components/BlockEditor/types';
 import { userColors } from '../lib/constants';
 import { randomElement } from '../lib/utils';
-import { useSidebar } from './useSidebar';
 
 declare global {
   interface Window {
@@ -28,7 +27,6 @@ export const useBlockEditor = ({
   provider?: TiptapCollabProvider | null | undefined;
   user: User;
 }) => {
-  const leftSidebar = useSidebar();
   const [collabState, setCollabState] = useState<WebSocketStatus>(
     WebSocketStatus.Connecting
   );
@@ -92,5 +90,5 @@ export const useBlockEditor = ({
 
   window.editor = editor;
 
-  return { editor, users, characterCount, collabState, leftSidebar };
+  return { editor, users, characterCount, collabState };
 };
