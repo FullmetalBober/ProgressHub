@@ -115,7 +115,7 @@ model WorkspaceMembers {
   userId      String
   workspaceId String
   user        User      @relation(fields: [userId], references: [id])
-  workspace   Workspace @relation(fields: [workspaceId], references: [id])
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   createdAt   DateTime  @default(now())
 }
 
@@ -145,7 +145,7 @@ model Issue {
   status      Status    @default(BACKLOG)
   priority    Priority  @default(NO_PRIORITY)
   workspaceId String
-  workspace   Workspace @relation(fields: [workspaceId], references: [id])
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   assigneeId  String
   assignee    User      @relation(fields: [assigneeId], references: [id])
   comments    Comment[]

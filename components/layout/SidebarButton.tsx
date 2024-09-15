@@ -9,7 +9,7 @@ export default function SidebarButton({
   label,
   href,
 }: Readonly<{
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
   label: string;
   href: string;
 }>) {

@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import CreateWorkspaceForm from '@/components/workspace/CreateWorkspaceForm';
+import WorkspaceCreateForm from '@/components/workspace/WorkspaceCreateForm';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -26,7 +26,7 @@ export default function CreateWorkspacePage() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <CreateWorkspaceForm />
+        <WorkspaceCreateForm />
       </CardContent>
       <CardFooter className='flex justify-between'>
         <Button variant='ghost' className='w-full' asChild>

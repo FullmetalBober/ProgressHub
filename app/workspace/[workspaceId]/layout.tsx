@@ -1,5 +1,3 @@
-import Footer from '@/components/layout/Footer';
-import SideBar from '@/components/layout/Sidebar';
 import { auth } from '@/lib/auth/utils';
 import prisma from '@/lib/db';
 import type { Metadata } from 'next';
@@ -37,13 +35,5 @@ export default async function RootLayout({
   //TODO: Add a better UI for this
   if (!isUserMember) return <main>You are not a member of this workspace</main>;
 
-  return (
-    <div className='flex flex-col h-screen justify-between'>
-      <div className='mb-auto p-8 pt-2 md:p-8 grid lg:grid-cols-5'>
-        <SideBar workspaceId={params.workspaceId} />
-        <main className='lg:col-span-4'>{children}</main>
-      </div>
-      <Footer />
-    </div>
-  );
+  return children;
 }

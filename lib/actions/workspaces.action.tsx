@@ -3,6 +3,7 @@
 import prisma from '@/lib/db/index';
 import { WorkspaceCreateInputSchema } from '@/prisma/zod';
 import { Prisma } from '@prisma/client';
+import { revalidatePath } from 'next/cache';
 import { auth } from '../auth/utils';
 
 export async function createWorkspace(body: { [key: string]: unknown }) {
@@ -31,6 +32,31 @@ export async function createWorkspace(body: { [key: string]: unknown }) {
   });
 }
 
+export async function updateWorkspace(
+  id: string,
+  body: { [key: string]: unknown }
+) {
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  if (!userId) throw new Error('You must be logged in to update a workspace');
+
+  const validatedFields = WorkspaceCreateInputSchema.safeParse(body);
+
+  if (!validatedFields.success)
+    throw new Error(
+      validatedFields.error.errors.map(e => e.message).join(', ')
+    );
+
+  revalidatePath(`/workspace/${id}/settings`);
+  return prisma.workspace.update({
+    where: {
+      id,
+    },
+    data: validatedFields.data,
+  });
+}
+
 export async function getWorkspaces(opt?: Prisma.User$workspacesArgs) {
   const session = await auth();
 
@@ -51,4 +77,18 @@ export async function getWorkspaces(opt?: Prisma.User$workspacesArgs) {
   });
 
   return { workspaces: user?.workspaces };
+}
+
+export async function deleteWorkspace(id: string) {
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  if (!userId) throw new Error('You must be logged in to delete a workspace');
+
+  revalidatePath('/workspace');
+  return prisma.workspace.delete({
+    where: {
+      id,
+    },
+  });
 }

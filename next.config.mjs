@@ -14,8 +14,18 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: '/workspace',
+        destination: '/',
+        permanent: true,
+      },
+      {
         source: '/workspace/:workspaceId',
         destination: '/workspace/:workspaceId/issues',
+        permanent: true,
+      },
+      {
+        source: '/workspace/:workspaceId/settings',
+        destination: '/workspace/:workspaceId/settings/general',
         permanent: true,
       },
     ];

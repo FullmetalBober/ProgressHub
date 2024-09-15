@@ -6,37 +6,40 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
-import { createWorkspace } from '@/lib/actions/workspaces.action';
+import { updateWorkspace } from '@/lib/actions/workspaces.action';
 import { WorkspaceUncheckedCreateInputSchema } from '@/prisma/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
+import { Workspace } from '@prisma/client';
 import { useForm } from 'react-hook-form';
 
-export default function CreateWorkspaceForm() {
-  const router = useRouter();
+export default function WorkspaceUpdateForm({
+  workspace,
+}: Readonly<{
+  workspace: Workspace;
+}>) {
+  // console.log(workspace);
   const { toast } = useToast();
-
   //! Prisma.WorkspaceUncheckedCreateInput
   const form = useForm<any>({
     resolver: zodResolver(WorkspaceUncheckedCreateInputSchema),
     defaultValues: {
-      name: '',
+      name: workspace.name,
     },
   });
 
-  //! Prisma.WorkspaceUncheckedCreateInput
   async function onSubmit(data: any) {
     try {
-      const res = await createWorkspace(data);
+      await updateWorkspace(workspace.id, data);
 
+      form.reset(data);
       toast({
-        title: 'Workspace created successfully!',
+        title: 'Workspace updated successfully!',
       });
-      router.push(`/workspace/${res.id}`);
     } catch (error) {
       toast({
         variant: 'destructive',
@@ -47,24 +50,25 @@ export default function CreateWorkspaceForm() {
     }
   }
 
-  const isFormDisabled = form.formState.isSubmitting;
+  const isFormDisabled = form.formState.isSubmitting || !form.formState.isDirty;
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='grid gap-3'>
+      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
         <FormField
           control={form.control}
           name='name'
           render={({ field }) => (
             <FormItem>
+              <FormLabel>Workspace name</FormLabel>
               <FormControl>
-                <Input placeholder='Enter workspace name' {...field} />
+                <Input {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type='submit' disabled={isFormDisabled} className='w-full'>
-          Create workspace
+        <Button type='submit' disabled={isFormDisabled}>
+          Update
         </Button>
       </form>
     </Form>
