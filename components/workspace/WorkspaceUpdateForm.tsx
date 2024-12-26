@@ -22,7 +22,6 @@ export default function WorkspaceUpdateForm({
 }: Readonly<{
   workspace: Workspace;
 }>) {
-  // console.log(workspace);
   const { toast } = useToast();
   //! Prisma.WorkspaceUncheckedCreateInput
   const form = useForm<any>({
