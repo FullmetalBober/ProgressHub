@@ -15,7 +15,7 @@ const server = http.createServer((_req, res) => {
 });
 const io = new SocketIOServer(server, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: env.WEB_DEPLOYMENT_URL,
   },
 });
 const wss = new WebSocket.Server({ noServer: true });
