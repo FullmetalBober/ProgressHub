@@ -24,7 +24,7 @@ export default function TiptapEditor({
     setProvider(
       new TiptapCollabProvider({
         name: room,
-        baseUrl: env.NEXT_PUBLIC_TIPTAP_COLLAB_BASE_URL,
+        baseUrl: `${env.NEXT_PUBLIC_SOCKET_BASE_URL}${env.NEXT_PUBLIC_HOCUSPOCUS_PATH}`,
         token: collabToken,
         document: ydoc,
       })

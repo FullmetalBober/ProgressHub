@@ -33,7 +33,8 @@ export default async function RootLayout({
   }
 
   //TODO: Add a better UI for this
-  if (!isUserMember) return <main>You are not a member of this workspace</main>;
+  if (!isUserMember) return;
+  <main>You are not a member of this workspace</main>;
 
   return children;
 }

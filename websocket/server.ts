@@ -1,10 +1,24 @@
 import prisma from '@/lib/db';
+import { env } from '@/lib/env.mjs';
 import { Database } from '@hocuspocus/extension-database';
 import { Logger } from '@hocuspocus/extension-logger';
 import { Server } from '@hocuspocus/server';
-import express from 'express';
-import expressWebsocket from 'express-ws';
+import http from 'http';
 import jwt from 'jsonwebtoken';
+import { Server as SocketIOServer } from 'socket.io';
+import WebSocket from 'ws';
+
+const hocuspocusPath = env.NEXT_PUBLIC_HOCUSPOCUS_PATH;
+
+const server = http.createServer((_req, res) => {
+  res.end('v0.0.1');
+});
+const io = new SocketIOServer(server, {
+  cors: {
+    origin: 'http://localhost:3000',
+  },
+});
+const wss = new WebSocket.Server({ noServer: true });
 
 const hocuspocusServer = Server.configure({
   extensions: [
@@ -44,26 +58,37 @@ const hocuspocusServer = Server.configure({
     }),
   ],
   async onAuthenticate({ token }) {
-    jwt.verify(token, process.env.TIPTAP_COLLAB_SECRET ?? 'secret');
+    jwt.verify(token, env.TIPTAP_COLLAB_SECRET ?? 'secret');
   },
 });
 
-// Setup your express instance using the express-ws extension
-const { app } = expressWebsocket(express());
-
-// A basic http route
-app.get('/', (_request, response) => {
-  response.send('Hello World!');
+wss.on('connection', (ws, req) => {
+  hocuspocusServer.handleConnection(ws, req);
 });
 
-// Add a websocket route for Hocuspocus
-// You can set any contextual data like in the onConnect hook
-// and pass it to the handleConnection method.
-app.ws('/collaboration', (websocket, request) => {
-  hocuspocusServer.handleConnection(websocket, request);
+server.on('upgrade', (req, socket, head) => {
+  if (req.url !== hocuspocusPath) return;
+  wss.handleUpgrade(req, socket, head, ws => {
+    wss.emit('connection', ws, req);
+  });
 });
 
-// Start the server
-app.listen(Number(process.env.PORT ?? 1234), () =>
-  console.log(`Listening on http://127.0.0.1:${process.env.PORT ?? 1234}`)
-);
+io.on('connection', socket => {
+  console.log('Socket.IO client connected.');
+
+  socket.on('message', msg => {
+    console.log('Socket.IO received message:', msg);
+    socket.emit('message', `Echo from Socket.IO: ${msg}`);
+  });
+
+  socket.on('editIssueTitle', msg => {
+    console.log('Socket.IO received editIssueTitle:', msg);
+    socket.emit('editIssueTitle', `Echo from Socket.IO: ${msg}`);
+  });
+});
+
+server.listen(process.env.PORT ?? 4000, () => {
+  console.log('Server is running on http://localhost:4000');
+  console.log('Socket.IO path: http://localhost:4000');
+  console.log(`Hocuspocus endpoint: ws://localhost:4000${hocuspocusPath}`);
+});

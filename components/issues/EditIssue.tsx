@@ -2,8 +2,8 @@ import { env } from '@/lib/env.mjs';
 import { Issue } from '@prisma/client';
 import jwt from 'jsonwebtoken';
 import { User } from 'next-auth';
-// import { Input } from '../ui/input';
 import dynamic from 'next/dynamic';
+import EditIssueTitle from './EditIssueTitle';
 const TiptapEditor = dynamic(() => import('@/tiptap/TiptapEditor'), {
   ssr: false,
 });
@@ -20,8 +20,7 @@ export default function EditIssue({
 
   return (
     <div>
-      {/* <Input value={issue.title} variant='ghost' textSize='lg' /> */}
-      {/* <EditorContent editor={editor} /> */}
+      <EditIssueTitle id={issue.id} value={issue.title} />
       <TiptapEditor
         room={roomDescription}
         user={user}
