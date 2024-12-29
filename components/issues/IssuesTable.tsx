@@ -1,6 +1,7 @@
 'use client';
 
 import { priorities, statuses } from '@/config/constants';
+import { useSocketObserver } from '@/hooks/useSocketObserver';
 import { Issue, User } from '@prisma/client';
 import { ColumnDef } from '@tanstack/react-table';
 import CustomAvatar from '../CustomAvatar';
@@ -156,11 +157,12 @@ export default function IssuesTable({
     assignee: User;
   })[];
 }>) {
+  const issuesObservable = useSocketObserver('issue', issues);
   const workspaceId = issues[0]?.workspaceId;
 
   return (
     <DataTable
-      data={issues}
+      data={issuesObservable}
       columns={columns}
       navigateTo={`/workspace/${workspaceId}/issues`}
       navigateBy={navigateBy}

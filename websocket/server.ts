@@ -50,7 +50,7 @@ const hocuspocusServer = Server.configure({
               id,
             },
             data: {
-              description: state,
+              description: new Uint8Array(state),
             },
           });
         }
@@ -73,17 +73,35 @@ server.on('upgrade', (req, socket, head) => {
   });
 });
 
-io.on('connection', socket => {
-  console.log('Socket.IO client connected.');
+type TNotifyData = {
+  room: string;
+  entity: string;
+  event: string;
+  payload: Record<string, unknown>;
+};
 
-  socket.on('message', msg => {
-    console.log('Socket.IO received message:', msg);
-    socket.emit('message', `Echo from Socket.IO: ${msg}`);
+const entities = ['issue'];
+const events = ['create', 'update', 'delete'];
+io.on('connection', socket => {
+  socket.on('join', (room: unknown) => {
+    if (typeof room !== 'string') throw new Error('Room must be a string');
+    socket.join(room);
   });
 
-  socket.on('editIssueTitle', msg => {
-    console.log('Socket.IO received editIssueTitle:', msg);
-    socket.emit('editIssueTitle', `Echo from Socket.IO: ${msg}`);
+  socket.on('notify', (data?: Partial<TNotifyData>) => {
+    const { room, entity, event, payload } = data ?? {};
+
+    if (!payload?.id) throw new Error('Payload must have an id');
+    else if (typeof room !== 'string') throw new Error('Room must be a string');
+    else if (typeof entity !== 'string')
+      throw new Error('Entity must be a string');
+    else if (typeof event !== 'string')
+      throw new Error('Event must be a string');
+    else if (!entities.includes(entity) || !events.includes(event)) {
+      throw new Error(`Invalid entity or event: ${entity}/${event}`);
+    }
+
+    io.to(room).emit(`${entity}/${event}`, payload);
   });
 });
 

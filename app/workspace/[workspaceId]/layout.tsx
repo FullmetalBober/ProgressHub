@@ -1,3 +1,4 @@
+import { SocketEmitterProvider } from '@/context/SocketEmitterContext';
 import { auth } from '@/lib/auth/utils';
 import prisma from '@/lib/db';
 import type { Metadata } from 'next';
@@ -34,5 +35,9 @@ export default async function RootLayout({
 
   //TODO: Add a better UI for this
   if (!isUserMember) return <main>You are not a member of this workspace</main>;
-  return children;
+  return (
+    <SocketEmitterProvider room={params.workspaceId}>
+      {children}
+    </SocketEmitterProvider>
+  );
 }

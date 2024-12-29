@@ -1,34 +1,58 @@
 'use client';
 
-import { socket } from '@/lib/socket';
-import { useState } from 'react';
+import { useSocketEmitter } from '@/context/SocketEmitterContext';
+import { updateIssue } from '@/lib/actions/issues.action';
+import { IssuePartial, IssueUncheckedUpdateInputSchema } from '@/prisma/zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { Form, FormControl, FormField, FormItem } from '../ui/form';
 import { Textarea } from '../ui/textarea';
 
 export default function EditIssueTitle({
   id,
-  value,
+  title,
 }: Readonly<{
   id: string;
-  value: string;
+  title: string;
 }>) {
-  const [title, setTitle] = useState(value);
+  const { emit } = useSocketEmitter();
+  const form = useForm<IssuePartial>({
+    resolver: zodResolver(IssueUncheckedUpdateInputSchema),
+    defaultValues: {
+      title,
+    },
+  });
+
+  const onSubmit = async (data: IssuePartial) => {
+    if (!form.formState.isDirty) return;
+    form.reset(data);
+
+    await updateIssue(id, data);
+    emit('issue', 'update', {
+      id,
+      title: data.title,
+    });
+  };
 
   return (
-    <Textarea
-      value={title}
-      variant='ghost'
-      textSize='lg'
-      className='pl-3 overflow-hidden resize-none h-[80px]'
-      onInput={e => {
-        const target = e.target as HTMLTextAreaElement;
-        target.style.height = '0px';
-        target.style.height = target.scrollHeight + 'px';
-      }}
-      onChange={e => {
-        const target = e.target as HTMLTextAreaElement;
-        socket.emit('editIssueTitle', { id, title: target.value });
-        setTitle(target.value);
-      }}
-    />
+    <Form {...form}>
+      <FormField
+        control={form.control}
+        name='title'
+        render={({ field }) => (
+          <FormItem>
+            <FormControl>
+              <Textarea
+                {...field}
+                variant='ghost'
+                textSize='lg'
+                className='pl-3 overflow-hidden resize-none h-[80px]'
+                onBlur={form.handleSubmit(onSubmit)}
+              />
+            </FormControl>
+          </FormItem>
+        )}
+      />
+    </Form>
   );
 }

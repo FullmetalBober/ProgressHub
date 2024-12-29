@@ -20,7 +20,7 @@ export default function EditIssue({
 
   return (
     <div>
-      <EditIssueTitle id={issue.id} value={issue.title} />
+      <EditIssueTitle {...issue} />
       <TiptapEditor
         room={roomDescription}
         user={user}

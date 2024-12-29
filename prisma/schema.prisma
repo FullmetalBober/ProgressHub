@@ -10,6 +10,7 @@ generator zod {
   provider                  = "zod-prisma-types"
   output                    = "./zod"
   createRelationValuesTypes = true
+  createPartialTypes        = true
   useTypeAssertions         = true
 }
 

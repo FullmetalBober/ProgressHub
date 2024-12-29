@@ -74,6 +74,14 @@ export const UserCustomValidatorsSchema = UserSchema.strip()
 
 export type UserCustomValidators = z.infer<typeof UserCustomValidatorsSchema>
 
+/////////////////////////////////////////
+// USER PARTIAL SCHEMA
+/////////////////////////////////////////
+
+export const UserPartialSchema = UserSchema.partial()
+
+export type UserPartial = z.infer<typeof UserPartialSchema>
+
 // USER RELATION SCHEMA
 //------------------------------------------------------
 
@@ -92,6 +100,34 @@ export const UserWithRelationsSchema: z.ZodType<UserWithRelations> = UserSchema.
   workspaces: z.lazy(() => WorkspaceMembersWithRelationsSchema).array(),
   issues: z.lazy(() => IssueWithRelationsSchema).array(),
 }))
+
+// USER PARTIAL RELATION SCHEMA
+//------------------------------------------------------
+
+export type UserPartialRelations = {
+  accounts?: AccountPartialWithRelations[];
+  sessions?: SessionPartialWithRelations[];
+  workspaces?: WorkspaceMembersPartialWithRelations[];
+  issues?: IssuePartialWithRelations[];
+};
+
+export type UserPartialWithRelations = z.infer<typeof UserPartialSchema> & UserPartialRelations
+
+export const UserPartialWithRelationsSchema: z.ZodType<UserPartialWithRelations> = UserPartialSchema.merge(z.object({
+  accounts: z.lazy(() => AccountPartialWithRelationsSchema).array(),
+  sessions: z.lazy(() => SessionPartialWithRelationsSchema).array(),
+  workspaces: z.lazy(() => WorkspaceMembersPartialWithRelationsSchema).array(),
+  issues: z.lazy(() => IssuePartialWithRelationsSchema).array(),
+})).partial()
+
+export type UserWithPartialRelations = z.infer<typeof UserSchema> & UserPartialRelations
+
+export const UserWithPartialRelationsSchema: z.ZodType<UserWithPartialRelations> = UserSchema.merge(z.object({
+  accounts: z.lazy(() => AccountPartialWithRelationsSchema).array(),
+  sessions: z.lazy(() => SessionPartialWithRelationsSchema).array(),
+  workspaces: z.lazy(() => WorkspaceMembersPartialWithRelationsSchema).array(),
+  issues: z.lazy(() => IssuePartialWithRelationsSchema).array(),
+}).partial())
 
 /////////////////////////////////////////
 // ACCOUNT SCHEMA
@@ -123,6 +159,14 @@ export const AccountCustomValidatorsSchema = AccountSchema.strip()
 
 export type AccountCustomValidators = z.infer<typeof AccountCustomValidatorsSchema>
 
+/////////////////////////////////////////
+// ACCOUNT PARTIAL SCHEMA
+/////////////////////////////////////////
+
+export const AccountPartialSchema = AccountSchema.partial()
+
+export type AccountPartial = z.infer<typeof AccountPartialSchema>
+
 // ACCOUNT RELATION SCHEMA
 //------------------------------------------------------
 
@@ -135,6 +179,25 @@ export type AccountWithRelations = z.infer<typeof AccountSchema> & AccountRelati
 export const AccountWithRelationsSchema: z.ZodType<AccountWithRelations> = AccountSchema.merge(z.object({
   user: z.lazy(() => UserWithRelationsSchema),
 }))
+
+// ACCOUNT PARTIAL RELATION SCHEMA
+//------------------------------------------------------
+
+export type AccountPartialRelations = {
+  user?: UserPartialWithRelations;
+};
+
+export type AccountPartialWithRelations = z.infer<typeof AccountPartialSchema> & AccountPartialRelations
+
+export const AccountPartialWithRelationsSchema: z.ZodType<AccountPartialWithRelations> = AccountPartialSchema.merge(z.object({
+  user: z.lazy(() => UserPartialWithRelationsSchema),
+})).partial()
+
+export type AccountWithPartialRelations = z.infer<typeof AccountSchema> & AccountPartialRelations
+
+export const AccountWithPartialRelationsSchema: z.ZodType<AccountWithPartialRelations> = AccountSchema.merge(z.object({
+  user: z.lazy(() => UserPartialWithRelationsSchema),
+}).partial())
 
 /////////////////////////////////////////
 // SESSION SCHEMA
@@ -158,6 +221,14 @@ export const SessionCustomValidatorsSchema = SessionSchema.strip()
 
 export type SessionCustomValidators = z.infer<typeof SessionCustomValidatorsSchema>
 
+/////////////////////////////////////////
+// SESSION PARTIAL SCHEMA
+/////////////////////////////////////////
+
+export const SessionPartialSchema = SessionSchema.partial()
+
+export type SessionPartial = z.infer<typeof SessionPartialSchema>
+
 // SESSION RELATION SCHEMA
 //------------------------------------------------------
 
@@ -170,6 +241,25 @@ export type SessionWithRelations = z.infer<typeof SessionSchema> & SessionRelati
 export const SessionWithRelationsSchema: z.ZodType<SessionWithRelations> = SessionSchema.merge(z.object({
   user: z.lazy(() => UserWithRelationsSchema),
 }))
+
+// SESSION PARTIAL RELATION SCHEMA
+//------------------------------------------------------
+
+export type SessionPartialRelations = {
+  user?: UserPartialWithRelations;
+};
+
+export type SessionPartialWithRelations = z.infer<typeof SessionPartialSchema> & SessionPartialRelations
+
+export const SessionPartialWithRelationsSchema: z.ZodType<SessionPartialWithRelations> = SessionPartialSchema.merge(z.object({
+  user: z.lazy(() => UserPartialWithRelationsSchema),
+})).partial()
+
+export type SessionWithPartialRelations = z.infer<typeof SessionSchema> & SessionPartialRelations
+
+export const SessionWithPartialRelationsSchema: z.ZodType<SessionWithPartialRelations> = SessionSchema.merge(z.object({
+  user: z.lazy(() => UserPartialWithRelationsSchema),
+}).partial())
 
 /////////////////////////////////////////
 // VERIFICATION TOKEN SCHEMA
@@ -192,6 +282,14 @@ export const VerificationTokenCustomValidatorsSchema = VerificationTokenSchema.s
 export type VerificationTokenCustomValidators = z.infer<typeof VerificationTokenCustomValidatorsSchema>
 
 /////////////////////////////////////////
+// VERIFICATION TOKEN PARTIAL SCHEMA
+/////////////////////////////////////////
+
+export const VerificationTokenPartialSchema = VerificationTokenSchema.partial()
+
+export type VerificationTokenPartial = z.infer<typeof VerificationTokenPartialSchema>
+
+/////////////////////////////////////////
 // WORKSPACE SCHEMA
 /////////////////////////////////////////
 
@@ -212,6 +310,14 @@ export const WorkspaceCustomValidatorsSchema = WorkspaceSchema.strip()
 
 export type WorkspaceCustomValidators = z.infer<typeof WorkspaceCustomValidatorsSchema>
 
+/////////////////////////////////////////
+// WORKSPACE PARTIAL SCHEMA
+/////////////////////////////////////////
+
+export const WorkspacePartialSchema = WorkspaceSchema.partial()
+
+export type WorkspacePartial = z.infer<typeof WorkspacePartialSchema>
+
 // WORKSPACE RELATION SCHEMA
 //------------------------------------------------------
 
@@ -226,6 +332,28 @@ export const WorkspaceWithRelationsSchema: z.ZodType<WorkspaceWithRelations> = W
   members: z.lazy(() => WorkspaceMembersWithRelationsSchema).array(),
   issues: z.lazy(() => IssueWithRelationsSchema).array(),
 }))
+
+// WORKSPACE PARTIAL RELATION SCHEMA
+//------------------------------------------------------
+
+export type WorkspacePartialRelations = {
+  members?: WorkspaceMembersPartialWithRelations[];
+  issues?: IssuePartialWithRelations[];
+};
+
+export type WorkspacePartialWithRelations = z.infer<typeof WorkspacePartialSchema> & WorkspacePartialRelations
+
+export const WorkspacePartialWithRelationsSchema: z.ZodType<WorkspacePartialWithRelations> = WorkspacePartialSchema.merge(z.object({
+  members: z.lazy(() => WorkspaceMembersPartialWithRelationsSchema).array(),
+  issues: z.lazy(() => IssuePartialWithRelationsSchema).array(),
+})).partial()
+
+export type WorkspaceWithPartialRelations = z.infer<typeof WorkspaceSchema> & WorkspacePartialRelations
+
+export const WorkspaceWithPartialRelationsSchema: z.ZodType<WorkspaceWithPartialRelations> = WorkspaceSchema.merge(z.object({
+  members: z.lazy(() => WorkspaceMembersPartialWithRelationsSchema).array(),
+  issues: z.lazy(() => IssuePartialWithRelationsSchema).array(),
+}).partial())
 
 /////////////////////////////////////////
 // WORKSPACE MEMBERS SCHEMA
@@ -249,6 +377,14 @@ export const WorkspaceMembersCustomValidatorsSchema = WorkspaceMembersSchema.str
 
 export type WorkspaceMembersCustomValidators = z.infer<typeof WorkspaceMembersCustomValidatorsSchema>
 
+/////////////////////////////////////////
+// WORKSPACE MEMBERS PARTIAL SCHEMA
+/////////////////////////////////////////
+
+export const WorkspaceMembersPartialSchema = WorkspaceMembersSchema.partial()
+
+export type WorkspaceMembersPartial = z.infer<typeof WorkspaceMembersPartialSchema>
+
 // WORKSPACE MEMBERS RELATION SCHEMA
 //------------------------------------------------------
 
@@ -263,6 +399,28 @@ export const WorkspaceMembersWithRelationsSchema: z.ZodType<WorkspaceMembersWith
   user: z.lazy(() => UserWithRelationsSchema),
   workspace: z.lazy(() => WorkspaceWithRelationsSchema),
 }))
+
+// WORKSPACE MEMBERS PARTIAL RELATION SCHEMA
+//------------------------------------------------------
+
+export type WorkspaceMembersPartialRelations = {
+  user?: UserPartialWithRelations;
+  workspace?: WorkspacePartialWithRelations;
+};
+
+export type WorkspaceMembersPartialWithRelations = z.infer<typeof WorkspaceMembersPartialSchema> & WorkspaceMembersPartialRelations
+
+export const WorkspaceMembersPartialWithRelationsSchema: z.ZodType<WorkspaceMembersPartialWithRelations> = WorkspaceMembersPartialSchema.merge(z.object({
+  user: z.lazy(() => UserPartialWithRelationsSchema),
+  workspace: z.lazy(() => WorkspacePartialWithRelationsSchema),
+})).partial()
+
+export type WorkspaceMembersWithPartialRelations = z.infer<typeof WorkspaceMembersSchema> & WorkspaceMembersPartialRelations
+
+export const WorkspaceMembersWithPartialRelationsSchema: z.ZodType<WorkspaceMembersWithPartialRelations> = WorkspaceMembersSchema.merge(z.object({
+  user: z.lazy(() => UserPartialWithRelationsSchema),
+  workspace: z.lazy(() => WorkspacePartialWithRelationsSchema),
+}).partial())
 
 /////////////////////////////////////////
 // ISSUE SCHEMA
@@ -291,6 +449,14 @@ export const IssueCustomValidatorsSchema = IssueSchema.strip()
 
 export type IssueCustomValidators = z.infer<typeof IssueCustomValidatorsSchema>
 
+/////////////////////////////////////////
+// ISSUE PARTIAL SCHEMA
+/////////////////////////////////////////
+
+export const IssuePartialSchema = IssueSchema.partial()
+
+export type IssuePartial = z.infer<typeof IssuePartialSchema>
+
 // ISSUE RELATION SCHEMA
 //------------------------------------------------------
 
@@ -307,6 +473,31 @@ export const IssueWithRelationsSchema: z.ZodType<IssueWithRelations> = IssueSche
   assignee: z.lazy(() => UserWithRelationsSchema),
   comments: z.lazy(() => CommentWithRelationsSchema).array(),
 }))
+
+// ISSUE PARTIAL RELATION SCHEMA
+//------------------------------------------------------
+
+export type IssuePartialRelations = {
+  workspace?: WorkspacePartialWithRelations;
+  assignee?: UserPartialWithRelations;
+  comments?: CommentPartialWithRelations[];
+};
+
+export type IssuePartialWithRelations = z.infer<typeof IssuePartialSchema> & IssuePartialRelations
+
+export const IssuePartialWithRelationsSchema: z.ZodType<IssuePartialWithRelations> = IssuePartialSchema.merge(z.object({
+  workspace: z.lazy(() => WorkspacePartialWithRelationsSchema),
+  assignee: z.lazy(() => UserPartialWithRelationsSchema),
+  comments: z.lazy(() => CommentPartialWithRelationsSchema).array(),
+})).partial()
+
+export type IssueWithPartialRelations = z.infer<typeof IssueSchema> & IssuePartialRelations
+
+export const IssueWithPartialRelationsSchema: z.ZodType<IssueWithPartialRelations> = IssueSchema.merge(z.object({
+  workspace: z.lazy(() => WorkspacePartialWithRelationsSchema),
+  assignee: z.lazy(() => UserPartialWithRelationsSchema),
+  comments: z.lazy(() => CommentPartialWithRelationsSchema).array(),
+}).partial())
 
 /////////////////////////////////////////
 // COMMENT SCHEMA
@@ -331,6 +522,14 @@ export const CommentCustomValidatorsSchema = CommentSchema.strip()
 
 export type CommentCustomValidators = z.infer<typeof CommentCustomValidatorsSchema>
 
+/////////////////////////////////////////
+// COMMENT PARTIAL SCHEMA
+/////////////////////////////////////////
+
+export const CommentPartialSchema = CommentSchema.partial()
+
+export type CommentPartial = z.infer<typeof CommentPartialSchema>
+
 // COMMENT RELATION SCHEMA
 //------------------------------------------------------
 
@@ -343,6 +542,25 @@ export type CommentWithRelations = z.infer<typeof CommentSchema> & CommentRelati
 export const CommentWithRelationsSchema: z.ZodType<CommentWithRelations> = CommentSchema.merge(z.object({
   issue: z.lazy(() => IssueWithRelationsSchema),
 }))
+
+// COMMENT PARTIAL RELATION SCHEMA
+//------------------------------------------------------
+
+export type CommentPartialRelations = {
+  issue?: IssuePartialWithRelations;
+};
+
+export type CommentPartialWithRelations = z.infer<typeof CommentPartialSchema> & CommentPartialRelations
+
+export const CommentPartialWithRelationsSchema: z.ZodType<CommentPartialWithRelations> = CommentPartialSchema.merge(z.object({
+  issue: z.lazy(() => IssuePartialWithRelationsSchema),
+})).partial()
+
+export type CommentWithPartialRelations = z.infer<typeof CommentSchema> & CommentPartialRelations
+
+export const CommentWithPartialRelationsSchema: z.ZodType<CommentWithPartialRelations> = CommentSchema.merge(z.object({
+  issue: z.lazy(() => IssuePartialWithRelationsSchema),
+}).partial())
 
 /////////////////////////////////////////
 // SELECT & INCLUDE
@@ -675,7 +893,7 @@ export const AccountWhereInputSchema: z.ZodType<Prisma.AccountWhereInput> = z.ob
   session_state: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  user: z.union([ z.lazy(() => UserRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
+  user: z.union([ z.lazy(() => UserScalarRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.AccountWhereInput>;
 
 export const AccountOrderByWithRelationInputSchema: z.ZodType<Prisma.AccountOrderByWithRelationInput> = z.object({
@@ -716,7 +934,7 @@ export const AccountWhereUniqueInputSchema: z.ZodType<Prisma.AccountWhereUniqueI
   session_state: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  user: z.union([ z.lazy(() => UserRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
+  user: z.union([ z.lazy(() => UserScalarRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
 }).strict()) as z.ZodType<Prisma.AccountWhereUniqueInput>;
 
 export const AccountOrderByWithAggregationInputSchema: z.ZodType<Prisma.AccountOrderByWithAggregationInput> = z.object({
@@ -768,7 +986,7 @@ export const SessionWhereInputSchema: z.ZodType<Prisma.SessionWhereInput> = z.ob
   expires: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  user: z.union([ z.lazy(() => UserRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
+  user: z.union([ z.lazy(() => UserScalarRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.SessionWhereInput>;
 
 export const SessionOrderByWithRelationInputSchema: z.ZodType<Prisma.SessionOrderByWithRelationInput> = z.object({
@@ -792,7 +1010,7 @@ export const SessionWhereUniqueInputSchema: z.ZodType<Prisma.SessionWhereUniqueI
   expires: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  user: z.union([ z.lazy(() => UserRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
+  user: z.union([ z.lazy(() => UserScalarRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
 }).strict()) as z.ZodType<Prisma.SessionWhereUniqueInput>;
 
 export const SessionOrderByWithAggregationInputSchema: z.ZodType<Prisma.SessionOrderByWithAggregationInput> = z.object({
@@ -930,8 +1148,8 @@ export const WorkspaceMembersWhereInputSchema: z.ZodType<Prisma.WorkspaceMembers
   userId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   workspaceId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  user: z.union([ z.lazy(() => UserRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
-  workspace: z.union([ z.lazy(() => WorkspaceRelationFilterSchema),z.lazy(() => WorkspaceWhereInputSchema) ]).optional(),
+  user: z.union([ z.lazy(() => UserScalarRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
+  workspace: z.union([ z.lazy(() => WorkspaceScalarRelationFilterSchema),z.lazy(() => WorkspaceWhereInputSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.WorkspaceMembersWhereInput>;
 
 export const WorkspaceMembersOrderByWithRelationInputSchema: z.ZodType<Prisma.WorkspaceMembersOrderByWithRelationInput> = z.object({
@@ -956,8 +1174,8 @@ export const WorkspaceMembersWhereUniqueInputSchema: z.ZodType<Prisma.WorkspaceM
   userId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   workspaceId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  user: z.union([ z.lazy(() => UserRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
-  workspace: z.union([ z.lazy(() => WorkspaceRelationFilterSchema),z.lazy(() => WorkspaceWhereInputSchema) ]).optional(),
+  user: z.union([ z.lazy(() => UserScalarRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
+  workspace: z.union([ z.lazy(() => WorkspaceScalarRelationFilterSchema),z.lazy(() => WorkspaceWhereInputSchema) ]).optional(),
 }).strict()) as z.ZodType<Prisma.WorkspaceMembersWhereUniqueInput>;
 
 export const WorkspaceMembersOrderByWithAggregationInputSchema: z.ZodType<Prisma.WorkspaceMembersOrderByWithAggregationInput> = z.object({
@@ -996,8 +1214,8 @@ export const IssueWhereInputSchema: z.ZodType<Prisma.IssueWhereInput> = z.object
   assigneeId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  workspace: z.union([ z.lazy(() => WorkspaceRelationFilterSchema),z.lazy(() => WorkspaceWhereInputSchema) ]).optional(),
-  assignee: z.union([ z.lazy(() => UserRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
+  workspace: z.union([ z.lazy(() => WorkspaceScalarRelationFilterSchema),z.lazy(() => WorkspaceWhereInputSchema) ]).optional(),
+  assignee: z.union([ z.lazy(() => UserScalarRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
   comments: z.lazy(() => CommentListRelationFilterSchema).optional()
 }).strict() as z.ZodType<Prisma.IssueWhereInput>;
 
@@ -1044,8 +1262,8 @@ export const IssueWhereUniqueInputSchema: z.ZodType<Prisma.IssueWhereUniqueInput
   assigneeId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  workspace: z.union([ z.lazy(() => WorkspaceRelationFilterSchema),z.lazy(() => WorkspaceWhereInputSchema) ]).optional(),
-  assignee: z.union([ z.lazy(() => UserRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
+  workspace: z.union([ z.lazy(() => WorkspaceScalarRelationFilterSchema),z.lazy(() => WorkspaceWhereInputSchema) ]).optional(),
+  assignee: z.union([ z.lazy(() => UserScalarRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
   comments: z.lazy(() => CommentListRelationFilterSchema).optional()
 }).strict()) as z.ZodType<Prisma.IssueWhereUniqueInput>;
 
@@ -1093,7 +1311,7 @@ export const CommentWhereInputSchema: z.ZodType<Prisma.CommentWhereInput> = z.ob
   authorId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  issue: z.union([ z.lazy(() => IssueRelationFilterSchema),z.lazy(() => IssueWhereInputSchema) ]).optional(),
+  issue: z.union([ z.lazy(() => IssueScalarRelationFilterSchema),z.lazy(() => IssueWhereInputSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.CommentWhereInput>;
 
 export const CommentOrderByWithRelationInputSchema: z.ZodType<Prisma.CommentOrderByWithRelationInput> = z.object({
@@ -1119,7 +1337,7 @@ export const CommentWhereUniqueInputSchema: z.ZodType<Prisma.CommentWhereUniqueI
   authorId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  issue: z.union([ z.lazy(() => IssueRelationFilterSchema),z.lazy(() => IssueWhereInputSchema) ]).optional(),
+  issue: z.union([ z.lazy(() => IssueScalarRelationFilterSchema),z.lazy(() => IssueWhereInputSchema) ]).optional(),
 }).strict()) as z.ZodType<Prisma.CommentWhereUniqueInput>;
 
 export const CommentOrderByWithAggregationInputSchema: z.ZodType<Prisma.CommentOrderByWithAggregationInput> = z.object({
@@ -1908,10 +2126,10 @@ export const IntNullableFilterSchema: z.ZodType<Prisma.IntNullableFilter> = z.ob
   not: z.union([ z.number(),z.lazy(() => NestedIntNullableFilterSchema) ]).optional().nullable(),
 }).strict() as z.ZodType<Prisma.IntNullableFilter>;
 
-export const UserRelationFilterSchema: z.ZodType<Prisma.UserRelationFilter> = z.object({
+export const UserScalarRelationFilterSchema: z.ZodType<Prisma.UserScalarRelationFilter> = z.object({
   is: z.lazy(() => UserWhereInputSchema).optional(),
   isNot: z.lazy(() => UserWhereInputSchema).optional()
-}).strict() as z.ZodType<Prisma.UserRelationFilter>;
+}).strict() as z.ZodType<Prisma.UserScalarRelationFilter>;
 
 export const AccountProviderProviderAccountIdCompoundUniqueInputSchema: z.ZodType<Prisma.AccountProviderProviderAccountIdCompoundUniqueInput> = z.object({
   provider: z.string(),
@@ -2100,10 +2318,10 @@ export const EnumRoleFilterSchema: z.ZodType<Prisma.EnumRoleFilter> = z.object({
   not: z.union([ z.lazy(() => RoleSchema),z.lazy(() => NestedEnumRoleFilterSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.EnumRoleFilter>;
 
-export const WorkspaceRelationFilterSchema: z.ZodType<Prisma.WorkspaceRelationFilter> = z.object({
+export const WorkspaceScalarRelationFilterSchema: z.ZodType<Prisma.WorkspaceScalarRelationFilter> = z.object({
   is: z.lazy(() => WorkspaceWhereInputSchema).optional(),
   isNot: z.lazy(() => WorkspaceWhereInputSchema).optional()
-}).strict() as z.ZodType<Prisma.WorkspaceRelationFilter>;
+}).strict() as z.ZodType<Prisma.WorkspaceScalarRelationFilter>;
 
 export const WorkspaceMembersCountOrderByAggregateInputSchema: z.ZodType<Prisma.WorkspaceMembersCountOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
@@ -2252,10 +2470,10 @@ export const EnumPriorityWithAggregatesFilterSchema: z.ZodType<Prisma.EnumPriori
   _max: z.lazy(() => NestedEnumPriorityFilterSchema).optional()
 }).strict() as z.ZodType<Prisma.EnumPriorityWithAggregatesFilter>;
 
-export const IssueRelationFilterSchema: z.ZodType<Prisma.IssueRelationFilter> = z.object({
+export const IssueScalarRelationFilterSchema: z.ZodType<Prisma.IssueScalarRelationFilter> = z.object({
   is: z.lazy(() => IssueWhereInputSchema).optional(),
   isNot: z.lazy(() => IssueWhereInputSchema).optional()
-}).strict() as z.ZodType<Prisma.IssueRelationFilter>;
+}).strict() as z.ZodType<Prisma.IssueScalarRelationFilter>;
 
 export const CommentCountOrderByAggregateInputSchema: z.ZodType<Prisma.CommentCountOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),

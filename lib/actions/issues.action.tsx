@@ -1,6 +1,9 @@
 'use server';
 
-import { IssueUncheckedCreateInputSchema } from '@/prisma/zod';
+import {
+  IssueUncheckedCreateInputSchema,
+  IssueUncheckedUpdateInputSchema,
+} from '@/prisma/zod';
 import { auth } from '../auth/utils';
 import prisma from '../db';
 
@@ -64,4 +67,28 @@ export async function createIssue(body: { [key: string]: unknown }) {
   ]);
 
   return issue;
+}
+
+export async function updateIssue(
+  id: string,
+  body: { [key: string]: unknown }
+) {
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  if (!userId) throw new Error('You must be logged in to update a workspace');
+
+  const validatedFields = IssueUncheckedUpdateInputSchema.safeParse(body);
+
+  if (!validatedFields.success)
+    throw new Error(
+      validatedFields.error.errors.map(e => e.message).join(', ')
+    );
+
+  return prisma.issue.update({
+    where: {
+      id,
+    },
+    data: validatedFields.data,
+  });
 }
