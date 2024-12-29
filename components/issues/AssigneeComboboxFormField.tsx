@@ -1,4 +1,4 @@
-import { User } from '@prisma/client';
+import { Issue, User } from '@prisma/client';
 import { UseFormReturn } from 'react-hook-form';
 import CustomAvatar from '../CustomAvatar';
 import ComboboxFormField from '../form/ComboboxFormField';
@@ -7,7 +7,7 @@ export default function AssigneeComboboxFormField({
   form,
   users,
 }: Readonly<{
-  form: UseFormReturn;
+  form: UseFormReturn<Issue>;
   users: User[];
 }>) {
   const properties = users.map(user => ({

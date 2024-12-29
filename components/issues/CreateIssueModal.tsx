@@ -3,7 +3,7 @@
 import { createIssue } from '@/lib/actions/issues.action';
 import { IssueUncheckedCreateInputSchema } from '@/prisma/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { User } from '@prisma/client';
+import { Issue, User } from '@prisma/client';
 import { SquarePen } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -45,10 +45,8 @@ export default function CreateIssueModal({
 
   const [open, setOpen] = useState(false);
 
-  //! Prisma.IssueUncheckedCreateInput
-  const form = useForm<any>({
+  const form = useForm<Issue>({
     resolver: zodResolver(IssueUncheckedCreateInputSchema),
-    // mode: 'onChange',
     defaultValues: {
       workspaceId,
       identifier: -1,
@@ -59,8 +57,7 @@ export default function CreateIssueModal({
     },
   });
 
-  //! Prisma.IssueUncheckedCreateInput
-  async function onSubmit(data: any) {
+  async function onSubmit(data: Issue) {
     try {
       const res = await createIssue(data);
 

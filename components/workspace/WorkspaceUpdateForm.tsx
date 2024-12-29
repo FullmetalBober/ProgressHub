@@ -12,7 +12,10 @@ import {
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
 import { updateWorkspace } from '@/lib/actions/workspaces.action';
-import { WorkspaceUncheckedCreateInputSchema } from '@/prisma/zod';
+import {
+  WorkspacePartial,
+  WorkspaceUncheckedCreateInputSchema,
+} from '@/prisma/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Workspace } from '@prisma/client';
 import { useForm } from 'react-hook-form';
@@ -23,15 +26,14 @@ export default function WorkspaceUpdateForm({
   workspace: Workspace;
 }>) {
   const { toast } = useToast();
-  //! Prisma.WorkspaceUncheckedCreateInput
-  const form = useForm<any>({
+  const form = useForm<WorkspacePartial>({
     resolver: zodResolver(WorkspaceUncheckedCreateInputSchema),
     defaultValues: {
       name: workspace.name,
     },
   });
 
-  async function onSubmit(data: any) {
+  async function onSubmit(data: WorkspacePartial) {
     try {
       await updateWorkspace(workspace.id, data);
 

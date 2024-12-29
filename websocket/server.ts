@@ -88,6 +88,11 @@ io.on('connection', socket => {
     socket.join(room);
   });
 
+  socket.on('leave', (room: unknown) => {
+    if (typeof room !== 'string') throw new Error('Room must be a string');
+    socket.leave(room);
+  });
+
   socket.on('notify', (data?: Partial<TNotifyData>) => {
     const { room, entity, event, payload } = data ?? {};
 

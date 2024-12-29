@@ -25,7 +25,7 @@ export default function ComboboxFormField({
   fieldName,
   properties,
 }: Readonly<{
-  form: UseFormReturn;
+  form: UseFormReturn<any>;
   fieldName: string;
   properties: Property[];
 }>) {
