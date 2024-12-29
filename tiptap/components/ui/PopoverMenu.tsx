@@ -1,7 +1,6 @@
 import { cn } from '@/tiptap/lib/utils';
 import * as Popover from '@radix-ui/react-popover';
 import { icons } from 'lucide-react';
-import { forwardRef } from 'react';
 import { Surface } from './Surface';
 import { Toolbar } from './Toolbar';
 
@@ -118,14 +117,18 @@ export const CategoryTitle = ({ children }: CategoryTitle) => {
   );
 };
 
-export const Divider = forwardRef<HTMLHRElement>((props, ref) => {
+export const Divider = (
+  props: React.HTMLAttributes<HTMLHRElement> & {
+    ref?: React.Ref<HTMLHRElement>;
+  }
+) => {
   return (
     <hr
       {...props}
-      ref={ref}
+      ref={props.ref}
       className='my-1 border-neutral-200 dark:border-neutral-800'
     />
   );
-});
+};
 
 Divider.displayName = 'Divider';

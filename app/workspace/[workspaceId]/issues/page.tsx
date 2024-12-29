@@ -1,15 +1,19 @@
 import IssuesTable from '@/components/issues/IssuesTable';
 import prisma from '@/lib/db/index';
 import type { Metadata } from 'next';
-import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 
 export const metadata: Metadata = {
   title: 'Issues',
 };
 
-export default async function DashboardPage({
-  params,
-}: Readonly<{ params: Params }>) {
+export default async function DashboardPage(
+  props: Readonly<{
+    params: Promise<{
+      workspaceId: string;
+    }>;
+  }>
+) {
+  const params = await props.params;
   const { workspaceId } = params;
 
   const issues =

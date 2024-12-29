@@ -86,11 +86,13 @@ io.on('connection', socket => {
   socket.on('join', (room: unknown) => {
     if (typeof room !== 'string') throw new Error('Room must be a string');
     socket.join(room);
+    console.log(`Socket ${socket.id} joined room ${room}`);
   });
 
   socket.on('leave', (room: unknown) => {
     if (typeof room !== 'string') throw new Error('Room must be a string');
     socket.leave(room);
+    console.log(`Socket ${socket.id} left room ${room}`);
   });
 
   socket.on('notify', (data?: Partial<TNotifyData>) => {
@@ -107,6 +109,7 @@ io.on('connection', socket => {
     }
 
     io.to(room).emit(`${entity}/${event}`, payload);
+    console.log(`Notified room ${room} about ${entity}/${event}`);
   });
 });
 

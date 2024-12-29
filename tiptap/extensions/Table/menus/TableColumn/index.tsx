@@ -1,6 +1,6 @@
 import * as PopoverMenu from '@/tiptap/components/ui/PopoverMenu';
 import { BubbleMenu as BaseBubbleMenu } from '@tiptap/react';
-import React, { useCallback } from 'react';
+import React, { useCallback, type JSX } from 'react';
 
 import { MenuProps, ShouldShowProps } from '@/tiptap/components/menus/types';
 import { Icon } from '@/tiptap/components/ui/Icon';

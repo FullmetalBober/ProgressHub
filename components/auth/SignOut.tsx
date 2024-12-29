@@ -1,16 +1,16 @@
 'use client';
 
 import { signOut } from 'next-auth/react';
-import { forwardRef } from 'react';
+import type { Ref } from 'react';
 
-export default forwardRef(function SignOutBtn(
-  props: React.ButtonHTMLAttributes<HTMLButtonElement>,
-  ref: React.ForwardedRef<HTMLButtonElement>
+export default function SignOutBtn(
+  props: React.ButtonHTMLAttributes<HTMLButtonElement> & {
+    ref?: Ref<HTMLButtonElement>;
+  }
 ) {
   return (
     <button
       {...props}
-      ref={ref}
       onClick={() =>
         signOut({
           callbackUrl: '/',
@@ -20,4 +20,4 @@ export default forwardRef(function SignOutBtn(
       Log out
     </button>
   );
-});
+}

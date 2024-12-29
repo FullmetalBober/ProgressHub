@@ -6,6 +6,7 @@ import {
   HelpCircle,
   XCircle,
 } from 'lucide-react';
+import type { JSX } from 'react';
 
 type TField = {
   label: string;

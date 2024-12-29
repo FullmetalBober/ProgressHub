@@ -8,9 +8,10 @@ export const metadata: Metadata = {
   title: 'Workspace',
 };
 
-export default async function WorkspaceSettingPage({
-  params,
-}: Readonly<{ params: Params }>) {
+export default async function WorkspaceSettingPage(
+  props: Readonly<{ params: Params }>
+) {
+  const params = await props.params;
   const { workspaceId } = params;
 
   const workspace = await prisma.workspace.findUniqueOrThrow({

@@ -5,7 +5,10 @@ import { Icon } from '@/tiptap/components/ui/Icon';
 import { Surface } from '@/tiptap/components/ui/Surface';
 import { Command, MenuListProps } from './types';
 
-export const MenuList = React.forwardRef((props: MenuListProps, ref) => {
+export const MenuList = ({
+  ref,
+  ...props
+}: MenuListProps & { ref?: React.Ref<unknown> }) => {
   const scrollContainer = useRef<HTMLDivElement>(null);
   const activeItem = useRef<HTMLButtonElement>(null);
   const [selectedGroupIndex, setSelectedGroupIndex] = useState(0);
@@ -150,7 +153,7 @@ export const MenuList = React.forwardRef((props: MenuListProps, ref) => {
       </div>
     </Surface>
   );
-});
+};
 
 MenuList.displayName = 'MenuList';
 

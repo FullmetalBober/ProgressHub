@@ -1,10 +1,12 @@
 import { cn } from '@/tiptap/lib/utils';
-import { forwardRef } from 'react';
 
-export const Textarea = forwardRef<
-  HTMLTextAreaElement,
-  React.TextareaHTMLAttributes<HTMLTextAreaElement>
->(({ className, ...rest }, ref) => {
+export const Textarea = ({
+  className,
+  ref,
+  ...rest
+}: React.HTMLAttributes<HTMLTextAreaElement> & {
+  ref?: React.Ref<HTMLTextAreaElement>;
+}) => {
   const textAreaClassName = cn(
     'bg-black/5 border-0 rounded-lg caret-black block text-black text-sm font-medium h-[4.5rem] px-2 py-1 w-full',
     'dark:bg-white/10 dark:text-white dark:caret-white',
@@ -16,6 +18,6 @@ export const Textarea = forwardRef<
   );
 
   return <textarea className={textAreaClassName} ref={ref} {...rest} />;
-});
+};
 
 Textarea.displayName = 'Textarea';

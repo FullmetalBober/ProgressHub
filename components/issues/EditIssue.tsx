@@ -4,9 +4,7 @@ import jwt from 'jsonwebtoken';
 import { User } from 'next-auth';
 import dynamic from 'next/dynamic';
 import EditIssueTitle from './EditIssueTitle';
-const TiptapEditor = dynamic(() => import('@/tiptap/TiptapEditor'), {
-  ssr: false,
-});
+const TiptapEditor = dynamic(() => import('@/tiptap/TiptapEditor'));
 
 export default function EditIssue({
   issue,

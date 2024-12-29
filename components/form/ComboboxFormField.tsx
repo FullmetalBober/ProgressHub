@@ -17,7 +17,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 type Property = {
   value: string;
   label: string;
-  icon: React.ReactElement;
+  icon: React.ReactElement<any>;
 };
 
 export default function ComboboxFormField({

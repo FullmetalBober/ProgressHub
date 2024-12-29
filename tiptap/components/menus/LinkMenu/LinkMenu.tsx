@@ -1,5 +1,5 @@
 import { BubbleMenu as BaseBubbleMenu } from '@tiptap/react';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, type JSX } from 'react';
 
 import { LinkEditorPanel } from '@/tiptap/components/panels';
 import { LinkPreviewPanel } from '@/tiptap/components/panels/LinkPreviewPanel';

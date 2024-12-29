@@ -9,7 +9,10 @@ const nextConfig = {
     }
     return config;
   },
-  // experimental: { serverComponentsExternalPackages: ["yjs"] },
+  serverExternalPackages: ['yjs'],
+  experimental: {
+    turbo: {},
+  },
   async redirects() {
     return [
       {
