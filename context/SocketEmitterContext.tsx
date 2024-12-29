@@ -30,7 +30,7 @@ export function SocketEmitterProvider({ children, room }: TProvider) {
     return () => {
       socket.emit('leave', room);
     };
-  }, [socket]);
+  }, [socket, room]);
 
   const emit = (
     entity: string,

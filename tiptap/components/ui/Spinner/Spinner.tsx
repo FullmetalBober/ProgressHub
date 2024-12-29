@@ -1,10 +1,11 @@
 import { cn } from '@/tiptap/lib/utils';
+import { HTMLProps } from 'react';
 
 export const Spinner = ({
   className,
   ref,
   ...rest
-}: React.HTMLAttributes<HTMLDivElement> & {
+}: HTMLProps<HTMLDivElement> & {
   ref?: React.Ref<HTMLDivElement>;
 }) => {
   const spinnerClass = cn(

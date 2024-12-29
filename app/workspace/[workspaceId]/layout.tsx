@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default async function RootLayout(
   props: Readonly<{
     children: React.ReactNode;
-    params: { workspaceId: string };
+    params: Promise<{ workspaceId: string }>;
   }>
 ) {
   const params = await props.params;

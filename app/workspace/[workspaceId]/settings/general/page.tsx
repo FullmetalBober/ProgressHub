@@ -2,14 +2,13 @@ import WorkspaceDelete from '@/components/workspace/WorkspaceDelete';
 import WorkspaceUpdateForm from '@/components/workspace/WorkspaceUpdateForm';
 import prisma from '@/lib/db/index';
 import type { Metadata } from 'next';
-import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 
 export const metadata: Metadata = {
   title: 'Workspace',
 };
 
 export default async function WorkspaceSettingPage(
-  props: Readonly<{ params: Params }>
+  props: Readonly<{ params: Promise<{ workspaceId: string }> }>
 ) {
   const params = await props.params;
   const { workspaceId } = params;

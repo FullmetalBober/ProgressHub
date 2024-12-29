@@ -42,7 +42,7 @@ export function useSocketObserver<T extends { id: string }>(
       socket.off(`${eventName}/create`);
       socket.off(`${eventName}/delete`);
     };
-  }, [socket]);
+  }, [socket, eventName]);
 
   return state;
 }

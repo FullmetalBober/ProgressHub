@@ -11,7 +11,7 @@ export async function POST(request: Request) {
       from: 'Kirimase <onboarding@resend.dev>',
       to: [email],
       subject: 'Hello world!',
-      react: EmailTemplate({ firstName: name }),
+      react: await EmailTemplate({ firstName: name }),
       text: 'Email powered by Resend.',
     });
 

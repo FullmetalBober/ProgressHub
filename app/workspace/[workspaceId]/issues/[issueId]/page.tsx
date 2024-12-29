@@ -2,13 +2,14 @@ import EditIssue from '@/components/issues/EditIssue';
 import { auth } from '@/lib/auth/utils';
 import prisma from '@/lib/db';
 import type { Metadata } from 'next';
-import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 
 export const metadata: Metadata = {
   title: 'Issue',
 };
 
-export default async function IssuePage(props: Readonly<{ params: Params }>) {
+export default async function IssuePage(
+  props: Readonly<{ params: Promise<{ workspaceId: string; issueId: string }> }>
+) {
   const params = await props.params;
   const { workspaceId, issueId } = params;
   const identifier = Number(issueId);
