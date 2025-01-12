@@ -77,7 +77,9 @@ export default function ComboboxFormField({
                         value={status.label}
                         key={status.value}
                         onSelect={() => {
-                          form.setValue(fieldName, status.value);
+                          form.setValue(fieldName, status.value, {
+                            shouldDirty: true,
+                          });
                           setOpen(false);
                         }}
                       >

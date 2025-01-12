@@ -3,7 +3,11 @@
 import { useSocketEmitter } from '@/context/SocketEmitterContext';
 import { useSocketObserver } from '@/hooks/useSocketObserver';
 import { updateIssue } from '@/lib/actions/issues.action';
-import { IssuePartial, IssueUncheckedUpdateInputSchema } from '@/prisma/zod';
+import {
+  Issue,
+  IssuePartial,
+  IssueUncheckedUpdateInputSchema,
+} from '@/prisma/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -11,10 +15,7 @@ import { Form, FormControl, FormField, FormItem } from '../ui/form';
 import { Textarea } from '../ui/textarea';
 
 export default function EditIssueTitle(
-  issue: Readonly<{
-    id: string;
-    title: string;
-  }>
+  issue: Readonly<Pick<Issue, 'id' | 'title'>>
 ) {
   const [issueObservable] = useSocketObserver('issue', [issue]);
   const { id, title } = issueObservable;
@@ -29,7 +30,7 @@ export default function EditIssueTitle(
 
   useEffect(() => {
     form.reset({ title });
-  }, [title]);
+  }, [form, title]);
 
   const onSubmit = async (data: IssuePartial) => {
     if (Object.keys(form.formState.dirtyFields).length === 0) return;

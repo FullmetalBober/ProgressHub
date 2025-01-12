@@ -24,6 +24,17 @@ export default async function IssuePage(
           workspaceId,
         },
       },
+      include: {
+        workspace: {
+          include: {
+            members: {
+              select: {
+                user: true,
+              },
+            },
+          },
+        },
+      },
       omit: {
         description: true,
       },
@@ -31,9 +42,12 @@ export default async function IssuePage(
 
   if (!session?.user) return <div>Not authenticated</div>;
   if (!issue) return <div>Issue not found</div>;
+
+  const workspaceUsers = issue.workspace.members.map(m => m.user);
+
   return (
     <div>
-      <EditIssue issue={issue} user={session.user} />
+      <EditIssue issue={issue} user={session.user} users={workspaceUsers} />
     </div>
   );
 }

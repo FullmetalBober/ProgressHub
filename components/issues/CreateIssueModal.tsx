@@ -1,9 +1,8 @@
 'use client';
 
 import { createIssue } from '@/lib/actions/issues.action';
-import { IssueUncheckedCreateInputSchema } from '@/prisma/zod';
+import { Issue, IssueUncheckedCreateInputSchema, User } from '@/prisma/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Issue, User } from '@prisma/client';
 import { SquarePen } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
