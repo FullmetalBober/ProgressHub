@@ -12,7 +12,6 @@ README.md
 .prettierignore
 stories
 .storybook
-kirimase.config.json
 LICENSE
 components.json
 .nvmrc
