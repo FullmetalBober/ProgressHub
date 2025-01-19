@@ -34,21 +34,12 @@ export default function WorkspaceUpdateForm({
   });
 
   async function onSubmit(data: WorkspacePartial) {
-    try {
-      await updateWorkspace(workspace.id, data);
+    await updateWorkspace(workspace.id, data);
 
-      form.reset(data);
-      toast({
-        title: 'Workspace updated successfully!',
-      });
-    } catch (error) {
-      toast({
-        variant: 'destructive',
-        title: 'Uh oh! Something went wrong.',
-        description:
-          'There was a problem with your request. Please try again later.',
-      });
-    }
+    form.reset(data);
+    toast({
+      title: 'Workspace updated successfully!',
+    });
   }
 
   const isFormDisabled = form.formState.isSubmitting || !form.formState.isDirty;

@@ -17,7 +17,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 type Property = {
   value: string;
   label: string;
-  icon: React.ReactElement<any>;
+  icon: React.ReactElement<unknown>;
 };
 
 export default function ComboboxFormField({
@@ -25,6 +25,7 @@ export default function ComboboxFormField({
   fieldName,
   properties,
 }: Readonly<{
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   form: UseFormReturn<any>;
   fieldName: string;
   properties: Property[];

@@ -28,21 +28,12 @@ export default function WorkspaceCreateForm() {
   const { toast } = useToast();
 
   async function submitHandler(data: Workspace) {
-    try {
-      const res = await createWorkspace(data);
+    const res = await createWorkspace(data);
 
-      toast({
-        title: 'Workspace created successfully!',
-      });
-      router.push(`/workspace/${res.id}`);
-    } catch (error) {
-      toast({
-        variant: 'destructive',
-        title: 'Uh oh! Something went wrong.',
-        description:
-          'There was a problem with your request. Please try again later.',
-      });
-    }
+    toast({
+      title: 'Workspace created successfully!',
+    });
+    router.push(`/workspace/${res.id}`);
   }
 
   const isFormDisabled = form.formState.isSubmitting;

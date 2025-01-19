@@ -74,7 +74,7 @@ export function DataTable<TData, TValue>({
                   )
                     return;
 
-                  const navigateValue: string = (rowOriginal as any)[
+                  const navigateValue: string = (rowOriginal as never)[
                     navigateBy
                   ];
 

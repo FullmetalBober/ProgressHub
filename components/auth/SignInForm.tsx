@@ -4,12 +4,10 @@ import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import GithubAuth from './GithubAuth';
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
-
 export default async function SignInForm({
   className,
   ...props
-}: UserAuthFormProps) {
+}: React.HTMLAttributes<HTMLDivElement>) {
   // const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   // async function onSubmit(event: React.SyntheticEvent) {
@@ -20,8 +18,6 @@ export default async function SignInForm({
   //     setIsLoading(false);
   //   }, 3000);
   // }
-
-  const isLoading = false;
 
   return (
     <div className={cn('grid gap-6', className)} {...props}>

@@ -8,7 +8,7 @@
     "dev": "concurrently --raw \"next dev --turbopack\" \"pnpm run dev:ws\"",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint --dir .",
+    "lint": "next lint",
     "dev:ws": "node --import=tsx --watch websocket/server.ts",
     "start:ws": "node --import=tsx websocket/server.ts",
     "lint:ws": "eslint websocket",
@@ -94,7 +94,7 @@
     "jsonwebtoken": "^9.0.2",
     "lowlight": "^3.3.0",
     "lucide-react": "^0.469.0",
-    "next": "15.1.3",
+    "next": "15.1.5",
     "next-auth": "5.0.0-beta.25",
     "next-themes": "^0.4.4",
     "react": "19.0.0",
@@ -118,17 +118,18 @@
     "zod-prisma-types": "^3.2.1"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "3",
     "@tailwindcss/typography": "^0.5.15",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^20.17.10",
-    "@types/react": "19.0.2",
-    "@types/react-dom": "19.0.2",
+    "@types/react": "19.0.7",
+    "@types/react-dom": "19.0.3",
     "@types/uuid": "^9.0.8",
     "@types/ws": "^8.5.13",
     "autoprefixer": "^10.4.20",
     "concurrently": "^8.2.2",
-    "eslint": "8.57.0",
-    "eslint-config-next": "15.1.3",
+    "eslint": "9.18.0",
+    "eslint-config-next": "15.1.5",
     "postcss": "^8.4.49",
     "prettier": "^3.4.2",
     "prettier-plugin-organize-imports": "^3.2.4",
@@ -140,8 +141,8 @@
   },
   "pnpm": {
     "overrides": {
-      "@types/react": "19.0.2",
-      "@types/react-dom": "19.0.2"
+      "@types/react": "19.0.7",
+      "@types/react-dom": "19.0.3"
     }
   }
 }

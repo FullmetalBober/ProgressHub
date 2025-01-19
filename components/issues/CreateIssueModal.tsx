@@ -57,23 +57,14 @@ export default function CreateIssueModal({
   });
 
   async function onSubmit(data: Issue) {
-    try {
-      const res = await createIssue(data);
+    const res = await createIssue(data);
 
-      toast({
-        title: 'Issue created successfully!',
-      });
-      setOpen(false);
-      form.reset();
-      router.push(`/workspace/${workspaceId}/issues/${res?.identifier}`);
-    } catch (error) {
-      toast({
-        variant: 'destructive',
-        title: 'Uh oh! Something went wrong.',
-        description:
-          'There was a problem with your request. Please try again later.',
-      });
-    }
+    toast({
+      title: 'Issue created successfully!',
+    });
+    setOpen(false);
+    form.reset();
+    router.push(`/workspace/${workspaceId}/issues/${res?.identifier}`);
   }
 
   const isFormDisabled = form.formState.isSubmitting;
