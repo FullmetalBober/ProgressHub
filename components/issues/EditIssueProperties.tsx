@@ -51,7 +51,7 @@ export default function EditIssueProperties({
 
   const onSubmitDebounced = useDebouncedCallback(
     form.handleSubmit(onSubmit),
-    3_000
+    600
   );
 
   useEffect(() => {

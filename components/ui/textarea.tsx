@@ -14,7 +14,7 @@ const textareaVariants = cva(
       },
       textSize: {
         default: 'text-sm h-10',
-        lg: 'text-4xl font-bold',
+        '3xl': 'text-3xl font-bold',
       },
     },
     defaultVariants: {

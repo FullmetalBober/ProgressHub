@@ -35,9 +35,6 @@ export default async function IssuePage(
           },
         },
       },
-      omit: {
-        description: true,
-      },
     });
 
   if (!session?.user) return <div>Not authenticated</div>;

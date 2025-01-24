@@ -13,7 +13,7 @@ export default function EditIssue({
   user,
   users,
 }: Readonly<{
-  issue: Omit<Issue, 'description'>;
+  issue: Issue;
   user: SessionUser;
   users: User[];
 }>) {
