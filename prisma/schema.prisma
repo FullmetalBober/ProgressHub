@@ -1,9 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["omitApi"]
+  provider = "prisma-client-js"
 }
 
 generator zod {
@@ -22,20 +18,20 @@ datasource db {
 
 /// @zod.strip()
 model User {
-  id            String             @id @default(cuid())
+  id                String            @id @default(cuid())
   /// @zod.string.trim().min(1).max(255)
-  name          String?
+  name              String?
   /// @zod.string.trim().min(1).max(255)
-  email         String             @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  workspaces    WorkspaceMembers[]
-  issues        Issue[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  email             String            @unique
+  emailVerified     DateTime?
+  image             String?
+  accounts          Account[]
+  sessions          Session[]
+  workspaces        WorkspaceMember[]
+  issues            Issue[]
+  workspacesInvites WorkspaceInvite[]
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
 }
 
 /// @zod.strip()
@@ -94,23 +90,25 @@ model VerificationToken {
 
 /// @zod.strip()
 model Workspace {
-  id         String             @id @default(cuid())
+  id              String            @id @default(cuid())
   /// @zod.string.trim().min(1).max(255)
-  name       String
-  image      String?
-  issueCount Int                @default(0)
-  members    WorkspaceMembers[]
-  issues     Issue[]
+  name            String
+  image           String?
+  issueCount      Int               @default(0)
+  members         WorkspaceMember[]
+  issues          Issue[]
+  WorkspaceInvite WorkspaceInvite[]
 }
 
 enum Role {
   OWNER
   ADMIN
   MEMBER
+  GUEST
 }
 
 /// @zod.strip()
-model WorkspaceMembers {
+model WorkspaceMember {
   id          String    @id @default(cuid())
   role        Role
   userId      String
@@ -118,6 +116,26 @@ model WorkspaceMembers {
   user        User      @relation(fields: [userId], references: [id])
   workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   createdAt   DateTime  @default(now())
+}
+
+enum InviteStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+/// @zod.strip()
+model WorkspaceInvite {
+  id          String       @id @default(cuid())
+  /// @zod.string.email().trim().max(255)
+  email       String
+  workspaceId String
+  workspace   Workspace    @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  invitedById String
+  invitedBy   User         @relation(fields: [invitedById], references: [id], onDelete: Cascade)
+  status      InviteStatus @default(PENDING)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 }
 
 enum Status {

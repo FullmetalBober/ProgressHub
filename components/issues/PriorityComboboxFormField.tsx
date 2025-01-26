@@ -1,4 +1,4 @@
-import { priorities } from '@/config/constants';
+import { prioritiesIssue } from '@/config/constants';
 import { Issue, IssuePartial } from '@/prisma/zod';
 import { UseFormReturn } from 'react-hook-form';
 import ComboboxFormField from '../form/ComboboxFormField';
@@ -12,7 +12,7 @@ export default function StatusComboboxFormField({
     <ComboboxFormField
       form={form}
       fieldName='priority'
-      properties={priorities}
+      properties={prioritiesIssue}
     />
   );
 }

@@ -21,7 +21,7 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   navigateTo?: string;
-  navigateBy: string;
+  navigateBy?: string;
 }
 
 export function DataTable<TData, TValue>({

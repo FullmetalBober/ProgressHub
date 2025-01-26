@@ -23,7 +23,7 @@ export default async function RootLayout(
   const userId = session?.user?.id;
 
   if (userId) {
-    const workspaceUsers = await prisma.workspaceMembers.findFirst({
+    const workspaceUsers = await prisma.workspaceMember.findFirst({
       where: {
         workspaceId: params.workspaceId,
         userId: userId,

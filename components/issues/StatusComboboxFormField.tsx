@@ -1,4 +1,4 @@
-import { statuses } from '@/config/constants';
+import { statusesIssue } from '@/config/constants';
 import { Issue, IssuePartial } from '@/prisma/zod';
 import { UseFormReturn } from 'react-hook-form';
 import ComboboxFormField from '../form/ComboboxFormField';
@@ -9,6 +9,6 @@ export default function StatusComboboxFormField({
   form: UseFormReturn<Issue> | UseFormReturn<IssuePartial>;
 }>) {
   return (
-    <ComboboxFormField form={form} fieldName='status' properties={statuses} />
+    <ComboboxFormField form={form} fieldName='status' properties={statusesIssue} />
   );
 }

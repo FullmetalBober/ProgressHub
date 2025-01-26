@@ -1,6 +1,6 @@
 'use client';
 
-import { priorities, statuses } from '@/config/constants';
+import { prioritiesIssue, statusesIssue } from '@/config/constants';
 import { useSocketObserver } from '@/hooks/useSocketObserver';
 import { Issue, User } from '@prisma/client';
 import { ColumnDef } from '@tanstack/react-table';
@@ -73,7 +73,7 @@ const columns: ColumnDef<
     //   <DataTableColumnHeader column={column} title='Status' />
     // ),
     cell: ({ row }) => {
-      const status = statuses.find(
+      const status = statusesIssue.find(
         status => status.value === row.getValue('status')
       );
 
@@ -102,7 +102,7 @@ const columns: ColumnDef<
     //   <DataTableColumnHeader column={column} title='Priority' />
     // ),
     cell: ({ row }) => {
-      const priority = priorities.find(
+      const priority = prioritiesIssue.find(
         priority => priority.value === row.getValue('priority')
       );
 

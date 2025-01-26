@@ -1,4 +1,4 @@
-import { Priority, Status } from '@prisma/client';
+import { InviteStatus, Priority, Role, Status } from '@prisma/client';
 import {
   ArrowUpCircle,
   CheckCircle2,
@@ -13,15 +13,25 @@ type TField = {
   icon: JSX.Element;
 };
 
-type TPriority = {
+type TPriorityIssue = {
   value: Priority;
 } & TField;
 
-type TStatus = {
+type TStatusIssue = {
   value: Status;
 } & TField;
 
-const priorities: TPriority[] = [
+type TStatusWorkspaceInvite = {
+  value: InviteStatus;
+  label: string;
+};
+
+type TRoleWorkspaceMember = {
+  value: Role;
+  label: string;
+};
+
+const prioritiesIssue: TPriorityIssue[] = [
   {
     value: 'NO_PRIORITY',
     label: 'No priority',
@@ -49,7 +59,7 @@ const priorities: TPriority[] = [
   },
 ];
 
-const statuses: TStatus[] = [
+const statusesIssue: TStatusIssue[] = [
   {
     value: 'BACKLOG',
     label: 'Backlog',
@@ -77,4 +87,43 @@ const statuses: TStatus[] = [
   },
 ];
 
-export { priorities, statuses };
+const statusesWorkspaceInvite: TStatusWorkspaceInvite[] = [
+  {
+    value: 'PENDING',
+    label: 'Pending',
+  },
+  {
+    value: 'ACCEPTED',
+    label: 'Accepted',
+  },
+  {
+    value: 'DECLINED',
+    label: 'Declined',
+  },
+];
+
+const statusesWorkspaceMember: TRoleWorkspaceMember[] = [
+  {
+    value: 'OWNER',
+    label: 'Owner',
+  },
+  {
+    value: 'ADMIN',
+    label: 'Admin',
+  },
+  {
+    value: 'MEMBER',
+    label: 'Member',
+  },
+  {
+    value: 'GUEST',
+    label: 'Guest',
+  },
+];
+
+export {
+  prioritiesIssue,
+  statusesIssue,
+  statusesWorkspaceInvite,
+  statusesWorkspaceMember,
+};
