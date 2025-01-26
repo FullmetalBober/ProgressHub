@@ -5680,11 +5680,6 @@ export const UserUpdateManyArgsSchema: z.ZodType<Prisma.UserUpdateManyArgs> = z.
   where: UserWhereInputSchema.optional(),
 }).strict() as z.ZodType<Prisma.UserUpdateManyArgs>;
 
-export const updateManyUserCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyUserCreateManyAndReturnArgs> = z.object({
-  data: z.union([ UserUpdateManyMutationInputSchema,UserUncheckedUpdateManyInputSchema ]),
-  where: UserWhereInputSchema.optional(),
-}).strict() as z.ZodType<Prisma.updateManyUserCreateManyAndReturnArgs>;
-
 export const UserDeleteManyArgsSchema: z.ZodType<Prisma.UserDeleteManyArgs> = z.object({
   where: UserWhereInputSchema.optional(),
 }).strict() as z.ZodType<Prisma.UserDeleteManyArgs>;
@@ -5730,11 +5725,6 @@ export const AccountUpdateManyArgsSchema: z.ZodType<Prisma.AccountUpdateManyArgs
   data: z.union([ AccountUpdateManyMutationInputSchema,AccountUncheckedUpdateManyInputSchema ]),
   where: AccountWhereInputSchema.optional(),
 }).strict() as z.ZodType<Prisma.AccountUpdateManyArgs>;
-
-export const updateManyAccountCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyAccountCreateManyAndReturnArgs> = z.object({
-  data: z.union([ AccountUpdateManyMutationInputSchema,AccountUncheckedUpdateManyInputSchema ]),
-  where: AccountWhereInputSchema.optional(),
-}).strict() as z.ZodType<Prisma.updateManyAccountCreateManyAndReturnArgs>;
 
 export const AccountDeleteManyArgsSchema: z.ZodType<Prisma.AccountDeleteManyArgs> = z.object({
   where: AccountWhereInputSchema.optional(),
@@ -5782,11 +5772,6 @@ export const SessionUpdateManyArgsSchema: z.ZodType<Prisma.SessionUpdateManyArgs
   where: SessionWhereInputSchema.optional(),
 }).strict() as z.ZodType<Prisma.SessionUpdateManyArgs>;
 
-export const updateManySessionCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManySessionCreateManyAndReturnArgs> = z.object({
-  data: z.union([ SessionUpdateManyMutationInputSchema,SessionUncheckedUpdateManyInputSchema ]),
-  where: SessionWhereInputSchema.optional(),
-}).strict() as z.ZodType<Prisma.updateManySessionCreateManyAndReturnArgs>;
-
 export const SessionDeleteManyArgsSchema: z.ZodType<Prisma.SessionDeleteManyArgs> = z.object({
   where: SessionWhereInputSchema.optional(),
 }).strict() as z.ZodType<Prisma.SessionDeleteManyArgs>;
@@ -5828,11 +5813,6 @@ export const VerificationTokenUpdateManyArgsSchema: z.ZodType<Prisma.Verificatio
   data: z.union([ VerificationTokenUpdateManyMutationInputSchema,VerificationTokenUncheckedUpdateManyInputSchema ]),
   where: VerificationTokenWhereInputSchema.optional(),
 }).strict() as z.ZodType<Prisma.VerificationTokenUpdateManyArgs>;
-
-export const updateManyVerificationTokenCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyVerificationTokenCreateManyAndReturnArgs> = z.object({
-  data: z.union([ VerificationTokenUpdateManyMutationInputSchema,VerificationTokenUncheckedUpdateManyInputSchema ]),
-  where: VerificationTokenWhereInputSchema.optional(),
-}).strict() as z.ZodType<Prisma.updateManyVerificationTokenCreateManyAndReturnArgs>;
 
 export const VerificationTokenDeleteManyArgsSchema: z.ZodType<Prisma.VerificationTokenDeleteManyArgs> = z.object({
   where: VerificationTokenWhereInputSchema.optional(),
@@ -5880,11 +5860,6 @@ export const WorkspaceUpdateManyArgsSchema: z.ZodType<Prisma.WorkspaceUpdateMany
   where: WorkspaceWhereInputSchema.optional(),
 }).strict() as z.ZodType<Prisma.WorkspaceUpdateManyArgs>;
 
-export const updateManyWorkspaceCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyWorkspaceCreateManyAndReturnArgs> = z.object({
-  data: z.union([ WorkspaceUpdateManyMutationInputSchema,WorkspaceUncheckedUpdateManyInputSchema ]),
-  where: WorkspaceWhereInputSchema.optional(),
-}).strict() as z.ZodType<Prisma.updateManyWorkspaceCreateManyAndReturnArgs>;
-
 export const WorkspaceDeleteManyArgsSchema: z.ZodType<Prisma.WorkspaceDeleteManyArgs> = z.object({
   where: WorkspaceWhereInputSchema.optional(),
 }).strict() as z.ZodType<Prisma.WorkspaceDeleteManyArgs>;
@@ -5930,11 +5905,6 @@ export const WorkspaceMemberUpdateManyArgsSchema: z.ZodType<Prisma.WorkspaceMemb
   data: z.union([ WorkspaceMemberUpdateManyMutationInputSchema,WorkspaceMemberUncheckedUpdateManyInputSchema ]),
   where: WorkspaceMemberWhereInputSchema.optional(),
 }).strict() as z.ZodType<Prisma.WorkspaceMemberUpdateManyArgs>;
-
-export const updateManyWorkspaceMemberCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyWorkspaceMemberCreateManyAndReturnArgs> = z.object({
-  data: z.union([ WorkspaceMemberUpdateManyMutationInputSchema,WorkspaceMemberUncheckedUpdateManyInputSchema ]),
-  where: WorkspaceMemberWhereInputSchema.optional(),
-}).strict() as z.ZodType<Prisma.updateManyWorkspaceMemberCreateManyAndReturnArgs>;
 
 export const WorkspaceMemberDeleteManyArgsSchema: z.ZodType<Prisma.WorkspaceMemberDeleteManyArgs> = z.object({
   where: WorkspaceMemberWhereInputSchema.optional(),
@@ -5982,11 +5952,6 @@ export const WorkspaceInviteUpdateManyArgsSchema: z.ZodType<Prisma.WorkspaceInvi
   where: WorkspaceInviteWhereInputSchema.optional(),
 }).strict() as z.ZodType<Prisma.WorkspaceInviteUpdateManyArgs>;
 
-export const updateManyWorkspaceInviteCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyWorkspaceInviteCreateManyAndReturnArgs> = z.object({
-  data: z.union([ WorkspaceInviteUpdateManyMutationInputSchema,WorkspaceInviteUncheckedUpdateManyInputSchema ]),
-  where: WorkspaceInviteWhereInputSchema.optional(),
-}).strict() as z.ZodType<Prisma.updateManyWorkspaceInviteCreateManyAndReturnArgs>;
-
 export const WorkspaceInviteDeleteManyArgsSchema: z.ZodType<Prisma.WorkspaceInviteDeleteManyArgs> = z.object({
   where: WorkspaceInviteWhereInputSchema.optional(),
 }).strict() as z.ZodType<Prisma.WorkspaceInviteDeleteManyArgs>;
@@ -6033,11 +5998,6 @@ export const IssueUpdateManyArgsSchema: z.ZodType<Prisma.IssueUpdateManyArgs> = 
   where: IssueWhereInputSchema.optional(),
 }).strict() as z.ZodType<Prisma.IssueUpdateManyArgs>;
 
-export const updateManyIssueCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyIssueCreateManyAndReturnArgs> = z.object({
-  data: z.union([ IssueUpdateManyMutationInputSchema,IssueUncheckedUpdateManyInputSchema ]),
-  where: IssueWhereInputSchema.optional(),
-}).strict() as z.ZodType<Prisma.updateManyIssueCreateManyAndReturnArgs>;
-
 export const IssueDeleteManyArgsSchema: z.ZodType<Prisma.IssueDeleteManyArgs> = z.object({
   where: IssueWhereInputSchema.optional(),
 }).strict() as z.ZodType<Prisma.IssueDeleteManyArgs>;
@@ -6083,11 +6043,6 @@ export const CommentUpdateManyArgsSchema: z.ZodType<Prisma.CommentUpdateManyArgs
   data: z.union([ CommentUpdateManyMutationInputSchema,CommentUncheckedUpdateManyInputSchema ]),
   where: CommentWhereInputSchema.optional(),
 }).strict() as z.ZodType<Prisma.CommentUpdateManyArgs>;
-
-export const updateManyCommentCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyCommentCreateManyAndReturnArgs> = z.object({
-  data: z.union([ CommentUpdateManyMutationInputSchema,CommentUncheckedUpdateManyInputSchema ]),
-  where: CommentWhereInputSchema.optional(),
-}).strict() as z.ZodType<Prisma.updateManyCommentCreateManyAndReturnArgs>;
 
 export const CommentDeleteManyArgsSchema: z.ZodType<Prisma.CommentDeleteManyArgs> = z.object({
   where: CommentWhereInputSchema.optional(),
