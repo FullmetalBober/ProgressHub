@@ -80,7 +80,7 @@ type TNotifyData = {
   payload: Record<string, unknown>;
 };
 
-const entities = ['issue'];
+const entities = ['issue', 'workspaceInvite'];
 const events = ['create', 'update', 'delete'];
 io.on('connection', socket => {
   socket.on('join', (room: unknown) => {

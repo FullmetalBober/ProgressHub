@@ -98,7 +98,7 @@ model Workspace {
   issueCount      Int               @default(0)
   members         WorkspaceMember[]
   issues          Issue[]
-  WorkspaceInvite WorkspaceInvite[]
+  workspaceInvite WorkspaceInvite[]
 }
 
 enum Role {
@@ -137,6 +137,8 @@ model WorkspaceInvite {
   status      InviteStatus @default(PENDING)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
+
+  @@unique([email, workspaceId])
 }
 
 enum Status {

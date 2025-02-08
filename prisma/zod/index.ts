@@ -335,7 +335,7 @@ export type WorkspacePartial = z.infer<typeof WorkspacePartialSchema>
 export type WorkspaceRelations = {
   members: WorkspaceMemberWithRelations[];
   issues: IssueWithRelations[];
-  WorkspaceInvite: WorkspaceInviteWithRelations[];
+  workspaceInvite: WorkspaceInviteWithRelations[];
 };
 
 export type WorkspaceWithRelations = z.infer<typeof WorkspaceSchema> & WorkspaceRelations
@@ -343,7 +343,7 @@ export type WorkspaceWithRelations = z.infer<typeof WorkspaceSchema> & Workspace
 export const WorkspaceWithRelationsSchema: z.ZodType<WorkspaceWithRelations> = WorkspaceSchema.merge(z.object({
   members: z.lazy(() => WorkspaceMemberWithRelationsSchema).array(),
   issues: z.lazy(() => IssueWithRelationsSchema).array(),
-  WorkspaceInvite: z.lazy(() => WorkspaceInviteWithRelationsSchema).array(),
+  workspaceInvite: z.lazy(() => WorkspaceInviteWithRelationsSchema).array(),
 }))
 
 // WORKSPACE PARTIAL RELATION SCHEMA
@@ -352,7 +352,7 @@ export const WorkspaceWithRelationsSchema: z.ZodType<WorkspaceWithRelations> = W
 export type WorkspacePartialRelations = {
   members?: WorkspaceMemberPartialWithRelations[];
   issues?: IssuePartialWithRelations[];
-  WorkspaceInvite?: WorkspaceInvitePartialWithRelations[];
+  workspaceInvite?: WorkspaceInvitePartialWithRelations[];
 };
 
 export type WorkspacePartialWithRelations = z.infer<typeof WorkspacePartialSchema> & WorkspacePartialRelations
@@ -360,7 +360,7 @@ export type WorkspacePartialWithRelations = z.infer<typeof WorkspacePartialSchem
 export const WorkspacePartialWithRelationsSchema: z.ZodType<WorkspacePartialWithRelations> = WorkspacePartialSchema.merge(z.object({
   members: z.lazy(() => WorkspaceMemberPartialWithRelationsSchema).array(),
   issues: z.lazy(() => IssuePartialWithRelationsSchema).array(),
-  WorkspaceInvite: z.lazy(() => WorkspaceInvitePartialWithRelationsSchema).array(),
+  workspaceInvite: z.lazy(() => WorkspaceInvitePartialWithRelationsSchema).array(),
 })).partial()
 
 export type WorkspaceWithPartialRelations = z.infer<typeof WorkspaceSchema> & WorkspacePartialRelations
@@ -368,7 +368,7 @@ export type WorkspaceWithPartialRelations = z.infer<typeof WorkspaceSchema> & Wo
 export const WorkspaceWithPartialRelationsSchema: z.ZodType<WorkspaceWithPartialRelations> = WorkspaceSchema.merge(z.object({
   members: z.lazy(() => WorkspaceMemberPartialWithRelationsSchema).array(),
   issues: z.lazy(() => IssuePartialWithRelationsSchema).array(),
-  WorkspaceInvite: z.lazy(() => WorkspaceInvitePartialWithRelationsSchema).array(),
+  workspaceInvite: z.lazy(() => WorkspaceInvitePartialWithRelationsSchema).array(),
 }).partial())
 
 /////////////////////////////////////////
@@ -761,7 +761,7 @@ export const VerificationTokenSelectSchema: z.ZodType<Prisma.VerificationTokenSe
 export const WorkspaceIncludeSchema: z.ZodType<Prisma.WorkspaceInclude> = z.object({
   members: z.union([z.boolean(),z.lazy(() => WorkspaceMemberFindManyArgsSchema)]).optional(),
   issues: z.union([z.boolean(),z.lazy(() => IssueFindManyArgsSchema)]).optional(),
-  WorkspaceInvite: z.union([z.boolean(),z.lazy(() => WorkspaceInviteFindManyArgsSchema)]).optional(),
+  workspaceInvite: z.union([z.boolean(),z.lazy(() => WorkspaceInviteFindManyArgsSchema)]).optional(),
   _count: z.union([z.boolean(),z.lazy(() => WorkspaceCountOutputTypeArgsSchema)]).optional(),
 }).strict()
 
@@ -777,7 +777,7 @@ export const WorkspaceCountOutputTypeArgsSchema: z.ZodType<Prisma.WorkspaceCount
 export const WorkspaceCountOutputTypeSelectSchema: z.ZodType<Prisma.WorkspaceCountOutputTypeSelect> = z.object({
   members: z.boolean().optional(),
   issues: z.boolean().optional(),
-  WorkspaceInvite: z.boolean().optional(),
+  workspaceInvite: z.boolean().optional(),
 }).strict();
 
 export const WorkspaceSelectSchema: z.ZodType<Prisma.WorkspaceSelect> = z.object({
@@ -787,7 +787,7 @@ export const WorkspaceSelectSchema: z.ZodType<Prisma.WorkspaceSelect> = z.object
   issueCount: z.boolean().optional(),
   members: z.union([z.boolean(),z.lazy(() => WorkspaceMemberFindManyArgsSchema)]).optional(),
   issues: z.union([z.boolean(),z.lazy(() => IssueFindManyArgsSchema)]).optional(),
-  WorkspaceInvite: z.union([z.boolean(),z.lazy(() => WorkspaceInviteFindManyArgsSchema)]).optional(),
+  workspaceInvite: z.union([z.boolean(),z.lazy(() => WorkspaceInviteFindManyArgsSchema)]).optional(),
   _count: z.union([z.boolean(),z.lazy(() => WorkspaceCountOutputTypeArgsSchema)]).optional(),
 }).strict()
 
@@ -1210,7 +1210,7 @@ export const WorkspaceWhereInputSchema: z.ZodType<Prisma.WorkspaceWhereInput> = 
   issueCount: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   members: z.lazy(() => WorkspaceMemberListRelationFilterSchema).optional(),
   issues: z.lazy(() => IssueListRelationFilterSchema).optional(),
-  WorkspaceInvite: z.lazy(() => WorkspaceInviteListRelationFilterSchema).optional()
+  workspaceInvite: z.lazy(() => WorkspaceInviteListRelationFilterSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceWhereInput>;
 
 export const WorkspaceOrderByWithRelationInputSchema: z.ZodType<Prisma.WorkspaceOrderByWithRelationInput> = z.object({
@@ -1220,7 +1220,7 @@ export const WorkspaceOrderByWithRelationInputSchema: z.ZodType<Prisma.Workspace
   issueCount: z.lazy(() => SortOrderSchema).optional(),
   members: z.lazy(() => WorkspaceMemberOrderByRelationAggregateInputSchema).optional(),
   issues: z.lazy(() => IssueOrderByRelationAggregateInputSchema).optional(),
-  WorkspaceInvite: z.lazy(() => WorkspaceInviteOrderByRelationAggregateInputSchema).optional()
+  workspaceInvite: z.lazy(() => WorkspaceInviteOrderByRelationAggregateInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceOrderByWithRelationInput>;
 
 export const WorkspaceWhereUniqueInputSchema: z.ZodType<Prisma.WorkspaceWhereUniqueInput> = z.object({
@@ -1236,7 +1236,7 @@ export const WorkspaceWhereUniqueInputSchema: z.ZodType<Prisma.WorkspaceWhereUni
   issueCount: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
   members: z.lazy(() => WorkspaceMemberListRelationFilterSchema).optional(),
   issues: z.lazy(() => IssueListRelationFilterSchema).optional(),
-  WorkspaceInvite: z.lazy(() => WorkspaceInviteListRelationFilterSchema).optional()
+  workspaceInvite: z.lazy(() => WorkspaceInviteListRelationFilterSchema).optional()
 }).strict()) as z.ZodType<Prisma.WorkspaceWhereUniqueInput>;
 
 export const WorkspaceOrderByWithAggregationInputSchema: z.ZodType<Prisma.WorkspaceOrderByWithAggregationInput> = z.object({
@@ -1349,11 +1349,21 @@ export const WorkspaceInviteOrderByWithRelationInputSchema: z.ZodType<Prisma.Wor
   invitedBy: z.lazy(() => UserOrderByWithRelationInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceInviteOrderByWithRelationInput>;
 
-export const WorkspaceInviteWhereUniqueInputSchema: z.ZodType<Prisma.WorkspaceInviteWhereUniqueInput> = z.object({
-  id: z.string().cuid()
-})
+export const WorkspaceInviteWhereUniqueInputSchema: z.ZodType<Prisma.WorkspaceInviteWhereUniqueInput> = z.union([
+  z.object({
+    id: z.string().cuid(),
+    email_workspaceId: z.lazy(() => WorkspaceInviteEmailWorkspaceIdCompoundUniqueInputSchema)
+  }),
+  z.object({
+    id: z.string().cuid(),
+  }),
+  z.object({
+    email_workspaceId: z.lazy(() => WorkspaceInviteEmailWorkspaceIdCompoundUniqueInputSchema),
+  }),
+])
 .and(z.object({
   id: z.string().cuid().optional(),
+  email_workspaceId: z.lazy(() => WorkspaceInviteEmailWorkspaceIdCompoundUniqueInputSchema).optional(),
   AND: z.union([ z.lazy(() => WorkspaceInviteWhereInputSchema),z.lazy(() => WorkspaceInviteWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => WorkspaceInviteWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => WorkspaceInviteWhereInputSchema),z.lazy(() => WorkspaceInviteWhereInputSchema).array() ]).optional(),
@@ -1862,7 +1872,7 @@ export const WorkspaceCreateInputSchema: z.ZodType<Prisma.WorkspaceCreateInput> 
   issueCount: z.number().int().optional(),
   members: z.lazy(() => WorkspaceMemberCreateNestedManyWithoutWorkspaceInputSchema).optional(),
   issues: z.lazy(() => IssueCreateNestedManyWithoutWorkspaceInputSchema).optional(),
-  WorkspaceInvite: z.lazy(() => WorkspaceInviteCreateNestedManyWithoutWorkspaceInputSchema).optional()
+  workspaceInvite: z.lazy(() => WorkspaceInviteCreateNestedManyWithoutWorkspaceInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceCreateInput>;
 
 export const WorkspaceUncheckedCreateInputSchema: z.ZodType<Prisma.WorkspaceUncheckedCreateInput> = z.object({
@@ -1872,7 +1882,7 @@ export const WorkspaceUncheckedCreateInputSchema: z.ZodType<Prisma.WorkspaceUnch
   issueCount: z.number().int().optional(),
   members: z.lazy(() => WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional(),
   issues: z.lazy(() => IssueUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional(),
-  WorkspaceInvite: z.lazy(() => WorkspaceInviteUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional()
+  workspaceInvite: z.lazy(() => WorkspaceInviteUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceUncheckedCreateInput>;
 
 export const WorkspaceUpdateInputSchema: z.ZodType<Prisma.WorkspaceUpdateInput> = z.object({
@@ -1882,7 +1892,7 @@ export const WorkspaceUpdateInputSchema: z.ZodType<Prisma.WorkspaceUpdateInput> 
   issueCount: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   members: z.lazy(() => WorkspaceMemberUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
   issues: z.lazy(() => IssueUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
-  WorkspaceInvite: z.lazy(() => WorkspaceInviteUpdateManyWithoutWorkspaceNestedInputSchema).optional()
+  workspaceInvite: z.lazy(() => WorkspaceInviteUpdateManyWithoutWorkspaceNestedInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceUpdateInput>;
 
 export const WorkspaceUncheckedUpdateInputSchema: z.ZodType<Prisma.WorkspaceUncheckedUpdateInput> = z.object({
@@ -1892,7 +1902,7 @@ export const WorkspaceUncheckedUpdateInputSchema: z.ZodType<Prisma.WorkspaceUnch
   issueCount: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   members: z.lazy(() => WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
   issues: z.lazy(() => IssueUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
-  WorkspaceInvite: z.lazy(() => WorkspaceInviteUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional()
+  workspaceInvite: z.lazy(() => WorkspaceInviteUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceUncheckedUpdateInput>;
 
 export const WorkspaceCreateManyInputSchema: z.ZodType<Prisma.WorkspaceCreateManyInput> = z.object({
@@ -2642,6 +2652,11 @@ export const EnumInviteStatusFilterSchema: z.ZodType<Prisma.EnumInviteStatusFilt
   notIn: z.lazy(() => InviteStatusSchema).array().optional(),
   not: z.union([ z.lazy(() => InviteStatusSchema),z.lazy(() => NestedEnumInviteStatusFilterSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.EnumInviteStatusFilter>;
+
+export const WorkspaceInviteEmailWorkspaceIdCompoundUniqueInputSchema: z.ZodType<Prisma.WorkspaceInviteEmailWorkspaceIdCompoundUniqueInput> = z.object({
+  email: z.string(),
+  workspaceId: z.string()
+}).strict() as z.ZodType<Prisma.WorkspaceInviteEmailWorkspaceIdCompoundUniqueInput>;
 
 export const WorkspaceInviteCountOrderByAggregateInputSchema: z.ZodType<Prisma.WorkspaceInviteCountOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
@@ -4278,7 +4293,7 @@ export const WorkspaceCreateWithoutMembersInputSchema: z.ZodType<Prisma.Workspac
   image: z.string().optional().nullable(),
   issueCount: z.number().int().optional(),
   issues: z.lazy(() => IssueCreateNestedManyWithoutWorkspaceInputSchema).optional(),
-  WorkspaceInvite: z.lazy(() => WorkspaceInviteCreateNestedManyWithoutWorkspaceInputSchema).optional()
+  workspaceInvite: z.lazy(() => WorkspaceInviteCreateNestedManyWithoutWorkspaceInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceCreateWithoutMembersInput>;
 
 export const WorkspaceUncheckedCreateWithoutMembersInputSchema: z.ZodType<Prisma.WorkspaceUncheckedCreateWithoutMembersInput> = z.object({
@@ -4287,7 +4302,7 @@ export const WorkspaceUncheckedCreateWithoutMembersInputSchema: z.ZodType<Prisma
   image: z.string().optional().nullable(),
   issueCount: z.number().int().optional(),
   issues: z.lazy(() => IssueUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional(),
-  WorkspaceInvite: z.lazy(() => WorkspaceInviteUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional()
+  workspaceInvite: z.lazy(() => WorkspaceInviteUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceUncheckedCreateWithoutMembersInput>;
 
 export const WorkspaceCreateOrConnectWithoutMembersInputSchema: z.ZodType<Prisma.WorkspaceCreateOrConnectWithoutMembersInput> = z.object({
@@ -4351,7 +4366,7 @@ export const WorkspaceUpdateWithoutMembersInputSchema: z.ZodType<Prisma.Workspac
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   issueCount: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   issues: z.lazy(() => IssueUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
-  WorkspaceInvite: z.lazy(() => WorkspaceInviteUpdateManyWithoutWorkspaceNestedInputSchema).optional()
+  workspaceInvite: z.lazy(() => WorkspaceInviteUpdateManyWithoutWorkspaceNestedInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceUpdateWithoutMembersInput>;
 
 export const WorkspaceUncheckedUpdateWithoutMembersInputSchema: z.ZodType<Prisma.WorkspaceUncheckedUpdateWithoutMembersInput> = z.object({
@@ -4360,7 +4375,7 @@ export const WorkspaceUncheckedUpdateWithoutMembersInputSchema: z.ZodType<Prisma
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   issueCount: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   issues: z.lazy(() => IssueUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
-  WorkspaceInvite: z.lazy(() => WorkspaceInviteUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional()
+  workspaceInvite: z.lazy(() => WorkspaceInviteUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceUncheckedUpdateWithoutMembersInput>;
 
 export const WorkspaceCreateWithoutWorkspaceInviteInputSchema: z.ZodType<Prisma.WorkspaceCreateWithoutWorkspaceInviteInput> = z.object({
@@ -4493,7 +4508,7 @@ export const WorkspaceCreateWithoutIssuesInputSchema: z.ZodType<Prisma.Workspace
   image: z.string().optional().nullable(),
   issueCount: z.number().int().optional(),
   members: z.lazy(() => WorkspaceMemberCreateNestedManyWithoutWorkspaceInputSchema).optional(),
-  WorkspaceInvite: z.lazy(() => WorkspaceInviteCreateNestedManyWithoutWorkspaceInputSchema).optional()
+  workspaceInvite: z.lazy(() => WorkspaceInviteCreateNestedManyWithoutWorkspaceInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceCreateWithoutIssuesInput>;
 
 export const WorkspaceUncheckedCreateWithoutIssuesInputSchema: z.ZodType<Prisma.WorkspaceUncheckedCreateWithoutIssuesInput> = z.object({
@@ -4502,7 +4517,7 @@ export const WorkspaceUncheckedCreateWithoutIssuesInputSchema: z.ZodType<Prisma.
   image: z.string().optional().nullable(),
   issueCount: z.number().int().optional(),
   members: z.lazy(() => WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional(),
-  WorkspaceInvite: z.lazy(() => WorkspaceInviteUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional()
+  workspaceInvite: z.lazy(() => WorkspaceInviteUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceUncheckedCreateWithoutIssuesInput>;
 
 export const WorkspaceCreateOrConnectWithoutIssuesInputSchema: z.ZodType<Prisma.WorkspaceCreateOrConnectWithoutIssuesInput> = z.object({
@@ -4586,7 +4601,7 @@ export const WorkspaceUpdateWithoutIssuesInputSchema: z.ZodType<Prisma.Workspace
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   issueCount: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   members: z.lazy(() => WorkspaceMemberUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
-  WorkspaceInvite: z.lazy(() => WorkspaceInviteUpdateManyWithoutWorkspaceNestedInputSchema).optional()
+  workspaceInvite: z.lazy(() => WorkspaceInviteUpdateManyWithoutWorkspaceNestedInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceUpdateWithoutIssuesInput>;
 
 export const WorkspaceUncheckedUpdateWithoutIssuesInputSchema: z.ZodType<Prisma.WorkspaceUncheckedUpdateWithoutIssuesInput> = z.object({
@@ -4595,7 +4610,7 @@ export const WorkspaceUncheckedUpdateWithoutIssuesInputSchema: z.ZodType<Prisma.
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   issueCount: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   members: z.lazy(() => WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
-  WorkspaceInvite: z.lazy(() => WorkspaceInviteUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional()
+  workspaceInvite: z.lazy(() => WorkspaceInviteUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceUncheckedUpdateWithoutIssuesInput>;
 
 export const UserUpsertWithoutIssuesInputSchema: z.ZodType<Prisma.UserUpsertWithoutIssuesInput> = z.object({

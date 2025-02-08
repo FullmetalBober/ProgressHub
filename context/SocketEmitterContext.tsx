@@ -3,19 +3,21 @@
 import { createContext, useContext, useEffect } from 'react';
 import { useSocket } from './SocketContext';
 
+export type TSocketEmit = (
+  entity: string,
+  event: string,
+  data: {
+    [key: string]: unknown;
+    id: string;
+  }
+) => void;
+
 type TProvider = {
   children: React.ReactNode;
   room: string;
 };
 type TContext = {
-  emit: (
-    entity: string,
-    event: string,
-    data: {
-      [key: string]: unknown;
-      id: string;
-    }
-  ) => void;
+  emit: TSocketEmit;
 };
 
 const SocketEmitterContext = createContext<TContext | null>(null);
@@ -32,14 +34,7 @@ export function SocketEmitterProvider({ children, room }: TProvider) {
     };
   }, [socket, room]);
 
-  const emit = (
-    entity: string,
-    event: string,
-    data: {
-      [key: string]: unknown;
-      id: string;
-    }
-  ) => {
+  const emit: TSocketEmit = (entity, event, data) => {
     let tries = 0;
     const intervalId = setInterval(() => {
       if (tries > 5) {

@@ -4,7 +4,7 @@ import { useSocket } from '@/context/SocketContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-type entities = 'issue';
+type entities = 'issue' | 'workspaceInvite';
 
 export function useSocketObserver<T extends { id: string }>(
   eventName: entities,
@@ -42,7 +42,7 @@ export function useSocketObserver<T extends { id: string }>(
       socket.off(`${eventName}/create`);
       socket.off(`${eventName}/delete`);
     };
-  }, [socket, eventName]);
+  }, [socket, eventName, navigateOnDeletePath, router]);
 
   return state;
 }
