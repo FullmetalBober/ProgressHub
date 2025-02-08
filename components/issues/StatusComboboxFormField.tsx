@@ -9,6 +9,10 @@ export default function StatusComboboxFormField({
   form: UseFormReturn<Issue> | UseFormReturn<IssuePartial>;
 }>) {
   return (
-    <ComboboxFormField form={form} fieldName='status' properties={statusesIssue} />
+    <ComboboxFormField
+      form={form}
+      fieldName='status'
+      properties={statusesIssue}
+    />
   );
 }

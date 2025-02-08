@@ -8,7 +8,7 @@
 @import './partials/typography.css';
 
 .ProseMirror {
-  @apply z-0 pl-20 pr-8 caret-black outline-0 dark:caret-white lg:pl-8 lg:pr-8 pt-3;
+  @apply z-0 pl-20 pr-8 pt-3 caret-black outline-0 dark:caret-white lg:pl-8 lg:pr-8;
 
   .selection {
     @apply inline;

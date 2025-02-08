@@ -116,7 +116,7 @@ export default async function WorkspaceSideBar({
               href={`/workspace/${workspaceId}/my-issues`}
             /> */}
           <ScrollArea>
-          {/* <ScrollArea className='h-screen'> */}
+            {/* <ScrollArea className='h-screen'> */}
             <SidebarButton
               icon={<FolderKanban />}
               label='Issues'
