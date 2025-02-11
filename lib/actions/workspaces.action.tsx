@@ -2,7 +2,6 @@
 
 import prisma from '@/lib/db/index';
 import { WorkspaceCreateInputSchema } from '@/prisma/zod';
-import { Prisma } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 import { auth } from '../auth/utils';
 import { notifyUsers } from './utils';
@@ -70,28 +69,6 @@ export async function updateWorkspace(
   );
 
   return response;
-}
-
-export async function getWorkspaces(opt?: Prisma.User$workspacesArgs) {
-  const session = await auth();
-
-  if (!session)
-    return {
-      errors: {
-        auth: 'You must be logged in to get a workspace',
-      },
-    };
-
-  const user = await prisma.user.findUnique({
-    where: {
-      id: session?.user?.id,
-    },
-    include: {
-      workspaces: opt || true,
-    },
-  });
-
-  return { workspaces: user?.workspaces };
 }
 
 export async function deleteWorkspace(id: string) {
