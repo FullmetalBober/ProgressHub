@@ -1,4 +1,4 @@
-import { SocketEmitterProvider } from '@/context/SocketEmitterContext';
+import { SocketEmitterProvider } from '@/components/SocketWorkspaceProvider';
 import { auth } from '@/lib/auth/utils';
 import prisma from '@/lib/db';
 import type { Metadata } from 'next';
@@ -14,30 +14,30 @@ export default async function RootLayout(
     params: Promise<{ workspaceId: string }>;
   }>
 ) {
-  const params = await props.params;
+  const [params, session] = await Promise.all([
+    await props.params,
+    await auth(),
+  ]);
 
   const { children } = props;
 
-  let isUserMember = false;
-  const session = await auth();
   const userId = session?.user?.id;
 
-  if (userId) {
-    const workspaceUsers = await prisma.workspaceMember.findFirst({
-      where: {
-        workspaceId: params.workspaceId,
-        userId: userId,
-      },
-      select: {
-        id: true,
-      },
-    });
+  if (!userId) return <main>You must be logged in to view this page</main>;
 
-    if (workspaceUsers) isUserMember = true;
-  }
+  const workspaceUsers = await prisma.workspaceMember.findFirst({
+    where: {
+      workspaceId: params.workspaceId,
+      userId: userId,
+    },
+    select: {
+      id: true,
+    },
+  });
 
-  //TODO: Add a better UI for this
-  if (!isUserMember) return <main>You are not a member of this workspace</main>;
+  if (!workspaceUsers)
+    return <main>You are not a member of this workspace</main>;
+
   return (
     <SocketEmitterProvider room={params.workspaceId}>
       {children}

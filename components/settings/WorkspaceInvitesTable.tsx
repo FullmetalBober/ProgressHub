@@ -1,6 +1,5 @@
 'use client';
 
-import { TSocketEmit, useSocketEmitter } from '@/context/SocketEmitterContext';
 import { useSocketObserver } from '@/hooks/useSocketObserver';
 import { cancelWorkspaceInvite } from '@/lib/actions/workspaceInvite.action';
 import { WorkspaceInvite } from '@/prisma/zod';
@@ -11,7 +10,7 @@ import { DataTable } from '../ui/data-table';
 
 type tableRow = WorkspaceInvite;
 
-const columns = (emit: TSocketEmit): ColumnDef<tableRow>[] => [
+const columns: ColumnDef<tableRow>[] = [
   {
     accessorKey: 'email',
     header: 'Email',
@@ -51,9 +50,6 @@ const columns = (emit: TSocketEmit): ColumnDef<tableRow>[] => [
           const { id } = row.original;
 
           await cancelWorkspaceInvite(id);
-          emit('workspaceInvite', 'delete', {
-            id,
-          });
         }}
       >
         <X />
@@ -67,11 +63,10 @@ export default function WorkspaceInvitesTable({
 }: Readonly<{
   workspaceInvites: tableRow[];
 }>) {
-  const { emit } = useSocketEmitter();
   const workspaceInvitesObserved = useSocketObserver(
     'workspaceInvite',
     workspaceInvites
   );
 
-  return <DataTable data={workspaceInvitesObserved} columns={columns(emit)} />;
+  return <DataTable data={workspaceInvitesObserved} columns={columns} />;
 }

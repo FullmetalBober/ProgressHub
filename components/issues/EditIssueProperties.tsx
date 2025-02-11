@@ -1,6 +1,5 @@
 'use client';
 
-import { useSocketEmitter } from '@/context/SocketEmitterContext';
 import { useSocketObserver } from '@/hooks/useSocketObserver';
 import { updateIssue } from '@/lib/actions/issues.action';
 import {
@@ -28,7 +27,6 @@ export default function EditIssueProperties({
   const [issueObserved] = useSocketObserver('issue', [issue]);
   const { id, status, priority, assigneeId } = issueObserved;
 
-  const { emit } = useSocketEmitter();
   const form = useForm<IssuePartial>({
     resolver: zodResolver(IssueUncheckedUpdateInputSchema),
     defaultValues: { id, status, priority, assigneeId },
@@ -43,10 +41,6 @@ export default function EditIssueProperties({
     form.reset(data);
 
     await updateIssue(id, toUpdate);
-    emit('issue', 'update', {
-      id,
-      ...toUpdate,
-    });
   };
 
   const onSubmitDebounced = useDebouncedCallback(

@@ -1,6 +1,5 @@
 'use client';
 
-import { useSocketEmitter } from '@/context/SocketEmitterContext';
 import { useSocketObserver } from '@/hooks/useSocketObserver';
 import { inviteUserToWorkspace } from '@/lib/actions/workspaceInvite.action';
 import {
@@ -36,7 +35,6 @@ export default function WorkspaceInviteForm({
     'workspaceInvite',
     workspaceInvites
   );
-  const { emit } = useSocketEmitter();
 
   const membersEmails = [
     ...workspaceInvitesObserved.map(invite => invite.email),
@@ -62,12 +60,10 @@ export default function WorkspaceInviteForm({
   });
 
   async function submitHandler(data: WorkspaceInvite) {
-    const createdData = await inviteUserToWorkspace(data);
-
+    await inviteUserToWorkspace(data);
     toast({
       title: 'Invitation sent successfully!',
     });
-    emit('workspaceInvite', 'create', createdData);
 
     form.reset();
   }

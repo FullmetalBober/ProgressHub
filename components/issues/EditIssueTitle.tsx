@@ -1,6 +1,5 @@
 'use client';
 
-import { useSocketEmitter } from '@/context/SocketEmitterContext';
 import { useSocketObserver } from '@/hooks/useSocketObserver';
 import { updateIssue } from '@/lib/actions/issues.action';
 import {
@@ -29,7 +28,6 @@ export default function EditIssueTitle(
   const [issueObservable] = useSocketObserver('issue', [issue]);
   const { id, title } = issueObservable;
 
-  const { emit } = useSocketEmitter();
   const form = useForm<IssuePartial>({
     resolver: zodResolver(IssueUncheckedUpdateInputSchema),
     defaultValues: {
@@ -50,10 +48,6 @@ export default function EditIssueTitle(
     form.reset(data);
 
     await updateIssue(id, data);
-    emit('issue', 'update', {
-      id,
-      title: data.title,
-    });
   };
 
   return (

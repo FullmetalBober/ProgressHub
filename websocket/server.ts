@@ -3,22 +3,22 @@ import { env } from '@/lib/env.mjs';
 import { Database } from '@hocuspocus/extension-database';
 import { Logger } from '@hocuspocus/extension-logger';
 import { Server } from '@hocuspocus/server';
+import express from 'express';
 import http from 'http';
 import jwt from 'jsonwebtoken';
 import { Server as SocketIOServer } from 'socket.io';
 import WebSocket from 'ws';
+import { z } from 'zod';
 
-const hocuspocusPath = env.NEXT_PUBLIC_HOCUSPOCUS_PATH;
-
-const server = http.createServer((_req, res) => {
-  res.end('v0.0.1');
-});
+const app = express();
+app.use(express.json());
+const server = http.createServer(app);
 const io = new SocketIOServer(server, {
   cors: {
     origin: env.WEB_DEPLOYMENT_URL,
   },
 });
-const wss = new WebSocket.Server({ noServer: true });
+const hocuspocusPath = env.NEXT_PUBLIC_HOCUSPOCUS_PATH;
 
 const hocuspocusServer = Server.configure({
   extensions: [
@@ -62,26 +62,28 @@ const hocuspocusServer = Server.configure({
   },
 });
 
-wss.on('connection', (ws, req) => {
-  hocuspocusServer.handleConnection(ws, req);
+app.get('/', (_req, res) => {
+  res.send('v1.0.0');
 });
 
-server.on('upgrade', (req, socket, head) => {
-  if (req.url !== hocuspocusPath) return;
-  wss.handleUpgrade(req, socket, head, ws => {
-    wss.emit('connection', ws, req);
-  });
+const notifySchema = z.object({
+  room: z.string(),
+  entity: z.enum(['workspace', 'issue', 'workspaceInvite']),
+  event: z.enum(['create', 'update', 'delete']),
+  payload: z.record(z.unknown()).refine(data => data.id, {
+    message: 'Payload must have an id',
+  }),
 });
 
-type TNotifyData = {
-  room: string;
-  entity: string;
-  event: string;
-  payload: Record<string, unknown>;
-};
+app.post('/notify', (req, res) => {
+  const { room, entity, event, payload } = notifySchema.parse(req.body);
 
-const entities = ['issue', 'workspaceInvite'];
-const events = ['create', 'update', 'delete'];
+  io.to(room).emit(`${entity}/${event}`, payload);
+  console.log(`Notified room ${room} about ${entity}/${event}`);
+
+  res.send('OK');
+});
+
 io.on('connection', socket => {
   socket.on('join', (room: unknown) => {
     if (typeof room !== 'string') throw new Error('Room must be a string');
@@ -94,27 +96,27 @@ io.on('connection', socket => {
     socket.leave(room);
     console.log(`Socket ${socket.id} left room ${room}`);
   });
+});
 
-  socket.on('notify', (data?: Partial<TNotifyData>) => {
-    const { room, entity, event, payload } = data ?? {};
+const wss = new WebSocket.Server({
+  noServer: true,
+});
 
-    if (!payload?.id) throw new Error('Payload must have an id');
-    else if (typeof room !== 'string') throw new Error('Room must be a string');
-    else if (typeof entity !== 'string')
-      throw new Error('Entity must be a string');
-    else if (typeof event !== 'string')
-      throw new Error('Event must be a string');
-    else if (!entities.includes(entity) || !events.includes(event)) {
-      throw new Error(`Invalid entity or event: ${entity}/${event}`);
-    }
+wss.on('connection', (ws, req) => {
+  hocuspocusServer.handleConnection(ws, req);
+});
 
-    io.to(room).emit(`${entity}/${event}`, payload);
-    console.log(`Notified room ${room} about ${entity}/${event}`);
+server.on('upgrade', (req, socket, head) => {
+  if (req.url !== hocuspocusPath) return;
+  wss.handleUpgrade(req, socket, head, ws => {
+    wss.emit('connection', ws, req);
   });
 });
 
-server.listen(process.env.PORT ?? 4000, () => {
-  console.log('Server is running on http://localhost:4000');
-  console.log('Socket.IO path: http://localhost:4000');
-  console.log(`Hocuspocus endpoint: ws://localhost:4000${hocuspocusPath}`);
+const port = process.env.PORT ?? 4000;
+
+server.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Socket.IO path: http://localhost:${port}`);
+  console.log(`Hocuspocus endpoint: ws://localhost:${port}${hocuspocusPath}`);
 });

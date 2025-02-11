@@ -3,6 +3,7 @@
 import prisma from '@/lib/db/index';
 import { WorkspaceInviteUncheckedCreateInputSchema } from '@/prisma/zod';
 import { auth } from '../auth/utils';
+import { notifyUsers } from './utils';
 
 export async function inviteUserToWorkspace(body: { [key: string]: unknown }) {
   const session = await auth();
@@ -18,12 +19,21 @@ export async function inviteUserToWorkspace(body: { [key: string]: unknown }) {
       validatedFields.error.errors.map(e => e.message).join(', ')
     );
 
-  return prisma.workspaceInvite.create({
+  const response = await prisma.workspaceInvite.create({
     data: {
       ...validatedFields.data,
       invitedById: userId,
     },
   });
+
+  await notifyUsers(
+    response.workspaceId,
+    'workspaceInvite',
+    'create',
+    response
+  );
+
+  return response;
 }
 
 export async function cancelWorkspaceInvite(id: string) {
@@ -32,9 +42,18 @@ export async function cancelWorkspaceInvite(id: string) {
 
   if (!userId) throw new Error('You must be logged in to cancel an invite');
 
-  return prisma.workspaceInvite.delete({
+  const response = await prisma.workspaceInvite.delete({
     where: {
       id,
     },
   });
+
+  await notifyUsers(
+    response.workspaceId,
+    'workspaceInvite',
+    'delete',
+    response
+  );
+
+  return response;
 }

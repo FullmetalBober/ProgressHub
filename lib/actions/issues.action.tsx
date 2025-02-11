@@ -6,6 +6,7 @@ import {
 } from '@/prisma/zod';
 import { auth } from '../auth/utils';
 import prisma from '../db';
+import { notifyUsers } from './utils';
 
 export async function createIssue(body: { [key: string]: unknown }) {
   const session = await auth();
@@ -50,7 +51,7 @@ export async function createIssue(body: { [key: string]: unknown }) {
 
   data.identifier = workspace.issueCount + 1;
 
-  const [issue] = await prisma.$transaction([
+  const [response] = await prisma.$transaction([
     prisma.issue.create({
       data,
     }),
@@ -66,7 +67,9 @@ export async function createIssue(body: { [key: string]: unknown }) {
     }),
   ]);
 
-  return issue;
+  await notifyUsers(response.workspaceId, 'issue', 'create', response);
+
+  return response;
 }
 
 export async function updateIssue(
@@ -74,6 +77,7 @@ export async function updateIssue(
   body: { [key: string]: unknown }
 ) {
   const session = await auth();
+
   const userId = session?.user?.id;
 
   if (!userId) throw new Error('You must be logged in to update a workspace');
@@ -85,10 +89,20 @@ export async function updateIssue(
       validatedFields.error.errors.map(e => e.message).join(', ')
     );
 
-  return prisma.issue.update({
+  const response = await prisma.issue.update({
     where: {
       id,
     },
     data: validatedFields.data,
   });
+
+  await notifyUsers(
+    response.workspaceId,
+    'issue',
+    'update',
+    validatedFields.data,
+    response.id
+  );
+
+  return response;
 }
