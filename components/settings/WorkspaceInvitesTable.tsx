@@ -5,12 +5,22 @@ import { cancelWorkspaceInvite } from '@/lib/actions/workspaceInvite.action';
 import { WorkspaceInvite } from '@/prisma/zod';
 import { ColumnDef } from '@tanstack/react-table';
 import { X } from 'lucide-react';
-import { Button } from '../ui/button';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '../ui/alert-dialog';
 import { DataTable } from '../ui/data-table';
 
 type tableRow = WorkspaceInvite;
 
-const columns: ColumnDef<tableRow>[] = [
+const columns = (isEditEnabled: boolean): ColumnDef<tableRow>[] => [
   {
     accessorKey: 'email',
     header: 'Email',
@@ -42,31 +52,53 @@ const columns: ColumnDef<tableRow>[] = [
   },
   {
     id: 'cancel',
-    cell: ({ row }) => (
-      <Button
-        variant='outline'
-        size='icon'
-        onClick={async () => {
-          const { id } = row.original;
+    cell: ({ row }) => {
+      if (!isEditEnabled) return;
+      return (
+        <AlertDialog>
+          <AlertDialogTrigger>
+            <X />
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action will cancel the invite of user{' '}
+                <span className='font-bold'>{row.original.email}</span>.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={async () => {
+                  const { id } = row.original;
 
-          await cancelWorkspaceInvite(id);
-        }}
-      >
-        <X />
-      </Button>
-    ),
+                  await cancelWorkspaceInvite(id);
+                }}
+              >
+                Continue
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      );
+    },
   },
 ];
 
 export default function WorkspaceInvitesTable({
   workspaceInvites,
+  isAdmin,
 }: Readonly<{
   workspaceInvites: tableRow[];
+  isAdmin: boolean;
 }>) {
   const workspaceInvitesObserved = useSocketObserver(
     'workspaceInvite',
     workspaceInvites
   );
 
-  return <DataTable data={workspaceInvitesObserved} columns={columns} />;
+  return (
+    <DataTable data={workspaceInvitesObserved} columns={columns(isAdmin)} />
+  );
 }

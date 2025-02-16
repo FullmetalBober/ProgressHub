@@ -32,6 +32,11 @@ export default async function WorkspaceSettingPage(
     },
   });
 
+  const isOwnerOrAdmin = workspace.members.some(
+    ({ user, role }) =>
+      (user.id === userId && role === 'OWNER') || role === 'ADMIN'
+  );
+
   return (
     <div className='min-h-screen bg-black text-white p-8'>
       <div className='max-w-3xl mx-auto space-y-12'>
@@ -41,7 +46,11 @@ export default async function WorkspaceSettingPage(
 
         <div>
           <h2 className='text-xl font-semibold mb-4'>Members</h2>
-          <WorkspaceMembersTable workspaceMembers={workspace.members} />
+          <WorkspaceMembersTable
+            userId={userId}
+            isAdmin={isOwnerOrAdmin}
+            workspaceMembers={workspace.members}
+          />
         </div>
 
         <div className='space-y-4'>
@@ -57,7 +66,10 @@ export default async function WorkspaceSettingPage(
             workspaceId={workspaceId}
             userId={userId}
           />
-          <WorkspaceInvitesTable workspaceInvites={workspace.workspaceInvite} />
+          <WorkspaceInvitesTable
+            isAdmin={isOwnerOrAdmin}
+            workspaceInvites={workspace.workspaceInvite}
+          />
         </div>
       </div>
     </div>

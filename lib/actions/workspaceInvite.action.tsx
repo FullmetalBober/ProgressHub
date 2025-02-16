@@ -1,8 +1,10 @@
 'use server';
 
+import InviteWorkspaceEmail from '@/components/emails/InviteWorkspaceEmail';
 import prisma from '@/lib/db/index';
 import { WorkspaceInviteUncheckedCreateInputSchema } from '@/prisma/zod';
 import { auth } from '../auth/utils';
+import { sendEmail } from '../email';
 import { notifyUsers } from './utils';
 
 export async function inviteUserToWorkspace(body: { [key: string]: unknown }) {
@@ -24,14 +26,21 @@ export async function inviteUserToWorkspace(body: { [key: string]: unknown }) {
       ...validatedFields.data,
       invitedById: userId,
     },
+    include: {
+      workspace: true,
+    },
   });
 
-  await notifyUsers(
-    response.workspaceId,
-    'workspaceInvite',
-    'create',
-    response
-  );
+  await Promise.all([
+    notifyUsers(response.workspaceId, 'workspaceInvite', 'create', response),
+    sendEmail(
+      response.email,
+      'Hello, you have been invited to a workspace!',
+      InviteWorkspaceEmail({
+        workspaceName: response.workspace.name,
+      })
+    ),
+  ]);
 
   return response;
 }
