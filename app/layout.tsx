@@ -1,4 +1,3 @@
-import { ThemeProvider } from '@/components/ThemeProvider';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import NextAuthProvider from '@/lib/auth/Provider';
@@ -21,19 +20,12 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en' suppressHydrationWarning={true}>
+    <html lang='en' className="dark">
       <body className={inter.className}>
-        <ThemeProvider
-          attribute='class'
-          defaultTheme='system'
-          enableSystem
-          disableTransitionOnChange
-        >
-          <TooltipProvider>
-            <NextAuthProvider>{children}</NextAuthProvider>
-            <Toaster />
-          </TooltipProvider>
-        </ThemeProvider>
+        <TooltipProvider>
+          <NextAuthProvider>{children}</NextAuthProvider>
+          <Toaster />
+        </TooltipProvider>
         <SpeedInsights />
         <Analytics />
       </body>
