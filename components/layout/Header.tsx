@@ -48,7 +48,7 @@ export default async function Header() {
               className='p-2 font-medium text-gray-900 transition-colors hover:text-gray-900/90 dark:text-gray-50 dark:hover:text-gray-50/90'
               href='/auth/login'
             >
-              Log in
+              Login
             </Link>
             {/* <Link
               className='inline-flex h-9 items-center justify-center rounded-md bg-gray-900 p-2 text-sm font-medium text-gray-50 shadow transition-colors hover:bg-gray-900/90 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90'

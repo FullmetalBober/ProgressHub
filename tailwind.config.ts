@@ -1,4 +1,5 @@
-const { fontFamily } = require('tailwindcss/defaultTheme');
+import { fontFamily } from 'tailwindcss/defaultTheme';
+import plugin from 'tailwindcss/plugin';
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -77,5 +78,18 @@ module.exports = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')],
+  plugins: [
+    require('tailwindcss-animate'),
+    require('@tailwindcss/typography'),
+    plugin(function ({ addUtilities }) {
+      addUtilities({
+        '.min-h-svh-body': {
+          // 88px is the height of the header
+          // 64px is the height of the footer
+          // 1px is the border
+          minHeight: 'calc(100vh - 88px - 64px - 1px)',
+        },
+      });
+    }),
+  ],
 };

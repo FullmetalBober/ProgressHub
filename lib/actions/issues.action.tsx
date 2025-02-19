@@ -54,6 +54,9 @@ export async function createIssue(body: { [key: string]: unknown }) {
   const [response] = await prisma.$transaction([
     prisma.issue.create({
       data,
+      include: {
+        assignee: true,
+      },
     }),
     prisma.workspace.update({
       where: {
@@ -94,13 +97,21 @@ export async function updateIssue(
       id,
     },
     data: validatedFields.data,
+    include: {
+      assignee: true,
+    },
   });
+
+  const notifyData = {
+    ...validatedFields.data,
+    ...(validatedFields.data.assigneeId && { assignee: response.assignee }),
+  };
 
   await notifyUsers(
     response.workspaceId,
     'issue',
     'update',
-    validatedFields.data,
+    notifyData,
     response.id
   );
 
