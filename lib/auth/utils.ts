@@ -9,18 +9,12 @@ export const {
   handlers: { GET, POST },
   auth,
 } = NextAuth({
-  //! Should be removed in future
   trustHost: true,
   adapter: PrismaAdapter(prisma),
   pages: {
     verifyRequest: '/auth/verify-request',
   },
   providers: [
-    GithubProvider({
-      clientId: env.GITHUB_CLIENT_ID,
-      clientSecret: env.GITHUB_CLIENT_SECRET,
-      allowDangerousEmailAccountLinking: true,
-    }),
     Nodemailer({
       server: {
         host: env.SMTP_HOST,
@@ -31,6 +25,16 @@ export const {
         },
       },
       from: env.SMTP_USER,
+      ...(env.NODE_ENV !== 'production' && {
+        sendVerificationRequest({ identifier: email, url }) {
+          console.info('Sending email to:', email, url);
+        },
+      }),
+    }),
+    GithubProvider({
+      clientId: env.GITHUB_CLIENT_ID,
+      clientSecret: env.GITHUB_CLIENT_SECRET,
+      allowDangerousEmailAccountLinking: true,
     }),
   ],
 });

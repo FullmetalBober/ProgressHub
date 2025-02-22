@@ -1,7 +1,16 @@
 import { PrismaClient } from '@prisma/client';
 
 const prismaClientSingleton = () => {
-  return new PrismaClient();
+  return new PrismaClient().$extends({
+    query: {
+      user: {
+        async create({ args, query }) {
+          args.data.name ??= args.data.email.split('@')[0];
+          return query(args);
+        },
+      },
+    },
+  });
 };
 
 declare const globalThis: {

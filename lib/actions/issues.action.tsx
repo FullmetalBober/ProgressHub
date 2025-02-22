@@ -43,11 +43,7 @@ export async function createIssue(body: { [key: string]: unknown }) {
       issueCount: true,
     },
   });
-
-  const userRole = workspace?.members[0];
-
-  if (!userRole || (userRole.role !== 'ADMIN' && userRole.role !== 'OWNER'))
-    throw new Error('You must be an admin to create an issue');
+  if (!workspace) throw new Error('Workspace not found');
 
   data.identifier = workspace.issueCount + 1;
 

@@ -1284,11 +1284,21 @@ export const WorkspaceMemberOrderByWithRelationInputSchema: z.ZodType<Prisma.Wor
   workspace: z.lazy(() => WorkspaceOrderByWithRelationInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceMemberOrderByWithRelationInput>;
 
-export const WorkspaceMemberWhereUniqueInputSchema: z.ZodType<Prisma.WorkspaceMemberWhereUniqueInput> = z.object({
-  id: z.string().cuid()
-})
+export const WorkspaceMemberWhereUniqueInputSchema: z.ZodType<Prisma.WorkspaceMemberWhereUniqueInput> = z.union([
+  z.object({
+    id: z.string().cuid(),
+    userId_workspaceId: z.lazy(() => WorkspaceMemberUserIdWorkspaceIdCompoundUniqueInputSchema)
+  }),
+  z.object({
+    id: z.string().cuid(),
+  }),
+  z.object({
+    userId_workspaceId: z.lazy(() => WorkspaceMemberUserIdWorkspaceIdCompoundUniqueInputSchema),
+  }),
+])
 .and(z.object({
   id: z.string().cuid().optional(),
+  userId_workspaceId: z.lazy(() => WorkspaceMemberUserIdWorkspaceIdCompoundUniqueInputSchema).optional(),
   AND: z.union([ z.lazy(() => WorkspaceMemberWhereInputSchema),z.lazy(() => WorkspaceMemberWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => WorkspaceMemberWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => WorkspaceMemberWhereInputSchema),z.lazy(() => WorkspaceMemberWhereInputSchema).array() ]).optional(),
@@ -1928,7 +1938,7 @@ export const WorkspaceUncheckedUpdateManyInputSchema: z.ZodType<Prisma.Workspace
 
 export const WorkspaceMemberCreateInputSchema: z.ZodType<Prisma.WorkspaceMemberCreateInput> = z.object({
   id: z.string().cuid().optional(),
-  role: z.lazy(() => RoleSchema),
+  role: z.lazy(() => RoleSchema).optional(),
   createdAt: z.coerce.date().optional(),
   user: z.lazy(() => UserCreateNestedOneWithoutWorkspacesInputSchema),
   workspace: z.lazy(() => WorkspaceCreateNestedOneWithoutMembersInputSchema)
@@ -1936,7 +1946,7 @@ export const WorkspaceMemberCreateInputSchema: z.ZodType<Prisma.WorkspaceMemberC
 
 export const WorkspaceMemberUncheckedCreateInputSchema: z.ZodType<Prisma.WorkspaceMemberUncheckedCreateInput> = z.object({
   id: z.string().cuid().optional(),
-  role: z.lazy(() => RoleSchema),
+  role: z.lazy(() => RoleSchema).optional(),
   userId: z.string(),
   workspaceId: z.string(),
   createdAt: z.coerce.date().optional()
@@ -1960,7 +1970,7 @@ export const WorkspaceMemberUncheckedUpdateInputSchema: z.ZodType<Prisma.Workspa
 
 export const WorkspaceMemberCreateManyInputSchema: z.ZodType<Prisma.WorkspaceMemberCreateManyInput> = z.object({
   id: z.string().cuid().optional(),
-  role: z.lazy(() => RoleSchema),
+  role: z.lazy(() => RoleSchema).optional(),
   userId: z.string(),
   workspaceId: z.string(),
   createdAt: z.coerce.date().optional()
@@ -2611,6 +2621,11 @@ export const WorkspaceScalarRelationFilterSchema: z.ZodType<Prisma.WorkspaceScal
   is: z.lazy(() => WorkspaceWhereInputSchema).optional(),
   isNot: z.lazy(() => WorkspaceWhereInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceScalarRelationFilter>;
+
+export const WorkspaceMemberUserIdWorkspaceIdCompoundUniqueInputSchema: z.ZodType<Prisma.WorkspaceMemberUserIdWorkspaceIdCompoundUniqueInput> = z.object({
+  userId: z.string(),
+  workspaceId: z.string()
+}).strict() as z.ZodType<Prisma.WorkspaceMemberUserIdWorkspaceIdCompoundUniqueInput>;
 
 export const WorkspaceMemberCountOrderByAggregateInputSchema: z.ZodType<Prisma.WorkspaceMemberCountOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
@@ -3738,14 +3753,14 @@ export const SessionCreateManyUserInputEnvelopeSchema: z.ZodType<Prisma.SessionC
 
 export const WorkspaceMemberCreateWithoutUserInputSchema: z.ZodType<Prisma.WorkspaceMemberCreateWithoutUserInput> = z.object({
   id: z.string().cuid().optional(),
-  role: z.lazy(() => RoleSchema),
+  role: z.lazy(() => RoleSchema).optional(),
   createdAt: z.coerce.date().optional(),
   workspace: z.lazy(() => WorkspaceCreateNestedOneWithoutMembersInputSchema)
 }).strict() as z.ZodType<Prisma.WorkspaceMemberCreateWithoutUserInput>;
 
 export const WorkspaceMemberUncheckedCreateWithoutUserInputSchema: z.ZodType<Prisma.WorkspaceMemberUncheckedCreateWithoutUserInput> = z.object({
   id: z.string().cuid().optional(),
-  role: z.lazy(() => RoleSchema),
+  role: z.lazy(() => RoleSchema).optional(),
   workspaceId: z.string(),
   createdAt: z.coerce.date().optional()
 }).strict() as z.ZodType<Prisma.WorkspaceMemberUncheckedCreateWithoutUserInput>;
@@ -4120,14 +4135,14 @@ export const UserUncheckedUpdateWithoutSessionsInputSchema: z.ZodType<Prisma.Use
 
 export const WorkspaceMemberCreateWithoutWorkspaceInputSchema: z.ZodType<Prisma.WorkspaceMemberCreateWithoutWorkspaceInput> = z.object({
   id: z.string().cuid().optional(),
-  role: z.lazy(() => RoleSchema),
+  role: z.lazy(() => RoleSchema).optional(),
   createdAt: z.coerce.date().optional(),
   user: z.lazy(() => UserCreateNestedOneWithoutWorkspacesInputSchema)
 }).strict() as z.ZodType<Prisma.WorkspaceMemberCreateWithoutWorkspaceInput>;
 
 export const WorkspaceMemberUncheckedCreateWithoutWorkspaceInputSchema: z.ZodType<Prisma.WorkspaceMemberUncheckedCreateWithoutWorkspaceInput> = z.object({
   id: z.string().cuid().optional(),
-  role: z.lazy(() => RoleSchema),
+  role: z.lazy(() => RoleSchema).optional(),
   userId: z.string(),
   createdAt: z.coerce.date().optional()
 }).strict() as z.ZodType<Prisma.WorkspaceMemberUncheckedCreateWithoutWorkspaceInput>;
@@ -4772,7 +4787,7 @@ export const SessionCreateManyUserInputSchema: z.ZodType<Prisma.SessionCreateMan
 
 export const WorkspaceMemberCreateManyUserInputSchema: z.ZodType<Prisma.WorkspaceMemberCreateManyUserInput> = z.object({
   id: z.string().cuid().optional(),
-  role: z.lazy(() => RoleSchema),
+  role: z.lazy(() => RoleSchema).optional(),
   workspaceId: z.string(),
   createdAt: z.coerce.date().optional()
 }).strict() as z.ZodType<Prisma.WorkspaceMemberCreateManyUserInput>;
@@ -4952,7 +4967,7 @@ export const WorkspaceInviteUncheckedUpdateManyWithoutInvitedByInputSchema: z.Zo
 
 export const WorkspaceMemberCreateManyWorkspaceInputSchema: z.ZodType<Prisma.WorkspaceMemberCreateManyWorkspaceInput> = z.object({
   id: z.string().cuid().optional(),
-  role: z.lazy(() => RoleSchema),
+  role: z.lazy(() => RoleSchema).optional(),
   userId: z.string(),
   createdAt: z.coerce.date().optional()
 }).strict() as z.ZodType<Prisma.WorkspaceMemberCreateManyWorkspaceInput>;

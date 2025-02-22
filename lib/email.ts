@@ -17,10 +17,12 @@ export const sendEmail = async (
   subject: string,
   react: JSX.Element
 ) => {
-  return transporter.sendMail({
+  const mail = {
     from: `ProgressHub <${env.SMTP_USER}>`,
     to,
     subject,
     html: await render(react),
-  });
+  };
+  if (env.NODE_ENV !== 'production') console.info(mail);
+  else return transporter.sendMail(mail);
 };

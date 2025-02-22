@@ -66,3 +66,34 @@ export async function cancelWorkspaceInvite(id: string) {
 
   return response;
 }
+
+export async function acceptWorkspaceInvite(id: string) {
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  if (!userId) throw new Error('You must be logged in to accept an invite');
+
+  const invite = await prisma.workspaceInvite.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!invite) throw new Error('Invite not found');
+
+  const [workspaceMember] = await prisma.$transaction([
+    prisma.workspaceMember.create({
+      data: {
+        userId,
+        workspaceId: invite.workspaceId,
+      },
+    }),
+    prisma.workspaceInvite.delete({
+      where: {
+        id,
+      },
+    }),
+  ]);
+
+  return workspaceMember;
+}
