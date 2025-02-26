@@ -3,14 +3,11 @@
 import prisma from '@/lib/db/index';
 import { WorkspaceCreateInputSchema } from '@/prisma/zod';
 import { revalidatePath } from 'next/cache';
-import { auth } from '../auth/utils';
+import { protectAction } from '../protection';
 import { notifyUsers } from './utils';
 
 export async function createWorkspace(body: { [key: string]: unknown }) {
-  const session = await auth();
-  const userId = session?.user?.id;
-
-  if (!userId) throw new Error('You must be logged in to create an issue');
+  const user = await protectAction();
 
   const validatedFields = WorkspaceCreateInputSchema.safeParse(body);
 
@@ -24,7 +21,7 @@ export async function createWorkspace(body: { [key: string]: unknown }) {
       ...validatedFields.data,
       members: {
         create: {
-          userId: userId,
+          userId: user.id,
           role: 'OWNER',
         },
       },
@@ -40,11 +37,12 @@ export async function updateWorkspace(
   id: string,
   body: { [key: string]: unknown }
 ) {
-  const session = await auth();
-  const userId = session?.user?.id;
-
-  if (!userId) throw new Error('You must be logged in to update a workspace');
-
+  await protectAction(
+    {
+      workspaceId: id,
+    },
+    ['OWNER', 'ADMIN']
+  );
   const validatedFields = WorkspaceCreateInputSchema.safeParse(body);
 
   if (!validatedFields.success)
@@ -72,10 +70,12 @@ export async function updateWorkspace(
 }
 
 export async function deleteWorkspace(id: string) {
-  const session = await auth();
-  const userId = session?.user?.id;
-
-  if (!userId) throw new Error('You must be logged in to delete a workspace');
+  await protectAction(
+    {
+      workspaceId: id,
+    },
+    ['OWNER']
+  );
 
   revalidatePath('/workspace');
   const response = await prisma.workspace.delete({

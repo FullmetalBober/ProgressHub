@@ -3,16 +3,11 @@
 import InviteWorkspaceEmail from '@/components/emails/InviteWorkspaceEmail';
 import prisma from '@/lib/db/index';
 import { WorkspaceInviteUncheckedCreateInputSchema } from '@/prisma/zod';
-import { auth } from '../auth/utils';
 import { sendEmail } from '../email';
+import { protectAction } from '../protection';
 import { notifyUsers } from './utils';
 
 export async function inviteUserToWorkspace(body: { [key: string]: unknown }) {
-  const session = await auth();
-  const userId = session?.user?.id;
-
-  if (!userId) throw new Error('You must be logged in to create an issue');
-
   const validatedFields =
     WorkspaceInviteUncheckedCreateInputSchema.safeParse(body);
 
@@ -21,10 +16,17 @@ export async function inviteUserToWorkspace(body: { [key: string]: unknown }) {
       validatedFields.error.errors.map(e => e.message).join(', ')
     );
 
+  const user = await protectAction(
+    {
+      workspaceId: validatedFields.data.workspaceId,
+    },
+    ['OWNER', 'ADMIN']
+  );
+
   const response = await prisma.workspaceInvite.create({
     data: {
       ...validatedFields.data,
-      invitedById: userId,
+      invitedById: user.id,
     },
     include: {
       workspace: true,
@@ -46,10 +48,12 @@ export async function inviteUserToWorkspace(body: { [key: string]: unknown }) {
 }
 
 export async function cancelWorkspaceInvite(id: string) {
-  const session = await auth();
-  const userId = session?.user?.id;
-
-  if (!userId) throw new Error('You must be logged in to cancel an invite');
+  await protectAction(
+    {
+      workspaceInviteId: id,
+    },
+    ['OWNER', 'ADMIN']
+  );
 
   const response = await prisma.workspaceInvite.delete({
     where: {
@@ -68,23 +72,21 @@ export async function cancelWorkspaceInvite(id: string) {
 }
 
 export async function acceptWorkspaceInvite(id: string) {
-  const session = await auth();
-  const userId = session?.user?.id;
-
-  if (!userId) throw new Error('You must be logged in to accept an invite');
+  const user = await protectAction();
 
   const invite = await prisma.workspaceInvite.findUnique({
     where: {
       id,
     },
   });
-
   if (!invite) throw new Error('Invite not found');
+  if (invite.email !== user.email)
+    throw new Error('You are not the user for this invite');
 
   const [workspaceMember] = await prisma.$transaction([
     prisma.workspaceMember.create({
       data: {
-        userId,
+        userId: user.id,
         workspaceId: invite.workspaceId,
       },
     }),
