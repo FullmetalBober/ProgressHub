@@ -9,13 +9,13 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useToast } from '@/components/ui/use-toast';
 import { createWorkspace } from '@/lib/actions/workspaces.action';
 import { WorkspaceUncheckedCreateInputSchema } from '@/prisma/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Workspace } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 export default function WorkspaceCreateForm() {
   const router = useRouter();
@@ -25,14 +25,16 @@ export default function WorkspaceCreateForm() {
       name: '',
     },
   });
-  const { toast } = useToast();
 
   async function submitHandler(data: Workspace) {
-    const res = await createWorkspace(data);
-
-    toast({
-      title: 'Workspace created successfully!',
+    const action = createWorkspace(data);
+    toast.promise(action, {
+      loading: 'Creating workspace...',
+      success: 'Workspace created successfully',
+      error: 'Failed to create workspace',
     });
+    const res = await action;
+
     router.push(`/workspace/${res.id}`);
   }
 

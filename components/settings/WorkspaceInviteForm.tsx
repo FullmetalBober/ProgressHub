@@ -9,6 +9,7 @@ import {
 } from '@/prisma/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { Button } from '../ui/button';
 import {
   Form,
@@ -18,7 +19,6 @@ import {
   FormMessage,
 } from '../ui/form';
 import { Input } from '../ui/input';
-import { useToast } from '../ui/use-toast';
 
 export default function WorkspaceInviteForm({
   workspaceInvites,
@@ -41,7 +41,6 @@ export default function WorkspaceInviteForm({
     ...workspaceMembers.map(member => member.email),
   ];
 
-  const { toast } = useToast();
   const form = useForm<WorkspaceInvite>({
     resolver: zodResolver(
       WorkspaceInviteUncheckedCreateInputSchema.refine(
@@ -60,10 +59,13 @@ export default function WorkspaceInviteForm({
   });
 
   async function submitHandler(data: WorkspaceInvite) {
-    await inviteUserToWorkspace(data);
-    toast({
-      title: 'Invitation sent successfully!',
+    const action = inviteUserToWorkspace(data);
+    toast.promise(action, {
+      loading: 'Inviting user...',
+      success: 'User invited',
+      error: 'Failed to invite user',
     });
+    await action;
 
     form.reset();
   }

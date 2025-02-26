@@ -8,12 +8,14 @@ type TAvailableEntities = {
   workspaceId: string;
   issueId: string;
   workspaceInviteId: string;
+  workspaceMemberId: string;
 };
 
 type TCheckEntity =
   | Pick<TAvailableEntities, 'workspaceId'>
   | Pick<TAvailableEntities, 'issueId'>
-  | Pick<TAvailableEntities, 'workspaceInviteId'>;
+  | Pick<TAvailableEntities, 'workspaceInviteId'>
+  | Pick<TAvailableEntities, 'workspaceMemberId'>;
 
 const workspaceAvailability = (userId: string, workspaceId: string) =>
   prisma.workspaceMember.findUnique({
@@ -62,14 +64,36 @@ const workspaceInviteAvailability = (
     },
   });
 
+const workspaceMemberAvailability = (
+  userId: string,
+  workspaceMemberId: string
+) =>
+  prisma.workspaceMember.findFirst({
+    where: {
+      userId,
+      workspace: {
+        members: {
+          some: {
+            id: workspaceMemberId,
+          },
+        },
+      },
+    },
+    select: {
+      role: true,
+    },
+  });
+
 function getWorkspaceMember(userId: string, entity: TCheckEntity) {
-  if ('workspaceId' in entity) {
+  if ('workspaceId' in entity)
     return workspaceAvailability(userId, entity.workspaceId);
-  } else if ('issueId' in entity) {
+  else if ('issueId' in entity)
     return issueAvailability(userId, entity.issueId);
-  } else if ('workspaceInviteId' in entity) {
+  else if ('workspaceInviteId' in entity)
     return workspaceInviteAvailability(userId, entity.workspaceInviteId);
-  }
+  else if ('workspaceMemberId' in entity)
+    return workspaceMemberAvailability(userId, entity.workspaceMemberId);
+
   throw new Error('Invalid options provided in getWorkspaceMember');
 }
 

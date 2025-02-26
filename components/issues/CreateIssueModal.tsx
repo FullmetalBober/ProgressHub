@@ -7,6 +7,7 @@ import { SquarePen } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { Button } from '../ui/button';
 import {
   Dialog,
@@ -25,7 +26,6 @@ import {
   FormMessage,
 } from '../ui/form';
 import { Input } from '../ui/input';
-import { useToast } from '../ui/use-toast';
 import AssigneeComboboxFormField from './AssigneeComboboxFormField';
 import PriorityComboboxFormField from './PriorityComboboxFormField';
 import StatusComboboxFormField from './StatusComboboxFormField';
@@ -40,8 +40,6 @@ export default function CreateIssueModal({
   users: User[];
 }>) {
   const router = useRouter();
-  const { toast } = useToast();
-
   const [open, setOpen] = useState(false);
 
   const form = useForm<Issue>({
@@ -57,11 +55,14 @@ export default function CreateIssueModal({
   });
 
   async function onSubmit(data: Issue) {
-    const res = await createIssue(data);
-
-    toast({
-      title: 'Issue created successfully!',
+    const action = createIssue(data);
+    toast.promise(action, {
+      loading: 'Creating issue...',
+      success: 'Issue created!',
+      error: 'Failed to create issue',
     });
+    const res = await action;
+
     setOpen(false);
     form.reset();
     router.push(`/workspace/${workspaceId}/issues/${res?.identifier}`);

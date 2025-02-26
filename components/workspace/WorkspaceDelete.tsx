@@ -14,7 +14,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { deleteWorkspace } from '@/lib/actions/workspaces.action';
 import { useRouter } from 'next/navigation';
-import { useToast } from '../ui/use-toast';
+import { toast } from 'sonner';
 
 export default function WorkspaceDelete({
   workspaceId,
@@ -22,14 +22,16 @@ export default function WorkspaceDelete({
   workspaceId: string;
 }>) {
   const router = useRouter();
-  const { toast } = useToast();
 
   const onDeleteWorkspace = async () => {
-    await deleteWorkspace(workspaceId);
-
-    toast({
-      title: 'Workspace deleted successfully!',
+    const action = deleteWorkspace(workspaceId);
+    toast.promise(action, {
+      loading: 'Deleting workspace...',
+      success: 'Workspace deleted successfully',
+      error: 'Failed to delete workspace',
     });
+    await action;
+
     router.push('/workspace');
   };
 

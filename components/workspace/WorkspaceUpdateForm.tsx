@@ -10,7 +10,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useToast } from '@/components/ui/use-toast';
 import { updateWorkspace } from '@/lib/actions/workspaces.action';
 import {
   WorkspacePartial,
@@ -19,13 +18,13 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Workspace } from '@prisma/client';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 export default function WorkspaceUpdateForm({
   workspace,
 }: Readonly<{
   workspace: Workspace;
 }>) {
-  const { toast } = useToast();
   const form = useForm<WorkspacePartial>({
     resolver: zodResolver(WorkspaceUncheckedCreateInputSchema),
     defaultValues: {
@@ -34,12 +33,15 @@ export default function WorkspaceUpdateForm({
   });
 
   async function onSubmit(data: WorkspacePartial) {
-    await updateWorkspace(workspace.id, data);
+    const action = updateWorkspace(workspace.id, data);
+    toast.promise(action, {
+      loading: 'Updating workspace...',
+      success: 'Workspace updated successfully',
+      error: 'Failed to update workspace',
+    });
+    await action;
 
     form.reset(data);
-    toast({
-      title: 'Workspace updated successfully!',
-    });
   }
 
   const isFormDisabled = form.formState.isSubmitting || !form.formState.isDirty;

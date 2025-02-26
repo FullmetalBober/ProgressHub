@@ -1,10 +1,12 @@
 'use client';
 
 import { statusesWorkspaceMember } from '@/config/constants';
+import { updateWorkspaceMember } from '@/lib/actions/workspaceMember.action';
 import { User, WorkspaceMember } from '@/prisma/zod';
 import { ColumnDef } from '@tanstack/react-table';
 import { X } from 'lucide-react';
 import React from 'react';
+import { toast } from 'sonner';
 import CustomAvatar from '../CustomAvatar';
 import {
   AlertDialog,
@@ -77,7 +79,20 @@ const columns = (
       )
         return status?.label;
       return (
-        <Select defaultValue={status?.value}>
+        <Select
+          defaultValue={status?.value}
+          onValueChange={async value => {
+            const action = updateWorkspaceMember(row.original.id, {
+              role: value,
+            });
+            toast.promise(action, {
+              loading: 'Updating user role...',
+              success: 'User role updated successfully!',
+              error: 'Failed to update user role',
+            });
+            await action;
+          }}
+        >
           <SelectTrigger>
             <SelectValue />
           </SelectTrigger>
