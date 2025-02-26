@@ -5,27 +5,20 @@ import prisma from '@/lib/db/index';
 import { WorkspaceInviteUncheckedCreateInputSchema } from '@/prisma/zod';
 import { sendEmail } from '../email';
 import { protectAction } from '../protection';
-import { notifyUsers } from './utils';
+import { notifyUsers, zodValidate } from './utils';
 
-export async function inviteUserToWorkspace(body: { [key: string]: unknown }) {
-  const validatedFields =
-    WorkspaceInviteUncheckedCreateInputSchema.safeParse(body);
-
-  if (!validatedFields.success)
-    throw new Error(
-      validatedFields.error.errors.map(e => e.message).join(', ')
-    );
-
+export async function inviteUserToWorkspace(body: unknown) {
+  const data = zodValidate(WorkspaceInviteUncheckedCreateInputSchema, body);
   const user = await protectAction(
     {
-      workspaceId: validatedFields.data.workspaceId,
+      workspaceId: data.workspaceId,
     },
     ['OWNER', 'ADMIN']
   );
 
   const response = await prisma.workspaceInvite.create({
     data: {
-      ...validatedFields.data,
+      ...data,
       invitedById: user.id,
     },
     include: {

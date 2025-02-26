@@ -6,25 +6,17 @@ import {
 } from '@/prisma/zod';
 import prisma from '../db';
 import { protectAction } from '../protection';
-import { notifyUsers } from './utils';
+import { notifyUsers, zodValidate } from './utils';
 
-export async function createIssue(body: { [key: string]: unknown }) {
-  const validatedFields = IssueUncheckedCreateInputSchema.safeParse(body);
-  if (!validatedFields.success)
-    throw new Error(
-      validatedFields.error.errors.map(e => e.message).join(', ')
-    );
-  const { data } = validatedFields;
-
-  const { workspaceId } = data;
-
+export async function createIssue(body: unknown) {
+  const data = zodValidate(IssueUncheckedCreateInputSchema, body);
   const user = await protectAction({
-    workspaceId,
+    workspaceId: data.workspaceId,
   });
 
   const workspace = await prisma.workspace.findUnique({
     where: {
-      id: workspaceId,
+      id: data.workspaceId,
     },
     select: {
       members: {
@@ -51,7 +43,7 @@ export async function createIssue(body: { [key: string]: unknown }) {
     }),
     prisma.workspace.update({
       where: {
-        id: workspaceId,
+        id: data.workspaceId,
       },
       data: {
         issueCount: {
@@ -66,34 +58,25 @@ export async function createIssue(body: { [key: string]: unknown }) {
   return response;
 }
 
-export async function updateIssue(
-  id: string,
-  body: { [key: string]: unknown }
-) {
+export async function updateIssue(id: string, body: unknown) {
   await protectAction({
     issueId: id,
   });
-
-  const validatedFields = IssueUncheckedUpdateInputSchema.safeParse(body);
-
-  if (!validatedFields.success)
-    throw new Error(
-      validatedFields.error.errors.map(e => e.message).join(', ')
-    );
+  const data = zodValidate(IssueUncheckedUpdateInputSchema, body);
 
   const response = await prisma.issue.update({
     where: {
       id,
     },
-    data: validatedFields.data,
+    data,
     include: {
       assignee: true,
     },
   });
 
   const notifyData = {
-    ...validatedFields.data,
-    ...(validatedFields.data.assigneeId && { assignee: response.assignee }),
+    ...data,
+    ...(data.assigneeId && { assignee: response.assignee }),
   };
 
   await notifyUsers(response.workspaceId, 'issue', 'update', notifyData, id);

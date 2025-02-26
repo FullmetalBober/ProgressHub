@@ -1,3 +1,4 @@
+import { ZodType } from 'zod';
 import { auth } from '../auth/utils';
 import { env } from '../env.mjs';
 
@@ -30,4 +31,15 @@ export function notifyUsers(
       },
     }),
   });
+}
+
+export function zodValidate<T>(schema: ZodType<T>, data: unknown) {
+  const validatedFields = schema.safeParse(data);
+  if (!validatedFields.success)
+    throw new Error(
+      validatedFields.error.errors.map(e => e.message).join(', ')
+    );
+  const { data: validatedDate } = validatedFields;
+
+  return validatedDate;
 }
