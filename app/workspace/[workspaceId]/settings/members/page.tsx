@@ -53,24 +53,26 @@ export default async function WorkspaceSettingPage(
           />
         </div>
 
-        <div className='space-y-4'>
-          <h2 className='text-xl font-semibold mb-4'>Invite</h2>
-          <WorkspaceInviteForm
-            workspaceInvites={workspace.workspaceInvite.map(
-              ({ id, email }) => ({ id, email })
-            )}
-            workspaceMembers={workspace.members.map(({ user }) => ({
-              id: user.id,
-              email: user.email,
-            }))}
-            workspaceId={workspaceId}
-            userId={userId}
-          />
-          <WorkspaceInvitesTable
-            isAdmin={isOwnerOrAdmin}
-            workspaceInvites={workspace.workspaceInvite}
-          />
-        </div>
+        {isOwnerOrAdmin && (
+          <div className='space-y-4'>
+            <h2 className='text-xl font-semibold mb-4'>Invite</h2>
+            <WorkspaceInviteForm
+              workspaceInvites={workspace.workspaceInvite.map(
+                ({ id, email }) => ({ id, email })
+              )}
+              workspaceMembers={workspace.members.map(({ user }) => ({
+                id: user.id,
+                email: user.email,
+              }))}
+              workspaceId={workspaceId}
+              userId={userId}
+            />
+            <WorkspaceInvitesTable
+              isAdmin={isOwnerOrAdmin}
+              workspaceInvites={workspace.workspaceInvite}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

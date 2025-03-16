@@ -2,6 +2,19 @@ import path from 'path';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'github.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'ijhhu279hm.ufs.sh',
+        pathname: '/f/*',
+      },
+    ],
+  },
   webpack: (config, { isServer }) => {
     if (!isServer) {
       // Ensure that all imports of 'yjs' resolve to the same instance
@@ -12,6 +25,9 @@ const nextConfig = {
   serverExternalPackages: ['yjs'],
   experimental: {
     turbo: {},
+    serverActions: {
+      bodySizeLimit: '15mb',
+    },
   },
   async redirects() {
     return [

@@ -1,5 +1,6 @@
 import { auth } from '@/lib/auth/utils';
 import prisma from '@/lib/db/index';
+import { getImageUrl } from '@/lib/utils';
 import { FolderKanban } from 'lucide-react';
 import Link from 'next/link';
 import CustomAvatar from '../CustomAvatar';
@@ -55,7 +56,7 @@ export default async function WorkspaceSideBar({
               <DropdownMenuTrigger asChild>
                 <Button variant='ghost'>
                   <CustomAvatar
-                    src={currentWorkspace?.image}
+                    src={getImageUrl(currentWorkspace?.imageKey)}
                     name={currentWorkspace?.name}
                     className='mr-2 h-5 w-5'
                   />
@@ -70,9 +71,7 @@ export default async function WorkspaceSideBar({
                     <Link href={`/workspace/${workspace.id}`}>
                       <Avatar className='mr-2 h-5 w-5'>
                         <AvatarImage
-                          src={
-                            workspace?.image ?? 'https://github.com/shadcn.png'
-                          }
+                          src={getImageUrl(workspace?.imageKey)}
                           alt={workspace?.name}
                         />
                         <AvatarFallback>{workspace?.name[0]}</AvatarFallback>

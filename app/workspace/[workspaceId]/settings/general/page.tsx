@@ -1,6 +1,8 @@
+import ImageUploader from '@/components/settings/ImageUploader';
 import WorkspaceDelete from '@/components/workspace/WorkspaceDelete';
 import WorkspaceUpdateForm from '@/components/workspace/WorkspaceUpdateForm';
 import prisma from '@/lib/db/index';
+import { getImageUrl } from '@/lib/utils';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -32,23 +34,18 @@ export default async function WorkspaceSettingPage(
         <div>
           <h2 className='text-xl font-semibold mb-4'>Logo</h2>
           <div className='bg-gray-800 w-16 h-16 rounded-md flex items-center justify-center'>
-            <svg
-              className=' text-teal-500'
-              fill='none'
-              height='24'
-              stroke='currentColor'
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              strokeWidth='2'
-              viewBox='0 0 24 24'
-              width='24'
-              xmlns='http://www.w3.org/2000/svg'
-            >
-              <path d='M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8' />
-            </svg>
+            <ImageUploader
+              src={getImageUrl(workspace.imageKey)}
+              id={workspaceId}
+              alt='Workspace logo'
+              width={64}
+              height={64}
+              className='rounded-md'
+            />
           </div>
           <p className='text-sm text-gray-400 mt-2'>
-            Pick a logo for your workspace. Recommended size is 256x256px.
+            Pick a logo for your workspace. Recommended size is 256x256px. The
+            max file size is 15MB.
           </p>
         </div>
 

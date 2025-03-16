@@ -94,7 +94,7 @@ model Workspace {
   id              String            @id @default(cuid())
   /// @zod.string.trim().min(1).max(255)
   name            String
-  image           String?
+  imageKey        String?
   issueCount      Int               @default(0)
   members         WorkspaceMember[]
   issues          Issue[]

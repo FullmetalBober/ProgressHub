@@ -8,3 +8,8 @@ export function cn(...inputs: ClassValue[]) {
 export function absoluteUrl(path: string) {
   return `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}${path}`;
 }
+
+export function getImageUrl(key?: string | null) {
+  if (key) return `https://ijhhu279hm.ufs.sh/f/${key}`;
+  return 'https://github.com/shadcn.png';
+}

@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/card';
 import { auth } from '@/lib/auth/utils';
 import prisma from '@/lib/db';
+import { getImageUrl } from '@/lib/utils';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -53,7 +54,7 @@ export default async function JoinPage() {
                 className='flex items-center space-x-4 rounded-md border p-4'
               >
                 <CustomAvatar
-                  src={invite.workspace?.image}
+                  src={getImageUrl(invite.workspace?.imageKey)}
                   name={invite.workspace?.name}
                   className='mr-2 h-10 w-10'
                 />
