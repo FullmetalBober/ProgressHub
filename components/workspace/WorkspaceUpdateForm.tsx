@@ -22,8 +22,10 @@ import { toast } from 'sonner';
 
 export default function WorkspaceUpdateForm({
   workspace,
+  disabled,
 }: Readonly<{
   workspace: Workspace;
+  disabled?: boolean;
 }>) {
   const form = useForm<WorkspacePartial>({
     resolver: zodResolver(WorkspaceUncheckedCreateInputSchema),
@@ -55,15 +57,17 @@ export default function WorkspaceUpdateForm({
             <FormItem>
               <FormLabel>Workspace name</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} disabled={disabled} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type='submit' disabled={isFormDisabled}>
-          Update
-        </Button>
+        {!disabled && (
+          <Button type='submit' disabled={isFormDisabled}>
+            Update
+          </Button>
+        )}
       </form>
     </Form>
   );

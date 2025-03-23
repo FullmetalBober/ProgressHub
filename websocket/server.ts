@@ -68,7 +68,7 @@ app.get('/', (_req, res) => {
 
 const notifySchema = z.object({
   room: z.string(),
-  entity: z.enum(['workspace', 'issue', 'workspaceInvite']),
+  entity: z.enum(['workspace', 'issue', 'workspaceInvite', 'workspaceMember']),
   event: z.enum(['create', 'update', 'delete']),
   payload: z.record(z.unknown()).refine(data => data.id, {
     message: 'Payload must have an id',

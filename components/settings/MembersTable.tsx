@@ -1,7 +1,12 @@
 'use client';
 
 import { statusesWorkspaceMember } from '@/config/constants';
-import { updateWorkspaceMember } from '@/lib/actions/workspaceMember.action';
+import { useSocketObserver } from '@/hooks/useSocketObserver';
+import {
+  deleteWorkspaceMemberAsAdmin,
+  deleteWorkspaceMemberAsOwner,
+  updateWorkspaceMember,
+} from '@/lib/actions/workspaceMember.action';
 import { User, WorkspaceMember } from '@/prisma/zod';
 import { ColumnDef } from '@tanstack/react-table';
 import { X } from 'lucide-react';
@@ -33,6 +38,7 @@ type tableRow = WorkspaceMember & {
 };
 
 const columns = (
+  isSuperEditEnabled: boolean,
   isEditEnabled: boolean,
   currentUserId: string
 ): ColumnDef<tableRow>[] => [
@@ -128,7 +134,14 @@ const columns = (
   {
     id: 'remove',
     cell: ({ row }) => {
-      if (!isEditEnabled || row.original.userId === currentUserId) return;
+      if (
+        !isEditEnabled ||
+        row.original.userId === currentUserId ||
+        row.original.role === 'OWNER'
+      )
+        return;
+      if (isEditEnabled && row.original.role === 'ADMIN') return;
+
       return (
         <AlertDialog>
           <AlertDialogTrigger>
@@ -145,7 +158,21 @@ const columns = (
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={async () => {}}>
+              <AlertDialogAction
+                onClick={async () => {
+                  const deleteWorkspaceMember = isSuperEditEnabled
+                    ? deleteWorkspaceMemberAsOwner
+                    : deleteWorkspaceMemberAsAdmin;
+
+                  const action = deleteWorkspaceMember(row.original.id);
+                  toast.promise(action, {
+                    loading: 'Kicking user from workspace...',
+                    success: 'User kicked successfully!',
+                    error: 'Failed to kick user',
+                  });
+                  await action;
+                }}
+              >
                 Continue
               </AlertDialogAction>
             </AlertDialogFooter>
@@ -160,12 +187,22 @@ export default function WorkspaceMembersTable({
   workspaceMembers,
   userId,
   isAdmin,
+  isOwner,
 }: Readonly<{
   workspaceMembers: tableRow[];
   userId: string;
   isAdmin: boolean;
+  isOwner: boolean;
 }>) {
+  const workspaceInvitesObserved = useSocketObserver(
+    'workspaceMember',
+    workspaceMembers
+  );
+
   return (
-    <DataTable data={workspaceMembers} columns={columns(isAdmin, userId)} />
+    <DataTable
+      data={workspaceInvitesObserved}
+      columns={columns(isOwner, isAdmin, userId)}
+    />
   );
 }

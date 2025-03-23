@@ -1,3 +1,4 @@
+import { WorkspaceMember } from '@/prisma/zod';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -12,4 +13,23 @@ export function absoluteUrl(path: string) {
 export function getImageUrl(key?: string | null) {
   if (key) return `https://ijhhu279hm.ufs.sh/f/${key}`;
   return 'https://github.com/shadcn.png';
+}
+
+export function checkIsOwner(
+  sessionUserId: string,
+  workspaceMembers: Pick<WorkspaceMember, 'userId' | 'role'>[]
+) {
+  return workspaceMembers.some(
+    ({ userId, role }) => sessionUserId === userId && role === 'OWNER'
+  );
+}
+
+export function checkIsOwnerOrAdmin(
+  sessionUserId: string,
+  workspaceMembers: Pick<WorkspaceMember, 'userId' | 'role'>[]
+) {
+  return workspaceMembers.some(
+    ({ userId, role }) =>
+      sessionUserId === userId && (role === 'OWNER' || role === 'ADMIN')
+  );
 }

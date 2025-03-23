@@ -3,7 +3,7 @@
 import prisma from '@/lib/db/index';
 import { WorkspaceMemberUncheckedUpdateInputSchema } from '@/prisma/zod';
 import { protectAction } from '../protection';
-import { zodValidate } from './utils';
+import { notifyUsers, zodValidate } from './utils';
 
 export async function updateWorkspaceMember(id: string, body: unknown) {
   const data = zodValidate(WorkspaceMemberUncheckedUpdateInputSchema, body);
@@ -11,7 +11,7 @@ export async function updateWorkspaceMember(id: string, body: unknown) {
     {
       workspaceMemberId: id,
     },
-    ['OWNER', 'ADMIN']
+    ['OWNER']
   );
 
   if (data.role === 'OWNER') {
@@ -23,6 +23,57 @@ export async function updateWorkspaceMember(id: string, body: unknown) {
       id,
     },
     data,
+  });
+
+  return response;
+}
+
+export async function deleteWorkspaceMemberAsOwner(id: string) {
+  const { id: userId } = await protectAction(
+    {
+      workspaceMemberId: id,
+    },
+    ['OWNER']
+  );
+
+  const response = await prisma.workspaceMember.delete({
+    where: {
+      id,
+      role: {
+        not: 'OWNER',
+      },
+      userId: {
+        not: userId,
+      },
+    },
+  });
+
+  await notifyUsers(
+    response.workspaceId,
+    'workspaceMember',
+    'delete',
+    response
+  );
+
+  return response;
+}
+
+export async function deleteWorkspaceMemberAsAdmin(id: string) {
+  const { id: userId } = await protectAction(
+    {
+      workspaceMemberId: id,
+    },
+    ['ADMIN']
+  );
+
+  const response = await prisma.workspaceMember.delete({
+    where: {
+      id,
+      role: 'MEMBER',
+      userId: {
+        not: userId,
+      },
+    },
   });
 
   return response;

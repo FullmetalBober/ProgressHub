@@ -1,9 +1,11 @@
 import ImageUploader from '@/components/settings/ImageUploader';
 import WorkspaceDelete from '@/components/workspace/WorkspaceDelete';
 import WorkspaceUpdateForm from '@/components/workspace/WorkspaceUpdateForm';
+import { auth } from '@/lib/auth/utils';
 import prisma from '@/lib/db/index';
-import { getImageUrl } from '@/lib/utils';
+import { checkIsOwner, checkIsOwnerOrAdmin, getImageUrl } from '@/lib/utils';
 import type { Metadata } from 'next';
+import Image from 'next/image';
 
 export const metadata: Metadata = {
   title: 'Workspace',
@@ -12,8 +14,11 @@ export const metadata: Metadata = {
 export default async function WorkspaceSettingPage(
   props: Readonly<{ params: Promise<{ workspaceId: string }> }>
 ) {
-  const params = await props.params;
+  const [params, session] = await Promise.all([props.params, auth()]);
   const { workspaceId } = params;
+  const userId = session?.user?.id;
+
+  if (!userId) return null;
 
   const workspace = await prisma.workspace.findUniqueOrThrow({
     where: {
@@ -23,6 +28,11 @@ export default async function WorkspaceSettingPage(
       members: true,
     },
   });
+
+  const isOwner = checkIsOwner(userId, workspace.members);
+  const isOwnerOrAdmin = checkIsOwnerOrAdmin(userId, workspace.members);
+
+  const ImageTag = isOwnerOrAdmin ? ImageUploader : Image;
 
   return (
     <div className='min-h-screen bg-black text-white p-8'>
@@ -34,7 +44,7 @@ export default async function WorkspaceSettingPage(
         <div>
           <h2 className='text-xl font-semibold mb-4'>Logo</h2>
           <div className='bg-gray-800 w-16 h-16 rounded-md flex items-center justify-center'>
-            <ImageUploader
+            <ImageTag
               src={getImageUrl(workspace.imageKey)}
               id={workspaceId}
               alt='Workspace logo'
@@ -51,18 +61,23 @@ export default async function WorkspaceSettingPage(
 
         <div>
           <h2 className='text-xl font-semibold mb-4'>General</h2>
-          <WorkspaceUpdateForm workspace={workspace} />
+          <WorkspaceUpdateForm
+            workspace={workspace}
+            disabled={!isOwnerOrAdmin}
+          />
         </div>
 
-        <div>
-          <h2 className='text-xl font-semibold mb-2'>Delete workspace</h2>
-          <p className='text-sm text-gray-400 mb-4'>
-            If you want to permanently delete this workspace and all of its
-            data, including but not limited to users, issues, and comments, you
-            can do so below.
-          </p>
-          <WorkspaceDelete workspaceId={workspaceId} />
-        </div>
+        {isOwner && (
+          <div>
+            <h2 className='text-xl font-semibold mb-2'>Delete workspace</h2>
+            <p className='text-sm text-gray-400 mb-4'>
+              If you want to permanently delete this workspace and all of its
+              data, including but not limited to users, issues, and comments,
+              you can do so below.
+            </p>
+            <WorkspaceDelete workspaceId={workspaceId} />
+          </div>
+        )}
       </div>
     </div>
   );

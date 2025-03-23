@@ -36,6 +36,7 @@ export default function ImageUploader(
         onClick={() => !loading && inputRef.current?.click()}
         src={value}
         onLoad={() => setLoading(false)}
+        alt='Workspace Image'
       />
       <input
         type='file'

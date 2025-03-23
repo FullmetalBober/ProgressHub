@@ -4,7 +4,7 @@ import { useSocket } from '@/context/SocketContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-type entities = 'issue' | 'workspaceInvite';
+type entities = 'issue' | 'workspaceInvite' | 'workspaceMember';
 
 export function useSocketObserver<T extends { id: string }>(
   eventName: entities,

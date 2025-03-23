@@ -3,6 +3,7 @@ import WorkspaceInviteForm from '@/components/settings/WorkspaceInviteForm';
 import WorkspaceInvitesTable from '@/components/settings/WorkspaceInvitesTable';
 import { auth } from '@/lib/auth/utils';
 import prisma from '@/lib/db/index';
+import { checkIsOwner, checkIsOwnerOrAdmin } from '@/lib/utils';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -32,10 +33,8 @@ export default async function WorkspaceSettingPage(
     },
   });
 
-  const isOwnerOrAdmin = workspace.members.some(
-    ({ user, role }) =>
-      (user.id === userId && role === 'OWNER') || role === 'ADMIN'
-  );
+  const isOwner = checkIsOwner(userId, workspace.members);
+  const isOwnerOrAdmin = checkIsOwnerOrAdmin(userId, workspace.members);
 
   return (
     <div className='min-h-screen bg-black text-white p-8'>
@@ -48,6 +47,7 @@ export default async function WorkspaceSettingPage(
           <h2 className='text-xl font-semibold mb-4'>Members</h2>
           <WorkspaceMembersTable
             userId={userId}
+            isOwner={isOwner}
             isAdmin={isOwnerOrAdmin}
             workspaceMembers={workspace.members}
           />
