@@ -54,7 +54,7 @@ export default async function JoinPage() {
                 className='flex items-center space-x-4 rounded-md border p-4'
               >
                 <CustomAvatar
-                  src={getImageUrl(invite.workspace?.imageKey)}
+                  src={getImageUrl(invite.workspace?.image)}
                   name={invite.workspace?.name}
                   className='mr-2 h-10 w-10'
                 />

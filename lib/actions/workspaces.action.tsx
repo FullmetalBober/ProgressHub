@@ -88,13 +88,13 @@ export async function updateWorkspaceImage(
   if (!file) throw new Error('No file found');
   if (!(file instanceof File)) throw new Error('Invalid file type');
 
-  const [workspace, imageKey] = await Promise.all([
+  const [workspace, image] = await Promise.all([
     prisma.workspace.findUniqueOrThrow({
       where: {
         id,
       },
       select: {
-        imageKey: true,
+        image: true,
       },
     }),
     uploadImage(`workspace/${id}.webp`, file),
@@ -106,10 +106,10 @@ export async function updateWorkspaceImage(
         id,
       },
       data: {
-        imageKey,
+        image,
       },
     }),
-    workspace.imageKey && deleteImage(workspace.imageKey),
+    deleteImage(workspace.image),
   ]);
 
   return response;

@@ -56,7 +56,7 @@ export default async function WorkspaceSideBar({
               <DropdownMenuTrigger asChild>
                 <Button variant='ghost'>
                   <CustomAvatar
-                    src={getImageUrl(currentWorkspace?.imageKey)}
+                    src={getImageUrl(currentWorkspace?.image)}
                     name={currentWorkspace?.name}
                     className='mr-2 h-5 w-5'
                   />
@@ -71,7 +71,7 @@ export default async function WorkspaceSideBar({
                     <Link href={`/workspace/${workspace.id}`}>
                       <Avatar className='mr-2 h-5 w-5'>
                         <AvatarImage
-                          src={getImageUrl(workspace?.imageKey)}
+                          src={getImageUrl(workspace?.image)}
                           alt={workspace?.name}
                         />
                         <AvatarFallback>{workspace?.name[0]}</AvatarFallback>

@@ -45,7 +45,7 @@ export default async function WorkspaceSettingPage(
           <h2 className='text-xl font-semibold mb-4'>Logo</h2>
           <div className='bg-gray-800 w-16 h-16 rounded-md flex items-center justify-center'>
             <ImageTag
-              src={getImageUrl(workspace.imageKey)}
+              src={getImageUrl(workspace.image)}
               id={workspaceId}
               alt='Workspace logo'
               width={64}

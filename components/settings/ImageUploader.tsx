@@ -22,7 +22,7 @@ export default function ImageUploader(
 
     const response = await updateWorkspaceImage(props.id, imageFormData);
 
-    setValue(getImageUrl(response.imageKey));
+    setValue(getImageUrl(response.image));
   };
 
   return (
