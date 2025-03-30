@@ -1,13 +1,11 @@
 import { auth } from '@/lib/auth/utils';
 import prisma from '@/lib/db/index';
-import { getImageUrl } from '@/lib/utils';
 import { FolderKanban } from 'lucide-react';
 import Link from 'next/link';
 import CustomAvatar from '../CustomAvatar';
 import SignOut from '../auth/SignOut';
 import CreateIssueModal from '../issues/CreateIssueModal';
 import SidebarButton from '../layout/SidebarButton';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
 import {
   DropdownMenu,
@@ -56,7 +54,7 @@ export default async function WorkspaceSideBar({
               <DropdownMenuTrigger asChild>
                 <Button variant='ghost'>
                   <CustomAvatar
-                    src={getImageUrl(currentWorkspace?.image)}
+                    src={currentWorkspace?.image}
                     name={currentWorkspace?.name}
                     className='mr-2 h-5 w-5'
                   />
@@ -69,13 +67,11 @@ export default async function WorkspaceSideBar({
                 {otherWorkspaces.map(workspace => (
                   <DropdownMenuItem key={workspace.id} asChild>
                     <Link href={`/workspace/${workspace.id}`}>
-                      <Avatar className='mr-2 h-5 w-5'>
-                        <AvatarImage
-                          src={getImageUrl(workspace?.image)}
-                          alt={workspace?.name}
-                        />
-                        <AvatarFallback>{workspace?.name[0]}</AvatarFallback>
-                      </Avatar>
+                      <CustomAvatar
+                        src={workspace?.image}
+                        name={workspace?.name}
+                        className='mr-2 h-5 w-5'
+                      />
                       {workspace.name}
                     </Link>
                   </DropdownMenuItem>
