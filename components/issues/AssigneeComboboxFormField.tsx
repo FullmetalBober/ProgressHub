@@ -20,6 +20,7 @@ export default function AssigneeComboboxFormField({
     <ComboboxFormField
       form={form}
       fieldName='assigneeId'
+      fieldDefaultName='assignee'
       properties={properties}
     />
   );

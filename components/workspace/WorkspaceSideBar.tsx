@@ -79,7 +79,7 @@ export default async function WorkspaceSideBar({
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                   <Link href={`/workspace/${workspaceId}/settings`}>
-                    Workspace settings
+                    Settings
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
