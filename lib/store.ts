@@ -16,6 +16,6 @@ export async function uploadImage(name: string, file: File) {
 }
 
 export async function deleteImage(key?: string | null) {
-  if (!key || key.includes('https://')) return;
+  if (!key || key.startsWith('https://')) return;
   return utapi.deleteFiles(key);
 }

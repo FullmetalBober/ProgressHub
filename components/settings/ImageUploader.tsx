@@ -1,14 +1,25 @@
 'use client';
 
-import { updateWorkspaceImage } from '@/lib/actions/workspaces.action';
 import { cn, getImageUrl } from '@/lib/utils';
 import Image, { ImageProps } from 'next/image';
 import { useRef, useState } from 'react';
 
-export default function ImageUploader(
-  props: ImageProps & { id: string; src: string }
-) {
-  const [value, setValue] = useState<string>(props.src);
+export default function ImageUploader({
+  id,
+  src,
+  action,
+  ...props
+}: ImageProps & {
+  id: string;
+  src: string;
+  action: (
+    id: string,
+    imageFormData: FormData
+  ) => Promise<{
+    image: string | null;
+  }>;
+}) {
+  const [value, setValue] = useState<string>(src);
   const [loading, setLoading] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -20,7 +31,7 @@ export default function ImageUploader(
     const imageFormData = new FormData();
     imageFormData.append('image', file);
 
-    const response = await updateWorkspaceImage(props.id, imageFormData);
+    const response = await action(id, imageFormData);
 
     setValue(getImageUrl(response.image));
   };

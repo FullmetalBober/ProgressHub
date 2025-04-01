@@ -1,6 +1,7 @@
 import ImageUploader from '@/components/settings/ImageUploader';
 import WorkspaceDelete from '@/components/workspace/WorkspaceDelete';
 import WorkspaceUpdateForm from '@/components/workspace/WorkspaceUpdateForm';
+import { updateWorkspaceImage } from '@/lib/actions/workspaces.action';
 import { auth } from '@/lib/auth/utils';
 import prisma from '@/lib/db/index';
 import { checkIsOwner, checkIsOwnerOrAdmin, getImageUrl } from '@/lib/utils';
@@ -47,6 +48,7 @@ export default async function WorkspaceSettingPage(
             <ImageTag
               src={getImageUrl(workspace.image)}
               id={workspaceId}
+              action={updateWorkspaceImage}
               alt='Workspace logo'
               width={64}
               height={64}

@@ -11,7 +11,8 @@ export function absoluteUrl(path: string) {
 }
 
 export function getImageUrl(key?: string | null) {
-  if (key) return `https://ijhhu279hm.ufs.sh/f/${key}`;
+  if (key?.startsWith('https://')) return key;
+  else if (key) return `https://ijhhu279hm.ufs.sh/f/${key}`;
   return 'https://github.com/shadcn.png';
 }
 

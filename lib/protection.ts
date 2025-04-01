@@ -5,6 +5,7 @@ import prisma from './db';
 type TRoles = WorkspaceMember['role'][];
 
 type TAvailableEntities = {
+  userId: string;
   workspaceId: string;
   issueId: string;
   workspaceInviteId: string;
@@ -12,6 +13,7 @@ type TAvailableEntities = {
 };
 
 type TCheckEntity =
+  | Pick<TAvailableEntities, 'userId'>
   | Pick<TAvailableEntities, 'workspaceId'>
   | Pick<TAvailableEntities, 'issueId'>
   | Pick<TAvailableEntities, 'workspaceInviteId'>
@@ -109,6 +111,17 @@ async function protect(entity?: TCheckEntity, workspaceRoles?: TRoles) {
     return {
       user,
     };
+  }
+
+  if ('userId' in entity) {
+    if (entity.userId !== user.id)
+      return {
+        error: 'You do not have access to this resource',
+      };
+    else
+      return {
+        user,
+      };
   }
 
   const workspaceMember = await getWorkspaceMember(user.id, entity);

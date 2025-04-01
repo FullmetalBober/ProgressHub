@@ -10,7 +10,7 @@ export default async function SettingSideBar({
     <aside className='space-y-4'>
       <div className='pr-4'>
         <div className='space-y-1'>
-          <ScrollArea className='h-screen'>
+          <ScrollArea className='lg:h-screen'>
             <h2 className='mb-2 px-4 text-lg font-semibold tracking-tight'>
               Workspace
             </h2>
