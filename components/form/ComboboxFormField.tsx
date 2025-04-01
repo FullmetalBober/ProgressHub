@@ -23,11 +23,13 @@ type Property = {
 export default function ComboboxFormField({
   form,
   fieldName,
+  fieldDefaultName,
   properties,
 }: Readonly<{
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   form: UseFormReturn<any>;
   fieldName: string;
+  fieldDefaultName?: string;
   properties: Property[];
 }>) {
   const [open, setOpen] = useState(false);
@@ -51,17 +53,15 @@ export default function ComboboxFormField({
                   className='justify-start flex items-center'
                   aria-expanded={open}
                 >
-                  {field.value ? (
+                  {field.value && selectedStatus ? (
                     <>
-                      {selectedStatus && (
-                        <div className='*:mr-2 *:h-4 *:w-4 *:shrink-0'>
-                          {selectedStatus.icon}
-                        </div>
-                      )}
-                      {selectedStatus?.label}
+                      <div className='*:mr-2 *:h-4 *:w-4 *:shrink-0'>
+                        {selectedStatus.icon}
+                      </div>
+                      <span>{selectedStatus.label}</span>
                     </>
                   ) : (
-                    `Set ${fieldName}`
+                    `Set ${fieldDefaultName ?? fieldName}`
                   )}
                   {/* <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' /> */}
                 </Button>
