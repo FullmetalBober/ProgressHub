@@ -1,4 +1,5 @@
 import ImageUploader from '@/components/settings/ImageUploader';
+import UserUpdateForm from '@/components/settings/UserUpdateForm';
 import { updateUserImage } from '@/lib/actions/user.action';
 import { auth } from '@/lib/auth/utils';
 import prisma from '@/lib/db/index';
@@ -44,6 +45,11 @@ export default async function UserSettingPage() {
             Pick a avatar. Recommended size is 256x256px. The max file size is
             15MB.
           </p>
+        </div>
+
+        <div>
+          <h2 className='text-xl font-semibold mb-4'>General</h2>
+          <UserUpdateForm user={user} />
         </div>
       </div>
     </div>
