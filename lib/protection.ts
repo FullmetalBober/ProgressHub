@@ -10,6 +10,7 @@ type TAvailableEntities = {
   issueId: string;
   workspaceInviteId: string;
   workspaceMemberId: string;
+  githubAppInstallationId: number;
 };
 
 type TCheckEntity =
@@ -17,7 +18,8 @@ type TCheckEntity =
   | Pick<TAvailableEntities, 'workspaceId'>
   | Pick<TAvailableEntities, 'issueId'>
   | Pick<TAvailableEntities, 'workspaceInviteId'>
-  | Pick<TAvailableEntities, 'workspaceMemberId'>;
+  | Pick<TAvailableEntities, 'workspaceMemberId'>
+  | Pick<TAvailableEntities, 'githubAppInstallationId'>;
 
 const workspaceAvailability = (userId: string, workspaceId: string) =>
   prisma.workspaceMember.findUnique({
@@ -86,15 +88,39 @@ const workspaceMemberAvailability = (
     },
   });
 
+const githubAppInstallationAvailability = (
+  userId: string,
+  githubAppInstallationId: number
+) =>
+  prisma.workspaceMember.findFirst({
+    where: {
+      userId,
+      workspace: {
+        githubAppInstallation: {
+          some: {
+            id: githubAppInstallationId,
+          },
+        },
+      },
+    },
+    select: {
+      role: true,
+    },
+  });
+
 function getWorkspaceMember(userId: string, entity: TCheckEntity) {
   if ('workspaceId' in entity)
     return workspaceAvailability(userId, entity.workspaceId);
-  else if ('issueId' in entity)
-    return issueAvailability(userId, entity.issueId);
-  else if ('workspaceInviteId' in entity)
+  if ('issueId' in entity) return issueAvailability(userId, entity.issueId);
+  if ('workspaceInviteId' in entity)
     return workspaceInviteAvailability(userId, entity.workspaceInviteId);
-  else if ('workspaceMemberId' in entity)
+  if ('workspaceMemberId' in entity)
     return workspaceMemberAvailability(userId, entity.workspaceMemberId);
+  if ('githubAppInstallationId' in entity)
+    return githubAppInstallationAvailability(
+      userId,
+      entity.githubAppInstallationId
+    );
 
   throw new Error('Invalid options provided in getWorkspaceMember');
 }

@@ -16,7 +16,7 @@ export function notifyUsers(
   payload: Record<string, unknown>,
   entityId?: string
 ) {
-  return fetch(`${env.SOCKET_BASE_URL}/notify`, {
+  return fetch(`${env.SOCKET_BASE_URL}/api/notify`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

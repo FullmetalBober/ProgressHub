@@ -1,12 +1,16 @@
+import GithubApps from '@/components/githubApp/GithubApps';
 import ImageUploader from '@/components/settings/ImageUploader';
+import { Button } from '@/components/ui/button';
 import WorkspaceDelete from '@/components/workspace/WorkspaceDelete';
 import WorkspaceUpdateForm from '@/components/workspace/WorkspaceUpdateForm';
 import { updateWorkspaceImage } from '@/lib/actions/workspaces.action';
 import { auth } from '@/lib/auth/utils';
 import prisma from '@/lib/db/index';
 import { checkIsOwner, checkIsOwnerOrAdmin, getImageUrl } from '@/lib/utils';
+import { Plus } from 'lucide-react';
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Workspace',
@@ -27,6 +31,11 @@ export default async function WorkspaceSettingPage(
     },
     include: {
       members: true,
+      githubAppInstallation: {
+        include: {
+          createdBy: true,
+        },
+      },
     },
   });
 
@@ -34,6 +43,13 @@ export default async function WorkspaceSettingPage(
   const isOwnerOrAdmin = checkIsOwnerOrAdmin(userId, workspace.members);
 
   const ImageTag = isOwnerOrAdmin ? ImageUploader : Image;
+
+  const githubState = btoa(
+    JSON.stringify({
+      workspaceId,
+      userId,
+    })
+  );
 
   return (
     <div className='min-h-screen bg-black text-white p-8'>
@@ -67,6 +83,27 @@ export default async function WorkspaceSettingPage(
             workspace={workspace}
             disabled={!isOwnerOrAdmin}
           />
+        </div>
+
+        <div>
+          <h2 className='text-xl font-semibold mb-4'>Github</h2>
+          <div className='flex items-center justify-between mb-4'>
+            <h3 className='text-lg'>Connected accounts</h3>
+            <Button variant='ghost' asChild>
+              <Link
+                href={`https://github.com/apps/progresshubapp/installations/select_target?state=${githubState}`}
+                target='_blank'
+              >
+                <Plus />
+              </Link>
+            </Button>
+          </div>
+          <GithubApps
+            githubAppInstallations={workspace.githubAppInstallation}
+          />
+          <p className='text-sm text-gray-400 mt-2'>
+            Github account cannot be connected to multiple workspaces.
+          </p>
         </div>
 
         {isOwner && (

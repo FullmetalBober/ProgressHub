@@ -1,14 +1,17 @@
 import { env } from '@/lib/env.mjs';
 import express from 'express';
 import http from 'http';
+import SmeeClient from 'smee-client';
 import { WebSocket } from 'ws';
 import hocuspocusServer from './hocuspocus';
+import probotMiddleware from './probot';
 import router from './router';
 import io from './socket';
 
 const app = express();
+app.use(probotMiddleware);
 app.use(express.json());
-app.use(router);
+app.use('/api', router);
 
 const server = http.createServer(app);
 
@@ -31,6 +34,22 @@ server.on('upgrade', (req, socket, head) => {
   wss.handleUpgrade(req, socket, head, ws => {
     wss.emit('connection', ws, req);
   });
+});
+
+let smeeEvent: EventSource;
+server.once('listening', () => {
+  if (!env.GITHUB_WEBHOOK_PROXY_URL) return;
+  const smee = new SmeeClient({
+    source: env.GITHUB_WEBHOOK_PROXY_URL,
+    target: `${env.SOCKET_BASE_URL}/api/github/webhooks`,
+    logger: console,
+  });
+
+  smeeEvent = smee.start();
+});
+
+server.once('close', () => {
+  if (smeeEvent) smeeEvent.close();
 });
 
 export default server;
