@@ -55,3 +55,30 @@ export async function removeGithubAppInstallation(id: number) {
 
   return githubAppInstallation;
 }
+
+export async function getRepositories(installationId: number) {
+  await protectAction({
+    githubAppInstallationId: installationId,
+  });
+
+  const localOctokit = new ProbotOctokit({
+    auth: {
+      appId: env.GITHUB_APP_ID,
+      privateKey: env.GITHUB_PRIVATE_KEY,
+      clientId: env.GITHUB_CLIENT_ID,
+      clientSecret: env.GITHUB_CLIENT_SECRET,
+      type: 'installation',
+      installationId,
+    },
+  });
+
+  const {
+    data: { repositories },
+  } = await localOctokit.rest.apps.listReposAccessibleToInstallation();
+
+  return repositories.map(repo => ({
+    id: repo.id,
+    name: repo.name,
+    fullName: repo.full_name,
+  }));
+}

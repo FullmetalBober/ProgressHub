@@ -3,6 +3,8 @@ import { env } from '@/lib/env.mjs';
 import express from 'express';
 import { z } from 'zod';
 import io from './socket';
+import { pullGithubWiki } from './utils/git';
+import { getGithubToken, getRepoInfo } from './utils/github';
 
 const router = express.Router();
 
@@ -34,16 +36,16 @@ router.post('/notify', (req, res) => {
   res.send('OK');
 });
 
+const githubAppSetupParamsSchema = z.object({
+  installation_id: z.coerce.number(),
+  state: z.string(),
+});
+
 router.get('/github/setup', async (req, res) => {
-  const { installation_id, state } = req.query;
-  if (!installation_id) {
-    res.status(400).send('Missing installation_id');
-    return;
-  }
-  if (!state) {
-    res.status(400).send('Missing state');
-    return;
-  }
+  const { installation_id, state } = githubAppSetupParamsSchema.parse(
+    req.query
+  );
+
   const statePlain = Buffer.from(state.toString(), 'base64').toString('utf8');
   const { workspaceId, userId } = JSON.parse(statePlain);
 
@@ -60,6 +62,26 @@ router.get('/github/setup', async (req, res) => {
   res.redirect(
     `${env.WEB_DEPLOYMENT_URL}/workspace/${workspaceId}/settings/general`
   );
+});
+
+const getGithubWikiParamsSchema = z.object({
+  installationId: z.coerce.number(),
+  repoId: z.coerce.number(),
+});
+
+router.get('/github/wiki/:installationId/:repoId', async (req, res) => {
+  const { installationId, repoId } = getGithubWikiParamsSchema.parse(
+    req.params
+  );
+
+  const [repoData, token] = await Promise.all([
+    getRepoInfo(installationId, repoId),
+    getGithubToken(installationId),
+  ]);
+
+  await pullGithubWiki(repoId, repoData.full_name, token);
+
+  res.status(200).send('OK');
 });
 
 export default router;
