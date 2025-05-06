@@ -6,6 +6,7 @@ import WorkspaceUpdateForm from '@/components/workspace/WorkspaceUpdateForm';
 import { updateWorkspaceImage } from '@/lib/actions/workspaces.action';
 import { auth } from '@/lib/auth/utils';
 import prisma from '@/lib/db/index';
+import { env } from '@/lib/env.mjs';
 import { checkIsOwner, checkIsOwnerOrAdmin, getImageUrl } from '@/lib/utils';
 import { Plus } from 'lucide-react';
 import type { Metadata } from 'next';
@@ -91,7 +92,7 @@ export default async function WorkspaceSettingPage(
             <h3 className='text-lg'>Connected accounts</h3>
             <Button variant='ghost' asChild>
               <Link
-                href={`https://github.com/apps/progresshubapp/installations/select_target?state=${githubState}`}
+                href={`https://github.com/apps/${env.NEXT_PUBLIC_GITHUB_APP_NAME}/installations/select_target?state=${githubState}`}
                 target='_blank'
               >
                 <Plus />

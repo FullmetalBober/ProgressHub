@@ -27,6 +27,7 @@ export async function getGithubAppInfo(id: number) {
   }
 
   return {
+    id: installation.id,
     name:
       'login' in installation.account
         ? installation.account.login
@@ -56,7 +57,7 @@ export async function removeGithubAppInstallation(id: number) {
   return githubAppInstallation;
 }
 
-export async function getRepositories(installationId: number) {
+export async function getRepositoriesWithWikis(installationId: number) {
   await protectAction({
     githubAppInstallationId: installationId,
   });
@@ -76,9 +77,13 @@ export async function getRepositories(installationId: number) {
     data: { repositories },
   } = await localOctokit.rest.apps.listReposAccessibleToInstallation();
 
+  // const filteredRepos = repositories.filter(repo => repo.has_wiki);
+
   return repositories.map(repo => ({
     id: repo.id,
     name: repo.name,
-    fullName: repo.full_name,
+    image: repo.owner.avatar_url,
+    description: repo.description,
+    isPrivate: repo.private,
   }));
 }

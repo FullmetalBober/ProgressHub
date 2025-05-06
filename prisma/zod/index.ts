@@ -32,6 +32,8 @@ export const CommentScalarFieldEnumSchema = z.enum(['id','body','issueId','autho
 
 export const GithubAppInstallationScalarFieldEnumSchema = z.enum(['id','workspaceId','createdById','createdAt','updatedAt']);
 
+export const GithubWikiFileScalarFieldEnumSchema = z.enum(['id','path','workspaceId','githubRepositoryId','content','createdAt','updatedAt']);
+
 export const SortOrderSchema = z.enum(['asc','desc']);
 
 export const QueryModeSchema = z.enum(['default','insensitive']);
@@ -344,6 +346,7 @@ export type WorkspaceRelations = {
   issues: IssueWithRelations[];
   workspaceInvite: WorkspaceInviteWithRelations[];
   githubAppInstallation: GithubAppInstallationWithRelations[];
+  GithubWikiFile: GithubWikiFileWithRelations[];
 };
 
 export type WorkspaceWithRelations = z.infer<typeof WorkspaceSchema> & WorkspaceRelations
@@ -353,6 +356,7 @@ export const WorkspaceWithRelationsSchema: z.ZodType<WorkspaceWithRelations> = W
   issues: z.lazy(() => IssueWithRelationsSchema).array(),
   workspaceInvite: z.lazy(() => WorkspaceInviteWithRelationsSchema).array(),
   githubAppInstallation: z.lazy(() => GithubAppInstallationWithRelationsSchema).array(),
+  GithubWikiFile: z.lazy(() => GithubWikiFileWithRelationsSchema).array(),
 }))
 
 // WORKSPACE PARTIAL RELATION SCHEMA
@@ -363,6 +367,7 @@ export type WorkspacePartialRelations = {
   issues?: IssuePartialWithRelations[];
   workspaceInvite?: WorkspaceInvitePartialWithRelations[];
   githubAppInstallation?: GithubAppInstallationPartialWithRelations[];
+  GithubWikiFile?: GithubWikiFilePartialWithRelations[];
 };
 
 export type WorkspacePartialWithRelations = z.infer<typeof WorkspacePartialSchema> & WorkspacePartialRelations
@@ -372,6 +377,7 @@ export const WorkspacePartialWithRelationsSchema: z.ZodType<WorkspacePartialWith
   issues: z.lazy(() => IssuePartialWithRelationsSchema).array(),
   workspaceInvite: z.lazy(() => WorkspaceInvitePartialWithRelationsSchema).array(),
   githubAppInstallation: z.lazy(() => GithubAppInstallationPartialWithRelationsSchema).array(),
+  GithubWikiFile: z.lazy(() => GithubWikiFilePartialWithRelationsSchema).array(),
 })).partial()
 
 export type WorkspaceWithPartialRelations = z.infer<typeof WorkspaceSchema> & WorkspacePartialRelations
@@ -381,6 +387,7 @@ export const WorkspaceWithPartialRelationsSchema: z.ZodType<WorkspaceWithPartial
   issues: z.lazy(() => IssuePartialWithRelationsSchema).array(),
   workspaceInvite: z.lazy(() => WorkspaceInvitePartialWithRelationsSchema).array(),
   githubAppInstallation: z.lazy(() => GithubAppInstallationPartialWithRelationsSchema).array(),
+  GithubWikiFile: z.lazy(() => GithubWikiFilePartialWithRelationsSchema).array(),
 }).partial())
 
 /////////////////////////////////////////
@@ -727,6 +734,70 @@ export const GithubAppInstallationWithPartialRelationsSchema: z.ZodType<GithubAp
 }).partial())
 
 /////////////////////////////////////////
+// GITHUB WIKI FILE SCHEMA
+/////////////////////////////////////////
+
+export const GithubWikiFileSchema = z.object({
+  id: z.string().cuid(),
+  path: z.string().trim().min(1).max(255),
+  workspaceId: z.string(),
+  githubRepositoryId: z.number().int(),
+  content: z.instanceof(Buffer).nullable(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
+})
+
+export type GithubWikiFile = z.infer<typeof GithubWikiFileSchema>
+
+/////////////////////////////////////////
+// GITHUB WIKI FILE CUSTOM VALIDATORS SCHEMA
+/////////////////////////////////////////
+
+export const GithubWikiFileCustomValidatorsSchema = GithubWikiFileSchema.strip()
+
+export type GithubWikiFileCustomValidators = z.infer<typeof GithubWikiFileCustomValidatorsSchema>
+
+/////////////////////////////////////////
+// GITHUB WIKI FILE PARTIAL SCHEMA
+/////////////////////////////////////////
+
+export const GithubWikiFilePartialSchema = GithubWikiFileSchema.partial()
+
+export type GithubWikiFilePartial = z.infer<typeof GithubWikiFilePartialSchema>
+
+// GITHUB WIKI FILE RELATION SCHEMA
+//------------------------------------------------------
+
+export type GithubWikiFileRelations = {
+  workspace: WorkspaceWithRelations;
+};
+
+export type GithubWikiFileWithRelations = z.infer<typeof GithubWikiFileSchema> & GithubWikiFileRelations
+
+export const GithubWikiFileWithRelationsSchema: z.ZodType<GithubWikiFileWithRelations> = GithubWikiFileSchema.merge(z.object({
+  workspace: z.lazy(() => WorkspaceWithRelationsSchema),
+}))
+
+// GITHUB WIKI FILE PARTIAL RELATION SCHEMA
+//------------------------------------------------------
+
+export type GithubWikiFilePartialRelations = {
+  workspace?: WorkspacePartialWithRelations;
+};
+
+export type GithubWikiFilePartialWithRelations = z.infer<typeof GithubWikiFilePartialSchema> & GithubWikiFilePartialRelations
+
+export const GithubWikiFilePartialWithRelationsSchema: z.ZodType<GithubWikiFilePartialWithRelations> = GithubWikiFilePartialSchema.merge(z.object({
+  workspace: z.lazy(() => WorkspacePartialWithRelationsSchema),
+})).partial()
+
+export type GithubWikiFileWithPartialRelations = z.infer<typeof GithubWikiFileSchema> & GithubWikiFilePartialRelations
+
+export const GithubWikiFileWithPartialRelationsSchema: z.ZodType<GithubWikiFileWithPartialRelations> = GithubWikiFileSchema.merge(z.object({
+  workspace: z.lazy(() => WorkspacePartialWithRelationsSchema),
+}).partial())
+
+/////////////////////////////////////////
 // SELECT & INCLUDE
 /////////////////////////////////////////
 
@@ -845,6 +916,7 @@ export const WorkspaceIncludeSchema: z.ZodType<Prisma.WorkspaceInclude> = z.obje
   issues: z.union([z.boolean(),z.lazy(() => IssueFindManyArgsSchema)]).optional(),
   workspaceInvite: z.union([z.boolean(),z.lazy(() => WorkspaceInviteFindManyArgsSchema)]).optional(),
   githubAppInstallation: z.union([z.boolean(),z.lazy(() => GithubAppInstallationFindManyArgsSchema)]).optional(),
+  GithubWikiFile: z.union([z.boolean(),z.lazy(() => GithubWikiFileFindManyArgsSchema)]).optional(),
   _count: z.union([z.boolean(),z.lazy(() => WorkspaceCountOutputTypeArgsSchema)]).optional(),
 }).strict()
 
@@ -862,6 +934,7 @@ export const WorkspaceCountOutputTypeSelectSchema: z.ZodType<Prisma.WorkspaceCou
   issues: z.boolean().optional(),
   workspaceInvite: z.boolean().optional(),
   githubAppInstallation: z.boolean().optional(),
+  GithubWikiFile: z.boolean().optional(),
 }).strict();
 
 export const WorkspaceSelectSchema: z.ZodType<Prisma.WorkspaceSelect> = z.object({
@@ -873,6 +946,7 @@ export const WorkspaceSelectSchema: z.ZodType<Prisma.WorkspaceSelect> = z.object
   issues: z.union([z.boolean(),z.lazy(() => IssueFindManyArgsSchema)]).optional(),
   workspaceInvite: z.union([z.boolean(),z.lazy(() => WorkspaceInviteFindManyArgsSchema)]).optional(),
   githubAppInstallation: z.union([z.boolean(),z.lazy(() => GithubAppInstallationFindManyArgsSchema)]).optional(),
+  GithubWikiFile: z.union([z.boolean(),z.lazy(() => GithubWikiFileFindManyArgsSchema)]).optional(),
   _count: z.union([z.boolean(),z.lazy(() => WorkspaceCountOutputTypeArgsSchema)]).optional(),
 }).strict()
 
@@ -1007,6 +1081,29 @@ export const GithubAppInstallationSelectSchema: z.ZodType<Prisma.GithubAppInstal
   updatedAt: z.boolean().optional(),
   workspace: z.union([z.boolean(),z.lazy(() => WorkspaceArgsSchema)]).optional(),
   createdBy: z.union([z.boolean(),z.lazy(() => UserArgsSchema)]).optional(),
+}).strict()
+
+// GITHUB WIKI FILE
+//------------------------------------------------------
+
+export const GithubWikiFileIncludeSchema: z.ZodType<Prisma.GithubWikiFileInclude> = z.object({
+  workspace: z.union([z.boolean(),z.lazy(() => WorkspaceArgsSchema)]).optional(),
+}).strict()
+
+export const GithubWikiFileArgsSchema: z.ZodType<Prisma.GithubWikiFileDefaultArgs> = z.object({
+  select: z.lazy(() => GithubWikiFileSelectSchema).optional(),
+  include: z.lazy(() => GithubWikiFileIncludeSchema).optional(),
+}).strict();
+
+export const GithubWikiFileSelectSchema: z.ZodType<Prisma.GithubWikiFileSelect> = z.object({
+  id: z.boolean().optional(),
+  path: z.boolean().optional(),
+  workspaceId: z.boolean().optional(),
+  githubRepositoryId: z.boolean().optional(),
+  content: z.boolean().optional(),
+  createdAt: z.boolean().optional(),
+  updatedAt: z.boolean().optional(),
+  workspace: z.union([z.boolean(),z.lazy(() => WorkspaceArgsSchema)]).optional(),
 }).strict()
 
 
@@ -1322,7 +1419,8 @@ export const WorkspaceWhereInputSchema: z.ZodType<Prisma.WorkspaceWhereInput> = 
   members: z.lazy(() => WorkspaceMemberListRelationFilterSchema).optional(),
   issues: z.lazy(() => IssueListRelationFilterSchema).optional(),
   workspaceInvite: z.lazy(() => WorkspaceInviteListRelationFilterSchema).optional(),
-  githubAppInstallation: z.lazy(() => GithubAppInstallationListRelationFilterSchema).optional()
+  githubAppInstallation: z.lazy(() => GithubAppInstallationListRelationFilterSchema).optional(),
+  GithubWikiFile: z.lazy(() => GithubWikiFileListRelationFilterSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceWhereInput>;
 
 export const WorkspaceOrderByWithRelationInputSchema: z.ZodType<Prisma.WorkspaceOrderByWithRelationInput> = z.object({
@@ -1333,7 +1431,8 @@ export const WorkspaceOrderByWithRelationInputSchema: z.ZodType<Prisma.Workspace
   members: z.lazy(() => WorkspaceMemberOrderByRelationAggregateInputSchema).optional(),
   issues: z.lazy(() => IssueOrderByRelationAggregateInputSchema).optional(),
   workspaceInvite: z.lazy(() => WorkspaceInviteOrderByRelationAggregateInputSchema).optional(),
-  githubAppInstallation: z.lazy(() => GithubAppInstallationOrderByRelationAggregateInputSchema).optional()
+  githubAppInstallation: z.lazy(() => GithubAppInstallationOrderByRelationAggregateInputSchema).optional(),
+  GithubWikiFile: z.lazy(() => GithubWikiFileOrderByRelationAggregateInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceOrderByWithRelationInput>;
 
 export const WorkspaceWhereUniqueInputSchema: z.ZodType<Prisma.WorkspaceWhereUniqueInput> = z.object({
@@ -1350,7 +1449,8 @@ export const WorkspaceWhereUniqueInputSchema: z.ZodType<Prisma.WorkspaceWhereUni
   members: z.lazy(() => WorkspaceMemberListRelationFilterSchema).optional(),
   issues: z.lazy(() => IssueListRelationFilterSchema).optional(),
   workspaceInvite: z.lazy(() => WorkspaceInviteListRelationFilterSchema).optional(),
-  githubAppInstallation: z.lazy(() => GithubAppInstallationListRelationFilterSchema).optional()
+  githubAppInstallation: z.lazy(() => GithubAppInstallationListRelationFilterSchema).optional(),
+  GithubWikiFile: z.lazy(() => GithubWikiFileListRelationFilterSchema).optional()
 }).strict()) as z.ZodType<Prisma.WorkspaceWhereUniqueInput>;
 
 export const WorkspaceOrderByWithAggregationInputSchema: z.ZodType<Prisma.WorkspaceOrderByWithAggregationInput> = z.object({
@@ -1754,6 +1854,86 @@ export const GithubAppInstallationScalarWhereWithAggregatesInputSchema: z.ZodTyp
   updatedAt: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
 }).strict() as z.ZodType<Prisma.GithubAppInstallationScalarWhereWithAggregatesInput>;
 
+export const GithubWikiFileWhereInputSchema: z.ZodType<Prisma.GithubWikiFileWhereInput> = z.object({
+  AND: z.union([ z.lazy(() => GithubWikiFileWhereInputSchema),z.lazy(() => GithubWikiFileWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => GithubWikiFileWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => GithubWikiFileWhereInputSchema),z.lazy(() => GithubWikiFileWhereInputSchema).array() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  path: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  workspaceId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  githubRepositoryId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  content: z.union([ z.lazy(() => BytesNullableFilterSchema),z.instanceof(Buffer) ]).optional().nullable(),
+  createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
+  updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
+  workspace: z.union([ z.lazy(() => WorkspaceScalarRelationFilterSchema),z.lazy(() => WorkspaceWhereInputSchema) ]).optional(),
+}).strict() as z.ZodType<Prisma.GithubWikiFileWhereInput>;
+
+export const GithubWikiFileOrderByWithRelationInputSchema: z.ZodType<Prisma.GithubWikiFileOrderByWithRelationInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  path: z.lazy(() => SortOrderSchema).optional(),
+  workspaceId: z.lazy(() => SortOrderSchema).optional(),
+  githubRepositoryId: z.lazy(() => SortOrderSchema).optional(),
+  content: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
+  createdAt: z.lazy(() => SortOrderSchema).optional(),
+  updatedAt: z.lazy(() => SortOrderSchema).optional(),
+  workspace: z.lazy(() => WorkspaceOrderByWithRelationInputSchema).optional()
+}).strict() as z.ZodType<Prisma.GithubWikiFileOrderByWithRelationInput>;
+
+export const GithubWikiFileWhereUniqueInputSchema: z.ZodType<Prisma.GithubWikiFileWhereUniqueInput> = z.union([
+  z.object({
+    id: z.string().cuid(),
+    path_workspaceId: z.lazy(() => GithubWikiFilePathWorkspaceIdCompoundUniqueInputSchema)
+  }),
+  z.object({
+    id: z.string().cuid(),
+  }),
+  z.object({
+    path_workspaceId: z.lazy(() => GithubWikiFilePathWorkspaceIdCompoundUniqueInputSchema),
+  }),
+])
+.and(z.object({
+  id: z.string().cuid().optional(),
+  path_workspaceId: z.lazy(() => GithubWikiFilePathWorkspaceIdCompoundUniqueInputSchema).optional(),
+  AND: z.union([ z.lazy(() => GithubWikiFileWhereInputSchema),z.lazy(() => GithubWikiFileWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => GithubWikiFileWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => GithubWikiFileWhereInputSchema),z.lazy(() => GithubWikiFileWhereInputSchema).array() ]).optional(),
+  path: z.union([ z.lazy(() => StringFilterSchema),z.string().trim().min(1).max(255) ]).optional(),
+  workspaceId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  githubRepositoryId: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
+  content: z.union([ z.lazy(() => BytesNullableFilterSchema),z.instanceof(Buffer) ]).optional().nullable(),
+  createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
+  updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
+  workspace: z.union([ z.lazy(() => WorkspaceScalarRelationFilterSchema),z.lazy(() => WorkspaceWhereInputSchema) ]).optional(),
+}).strict()) as z.ZodType<Prisma.GithubWikiFileWhereUniqueInput>;
+
+export const GithubWikiFileOrderByWithAggregationInputSchema: z.ZodType<Prisma.GithubWikiFileOrderByWithAggregationInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  path: z.lazy(() => SortOrderSchema).optional(),
+  workspaceId: z.lazy(() => SortOrderSchema).optional(),
+  githubRepositoryId: z.lazy(() => SortOrderSchema).optional(),
+  content: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
+  createdAt: z.lazy(() => SortOrderSchema).optional(),
+  updatedAt: z.lazy(() => SortOrderSchema).optional(),
+  _count: z.lazy(() => GithubWikiFileCountOrderByAggregateInputSchema).optional(),
+  _avg: z.lazy(() => GithubWikiFileAvgOrderByAggregateInputSchema).optional(),
+  _max: z.lazy(() => GithubWikiFileMaxOrderByAggregateInputSchema).optional(),
+  _min: z.lazy(() => GithubWikiFileMinOrderByAggregateInputSchema).optional(),
+  _sum: z.lazy(() => GithubWikiFileSumOrderByAggregateInputSchema).optional()
+}).strict() as z.ZodType<Prisma.GithubWikiFileOrderByWithAggregationInput>;
+
+export const GithubWikiFileScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.GithubWikiFileScalarWhereWithAggregatesInput> = z.object({
+  AND: z.union([ z.lazy(() => GithubWikiFileScalarWhereWithAggregatesInputSchema),z.lazy(() => GithubWikiFileScalarWhereWithAggregatesInputSchema).array() ]).optional(),
+  OR: z.lazy(() => GithubWikiFileScalarWhereWithAggregatesInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => GithubWikiFileScalarWhereWithAggregatesInputSchema),z.lazy(() => GithubWikiFileScalarWhereWithAggregatesInputSchema).array() ]).optional(),
+  id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  path: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  workspaceId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  githubRepositoryId: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+  content: z.union([ z.lazy(() => BytesNullableWithAggregatesFilterSchema),z.instanceof(Buffer) ]).optional().nullable(),
+  createdAt: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
+  updatedAt: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
+}).strict() as z.ZodType<Prisma.GithubWikiFileScalarWhereWithAggregatesInput>;
+
 export const UserCreateInputSchema: z.ZodType<Prisma.UserCreateInput> = z.object({
   id: z.string().cuid().optional(),
   name: z.string().trim().min(1).max(255),
@@ -2064,7 +2244,8 @@ export const WorkspaceCreateInputSchema: z.ZodType<Prisma.WorkspaceCreateInput> 
   members: z.lazy(() => WorkspaceMemberCreateNestedManyWithoutWorkspaceInputSchema).optional(),
   issues: z.lazy(() => IssueCreateNestedManyWithoutWorkspaceInputSchema).optional(),
   workspaceInvite: z.lazy(() => WorkspaceInviteCreateNestedManyWithoutWorkspaceInputSchema).optional(),
-  githubAppInstallation: z.lazy(() => GithubAppInstallationCreateNestedManyWithoutWorkspaceInputSchema).optional()
+  githubAppInstallation: z.lazy(() => GithubAppInstallationCreateNestedManyWithoutWorkspaceInputSchema).optional(),
+  GithubWikiFile: z.lazy(() => GithubWikiFileCreateNestedManyWithoutWorkspaceInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceCreateInput>;
 
 export const WorkspaceUncheckedCreateInputSchema: z.ZodType<Prisma.WorkspaceUncheckedCreateInput> = z.object({
@@ -2075,7 +2256,8 @@ export const WorkspaceUncheckedCreateInputSchema: z.ZodType<Prisma.WorkspaceUnch
   members: z.lazy(() => WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional(),
   issues: z.lazy(() => IssueUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional(),
   workspaceInvite: z.lazy(() => WorkspaceInviteUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional(),
-  githubAppInstallation: z.lazy(() => GithubAppInstallationUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional()
+  githubAppInstallation: z.lazy(() => GithubAppInstallationUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional(),
+  GithubWikiFile: z.lazy(() => GithubWikiFileUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceUncheckedCreateInput>;
 
 export const WorkspaceUpdateInputSchema: z.ZodType<Prisma.WorkspaceUpdateInput> = z.object({
@@ -2086,7 +2268,8 @@ export const WorkspaceUpdateInputSchema: z.ZodType<Prisma.WorkspaceUpdateInput> 
   members: z.lazy(() => WorkspaceMemberUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
   issues: z.lazy(() => IssueUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
   workspaceInvite: z.lazy(() => WorkspaceInviteUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
-  githubAppInstallation: z.lazy(() => GithubAppInstallationUpdateManyWithoutWorkspaceNestedInputSchema).optional()
+  githubAppInstallation: z.lazy(() => GithubAppInstallationUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
+  GithubWikiFile: z.lazy(() => GithubWikiFileUpdateManyWithoutWorkspaceNestedInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceUpdateInput>;
 
 export const WorkspaceUncheckedUpdateInputSchema: z.ZodType<Prisma.WorkspaceUncheckedUpdateInput> = z.object({
@@ -2097,7 +2280,8 @@ export const WorkspaceUncheckedUpdateInputSchema: z.ZodType<Prisma.WorkspaceUnch
   members: z.lazy(() => WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
   issues: z.lazy(() => IssueUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
   workspaceInvite: z.lazy(() => WorkspaceInviteUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
-  githubAppInstallation: z.lazy(() => GithubAppInstallationUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional()
+  githubAppInstallation: z.lazy(() => GithubAppInstallationUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
+  GithubWikiFile: z.lazy(() => GithubWikiFileUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceUncheckedUpdateInput>;
 
 export const WorkspaceCreateManyInputSchema: z.ZodType<Prisma.WorkspaceCreateManyInput> = z.object({
@@ -2451,6 +2635,75 @@ export const GithubAppInstallationUncheckedUpdateManyInputSchema: z.ZodType<Pris
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.GithubAppInstallationUncheckedUpdateManyInput>;
+
+export const GithubWikiFileCreateInputSchema: z.ZodType<Prisma.GithubWikiFileCreateInput> = z.object({
+  id: z.string().cuid().optional(),
+  path: z.string().trim().min(1).max(255),
+  githubRepositoryId: z.number().int(),
+  content: z.instanceof(Buffer).optional().nullable(),
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional(),
+  workspace: z.lazy(() => WorkspaceCreateNestedOneWithoutGithubWikiFileInputSchema)
+}).strict() as z.ZodType<Prisma.GithubWikiFileCreateInput>;
+
+export const GithubWikiFileUncheckedCreateInputSchema: z.ZodType<Prisma.GithubWikiFileUncheckedCreateInput> = z.object({
+  id: z.string().cuid().optional(),
+  path: z.string().trim().min(1).max(255),
+  workspaceId: z.string(),
+  githubRepositoryId: z.number().int(),
+  content: z.instanceof(Buffer).optional().nullable(),
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional()
+}).strict() as z.ZodType<Prisma.GithubWikiFileUncheckedCreateInput>;
+
+export const GithubWikiFileUpdateInputSchema: z.ZodType<Prisma.GithubWikiFileUpdateInput> = z.object({
+  id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  path: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  githubRepositoryId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  content: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  workspace: z.lazy(() => WorkspaceUpdateOneRequiredWithoutGithubWikiFileNestedInputSchema).optional()
+}).strict() as z.ZodType<Prisma.GithubWikiFileUpdateInput>;
+
+export const GithubWikiFileUncheckedUpdateInputSchema: z.ZodType<Prisma.GithubWikiFileUncheckedUpdateInput> = z.object({
+  id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  path: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  workspaceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  githubRepositoryId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  content: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+}).strict() as z.ZodType<Prisma.GithubWikiFileUncheckedUpdateInput>;
+
+export const GithubWikiFileCreateManyInputSchema: z.ZodType<Prisma.GithubWikiFileCreateManyInput> = z.object({
+  id: z.string().cuid().optional(),
+  path: z.string().trim().min(1).max(255),
+  workspaceId: z.string(),
+  githubRepositoryId: z.number().int(),
+  content: z.instanceof(Buffer).optional().nullable(),
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional()
+}).strict() as z.ZodType<Prisma.GithubWikiFileCreateManyInput>;
+
+export const GithubWikiFileUpdateManyMutationInputSchema: z.ZodType<Prisma.GithubWikiFileUpdateManyMutationInput> = z.object({
+  id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  path: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  githubRepositoryId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  content: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+}).strict() as z.ZodType<Prisma.GithubWikiFileUpdateManyMutationInput>;
+
+export const GithubWikiFileUncheckedUpdateManyInputSchema: z.ZodType<Prisma.GithubWikiFileUncheckedUpdateManyInput> = z.object({
+  id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  path: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  workspaceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  githubRepositoryId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  content: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+}).strict() as z.ZodType<Prisma.GithubWikiFileUncheckedUpdateManyInput>;
 
 export const StringFilterSchema: z.ZodType<Prisma.StringFilter> = z.object({
   equals: z.string().optional(),
@@ -2814,6 +3067,16 @@ export const IntFilterSchema: z.ZodType<Prisma.IntFilter> = z.object({
   not: z.union([ z.number(),z.lazy(() => NestedIntFilterSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.IntFilter>;
 
+export const GithubWikiFileListRelationFilterSchema: z.ZodType<Prisma.GithubWikiFileListRelationFilter> = z.object({
+  every: z.lazy(() => GithubWikiFileWhereInputSchema).optional(),
+  some: z.lazy(() => GithubWikiFileWhereInputSchema).optional(),
+  none: z.lazy(() => GithubWikiFileWhereInputSchema).optional()
+}).strict() as z.ZodType<Prisma.GithubWikiFileListRelationFilter>;
+
+export const GithubWikiFileOrderByRelationAggregateInputSchema: z.ZodType<Prisma.GithubWikiFileOrderByRelationAggregateInput> = z.object({
+  _count: z.lazy(() => SortOrderSchema).optional()
+}).strict() as z.ZodType<Prisma.GithubWikiFileOrderByRelationAggregateInput>;
+
 export const WorkspaceCountOrderByAggregateInputSchema: z.ZodType<Prisma.WorkspaceCountOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
@@ -3138,6 +3401,49 @@ export const GithubAppInstallationMinOrderByAggregateInputSchema: z.ZodType<Pris
 export const GithubAppInstallationSumOrderByAggregateInputSchema: z.ZodType<Prisma.GithubAppInstallationSumOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional()
 }).strict() as z.ZodType<Prisma.GithubAppInstallationSumOrderByAggregateInput>;
+
+export const GithubWikiFilePathWorkspaceIdCompoundUniqueInputSchema: z.ZodType<Prisma.GithubWikiFilePathWorkspaceIdCompoundUniqueInput> = z.object({
+  path: z.string(),
+  workspaceId: z.string()
+}).strict() as z.ZodType<Prisma.GithubWikiFilePathWorkspaceIdCompoundUniqueInput>;
+
+export const GithubWikiFileCountOrderByAggregateInputSchema: z.ZodType<Prisma.GithubWikiFileCountOrderByAggregateInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  path: z.lazy(() => SortOrderSchema).optional(),
+  workspaceId: z.lazy(() => SortOrderSchema).optional(),
+  githubRepositoryId: z.lazy(() => SortOrderSchema).optional(),
+  content: z.lazy(() => SortOrderSchema).optional(),
+  createdAt: z.lazy(() => SortOrderSchema).optional(),
+  updatedAt: z.lazy(() => SortOrderSchema).optional()
+}).strict() as z.ZodType<Prisma.GithubWikiFileCountOrderByAggregateInput>;
+
+export const GithubWikiFileAvgOrderByAggregateInputSchema: z.ZodType<Prisma.GithubWikiFileAvgOrderByAggregateInput> = z.object({
+  githubRepositoryId: z.lazy(() => SortOrderSchema).optional()
+}).strict() as z.ZodType<Prisma.GithubWikiFileAvgOrderByAggregateInput>;
+
+export const GithubWikiFileMaxOrderByAggregateInputSchema: z.ZodType<Prisma.GithubWikiFileMaxOrderByAggregateInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  path: z.lazy(() => SortOrderSchema).optional(),
+  workspaceId: z.lazy(() => SortOrderSchema).optional(),
+  githubRepositoryId: z.lazy(() => SortOrderSchema).optional(),
+  content: z.lazy(() => SortOrderSchema).optional(),
+  createdAt: z.lazy(() => SortOrderSchema).optional(),
+  updatedAt: z.lazy(() => SortOrderSchema).optional()
+}).strict() as z.ZodType<Prisma.GithubWikiFileMaxOrderByAggregateInput>;
+
+export const GithubWikiFileMinOrderByAggregateInputSchema: z.ZodType<Prisma.GithubWikiFileMinOrderByAggregateInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  path: z.lazy(() => SortOrderSchema).optional(),
+  workspaceId: z.lazy(() => SortOrderSchema).optional(),
+  githubRepositoryId: z.lazy(() => SortOrderSchema).optional(),
+  content: z.lazy(() => SortOrderSchema).optional(),
+  createdAt: z.lazy(() => SortOrderSchema).optional(),
+  updatedAt: z.lazy(() => SortOrderSchema).optional()
+}).strict() as z.ZodType<Prisma.GithubWikiFileMinOrderByAggregateInput>;
+
+export const GithubWikiFileSumOrderByAggregateInputSchema: z.ZodType<Prisma.GithubWikiFileSumOrderByAggregateInput> = z.object({
+  githubRepositoryId: z.lazy(() => SortOrderSchema).optional()
+}).strict() as z.ZodType<Prisma.GithubWikiFileSumOrderByAggregateInput>;
 
 export const AccountCreateNestedManyWithoutUserInputSchema: z.ZodType<Prisma.AccountCreateNestedManyWithoutUserInput> = z.object({
   create: z.union([ z.lazy(() => AccountCreateWithoutUserInputSchema),z.lazy(() => AccountCreateWithoutUserInputSchema).array(),z.lazy(() => AccountUncheckedCreateWithoutUserInputSchema),z.lazy(() => AccountUncheckedCreateWithoutUserInputSchema).array() ]).optional(),
@@ -3471,6 +3777,13 @@ export const GithubAppInstallationCreateNestedManyWithoutWorkspaceInputSchema: z
   connect: z.union([ z.lazy(() => GithubAppInstallationWhereUniqueInputSchema),z.lazy(() => GithubAppInstallationWhereUniqueInputSchema).array() ]).optional(),
 }).strict() as z.ZodType<Prisma.GithubAppInstallationCreateNestedManyWithoutWorkspaceInput>;
 
+export const GithubWikiFileCreateNestedManyWithoutWorkspaceInputSchema: z.ZodType<Prisma.GithubWikiFileCreateNestedManyWithoutWorkspaceInput> = z.object({
+  create: z.union([ z.lazy(() => GithubWikiFileCreateWithoutWorkspaceInputSchema),z.lazy(() => GithubWikiFileCreateWithoutWorkspaceInputSchema).array(),z.lazy(() => GithubWikiFileUncheckedCreateWithoutWorkspaceInputSchema),z.lazy(() => GithubWikiFileUncheckedCreateWithoutWorkspaceInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => GithubWikiFileCreateOrConnectWithoutWorkspaceInputSchema),z.lazy(() => GithubWikiFileCreateOrConnectWithoutWorkspaceInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => GithubWikiFileCreateManyWorkspaceInputEnvelopeSchema).optional(),
+  connect: z.union([ z.lazy(() => GithubWikiFileWhereUniqueInputSchema),z.lazy(() => GithubWikiFileWhereUniqueInputSchema).array() ]).optional(),
+}).strict() as z.ZodType<Prisma.GithubWikiFileCreateNestedManyWithoutWorkspaceInput>;
+
 export const WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInputSchema: z.ZodType<Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput> = z.object({
   create: z.union([ z.lazy(() => WorkspaceMemberCreateWithoutWorkspaceInputSchema),z.lazy(() => WorkspaceMemberCreateWithoutWorkspaceInputSchema).array(),z.lazy(() => WorkspaceMemberUncheckedCreateWithoutWorkspaceInputSchema),z.lazy(() => WorkspaceMemberUncheckedCreateWithoutWorkspaceInputSchema).array() ]).optional(),
   connectOrCreate: z.union([ z.lazy(() => WorkspaceMemberCreateOrConnectWithoutWorkspaceInputSchema),z.lazy(() => WorkspaceMemberCreateOrConnectWithoutWorkspaceInputSchema).array() ]).optional(),
@@ -3498,6 +3811,13 @@ export const GithubAppInstallationUncheckedCreateNestedManyWithoutWorkspaceInput
   createMany: z.lazy(() => GithubAppInstallationCreateManyWorkspaceInputEnvelopeSchema).optional(),
   connect: z.union([ z.lazy(() => GithubAppInstallationWhereUniqueInputSchema),z.lazy(() => GithubAppInstallationWhereUniqueInputSchema).array() ]).optional(),
 }).strict() as z.ZodType<Prisma.GithubAppInstallationUncheckedCreateNestedManyWithoutWorkspaceInput>;
+
+export const GithubWikiFileUncheckedCreateNestedManyWithoutWorkspaceInputSchema: z.ZodType<Prisma.GithubWikiFileUncheckedCreateNestedManyWithoutWorkspaceInput> = z.object({
+  create: z.union([ z.lazy(() => GithubWikiFileCreateWithoutWorkspaceInputSchema),z.lazy(() => GithubWikiFileCreateWithoutWorkspaceInputSchema).array(),z.lazy(() => GithubWikiFileUncheckedCreateWithoutWorkspaceInputSchema),z.lazy(() => GithubWikiFileUncheckedCreateWithoutWorkspaceInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => GithubWikiFileCreateOrConnectWithoutWorkspaceInputSchema),z.lazy(() => GithubWikiFileCreateOrConnectWithoutWorkspaceInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => GithubWikiFileCreateManyWorkspaceInputEnvelopeSchema).optional(),
+  connect: z.union([ z.lazy(() => GithubWikiFileWhereUniqueInputSchema),z.lazy(() => GithubWikiFileWhereUniqueInputSchema).array() ]).optional(),
+}).strict() as z.ZodType<Prisma.GithubWikiFileUncheckedCreateNestedManyWithoutWorkspaceInput>;
 
 export const IntFieldUpdateOperationsInputSchema: z.ZodType<Prisma.IntFieldUpdateOperationsInput> = z.object({
   set: z.number().optional(),
@@ -3563,6 +3883,20 @@ export const GithubAppInstallationUpdateManyWithoutWorkspaceNestedInputSchema: z
   deleteMany: z.union([ z.lazy(() => GithubAppInstallationScalarWhereInputSchema),z.lazy(() => GithubAppInstallationScalarWhereInputSchema).array() ]).optional(),
 }).strict() as z.ZodType<Prisma.GithubAppInstallationUpdateManyWithoutWorkspaceNestedInput>;
 
+export const GithubWikiFileUpdateManyWithoutWorkspaceNestedInputSchema: z.ZodType<Prisma.GithubWikiFileUpdateManyWithoutWorkspaceNestedInput> = z.object({
+  create: z.union([ z.lazy(() => GithubWikiFileCreateWithoutWorkspaceInputSchema),z.lazy(() => GithubWikiFileCreateWithoutWorkspaceInputSchema).array(),z.lazy(() => GithubWikiFileUncheckedCreateWithoutWorkspaceInputSchema),z.lazy(() => GithubWikiFileUncheckedCreateWithoutWorkspaceInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => GithubWikiFileCreateOrConnectWithoutWorkspaceInputSchema),z.lazy(() => GithubWikiFileCreateOrConnectWithoutWorkspaceInputSchema).array() ]).optional(),
+  upsert: z.union([ z.lazy(() => GithubWikiFileUpsertWithWhereUniqueWithoutWorkspaceInputSchema),z.lazy(() => GithubWikiFileUpsertWithWhereUniqueWithoutWorkspaceInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => GithubWikiFileCreateManyWorkspaceInputEnvelopeSchema).optional(),
+  set: z.union([ z.lazy(() => GithubWikiFileWhereUniqueInputSchema),z.lazy(() => GithubWikiFileWhereUniqueInputSchema).array() ]).optional(),
+  disconnect: z.union([ z.lazy(() => GithubWikiFileWhereUniqueInputSchema),z.lazy(() => GithubWikiFileWhereUniqueInputSchema).array() ]).optional(),
+  delete: z.union([ z.lazy(() => GithubWikiFileWhereUniqueInputSchema),z.lazy(() => GithubWikiFileWhereUniqueInputSchema).array() ]).optional(),
+  connect: z.union([ z.lazy(() => GithubWikiFileWhereUniqueInputSchema),z.lazy(() => GithubWikiFileWhereUniqueInputSchema).array() ]).optional(),
+  update: z.union([ z.lazy(() => GithubWikiFileUpdateWithWhereUniqueWithoutWorkspaceInputSchema),z.lazy(() => GithubWikiFileUpdateWithWhereUniqueWithoutWorkspaceInputSchema).array() ]).optional(),
+  updateMany: z.union([ z.lazy(() => GithubWikiFileUpdateManyWithWhereWithoutWorkspaceInputSchema),z.lazy(() => GithubWikiFileUpdateManyWithWhereWithoutWorkspaceInputSchema).array() ]).optional(),
+  deleteMany: z.union([ z.lazy(() => GithubWikiFileScalarWhereInputSchema),z.lazy(() => GithubWikiFileScalarWhereInputSchema).array() ]).optional(),
+}).strict() as z.ZodType<Prisma.GithubWikiFileUpdateManyWithoutWorkspaceNestedInput>;
+
 export const WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInputSchema: z.ZodType<Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput> = z.object({
   create: z.union([ z.lazy(() => WorkspaceMemberCreateWithoutWorkspaceInputSchema),z.lazy(() => WorkspaceMemberCreateWithoutWorkspaceInputSchema).array(),z.lazy(() => WorkspaceMemberUncheckedCreateWithoutWorkspaceInputSchema),z.lazy(() => WorkspaceMemberUncheckedCreateWithoutWorkspaceInputSchema).array() ]).optional(),
   connectOrCreate: z.union([ z.lazy(() => WorkspaceMemberCreateOrConnectWithoutWorkspaceInputSchema),z.lazy(() => WorkspaceMemberCreateOrConnectWithoutWorkspaceInputSchema).array() ]).optional(),
@@ -3618,6 +3952,20 @@ export const GithubAppInstallationUncheckedUpdateManyWithoutWorkspaceNestedInput
   updateMany: z.union([ z.lazy(() => GithubAppInstallationUpdateManyWithWhereWithoutWorkspaceInputSchema),z.lazy(() => GithubAppInstallationUpdateManyWithWhereWithoutWorkspaceInputSchema).array() ]).optional(),
   deleteMany: z.union([ z.lazy(() => GithubAppInstallationScalarWhereInputSchema),z.lazy(() => GithubAppInstallationScalarWhereInputSchema).array() ]).optional(),
 }).strict() as z.ZodType<Prisma.GithubAppInstallationUncheckedUpdateManyWithoutWorkspaceNestedInput>;
+
+export const GithubWikiFileUncheckedUpdateManyWithoutWorkspaceNestedInputSchema: z.ZodType<Prisma.GithubWikiFileUncheckedUpdateManyWithoutWorkspaceNestedInput> = z.object({
+  create: z.union([ z.lazy(() => GithubWikiFileCreateWithoutWorkspaceInputSchema),z.lazy(() => GithubWikiFileCreateWithoutWorkspaceInputSchema).array(),z.lazy(() => GithubWikiFileUncheckedCreateWithoutWorkspaceInputSchema),z.lazy(() => GithubWikiFileUncheckedCreateWithoutWorkspaceInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => GithubWikiFileCreateOrConnectWithoutWorkspaceInputSchema),z.lazy(() => GithubWikiFileCreateOrConnectWithoutWorkspaceInputSchema).array() ]).optional(),
+  upsert: z.union([ z.lazy(() => GithubWikiFileUpsertWithWhereUniqueWithoutWorkspaceInputSchema),z.lazy(() => GithubWikiFileUpsertWithWhereUniqueWithoutWorkspaceInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => GithubWikiFileCreateManyWorkspaceInputEnvelopeSchema).optional(),
+  set: z.union([ z.lazy(() => GithubWikiFileWhereUniqueInputSchema),z.lazy(() => GithubWikiFileWhereUniqueInputSchema).array() ]).optional(),
+  disconnect: z.union([ z.lazy(() => GithubWikiFileWhereUniqueInputSchema),z.lazy(() => GithubWikiFileWhereUniqueInputSchema).array() ]).optional(),
+  delete: z.union([ z.lazy(() => GithubWikiFileWhereUniqueInputSchema),z.lazy(() => GithubWikiFileWhereUniqueInputSchema).array() ]).optional(),
+  connect: z.union([ z.lazy(() => GithubWikiFileWhereUniqueInputSchema),z.lazy(() => GithubWikiFileWhereUniqueInputSchema).array() ]).optional(),
+  update: z.union([ z.lazy(() => GithubWikiFileUpdateWithWhereUniqueWithoutWorkspaceInputSchema),z.lazy(() => GithubWikiFileUpdateWithWhereUniqueWithoutWorkspaceInputSchema).array() ]).optional(),
+  updateMany: z.union([ z.lazy(() => GithubWikiFileUpdateManyWithWhereWithoutWorkspaceInputSchema),z.lazy(() => GithubWikiFileUpdateManyWithWhereWithoutWorkspaceInputSchema).array() ]).optional(),
+  deleteMany: z.union([ z.lazy(() => GithubWikiFileScalarWhereInputSchema),z.lazy(() => GithubWikiFileScalarWhereInputSchema).array() ]).optional(),
+}).strict() as z.ZodType<Prisma.GithubWikiFileUncheckedUpdateManyWithoutWorkspaceNestedInput>;
 
 export const UserCreateNestedOneWithoutWorkspacesInputSchema: z.ZodType<Prisma.UserCreateNestedOneWithoutWorkspacesInput> = z.object({
   create: z.union([ z.lazy(() => UserCreateWithoutWorkspacesInputSchema),z.lazy(() => UserUncheckedCreateWithoutWorkspacesInputSchema) ]).optional(),
@@ -3806,6 +4154,20 @@ export const UserUpdateOneRequiredWithoutGithubAppInstallationNestedInputSchema:
   connect: z.lazy(() => UserWhereUniqueInputSchema).optional(),
   update: z.union([ z.lazy(() => UserUpdateToOneWithWhereWithoutGithubAppInstallationInputSchema),z.lazy(() => UserUpdateWithoutGithubAppInstallationInputSchema),z.lazy(() => UserUncheckedUpdateWithoutGithubAppInstallationInputSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.UserUpdateOneRequiredWithoutGithubAppInstallationNestedInput>;
+
+export const WorkspaceCreateNestedOneWithoutGithubWikiFileInputSchema: z.ZodType<Prisma.WorkspaceCreateNestedOneWithoutGithubWikiFileInput> = z.object({
+  create: z.union([ z.lazy(() => WorkspaceCreateWithoutGithubWikiFileInputSchema),z.lazy(() => WorkspaceUncheckedCreateWithoutGithubWikiFileInputSchema) ]).optional(),
+  connectOrCreate: z.lazy(() => WorkspaceCreateOrConnectWithoutGithubWikiFileInputSchema).optional(),
+  connect: z.lazy(() => WorkspaceWhereUniqueInputSchema).optional()
+}).strict() as z.ZodType<Prisma.WorkspaceCreateNestedOneWithoutGithubWikiFileInput>;
+
+export const WorkspaceUpdateOneRequiredWithoutGithubWikiFileNestedInputSchema: z.ZodType<Prisma.WorkspaceUpdateOneRequiredWithoutGithubWikiFileNestedInput> = z.object({
+  create: z.union([ z.lazy(() => WorkspaceCreateWithoutGithubWikiFileInputSchema),z.lazy(() => WorkspaceUncheckedCreateWithoutGithubWikiFileInputSchema) ]).optional(),
+  connectOrCreate: z.lazy(() => WorkspaceCreateOrConnectWithoutGithubWikiFileInputSchema).optional(),
+  upsert: z.lazy(() => WorkspaceUpsertWithoutGithubWikiFileInputSchema).optional(),
+  connect: z.lazy(() => WorkspaceWhereUniqueInputSchema).optional(),
+  update: z.union([ z.lazy(() => WorkspaceUpdateToOneWithWhereWithoutGithubWikiFileInputSchema),z.lazy(() => WorkspaceUpdateWithoutGithubWikiFileInputSchema),z.lazy(() => WorkspaceUncheckedUpdateWithoutGithubWikiFileInputSchema) ]).optional(),
+}).strict() as z.ZodType<Prisma.WorkspaceUpdateOneRequiredWithoutGithubWikiFileNestedInput>;
 
 export const NestedStringFilterSchema: z.ZodType<Prisma.NestedStringFilter> = z.object({
   equals: z.string().optional(),
@@ -4697,6 +5059,34 @@ export const GithubAppInstallationCreateManyWorkspaceInputEnvelopeSchema: z.ZodT
   skipDuplicates: z.boolean().optional()
 }).strict() as z.ZodType<Prisma.GithubAppInstallationCreateManyWorkspaceInputEnvelope>;
 
+export const GithubWikiFileCreateWithoutWorkspaceInputSchema: z.ZodType<Prisma.GithubWikiFileCreateWithoutWorkspaceInput> = z.object({
+  id: z.string().cuid().optional(),
+  path: z.string().trim().min(1).max(255),
+  githubRepositoryId: z.number().int(),
+  content: z.instanceof(Buffer).optional().nullable(),
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional()
+}).strict() as z.ZodType<Prisma.GithubWikiFileCreateWithoutWorkspaceInput>;
+
+export const GithubWikiFileUncheckedCreateWithoutWorkspaceInputSchema: z.ZodType<Prisma.GithubWikiFileUncheckedCreateWithoutWorkspaceInput> = z.object({
+  id: z.string().cuid().optional(),
+  path: z.string().trim().min(1).max(255),
+  githubRepositoryId: z.number().int(),
+  content: z.instanceof(Buffer).optional().nullable(),
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional()
+}).strict() as z.ZodType<Prisma.GithubWikiFileUncheckedCreateWithoutWorkspaceInput>;
+
+export const GithubWikiFileCreateOrConnectWithoutWorkspaceInputSchema: z.ZodType<Prisma.GithubWikiFileCreateOrConnectWithoutWorkspaceInput> = z.object({
+  where: z.lazy(() => GithubWikiFileWhereUniqueInputSchema),
+  create: z.union([ z.lazy(() => GithubWikiFileCreateWithoutWorkspaceInputSchema),z.lazy(() => GithubWikiFileUncheckedCreateWithoutWorkspaceInputSchema) ]),
+}).strict() as z.ZodType<Prisma.GithubWikiFileCreateOrConnectWithoutWorkspaceInput>;
+
+export const GithubWikiFileCreateManyWorkspaceInputEnvelopeSchema: z.ZodType<Prisma.GithubWikiFileCreateManyWorkspaceInputEnvelope> = z.object({
+  data: z.union([ z.lazy(() => GithubWikiFileCreateManyWorkspaceInputSchema),z.lazy(() => GithubWikiFileCreateManyWorkspaceInputSchema).array() ]),
+  skipDuplicates: z.boolean().optional()
+}).strict() as z.ZodType<Prisma.GithubWikiFileCreateManyWorkspaceInputEnvelope>;
+
 export const WorkspaceMemberUpsertWithWhereUniqueWithoutWorkspaceInputSchema: z.ZodType<Prisma.WorkspaceMemberUpsertWithWhereUniqueWithoutWorkspaceInput> = z.object({
   where: z.lazy(() => WorkspaceMemberWhereUniqueInputSchema),
   update: z.union([ z.lazy(() => WorkspaceMemberUpdateWithoutWorkspaceInputSchema),z.lazy(() => WorkspaceMemberUncheckedUpdateWithoutWorkspaceInputSchema) ]),
@@ -4761,6 +5151,35 @@ export const GithubAppInstallationUpdateManyWithWhereWithoutWorkspaceInputSchema
   data: z.union([ z.lazy(() => GithubAppInstallationUpdateManyMutationInputSchema),z.lazy(() => GithubAppInstallationUncheckedUpdateManyWithoutWorkspaceInputSchema) ]),
 }).strict() as z.ZodType<Prisma.GithubAppInstallationUpdateManyWithWhereWithoutWorkspaceInput>;
 
+export const GithubWikiFileUpsertWithWhereUniqueWithoutWorkspaceInputSchema: z.ZodType<Prisma.GithubWikiFileUpsertWithWhereUniqueWithoutWorkspaceInput> = z.object({
+  where: z.lazy(() => GithubWikiFileWhereUniqueInputSchema),
+  update: z.union([ z.lazy(() => GithubWikiFileUpdateWithoutWorkspaceInputSchema),z.lazy(() => GithubWikiFileUncheckedUpdateWithoutWorkspaceInputSchema) ]),
+  create: z.union([ z.lazy(() => GithubWikiFileCreateWithoutWorkspaceInputSchema),z.lazy(() => GithubWikiFileUncheckedCreateWithoutWorkspaceInputSchema) ]),
+}).strict() as z.ZodType<Prisma.GithubWikiFileUpsertWithWhereUniqueWithoutWorkspaceInput>;
+
+export const GithubWikiFileUpdateWithWhereUniqueWithoutWorkspaceInputSchema: z.ZodType<Prisma.GithubWikiFileUpdateWithWhereUniqueWithoutWorkspaceInput> = z.object({
+  where: z.lazy(() => GithubWikiFileWhereUniqueInputSchema),
+  data: z.union([ z.lazy(() => GithubWikiFileUpdateWithoutWorkspaceInputSchema),z.lazy(() => GithubWikiFileUncheckedUpdateWithoutWorkspaceInputSchema) ]),
+}).strict() as z.ZodType<Prisma.GithubWikiFileUpdateWithWhereUniqueWithoutWorkspaceInput>;
+
+export const GithubWikiFileUpdateManyWithWhereWithoutWorkspaceInputSchema: z.ZodType<Prisma.GithubWikiFileUpdateManyWithWhereWithoutWorkspaceInput> = z.object({
+  where: z.lazy(() => GithubWikiFileScalarWhereInputSchema),
+  data: z.union([ z.lazy(() => GithubWikiFileUpdateManyMutationInputSchema),z.lazy(() => GithubWikiFileUncheckedUpdateManyWithoutWorkspaceInputSchema) ]),
+}).strict() as z.ZodType<Prisma.GithubWikiFileUpdateManyWithWhereWithoutWorkspaceInput>;
+
+export const GithubWikiFileScalarWhereInputSchema: z.ZodType<Prisma.GithubWikiFileScalarWhereInput> = z.object({
+  AND: z.union([ z.lazy(() => GithubWikiFileScalarWhereInputSchema),z.lazy(() => GithubWikiFileScalarWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => GithubWikiFileScalarWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => GithubWikiFileScalarWhereInputSchema),z.lazy(() => GithubWikiFileScalarWhereInputSchema).array() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  path: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  workspaceId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  githubRepositoryId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  content: z.union([ z.lazy(() => BytesNullableFilterSchema),z.instanceof(Buffer) ]).optional().nullable(),
+  createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
+  updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
+}).strict() as z.ZodType<Prisma.GithubWikiFileScalarWhereInput>;
+
 export const UserCreateWithoutWorkspacesInputSchema: z.ZodType<Prisma.UserCreateWithoutWorkspacesInput> = z.object({
   id: z.string().cuid().optional(),
   name: z.string().trim().min(1).max(255),
@@ -4803,7 +5222,8 @@ export const WorkspaceCreateWithoutMembersInputSchema: z.ZodType<Prisma.Workspac
   issueCount: z.number().int().optional(),
   issues: z.lazy(() => IssueCreateNestedManyWithoutWorkspaceInputSchema).optional(),
   workspaceInvite: z.lazy(() => WorkspaceInviteCreateNestedManyWithoutWorkspaceInputSchema).optional(),
-  githubAppInstallation: z.lazy(() => GithubAppInstallationCreateNestedManyWithoutWorkspaceInputSchema).optional()
+  githubAppInstallation: z.lazy(() => GithubAppInstallationCreateNestedManyWithoutWorkspaceInputSchema).optional(),
+  GithubWikiFile: z.lazy(() => GithubWikiFileCreateNestedManyWithoutWorkspaceInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceCreateWithoutMembersInput>;
 
 export const WorkspaceUncheckedCreateWithoutMembersInputSchema: z.ZodType<Prisma.WorkspaceUncheckedCreateWithoutMembersInput> = z.object({
@@ -4813,7 +5233,8 @@ export const WorkspaceUncheckedCreateWithoutMembersInputSchema: z.ZodType<Prisma
   issueCount: z.number().int().optional(),
   issues: z.lazy(() => IssueUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional(),
   workspaceInvite: z.lazy(() => WorkspaceInviteUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional(),
-  githubAppInstallation: z.lazy(() => GithubAppInstallationUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional()
+  githubAppInstallation: z.lazy(() => GithubAppInstallationUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional(),
+  GithubWikiFile: z.lazy(() => GithubWikiFileUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceUncheckedCreateWithoutMembersInput>;
 
 export const WorkspaceCreateOrConnectWithoutMembersInputSchema: z.ZodType<Prisma.WorkspaceCreateOrConnectWithoutMembersInput> = z.object({
@@ -4880,7 +5301,8 @@ export const WorkspaceUpdateWithoutMembersInputSchema: z.ZodType<Prisma.Workspac
   issueCount: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   issues: z.lazy(() => IssueUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
   workspaceInvite: z.lazy(() => WorkspaceInviteUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
-  githubAppInstallation: z.lazy(() => GithubAppInstallationUpdateManyWithoutWorkspaceNestedInputSchema).optional()
+  githubAppInstallation: z.lazy(() => GithubAppInstallationUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
+  GithubWikiFile: z.lazy(() => GithubWikiFileUpdateManyWithoutWorkspaceNestedInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceUpdateWithoutMembersInput>;
 
 export const WorkspaceUncheckedUpdateWithoutMembersInputSchema: z.ZodType<Prisma.WorkspaceUncheckedUpdateWithoutMembersInput> = z.object({
@@ -4890,7 +5312,8 @@ export const WorkspaceUncheckedUpdateWithoutMembersInputSchema: z.ZodType<Prisma
   issueCount: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   issues: z.lazy(() => IssueUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
   workspaceInvite: z.lazy(() => WorkspaceInviteUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
-  githubAppInstallation: z.lazy(() => GithubAppInstallationUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional()
+  githubAppInstallation: z.lazy(() => GithubAppInstallationUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
+  GithubWikiFile: z.lazy(() => GithubWikiFileUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceUncheckedUpdateWithoutMembersInput>;
 
 export const WorkspaceCreateWithoutWorkspaceInviteInputSchema: z.ZodType<Prisma.WorkspaceCreateWithoutWorkspaceInviteInput> = z.object({
@@ -4900,7 +5323,8 @@ export const WorkspaceCreateWithoutWorkspaceInviteInputSchema: z.ZodType<Prisma.
   issueCount: z.number().int().optional(),
   members: z.lazy(() => WorkspaceMemberCreateNestedManyWithoutWorkspaceInputSchema).optional(),
   issues: z.lazy(() => IssueCreateNestedManyWithoutWorkspaceInputSchema).optional(),
-  githubAppInstallation: z.lazy(() => GithubAppInstallationCreateNestedManyWithoutWorkspaceInputSchema).optional()
+  githubAppInstallation: z.lazy(() => GithubAppInstallationCreateNestedManyWithoutWorkspaceInputSchema).optional(),
+  GithubWikiFile: z.lazy(() => GithubWikiFileCreateNestedManyWithoutWorkspaceInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceCreateWithoutWorkspaceInviteInput>;
 
 export const WorkspaceUncheckedCreateWithoutWorkspaceInviteInputSchema: z.ZodType<Prisma.WorkspaceUncheckedCreateWithoutWorkspaceInviteInput> = z.object({
@@ -4910,7 +5334,8 @@ export const WorkspaceUncheckedCreateWithoutWorkspaceInviteInputSchema: z.ZodTyp
   issueCount: z.number().int().optional(),
   members: z.lazy(() => WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional(),
   issues: z.lazy(() => IssueUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional(),
-  githubAppInstallation: z.lazy(() => GithubAppInstallationUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional()
+  githubAppInstallation: z.lazy(() => GithubAppInstallationUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional(),
+  GithubWikiFile: z.lazy(() => GithubWikiFileUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceUncheckedCreateWithoutWorkspaceInviteInput>;
 
 export const WorkspaceCreateOrConnectWithoutWorkspaceInviteInputSchema: z.ZodType<Prisma.WorkspaceCreateOrConnectWithoutWorkspaceInviteInput> = z.object({
@@ -4971,7 +5396,8 @@ export const WorkspaceUpdateWithoutWorkspaceInviteInputSchema: z.ZodType<Prisma.
   issueCount: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   members: z.lazy(() => WorkspaceMemberUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
   issues: z.lazy(() => IssueUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
-  githubAppInstallation: z.lazy(() => GithubAppInstallationUpdateManyWithoutWorkspaceNestedInputSchema).optional()
+  githubAppInstallation: z.lazy(() => GithubAppInstallationUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
+  GithubWikiFile: z.lazy(() => GithubWikiFileUpdateManyWithoutWorkspaceNestedInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceUpdateWithoutWorkspaceInviteInput>;
 
 export const WorkspaceUncheckedUpdateWithoutWorkspaceInviteInputSchema: z.ZodType<Prisma.WorkspaceUncheckedUpdateWithoutWorkspaceInviteInput> = z.object({
@@ -4981,7 +5407,8 @@ export const WorkspaceUncheckedUpdateWithoutWorkspaceInviteInputSchema: z.ZodTyp
   issueCount: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   members: z.lazy(() => WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
   issues: z.lazy(() => IssueUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
-  githubAppInstallation: z.lazy(() => GithubAppInstallationUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional()
+  githubAppInstallation: z.lazy(() => GithubAppInstallationUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
+  GithubWikiFile: z.lazy(() => GithubWikiFileUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceUncheckedUpdateWithoutWorkspaceInviteInput>;
 
 export const UserUpsertWithoutWorkspacesInvitesInputSchema: z.ZodType<Prisma.UserUpsertWithoutWorkspacesInvitesInput> = z.object({
@@ -5032,7 +5459,8 @@ export const WorkspaceCreateWithoutIssuesInputSchema: z.ZodType<Prisma.Workspace
   issueCount: z.number().int().optional(),
   members: z.lazy(() => WorkspaceMemberCreateNestedManyWithoutWorkspaceInputSchema).optional(),
   workspaceInvite: z.lazy(() => WorkspaceInviteCreateNestedManyWithoutWorkspaceInputSchema).optional(),
-  githubAppInstallation: z.lazy(() => GithubAppInstallationCreateNestedManyWithoutWorkspaceInputSchema).optional()
+  githubAppInstallation: z.lazy(() => GithubAppInstallationCreateNestedManyWithoutWorkspaceInputSchema).optional(),
+  GithubWikiFile: z.lazy(() => GithubWikiFileCreateNestedManyWithoutWorkspaceInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceCreateWithoutIssuesInput>;
 
 export const WorkspaceUncheckedCreateWithoutIssuesInputSchema: z.ZodType<Prisma.WorkspaceUncheckedCreateWithoutIssuesInput> = z.object({
@@ -5042,7 +5470,8 @@ export const WorkspaceUncheckedCreateWithoutIssuesInputSchema: z.ZodType<Prisma.
   issueCount: z.number().int().optional(),
   members: z.lazy(() => WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional(),
   workspaceInvite: z.lazy(() => WorkspaceInviteUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional(),
-  githubAppInstallation: z.lazy(() => GithubAppInstallationUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional()
+  githubAppInstallation: z.lazy(() => GithubAppInstallationUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional(),
+  GithubWikiFile: z.lazy(() => GithubWikiFileUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceUncheckedCreateWithoutIssuesInput>;
 
 export const WorkspaceCreateOrConnectWithoutIssuesInputSchema: z.ZodType<Prisma.WorkspaceCreateOrConnectWithoutIssuesInput> = z.object({
@@ -5129,7 +5558,8 @@ export const WorkspaceUpdateWithoutIssuesInputSchema: z.ZodType<Prisma.Workspace
   issueCount: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   members: z.lazy(() => WorkspaceMemberUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
   workspaceInvite: z.lazy(() => WorkspaceInviteUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
-  githubAppInstallation: z.lazy(() => GithubAppInstallationUpdateManyWithoutWorkspaceNestedInputSchema).optional()
+  githubAppInstallation: z.lazy(() => GithubAppInstallationUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
+  GithubWikiFile: z.lazy(() => GithubWikiFileUpdateManyWithoutWorkspaceNestedInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceUpdateWithoutIssuesInput>;
 
 export const WorkspaceUncheckedUpdateWithoutIssuesInputSchema: z.ZodType<Prisma.WorkspaceUncheckedUpdateWithoutIssuesInput> = z.object({
@@ -5139,7 +5569,8 @@ export const WorkspaceUncheckedUpdateWithoutIssuesInputSchema: z.ZodType<Prisma.
   issueCount: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   members: z.lazy(() => WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
   workspaceInvite: z.lazy(() => WorkspaceInviteUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
-  githubAppInstallation: z.lazy(() => GithubAppInstallationUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional()
+  githubAppInstallation: z.lazy(() => GithubAppInstallationUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
+  GithubWikiFile: z.lazy(() => GithubWikiFileUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceUncheckedUpdateWithoutIssuesInput>;
 
 export const UserUpsertWithoutIssuesInputSchema: z.ZodType<Prisma.UserUpsertWithoutIssuesInput> = z.object({
@@ -5286,7 +5717,8 @@ export const WorkspaceCreateWithoutGithubAppInstallationInputSchema: z.ZodType<P
   issueCount: z.number().int().optional(),
   members: z.lazy(() => WorkspaceMemberCreateNestedManyWithoutWorkspaceInputSchema).optional(),
   issues: z.lazy(() => IssueCreateNestedManyWithoutWorkspaceInputSchema).optional(),
-  workspaceInvite: z.lazy(() => WorkspaceInviteCreateNestedManyWithoutWorkspaceInputSchema).optional()
+  workspaceInvite: z.lazy(() => WorkspaceInviteCreateNestedManyWithoutWorkspaceInputSchema).optional(),
+  GithubWikiFile: z.lazy(() => GithubWikiFileCreateNestedManyWithoutWorkspaceInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceCreateWithoutGithubAppInstallationInput>;
 
 export const WorkspaceUncheckedCreateWithoutGithubAppInstallationInputSchema: z.ZodType<Prisma.WorkspaceUncheckedCreateWithoutGithubAppInstallationInput> = z.object({
@@ -5296,7 +5728,8 @@ export const WorkspaceUncheckedCreateWithoutGithubAppInstallationInputSchema: z.
   issueCount: z.number().int().optional(),
   members: z.lazy(() => WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional(),
   issues: z.lazy(() => IssueUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional(),
-  workspaceInvite: z.lazy(() => WorkspaceInviteUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional()
+  workspaceInvite: z.lazy(() => WorkspaceInviteUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional(),
+  GithubWikiFile: z.lazy(() => GithubWikiFileUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceUncheckedCreateWithoutGithubAppInstallationInput>;
 
 export const WorkspaceCreateOrConnectWithoutGithubAppInstallationInputSchema: z.ZodType<Prisma.WorkspaceCreateOrConnectWithoutGithubAppInstallationInput> = z.object({
@@ -5357,7 +5790,8 @@ export const WorkspaceUpdateWithoutGithubAppInstallationInputSchema: z.ZodType<P
   issueCount: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   members: z.lazy(() => WorkspaceMemberUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
   issues: z.lazy(() => IssueUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
-  workspaceInvite: z.lazy(() => WorkspaceInviteUpdateManyWithoutWorkspaceNestedInputSchema).optional()
+  workspaceInvite: z.lazy(() => WorkspaceInviteUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
+  GithubWikiFile: z.lazy(() => GithubWikiFileUpdateManyWithoutWorkspaceNestedInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceUpdateWithoutGithubAppInstallationInput>;
 
 export const WorkspaceUncheckedUpdateWithoutGithubAppInstallationInputSchema: z.ZodType<Prisma.WorkspaceUncheckedUpdateWithoutGithubAppInstallationInput> = z.object({
@@ -5367,7 +5801,8 @@ export const WorkspaceUncheckedUpdateWithoutGithubAppInstallationInputSchema: z.
   issueCount: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   members: z.lazy(() => WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
   issues: z.lazy(() => IssueUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
-  workspaceInvite: z.lazy(() => WorkspaceInviteUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional()
+  workspaceInvite: z.lazy(() => WorkspaceInviteUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
+  GithubWikiFile: z.lazy(() => GithubWikiFileUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceUncheckedUpdateWithoutGithubAppInstallationInput>;
 
 export const UserUpsertWithoutGithubAppInstallationInputSchema: z.ZodType<Prisma.UserUpsertWithoutGithubAppInstallationInput> = z.object({
@@ -5410,6 +5845,66 @@ export const UserUncheckedUpdateWithoutGithubAppInstallationInputSchema: z.ZodTy
   issues: z.lazy(() => IssueUncheckedUpdateManyWithoutAssigneeNestedInputSchema).optional(),
   workspacesInvites: z.lazy(() => WorkspaceInviteUncheckedUpdateManyWithoutInvitedByNestedInputSchema).optional()
 }).strict() as z.ZodType<Prisma.UserUncheckedUpdateWithoutGithubAppInstallationInput>;
+
+export const WorkspaceCreateWithoutGithubWikiFileInputSchema: z.ZodType<Prisma.WorkspaceCreateWithoutGithubWikiFileInput> = z.object({
+  id: z.string().cuid().optional(),
+  name: z.string().trim().min(1).max(255),
+  image: z.string().optional().nullable(),
+  issueCount: z.number().int().optional(),
+  members: z.lazy(() => WorkspaceMemberCreateNestedManyWithoutWorkspaceInputSchema).optional(),
+  issues: z.lazy(() => IssueCreateNestedManyWithoutWorkspaceInputSchema).optional(),
+  workspaceInvite: z.lazy(() => WorkspaceInviteCreateNestedManyWithoutWorkspaceInputSchema).optional(),
+  githubAppInstallation: z.lazy(() => GithubAppInstallationCreateNestedManyWithoutWorkspaceInputSchema).optional()
+}).strict() as z.ZodType<Prisma.WorkspaceCreateWithoutGithubWikiFileInput>;
+
+export const WorkspaceUncheckedCreateWithoutGithubWikiFileInputSchema: z.ZodType<Prisma.WorkspaceUncheckedCreateWithoutGithubWikiFileInput> = z.object({
+  id: z.string().cuid().optional(),
+  name: z.string().trim().min(1).max(255),
+  image: z.string().optional().nullable(),
+  issueCount: z.number().int().optional(),
+  members: z.lazy(() => WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional(),
+  issues: z.lazy(() => IssueUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional(),
+  workspaceInvite: z.lazy(() => WorkspaceInviteUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional(),
+  githubAppInstallation: z.lazy(() => GithubAppInstallationUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional()
+}).strict() as z.ZodType<Prisma.WorkspaceUncheckedCreateWithoutGithubWikiFileInput>;
+
+export const WorkspaceCreateOrConnectWithoutGithubWikiFileInputSchema: z.ZodType<Prisma.WorkspaceCreateOrConnectWithoutGithubWikiFileInput> = z.object({
+  where: z.lazy(() => WorkspaceWhereUniqueInputSchema),
+  create: z.union([ z.lazy(() => WorkspaceCreateWithoutGithubWikiFileInputSchema),z.lazy(() => WorkspaceUncheckedCreateWithoutGithubWikiFileInputSchema) ]),
+}).strict() as z.ZodType<Prisma.WorkspaceCreateOrConnectWithoutGithubWikiFileInput>;
+
+export const WorkspaceUpsertWithoutGithubWikiFileInputSchema: z.ZodType<Prisma.WorkspaceUpsertWithoutGithubWikiFileInput> = z.object({
+  update: z.union([ z.lazy(() => WorkspaceUpdateWithoutGithubWikiFileInputSchema),z.lazy(() => WorkspaceUncheckedUpdateWithoutGithubWikiFileInputSchema) ]),
+  create: z.union([ z.lazy(() => WorkspaceCreateWithoutGithubWikiFileInputSchema),z.lazy(() => WorkspaceUncheckedCreateWithoutGithubWikiFileInputSchema) ]),
+  where: z.lazy(() => WorkspaceWhereInputSchema).optional()
+}).strict() as z.ZodType<Prisma.WorkspaceUpsertWithoutGithubWikiFileInput>;
+
+export const WorkspaceUpdateToOneWithWhereWithoutGithubWikiFileInputSchema: z.ZodType<Prisma.WorkspaceUpdateToOneWithWhereWithoutGithubWikiFileInput> = z.object({
+  where: z.lazy(() => WorkspaceWhereInputSchema).optional(),
+  data: z.union([ z.lazy(() => WorkspaceUpdateWithoutGithubWikiFileInputSchema),z.lazy(() => WorkspaceUncheckedUpdateWithoutGithubWikiFileInputSchema) ]),
+}).strict() as z.ZodType<Prisma.WorkspaceUpdateToOneWithWhereWithoutGithubWikiFileInput>;
+
+export const WorkspaceUpdateWithoutGithubWikiFileInputSchema: z.ZodType<Prisma.WorkspaceUpdateWithoutGithubWikiFileInput> = z.object({
+  id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  issueCount: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  members: z.lazy(() => WorkspaceMemberUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
+  issues: z.lazy(() => IssueUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
+  workspaceInvite: z.lazy(() => WorkspaceInviteUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
+  githubAppInstallation: z.lazy(() => GithubAppInstallationUpdateManyWithoutWorkspaceNestedInputSchema).optional()
+}).strict() as z.ZodType<Prisma.WorkspaceUpdateWithoutGithubWikiFileInput>;
+
+export const WorkspaceUncheckedUpdateWithoutGithubWikiFileInputSchema: z.ZodType<Prisma.WorkspaceUncheckedUpdateWithoutGithubWikiFileInput> = z.object({
+  id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  issueCount: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  members: z.lazy(() => WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
+  issues: z.lazy(() => IssueUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
+  workspaceInvite: z.lazy(() => WorkspaceInviteUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
+  githubAppInstallation: z.lazy(() => GithubAppInstallationUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional()
+}).strict() as z.ZodType<Prisma.WorkspaceUncheckedUpdateWithoutGithubWikiFileInput>;
 
 export const AccountCreateManyUserInputSchema: z.ZodType<Prisma.AccountCreateManyUserInput> = z.object({
   type: z.string(),
@@ -5676,6 +6171,15 @@ export const GithubAppInstallationCreateManyWorkspaceInputSchema: z.ZodType<Pris
   updatedAt: z.coerce.date().optional()
 }).strict() as z.ZodType<Prisma.GithubAppInstallationCreateManyWorkspaceInput>;
 
+export const GithubWikiFileCreateManyWorkspaceInputSchema: z.ZodType<Prisma.GithubWikiFileCreateManyWorkspaceInput> = z.object({
+  id: z.string().cuid().optional(),
+  path: z.string().trim().min(1).max(255),
+  githubRepositoryId: z.number().int(),
+  content: z.instanceof(Buffer).optional().nullable(),
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional()
+}).strict() as z.ZodType<Prisma.GithubWikiFileCreateManyWorkspaceInput>;
+
 export const WorkspaceMemberUpdateWithoutWorkspaceInputSchema: z.ZodType<Prisma.WorkspaceMemberUpdateWithoutWorkspaceInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   role: z.union([ z.lazy(() => RoleSchema),z.lazy(() => EnumRoleFieldUpdateOperationsInputSchema) ]).optional(),
@@ -5782,6 +6286,33 @@ export const GithubAppInstallationUncheckedUpdateManyWithoutWorkspaceInputSchema
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.GithubAppInstallationUncheckedUpdateManyWithoutWorkspaceInput>;
+
+export const GithubWikiFileUpdateWithoutWorkspaceInputSchema: z.ZodType<Prisma.GithubWikiFileUpdateWithoutWorkspaceInput> = z.object({
+  id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  path: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  githubRepositoryId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  content: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+}).strict() as z.ZodType<Prisma.GithubWikiFileUpdateWithoutWorkspaceInput>;
+
+export const GithubWikiFileUncheckedUpdateWithoutWorkspaceInputSchema: z.ZodType<Prisma.GithubWikiFileUncheckedUpdateWithoutWorkspaceInput> = z.object({
+  id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  path: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  githubRepositoryId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  content: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+}).strict() as z.ZodType<Prisma.GithubWikiFileUncheckedUpdateWithoutWorkspaceInput>;
+
+export const GithubWikiFileUncheckedUpdateManyWithoutWorkspaceInputSchema: z.ZodType<Prisma.GithubWikiFileUncheckedUpdateManyWithoutWorkspaceInput> = z.object({
+  id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  path: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  githubRepositoryId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  content: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+}).strict() as z.ZodType<Prisma.GithubWikiFileUncheckedUpdateManyWithoutWorkspaceInput>;
 
 export const CommentCreateManyIssueInputSchema: z.ZodType<Prisma.CommentCreateManyIssueInput> = z.object({
   id: z.string().cuid().optional(),
@@ -6434,6 +6965,68 @@ export const GithubAppInstallationFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.
   where: GithubAppInstallationWhereUniqueInputSchema,
 }).strict() as z.ZodType<Prisma.GithubAppInstallationFindUniqueOrThrowArgs>;
 
+export const GithubWikiFileFindFirstArgsSchema: z.ZodType<Prisma.GithubWikiFileFindFirstArgs> = z.object({
+  select: GithubWikiFileSelectSchema.optional(),
+  include: GithubWikiFileIncludeSchema.optional(),
+  where: GithubWikiFileWhereInputSchema.optional(),
+  orderBy: z.union([ GithubWikiFileOrderByWithRelationInputSchema.array(),GithubWikiFileOrderByWithRelationInputSchema ]).optional(),
+  cursor: GithubWikiFileWhereUniqueInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+  distinct: z.union([ GithubWikiFileScalarFieldEnumSchema,GithubWikiFileScalarFieldEnumSchema.array() ]).optional(),
+}).strict() as z.ZodType<Prisma.GithubWikiFileFindFirstArgs>;
+
+export const GithubWikiFileFindFirstOrThrowArgsSchema: z.ZodType<Prisma.GithubWikiFileFindFirstOrThrowArgs> = z.object({
+  select: GithubWikiFileSelectSchema.optional(),
+  include: GithubWikiFileIncludeSchema.optional(),
+  where: GithubWikiFileWhereInputSchema.optional(),
+  orderBy: z.union([ GithubWikiFileOrderByWithRelationInputSchema.array(),GithubWikiFileOrderByWithRelationInputSchema ]).optional(),
+  cursor: GithubWikiFileWhereUniqueInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+  distinct: z.union([ GithubWikiFileScalarFieldEnumSchema,GithubWikiFileScalarFieldEnumSchema.array() ]).optional(),
+}).strict() as z.ZodType<Prisma.GithubWikiFileFindFirstOrThrowArgs>;
+
+export const GithubWikiFileFindManyArgsSchema: z.ZodType<Prisma.GithubWikiFileFindManyArgs> = z.object({
+  select: GithubWikiFileSelectSchema.optional(),
+  include: GithubWikiFileIncludeSchema.optional(),
+  where: GithubWikiFileWhereInputSchema.optional(),
+  orderBy: z.union([ GithubWikiFileOrderByWithRelationInputSchema.array(),GithubWikiFileOrderByWithRelationInputSchema ]).optional(),
+  cursor: GithubWikiFileWhereUniqueInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+  distinct: z.union([ GithubWikiFileScalarFieldEnumSchema,GithubWikiFileScalarFieldEnumSchema.array() ]).optional(),
+}).strict() as z.ZodType<Prisma.GithubWikiFileFindManyArgs>;
+
+export const GithubWikiFileAggregateArgsSchema: z.ZodType<Prisma.GithubWikiFileAggregateArgs> = z.object({
+  where: GithubWikiFileWhereInputSchema.optional(),
+  orderBy: z.union([ GithubWikiFileOrderByWithRelationInputSchema.array(),GithubWikiFileOrderByWithRelationInputSchema ]).optional(),
+  cursor: GithubWikiFileWhereUniqueInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+}).strict() as z.ZodType<Prisma.GithubWikiFileAggregateArgs>;
+
+export const GithubWikiFileGroupByArgsSchema: z.ZodType<Prisma.GithubWikiFileGroupByArgs> = z.object({
+  where: GithubWikiFileWhereInputSchema.optional(),
+  orderBy: z.union([ GithubWikiFileOrderByWithAggregationInputSchema.array(),GithubWikiFileOrderByWithAggregationInputSchema ]).optional(),
+  by: GithubWikiFileScalarFieldEnumSchema.array(),
+  having: GithubWikiFileScalarWhereWithAggregatesInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+}).strict() as z.ZodType<Prisma.GithubWikiFileGroupByArgs>;
+
+export const GithubWikiFileFindUniqueArgsSchema: z.ZodType<Prisma.GithubWikiFileFindUniqueArgs> = z.object({
+  select: GithubWikiFileSelectSchema.optional(),
+  include: GithubWikiFileIncludeSchema.optional(),
+  where: GithubWikiFileWhereUniqueInputSchema,
+}).strict() as z.ZodType<Prisma.GithubWikiFileFindUniqueArgs>;
+
+export const GithubWikiFileFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.GithubWikiFileFindUniqueOrThrowArgs> = z.object({
+  select: GithubWikiFileSelectSchema.optional(),
+  include: GithubWikiFileIncludeSchema.optional(),
+  where: GithubWikiFileWhereUniqueInputSchema,
+}).strict() as z.ZodType<Prisma.GithubWikiFileFindUniqueOrThrowArgs>;
+
 export const UserCreateArgsSchema: z.ZodType<Prisma.UserCreateArgs> = z.object({
   select: UserSelectSchema.optional(),
   include: UserIncludeSchema.optional(),
@@ -6889,3 +7482,49 @@ export const GithubAppInstallationUpdateManyArgsSchema: z.ZodType<Prisma.GithubA
 export const GithubAppInstallationDeleteManyArgsSchema: z.ZodType<Prisma.GithubAppInstallationDeleteManyArgs> = z.object({
   where: GithubAppInstallationWhereInputSchema.optional(),
 }).strict() as z.ZodType<Prisma.GithubAppInstallationDeleteManyArgs>;
+
+export const GithubWikiFileCreateArgsSchema: z.ZodType<Prisma.GithubWikiFileCreateArgs> = z.object({
+  select: GithubWikiFileSelectSchema.optional(),
+  include: GithubWikiFileIncludeSchema.optional(),
+  data: z.union([ GithubWikiFileCreateInputSchema,GithubWikiFileUncheckedCreateInputSchema ]),
+}).strict() as z.ZodType<Prisma.GithubWikiFileCreateArgs>;
+
+export const GithubWikiFileUpsertArgsSchema: z.ZodType<Prisma.GithubWikiFileUpsertArgs> = z.object({
+  select: GithubWikiFileSelectSchema.optional(),
+  include: GithubWikiFileIncludeSchema.optional(),
+  where: GithubWikiFileWhereUniqueInputSchema,
+  create: z.union([ GithubWikiFileCreateInputSchema,GithubWikiFileUncheckedCreateInputSchema ]),
+  update: z.union([ GithubWikiFileUpdateInputSchema,GithubWikiFileUncheckedUpdateInputSchema ]),
+}).strict() as z.ZodType<Prisma.GithubWikiFileUpsertArgs>;
+
+export const GithubWikiFileCreateManyArgsSchema: z.ZodType<Prisma.GithubWikiFileCreateManyArgs> = z.object({
+  data: z.union([ GithubWikiFileCreateManyInputSchema,GithubWikiFileCreateManyInputSchema.array() ]),
+  skipDuplicates: z.boolean().optional(),
+}).strict() as z.ZodType<Prisma.GithubWikiFileCreateManyArgs>;
+
+export const GithubWikiFileCreateManyAndReturnArgsSchema: z.ZodType<Prisma.GithubWikiFileCreateManyAndReturnArgs> = z.object({
+  data: z.union([ GithubWikiFileCreateManyInputSchema,GithubWikiFileCreateManyInputSchema.array() ]),
+  skipDuplicates: z.boolean().optional(),
+}).strict() as z.ZodType<Prisma.GithubWikiFileCreateManyAndReturnArgs>;
+
+export const GithubWikiFileDeleteArgsSchema: z.ZodType<Prisma.GithubWikiFileDeleteArgs> = z.object({
+  select: GithubWikiFileSelectSchema.optional(),
+  include: GithubWikiFileIncludeSchema.optional(),
+  where: GithubWikiFileWhereUniqueInputSchema,
+}).strict() as z.ZodType<Prisma.GithubWikiFileDeleteArgs>;
+
+export const GithubWikiFileUpdateArgsSchema: z.ZodType<Prisma.GithubWikiFileUpdateArgs> = z.object({
+  select: GithubWikiFileSelectSchema.optional(),
+  include: GithubWikiFileIncludeSchema.optional(),
+  data: z.union([ GithubWikiFileUpdateInputSchema,GithubWikiFileUncheckedUpdateInputSchema ]),
+  where: GithubWikiFileWhereUniqueInputSchema,
+}).strict() as z.ZodType<Prisma.GithubWikiFileUpdateArgs>;
+
+export const GithubWikiFileUpdateManyArgsSchema: z.ZodType<Prisma.GithubWikiFileUpdateManyArgs> = z.object({
+  data: z.union([ GithubWikiFileUpdateManyMutationInputSchema,GithubWikiFileUncheckedUpdateManyInputSchema ]),
+  where: GithubWikiFileWhereInputSchema.optional(),
+}).strict() as z.ZodType<Prisma.GithubWikiFileUpdateManyArgs>;
+
+export const GithubWikiFileDeleteManyArgsSchema: z.ZodType<Prisma.GithubWikiFileDeleteManyArgs> = z.object({
+  where: GithubWikiFileWhereInputSchema.optional(),
+}).strict() as z.ZodType<Prisma.GithubWikiFileDeleteManyArgs>;
