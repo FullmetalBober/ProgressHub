@@ -50,6 +50,7 @@ export default function WikiSidebar(
           <CreateWikiModal
             installationId={Number(params.installationId)}
             repositoryId={Number(params.repositoryId)}
+            wikiPaths={sortedWikis.map(wiki => wiki.path)}
           />
           <SidebarMenu>
             {sortedWikis.map(wiki => (
@@ -92,15 +93,15 @@ export default function WikiSidebar(
                 description={
                   <>
                     Ця дія скине всі зміни, внесені до{' '}
-                    <span className='font-bold'>ВСІХ</span> файлів. Ви впевнені,
-                    що хочете продовжити?
+                    <span className='font-bold'>{selectedWiki.path}</span>. Ви
+                    впевнені, що хочете продовжити?
                   </>
                 }
                 action={async () => {}}
                 asChild
               >
                 <SidebarMenuButton variant='destructive'>
-                  Скинути всі зміни
+                  Скинути зміни
                 </SidebarMenuButton>
               </ConfirmationDialog>
             </SidebarMenuItem>

@@ -32,7 +32,7 @@ export const CommentScalarFieldEnumSchema = z.enum(['id','body','issueId','autho
 
 export const GithubAppInstallationScalarFieldEnumSchema = z.enum(['id','workspaceId','createdById','createdAt','updatedAt']);
 
-export const GithubWikiFileScalarFieldEnumSchema = z.enum(['id','path','installationId','githubRepositoryId','content','createdAt','updatedAt']);
+export const GithubWikiFileScalarFieldEnumSchema = z.enum(['id','path','previousPath','installationId','githubRepositoryId','content','previousContent','createdAt','updatedAt']);
 
 export const SortOrderSchema = z.enum(['asc','desc']);
 
@@ -740,9 +740,11 @@ export const GithubAppInstallationWithPartialRelationsSchema: z.ZodType<GithubAp
 export const GithubWikiFileSchema = z.object({
   id: z.string().cuid(),
   path: z.string().trim().min(1).max(255),
+  previousPath: z.string().trim().min(1).max(255).nullable(),
   installationId: z.number().int(),
   githubRepositoryId: z.number().int(),
   content: z.instanceof(Buffer).nullable(),
+  previousContent: z.instanceof(Buffer).nullable(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
 })
@@ -1107,9 +1109,11 @@ export const GithubWikiFileArgsSchema: z.ZodType<Prisma.GithubWikiFileDefaultArg
 export const GithubWikiFileSelectSchema: z.ZodType<Prisma.GithubWikiFileSelect> = z.object({
   id: z.boolean().optional(),
   path: z.boolean().optional(),
+  previousPath: z.boolean().optional(),
   installationId: z.boolean().optional(),
   githubRepositoryId: z.boolean().optional(),
   content: z.boolean().optional(),
+  previousContent: z.boolean().optional(),
   createdAt: z.boolean().optional(),
   updatedAt: z.boolean().optional(),
   installation: z.union([z.boolean(),z.lazy(() => GithubAppInstallationArgsSchema)]).optional(),
@@ -1869,9 +1873,11 @@ export const GithubWikiFileWhereInputSchema: z.ZodType<Prisma.GithubWikiFileWher
   NOT: z.union([ z.lazy(() => GithubWikiFileWhereInputSchema),z.lazy(() => GithubWikiFileWhereInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   path: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  previousPath: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   installationId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   githubRepositoryId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   content: z.union([ z.lazy(() => BytesNullableFilterSchema),z.instanceof(Buffer) ]).optional().nullable(),
+  previousContent: z.union([ z.lazy(() => BytesNullableFilterSchema),z.instanceof(Buffer) ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   installation: z.union([ z.lazy(() => GithubAppInstallationScalarRelationFilterSchema),z.lazy(() => GithubAppInstallationWhereInputSchema) ]).optional(),
@@ -1880,9 +1886,11 @@ export const GithubWikiFileWhereInputSchema: z.ZodType<Prisma.GithubWikiFileWher
 export const GithubWikiFileOrderByWithRelationInputSchema: z.ZodType<Prisma.GithubWikiFileOrderByWithRelationInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   path: z.lazy(() => SortOrderSchema).optional(),
+  previousPath: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   installationId: z.lazy(() => SortOrderSchema).optional(),
   githubRepositoryId: z.lazy(() => SortOrderSchema).optional(),
   content: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
+  previousContent: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional(),
   installation: z.lazy(() => GithubAppInstallationOrderByWithRelationInputSchema).optional()
@@ -1907,9 +1915,11 @@ export const GithubWikiFileWhereUniqueInputSchema: z.ZodType<Prisma.GithubWikiFi
   OR: z.lazy(() => GithubWikiFileWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => GithubWikiFileWhereInputSchema),z.lazy(() => GithubWikiFileWhereInputSchema).array() ]).optional(),
   path: z.union([ z.lazy(() => StringFilterSchema),z.string().trim().min(1).max(255) ]).optional(),
+  previousPath: z.union([ z.lazy(() => StringNullableFilterSchema),z.string().trim().min(1).max(255) ]).optional().nullable(),
   installationId: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
   githubRepositoryId: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
   content: z.union([ z.lazy(() => BytesNullableFilterSchema),z.instanceof(Buffer) ]).optional().nullable(),
+  previousContent: z.union([ z.lazy(() => BytesNullableFilterSchema),z.instanceof(Buffer) ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   installation: z.union([ z.lazy(() => GithubAppInstallationScalarRelationFilterSchema),z.lazy(() => GithubAppInstallationWhereInputSchema) ]).optional(),
@@ -1918,9 +1928,11 @@ export const GithubWikiFileWhereUniqueInputSchema: z.ZodType<Prisma.GithubWikiFi
 export const GithubWikiFileOrderByWithAggregationInputSchema: z.ZodType<Prisma.GithubWikiFileOrderByWithAggregationInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   path: z.lazy(() => SortOrderSchema).optional(),
+  previousPath: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   installationId: z.lazy(() => SortOrderSchema).optional(),
   githubRepositoryId: z.lazy(() => SortOrderSchema).optional(),
   content: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
+  previousContent: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => GithubWikiFileCountOrderByAggregateInputSchema).optional(),
@@ -1936,9 +1948,11 @@ export const GithubWikiFileScalarWhereWithAggregatesInputSchema: z.ZodType<Prism
   NOT: z.union([ z.lazy(() => GithubWikiFileScalarWhereWithAggregatesInputSchema),z.lazy(() => GithubWikiFileScalarWhereWithAggregatesInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   path: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  previousPath: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   installationId: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
   githubRepositoryId: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
   content: z.union([ z.lazy(() => BytesNullableWithAggregatesFilterSchema),z.instanceof(Buffer) ]).optional().nullable(),
+  previousContent: z.union([ z.lazy(() => BytesNullableWithAggregatesFilterSchema),z.instanceof(Buffer) ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
 }).strict() as z.ZodType<Prisma.GithubWikiFileScalarWhereWithAggregatesInput>;
@@ -2648,8 +2662,10 @@ export const GithubAppInstallationUncheckedUpdateManyInputSchema: z.ZodType<Pris
 export const GithubWikiFileCreateInputSchema: z.ZodType<Prisma.GithubWikiFileCreateInput> = z.object({
   id: z.string().cuid().optional(),
   path: z.string().trim().min(1).max(255),
+  previousPath: z.string().trim().min(1).max(255).optional().nullable(),
   githubRepositoryId: z.number().int(),
   content: z.instanceof(Buffer).optional().nullable(),
+  previousContent: z.instanceof(Buffer).optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   installation: z.lazy(() => GithubAppInstallationCreateNestedOneWithoutGithubWikiFileInputSchema)
@@ -2658,9 +2674,11 @@ export const GithubWikiFileCreateInputSchema: z.ZodType<Prisma.GithubWikiFileCre
 export const GithubWikiFileUncheckedCreateInputSchema: z.ZodType<Prisma.GithubWikiFileUncheckedCreateInput> = z.object({
   id: z.string().cuid().optional(),
   path: z.string().trim().min(1).max(255),
+  previousPath: z.string().trim().min(1).max(255).optional().nullable(),
   installationId: z.number().int(),
   githubRepositoryId: z.number().int(),
   content: z.instanceof(Buffer).optional().nullable(),
+  previousContent: z.instanceof(Buffer).optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
 }).strict() as z.ZodType<Prisma.GithubWikiFileUncheckedCreateInput>;
@@ -2668,8 +2686,10 @@ export const GithubWikiFileUncheckedCreateInputSchema: z.ZodType<Prisma.GithubWi
 export const GithubWikiFileUpdateInputSchema: z.ZodType<Prisma.GithubWikiFileUpdateInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   path: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  previousPath: z.union([ z.string().trim().min(1).max(255),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   githubRepositoryId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   content: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  previousContent: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   installation: z.lazy(() => GithubAppInstallationUpdateOneRequiredWithoutGithubWikiFileNestedInputSchema).optional()
@@ -2678,9 +2698,11 @@ export const GithubWikiFileUpdateInputSchema: z.ZodType<Prisma.GithubWikiFileUpd
 export const GithubWikiFileUncheckedUpdateInputSchema: z.ZodType<Prisma.GithubWikiFileUncheckedUpdateInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   path: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  previousPath: z.union([ z.string().trim().min(1).max(255),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   installationId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   githubRepositoryId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   content: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  previousContent: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.GithubWikiFileUncheckedUpdateInput>;
@@ -2688,9 +2710,11 @@ export const GithubWikiFileUncheckedUpdateInputSchema: z.ZodType<Prisma.GithubWi
 export const GithubWikiFileCreateManyInputSchema: z.ZodType<Prisma.GithubWikiFileCreateManyInput> = z.object({
   id: z.string().cuid().optional(),
   path: z.string().trim().min(1).max(255),
+  previousPath: z.string().trim().min(1).max(255).optional().nullable(),
   installationId: z.number().int(),
   githubRepositoryId: z.number().int(),
   content: z.instanceof(Buffer).optional().nullable(),
+  previousContent: z.instanceof(Buffer).optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
 }).strict() as z.ZodType<Prisma.GithubWikiFileCreateManyInput>;
@@ -2698,8 +2722,10 @@ export const GithubWikiFileCreateManyInputSchema: z.ZodType<Prisma.GithubWikiFil
 export const GithubWikiFileUpdateManyMutationInputSchema: z.ZodType<Prisma.GithubWikiFileUpdateManyMutationInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   path: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  previousPath: z.union([ z.string().trim().min(1).max(255),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   githubRepositoryId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   content: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  previousContent: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.GithubWikiFileUpdateManyMutationInput>;
@@ -2707,9 +2733,11 @@ export const GithubWikiFileUpdateManyMutationInputSchema: z.ZodType<Prisma.Githu
 export const GithubWikiFileUncheckedUpdateManyInputSchema: z.ZodType<Prisma.GithubWikiFileUncheckedUpdateManyInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   path: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  previousPath: z.union([ z.string().trim().min(1).max(255),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   installationId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   githubRepositoryId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   content: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  previousContent: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.GithubWikiFileUncheckedUpdateManyInput>;
@@ -3424,9 +3452,11 @@ export const GithubWikiFilePathInstallationIdCompoundUniqueInputSchema: z.ZodTyp
 export const GithubWikiFileCountOrderByAggregateInputSchema: z.ZodType<Prisma.GithubWikiFileCountOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   path: z.lazy(() => SortOrderSchema).optional(),
+  previousPath: z.lazy(() => SortOrderSchema).optional(),
   installationId: z.lazy(() => SortOrderSchema).optional(),
   githubRepositoryId: z.lazy(() => SortOrderSchema).optional(),
   content: z.lazy(() => SortOrderSchema).optional(),
+  previousContent: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
 }).strict() as z.ZodType<Prisma.GithubWikiFileCountOrderByAggregateInput>;
@@ -3439,9 +3469,11 @@ export const GithubWikiFileAvgOrderByAggregateInputSchema: z.ZodType<Prisma.Gith
 export const GithubWikiFileMaxOrderByAggregateInputSchema: z.ZodType<Prisma.GithubWikiFileMaxOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   path: z.lazy(() => SortOrderSchema).optional(),
+  previousPath: z.lazy(() => SortOrderSchema).optional(),
   installationId: z.lazy(() => SortOrderSchema).optional(),
   githubRepositoryId: z.lazy(() => SortOrderSchema).optional(),
   content: z.lazy(() => SortOrderSchema).optional(),
+  previousContent: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
 }).strict() as z.ZodType<Prisma.GithubWikiFileMaxOrderByAggregateInput>;
@@ -3449,9 +3481,11 @@ export const GithubWikiFileMaxOrderByAggregateInputSchema: z.ZodType<Prisma.Gith
 export const GithubWikiFileMinOrderByAggregateInputSchema: z.ZodType<Prisma.GithubWikiFileMinOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   path: z.lazy(() => SortOrderSchema).optional(),
+  previousPath: z.lazy(() => SortOrderSchema).optional(),
   installationId: z.lazy(() => SortOrderSchema).optional(),
   githubRepositoryId: z.lazy(() => SortOrderSchema).optional(),
   content: z.lazy(() => SortOrderSchema).optional(),
+  previousContent: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
 }).strict() as z.ZodType<Prisma.GithubWikiFileMinOrderByAggregateInput>;
@@ -5724,8 +5758,10 @@ export const UserCreateOrConnectWithoutGithubAppInstallationInputSchema: z.ZodTy
 export const GithubWikiFileCreateWithoutInstallationInputSchema: z.ZodType<Prisma.GithubWikiFileCreateWithoutInstallationInput> = z.object({
   id: z.string().cuid().optional(),
   path: z.string().trim().min(1).max(255),
+  previousPath: z.string().trim().min(1).max(255).optional().nullable(),
   githubRepositoryId: z.number().int(),
   content: z.instanceof(Buffer).optional().nullable(),
+  previousContent: z.instanceof(Buffer).optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
 }).strict() as z.ZodType<Prisma.GithubWikiFileCreateWithoutInstallationInput>;
@@ -5733,8 +5769,10 @@ export const GithubWikiFileCreateWithoutInstallationInputSchema: z.ZodType<Prism
 export const GithubWikiFileUncheckedCreateWithoutInstallationInputSchema: z.ZodType<Prisma.GithubWikiFileUncheckedCreateWithoutInstallationInput> = z.object({
   id: z.string().cuid().optional(),
   path: z.string().trim().min(1).max(255),
+  previousPath: z.string().trim().min(1).max(255).optional().nullable(),
   githubRepositoryId: z.number().int(),
   content: z.instanceof(Buffer).optional().nullable(),
+  previousContent: z.instanceof(Buffer).optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
 }).strict() as z.ZodType<Prisma.GithubWikiFileUncheckedCreateWithoutInstallationInput>;
@@ -5843,9 +5881,11 @@ export const GithubWikiFileScalarWhereInputSchema: z.ZodType<Prisma.GithubWikiFi
   NOT: z.union([ z.lazy(() => GithubWikiFileScalarWhereInputSchema),z.lazy(() => GithubWikiFileScalarWhereInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   path: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  previousPath: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   installationId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   githubRepositoryId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   content: z.union([ z.lazy(() => BytesNullableFilterSchema),z.instanceof(Buffer) ]).optional().nullable(),
+  previousContent: z.union([ z.lazy(() => BytesNullableFilterSchema),z.instanceof(Buffer) ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
 }).strict() as z.ZodType<Prisma.GithubWikiFileScalarWhereInput>;
@@ -6309,8 +6349,10 @@ export const CommentUncheckedUpdateManyWithoutIssueInputSchema: z.ZodType<Prisma
 export const GithubWikiFileCreateManyInstallationInputSchema: z.ZodType<Prisma.GithubWikiFileCreateManyInstallationInput> = z.object({
   id: z.string().cuid().optional(),
   path: z.string().trim().min(1).max(255),
+  previousPath: z.string().trim().min(1).max(255).optional().nullable(),
   githubRepositoryId: z.number().int(),
   content: z.instanceof(Buffer).optional().nullable(),
+  previousContent: z.instanceof(Buffer).optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
 }).strict() as z.ZodType<Prisma.GithubWikiFileCreateManyInstallationInput>;
@@ -6318,8 +6360,10 @@ export const GithubWikiFileCreateManyInstallationInputSchema: z.ZodType<Prisma.G
 export const GithubWikiFileUpdateWithoutInstallationInputSchema: z.ZodType<Prisma.GithubWikiFileUpdateWithoutInstallationInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   path: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  previousPath: z.union([ z.string().trim().min(1).max(255),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   githubRepositoryId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   content: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  previousContent: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.GithubWikiFileUpdateWithoutInstallationInput>;
@@ -6327,8 +6371,10 @@ export const GithubWikiFileUpdateWithoutInstallationInputSchema: z.ZodType<Prism
 export const GithubWikiFileUncheckedUpdateWithoutInstallationInputSchema: z.ZodType<Prisma.GithubWikiFileUncheckedUpdateWithoutInstallationInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   path: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  previousPath: z.union([ z.string().trim().min(1).max(255),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   githubRepositoryId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   content: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  previousContent: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.GithubWikiFileUncheckedUpdateWithoutInstallationInput>;
@@ -6336,8 +6382,10 @@ export const GithubWikiFileUncheckedUpdateWithoutInstallationInputSchema: z.ZodT
 export const GithubWikiFileUncheckedUpdateManyWithoutInstallationInputSchema: z.ZodType<Prisma.GithubWikiFileUncheckedUpdateManyWithoutInstallationInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   path: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  previousPath: z.union([ z.string().trim().min(1).max(255),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   githubRepositoryId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   content: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  previousContent: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.GithubWikiFileUncheckedUpdateManyWithoutInstallationInput>;

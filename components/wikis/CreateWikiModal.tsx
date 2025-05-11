@@ -33,14 +33,24 @@ import { SidebarGroupAction } from '../ui/sidebar';
 export default function CreateWikiModal({
   installationId,
   repositoryId,
+  wikiPaths,
 }: Readonly<{
   installationId: number;
   repositoryId: number;
+  wikiPaths: string[];
 }>) {
   const [open, setOpen] = useState(false);
 
   const form = useForm<GithubWikiFile>({
-    resolver: zodResolver(GithubWikiFileUncheckedCreateInputSchema),
+    resolver: zodResolver(
+      GithubWikiFileUncheckedCreateInputSchema.refine(
+        data => !wikiPaths.includes(data.path),
+        {
+          message: 'Wiki page already exists',
+          path: ['path'],
+        }
+      )
+    ),
     defaultValues: {
       installationId,
       githubRepositoryId: repositoryId,
@@ -55,12 +65,12 @@ export default function CreateWikiModal({
       success: 'Wiki page created!',
       error: 'Failed to create wiki page',
     });
-    const res = await action;
+    await action;
 
     setOpen(false);
   }
 
-  const isFormDisabled = form.formState.isSubmitting;
+  const isFormDisabled = form.formState.isSubmitting || !form.formState.isValid;
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>

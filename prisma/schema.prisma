@@ -210,10 +210,13 @@ model GithubWikiFile {
   id                 String                @id @default(cuid())
   /// @zod.string.trim().min(1).max(255)
   path               String
+  /// @zod.string.trim().min(1).max(255)
+  previousPath       String?
   installationId     Int
   installation       GithubAppInstallation @relation(fields: [installationId], references: [id], onDelete: Cascade)
   githubRepositoryId Int
   content            Bytes?
+  previousContent    Bytes?
   createdAt          DateTime              @default(now())
   updatedAt          DateTime              @updatedAt
 
