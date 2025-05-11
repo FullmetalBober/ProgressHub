@@ -1,11 +1,7 @@
-import { ChevronRight } from 'lucide-react';
+import { useWiki } from '@/context/WikiContext';
+import { GithubWikiFile } from '@prisma/client';
 import { useParams } from 'next/navigation';
 import ConfirmationDialog from '../ConfirmationDialog';
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '../ui/collapsible';
 import {
   Sidebar,
   SidebarContent,
@@ -16,16 +12,25 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubItem,
   SidebarTrigger,
 } from '../ui/sidebar';
 import CreateWikiModal from './CreateWikiModal';
 
-export default function WikiSidebar() {
+export default function WikiSidebar(
+  props: Readonly<{
+    wikis: GithubWikiFile[];
+  }>
+) {
   const params = useParams<{ installationId: string; repositoryId: string }>();
+  const { selectedWiki, setSelectedWiki } = useWiki();
 
-  const handleSwitchWiki = () => {};
+  const sortedWikis = props.wikis.toSorted((a, b) =>
+    a.path.localeCompare(b.path)
+  );
+
+  const handleSwitchWiki = (wiki: GithubWikiFile) => {
+    setSelectedWiki(wiki);
+  };
   const handleDeleteWiki = () => {};
   const handleResetLocalWiki = () => {};
 
@@ -47,71 +52,61 @@ export default function WikiSidebar() {
             repositoryId={Number(params.repositoryId)}
           />
           <SidebarMenu>
-            <SidebarMenuItem>
-              <Collapsible
-                defaultOpen
-                className='group/collapsible [&[data-state=open]>button>svg:first-child]:rotate-90'
-              >
-                <CollapsibleTrigger asChild>
-                  <SidebarMenuButton>
-                    <ChevronRight className='transition-transform' />
-                    Wiki
-                  </SidebarMenuButton>
-                </CollapsibleTrigger>
-                <CollapsibleContent>
-                  <SidebarMenuSub>
-                    <SidebarMenuSubItem>
-                      <SidebarMenuButton isActive>Wiki 1</SidebarMenuButton>
-                    </SidebarMenuSubItem>
-                    <SidebarMenuSubItem>
-                      <SidebarMenuButton>Wiki 2</SidebarMenuButton>
-                    </SidebarMenuSubItem>
-                  </SidebarMenuSub>
-                </CollapsibleContent>
-              </Collapsible>
-            </SidebarMenuItem>
+            {sortedWikis.map(wiki => (
+              <SidebarMenuItem key={wiki.id}>
+                <SidebarMenuButton
+                  onClick={() => handleSwitchWiki(wiki)}
+                  isActive={selectedWiki?.id === wiki.id}
+                >
+                  {wiki.path}
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <ConfirmationDialog
-              title='Ви впевнені?'
-              description={
-                <>
-                  Ця дія видалить <span className='font-bold'>Wiki 1</span>. Ви
-                  впевнені, що хочете продовжити?
-                </>
-              }
-              action={async () => {}}
-              asChild
-            >
-              <SidebarMenuButton variant='destructive'>
-                Видалити сторінку
-              </SidebarMenuButton>
-            </ConfirmationDialog>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <ConfirmationDialog
-              title='Ви впевнені?'
-              description={
-                <>
-                  Ця дія скине всі зміни, внесені до{' '}
-                  <span className='font-bold'>ВСІХ</span> файлів. Ви впевнені,
-                  що хочете продовжити?
-                </>
-              }
-              action={async () => {}}
-              asChild
-            >
-              <SidebarMenuButton variant='destructive'>
-                Скинути всі зміни
-              </SidebarMenuButton>
-            </ConfirmationDialog>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
+      {selectedWiki && (
+        <SidebarFooter>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <ConfirmationDialog
+                title='Ви впевнені?'
+                description={
+                  <>
+                    Ця дія видалить{' '}
+                    <span className='font-bold'>{selectedWiki.path}</span>. Ви
+                    впевнені, що хочете продовжити?
+                  </>
+                }
+                action={async () => {}}
+                asChild
+              >
+                <SidebarMenuButton variant='destructive'>
+                  Видалити сторінку
+                </SidebarMenuButton>
+              </ConfirmationDialog>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <ConfirmationDialog
+                title='Ви впевнені?'
+                description={
+                  <>
+                    Ця дія скине всі зміни, внесені до{' '}
+                    <span className='font-bold'>ВСІХ</span> файлів. Ви впевнені,
+                    що хочете продовжити?
+                  </>
+                }
+                action={async () => {}}
+                asChild
+              >
+                <SidebarMenuButton variant='destructive'>
+                  Скинути всі зміни
+                </SidebarMenuButton>
+              </ConfirmationDialog>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
+      )}
     </Sidebar>
   );
 }
