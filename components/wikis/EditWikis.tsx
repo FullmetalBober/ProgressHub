@@ -1,12 +1,13 @@
 'use client';
 
+import { useSocketObserver } from '@/hooks/useSocketObserver';
+import { SocketWikiEmitterProvider } from '@/providers/SocketWikiProvider';
 import { GithubWikiFile } from '@prisma/client';
 import { User as SessionUser } from 'next-auth';
-import dynamic from 'next/dynamic';
+import { useParams } from 'next/navigation';
 import { useState } from 'react';
-import { SidebarProvider, SidebarTrigger } from '../ui/sidebar';
+import { SidebarProvider } from '../ui/sidebar';
 import WikiSidebar from './WikiSidebar';
-const TiptapEditor = dynamic(() => import('@/tiptap/TiptapEditor'));
 
 export default function EditWikis({
   wikis,
@@ -17,24 +18,28 @@ export default function EditWikis({
   user: SessionUser;
   tiptapToken: string;
 }>) {
+  const observableWikis = useSocketObserver('githubWikiFile', wikis);
+  const params = useParams<{ repositoryId: string }>();
   const [selectedWiki, setSelectedWiki] = useState<GithubWikiFile | undefined>(
-    wikis[0]
+    observableWikis[0]
   );
+
+  console.log(observableWikis);
+
   // const roomDescription = `wiki.${selectedWiki.id}`;
 
   return (
-    <SidebarProvider>
-      {/* <EditIssueProperties issue={issue} users={users} />
+    <SocketWikiEmitterProvider room={params.repositoryId}>
+      <SidebarProvider>
+        {/* <EditIssueProperties issue={issue} users={users} />
       <EditIssueTitle {...issue} /> */}
-      {/* <TiptapEditor
+        {/* <TiptapEditor
         room={roomDescription}
         user={user}
         collabToken={tiptapToken}
-      /> */}
-      <ul>
-        <li>adsasd</li>
-      </ul>
-      <WikiSidebar />
-    </SidebarProvider>
+        /> */}
+        <WikiSidebar />
+      </SidebarProvider>
+    </SocketWikiEmitterProvider>
   );
 }

@@ -1,9 +1,11 @@
 'use server';
 
+import { GithubWikiFileUncheckedCreateInputSchema } from '@/prisma/zod';
 import { ProbotOctokit } from 'probot';
 import prisma from '../db';
 import { env } from '../env.mjs';
 import { protectAction } from '../protection';
+import { getGithubWikis, notifyUsers, zodValidate } from './utils';
 
 const octokit = new ProbotOctokit({
   auth: {
@@ -86,4 +88,88 @@ export async function getRepositoriesWithWikis(installationId: number) {
     description: repo.description,
     isPrivate: repo.private,
   }));
+}
+
+export async function resetLocalGithubRepoWiki(
+  installationId: number,
+  repoId: number
+) {
+  await protectAction({
+    githubAppInstallationId: installationId,
+  });
+
+  const [repoContent, localWiki] = await Promise.all([
+    getGithubWikis(installationId, repoId),
+    prisma.githubWikiFile.findMany({
+      where: {
+        githubRepositoryId: repoId,
+      },
+    }),
+  ]);
+
+  const toDeleteLocalWikiIds = localWiki
+    .filter(
+      localWikiItem =>
+        !repoContent.some(repoItem => repoItem.name === localWikiItem.path)
+    )
+    .map(localWikiItem => localWikiItem.id);
+  const toCreateLocalWiki = repoContent
+    .filter(
+      repoItem =>
+        !localWiki.some(localWikiItem => localWikiItem.path === repoItem.name)
+    )
+    .map(repoItem => ({
+      installationId: installationId,
+      githubRepositoryId: repoId,
+      path: repoItem.name,
+    }));
+
+  await Promise.all([
+    prisma.$transaction([
+      prisma.githubWikiFile.deleteMany({
+        where: {
+          id: {
+            in: toDeleteLocalWikiIds,
+          },
+        },
+      }),
+      prisma.githubWikiFile.createMany({
+        data: toCreateLocalWiki,
+      }),
+    ]),
+    // notifyUsers()
+  ]);
+
+  return;
+}
+
+export async function createGithubWikiFile(body: unknown) {
+  const data = zodValidate(GithubWikiFileUncheckedCreateInputSchema, body);
+  await protectAction({
+    githubAppInstallationId: data.installationId,
+  });
+
+  const githubWikiFile = await prisma.githubWikiFile.create({
+    data,
+    include: {
+      installation: {
+        include: {
+          workspace: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  await notifyUsers(
+    githubWikiFile.installation.workspace.id,
+    'githubWikiFile',
+    'create',
+    githubWikiFile
+  );
+
+  return githubWikiFile;
 }

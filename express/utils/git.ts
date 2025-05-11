@@ -47,3 +47,22 @@ export async function pushGithubWiki(
     `https://x-access-token:${token}@github.com/${repoFullName}.wiki.git`
   );
 }
+
+export async function getMDFilesGithubWiki(repoId: number) {
+  const path = join(basePath, repoId.toString());
+
+  const files = await fs.readdir(path);
+  const mdFiles = files.filter(file => file.endsWith('.md'));
+  const mdFilesWithContent = await Promise.all(
+    mdFiles.map(async file => {
+      const filePath = join(path, file);
+      const content = await fs.readFile(filePath, 'utf-8');
+      return {
+        name: file,
+        content,
+      };
+    })
+  );
+
+  return mdFilesWithContent;
+}

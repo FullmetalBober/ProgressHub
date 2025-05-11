@@ -1,4 +1,6 @@
-import { ChevronRight, Plus } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
+import { useParams } from 'next/navigation';
+import ConfirmationDialog from '../ConfirmationDialog';
 import {
   Collapsible,
   CollapsibleContent,
@@ -9,7 +11,6 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
-  SidebarGroupAction,
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
@@ -19,25 +20,32 @@ import {
   SidebarMenuSubItem,
   SidebarTrigger,
 } from '../ui/sidebar';
+import CreateWikiModal from './CreateWikiModal';
 
 export default function WikiSidebar() {
+  const params = useParams<{ installationId: string; repositoryId: string }>();
+
+  const handleSwitchWiki = () => {};
+  const handleDeleteWiki = () => {};
+  const handleResetLocalWiki = () => {};
+
   return (
     <Sidebar side='right'>
       <SidebarTrigger className='absolute z-50 left-[-2rem] top-1' />
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton>Sync with GitHub</SidebarMenuButton>
+            <SidebarMenuButton>Синхронізувати з GitHub</SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Pages</SidebarGroupLabel>
-          <SidebarGroupAction title='Add Project'>
-            <Plus />
-            <span className='sr-only'>Add Page</span>
-          </SidebarGroupAction>
+          <SidebarGroupLabel>Сторінки</SidebarGroupLabel>
+          <CreateWikiModal
+            installationId={Number(params.installationId)}
+            repositoryId={Number(params.repositoryId)}
+          />
           <SidebarMenu>
             <SidebarMenuItem>
               <Collapsible
@@ -68,14 +76,39 @@ export default function WikiSidebar() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton variant='destructive'>
-              Delete file
-            </SidebarMenuButton>
+            <ConfirmationDialog
+              title='Ви впевнені?'
+              description={
+                <>
+                  Ця дія видалить <span className='font-bold'>Wiki 1</span>. Ви
+                  впевнені, що хочете продовжити?
+                </>
+              }
+              action={async () => {}}
+              asChild
+            >
+              <SidebarMenuButton variant='destructive'>
+                Видалити сторінку
+              </SidebarMenuButton>
+            </ConfirmationDialog>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton variant='destructive'>
-              Reset all changes
-            </SidebarMenuButton>
+            <ConfirmationDialog
+              title='Ви впевнені?'
+              description={
+                <>
+                  Ця дія скине всі зміни, внесені до{' '}
+                  <span className='font-bold'>ВСІХ</span> файлів. Ви впевнені,
+                  що хочете продовжити?
+                </>
+              }
+              action={async () => {}}
+              asChild
+            >
+              <SidebarMenuButton variant='destructive'>
+                Скинути всі зміни
+              </SidebarMenuButton>
+            </ConfirmationDialog>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>

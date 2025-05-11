@@ -15,7 +15,7 @@ export default async function WikiPage(
   }>
 ) {
   const params = await props.params;
-  const { workspaceId, repositoryId } = params;
+  const { repositoryId } = params;
   const session = await auth();
   if (!session?.user) return <div>Not authenticated</div>;
   const tiptapToken = jwt.sign({}, env.TIPTAP_COLLAB_SECRET);

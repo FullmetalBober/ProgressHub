@@ -1,4 +1,4 @@
-import { ZodType } from 'zod';
+import { z, ZodType } from 'zod';
 import { auth } from '../auth/utils';
 import { env } from '../env.mjs';
 
@@ -31,6 +31,24 @@ export function notifyUsers(
       },
     }),
   });
+}
+
+const githubWikiSchema = z.array(
+  z.object({
+    name: z.string(),
+    content: z.string(),
+  })
+);
+
+export async function getGithubWikis(installationId: number, repoId: number) {
+  const res = await fetch(
+    `${env.SOCKET_BASE_URL}/github/wiki/${installationId}/${repoId}`
+  );
+  if (!res.ok) throw new Error('Failed to fetch wikis');
+  const data = await res.json();
+
+  const parsedData = githubWikiSchema.parse(data);
+  return parsedData;
 }
 
 export function zodValidate<T>(schema: ZodType<T>, data: unknown) {

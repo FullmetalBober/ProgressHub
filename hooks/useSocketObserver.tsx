@@ -4,7 +4,11 @@ import { useSocket } from '@/context/SocketContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-type entities = 'issue' | 'workspaceInvite' | 'workspaceMember';
+type entities =
+  | 'issue'
+  | 'workspaceInvite'
+  | 'workspaceMember'
+  | 'githubWikiFile';
 
 export function useSocketObserver<T extends { id: string }>(
   eventName: entities,

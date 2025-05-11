@@ -101,7 +101,6 @@ model Workspace {
   issues                Issue[]
   workspaceInvite       WorkspaceInvite[]
   githubAppInstallation GithubAppInstallation[]
-  GithubWikiFile        GithubWikiFile[]
 }
 
 enum Role {
@@ -196,26 +195,27 @@ model Comment {
 
 /// @zod.strip()
 model GithubAppInstallation {
-  id          Int       @id
-  workspaceId String
-  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  createdById String
-  createdBy   User      @relation(fields: [createdById], references: [id], onDelete: Cascade)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id             Int              @id
+  workspaceId    String
+  workspace      Workspace        @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  createdById    String
+  createdBy      User             @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  githubWikiFile GithubWikiFile[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
 }
 
 /// @zod.strip()
 model GithubWikiFile {
-  id                 String    @id @default(cuid())
+  id                 String                @id @default(cuid())
   /// @zod.string.trim().min(1).max(255)
   path               String
-  workspaceId        String
-  workspace          Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  installationId     Int
+  installation       GithubAppInstallation @relation(fields: [installationId], references: [id], onDelete: Cascade)
   githubRepositoryId Int
   content            Bytes?
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime  @updatedAt
+  createdAt          DateTime              @default(now())
+  updatedAt          DateTime              @updatedAt
 
-  @@unique([path, workspaceId])
+  @@unique([path, installationId])
 }

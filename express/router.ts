@@ -3,14 +3,20 @@ import { env } from '@/lib/env.mjs';
 import express from 'express';
 import { z } from 'zod';
 import io from './socket';
-import { pullGithubWiki } from './utils/git';
+import { getMDFilesGithubWiki, pullGithubWiki } from './utils/git';
 import { getGithubToken, getRepoInfo } from './utils/github';
 
 const router = express.Router();
 
 const notifySchema = z.object({
   room: z.string(),
-  entity: z.enum(['workspace', 'issue', 'workspaceInvite', 'workspaceMember']),
+  entity: z.enum([
+    'workspace',
+    'issue',
+    'workspaceInvite',
+    'workspaceMember',
+    'githubWikiFile',
+  ]),
   event: z.enum(['create', 'update', 'delete']),
   payload: z.record(z.unknown()).refine(data => data.id, {
     message: 'Payload must have an id',
@@ -80,8 +86,9 @@ router.get('/github/wiki/:installationId/:repoId', async (req, res) => {
   ]);
 
   await pullGithubWiki(repoId, repoData.full_name, token);
+  const repoContent = await getMDFilesGithubWiki(repoId);
 
-  res.status(200).send('OK');
+  res.status(200).json(repoContent);
 });
 
 export default router;

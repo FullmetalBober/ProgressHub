@@ -15,17 +15,7 @@ export default function RepositoryGroupComponent({
   group: TGithubAccount;
   defaultOpen: boolean;
 }>) {
-  const { name, repositories, avatarUrl } = group;
-
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
+  const { id, name, repositories, avatarUrl } = group;
 
   return (
     <Accordion
@@ -48,7 +38,11 @@ export default function RepositoryGroupComponent({
         </AccordionTrigger>
         <AccordionContent className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'>
           {repositories.map(repository => (
-            <RepositoryCard key={repository.id} repository={repository} />
+            <RepositoryCard
+              key={repository.id}
+              accountId={id}
+              repository={repository}
+            />
           ))}
         </AccordionContent>
       </AccordionItem>

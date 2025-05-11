@@ -9,13 +9,16 @@ import { Card, CardContent, CardHeader } from '../ui/card';
 export default function RepositoryCard(
   props: Readonly<{
     repository: TGithubRepository;
+    accountId: number;
   }>
 ) {
   const { id, name, description, isPrivate, image } = props.repository;
   const params = useParams<{ workspaceId: string }>();
 
   return (
-    <Link href={`/workspace/${params.workspaceId}/wikis/${id}`}>
+    <Link
+      href={`/workspace/${params.workspaceId}/wikis/${props.accountId}/${id}`}
+    >
       <Card className='h-full transition-all duration-300 hover:shadow-md dark:hover:shadow-primary/5 cursor-pointer'>
         <CardHeader className='pb-2'>
           <div className='flex items-start justify-between'>
