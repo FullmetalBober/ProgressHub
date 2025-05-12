@@ -35,79 +35,82 @@ export default function WikiSidebar(
   const handleResetLocalWiki = () => {};
 
   return (
-    <Sidebar side='right'>
-      <SidebarTrigger className='absolute z-50 left-[-2rem] top-1' />
-      <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton>Синхронізувати з GitHub</SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarHeader>
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Сторінки</SidebarGroupLabel>
-          <CreateWikiModal
-            installationId={Number(params.installationId)}
-            repositoryId={Number(params.repositoryId)}
-            wikiPaths={sortedWikis.map(wiki => wiki.path)}
-          />
+    <>
+      <SidebarTrigger className='absolute z-50 right-1 top-1 md:hidden' />
+      <Sidebar side='right'>
+        <SidebarTrigger className='absolute z-50 left-[-2rem] top-1 hidden md:block' />
+        <SidebarHeader>
           <SidebarMenu>
-            {sortedWikis.map(wiki => (
-              <SidebarMenuItem key={wiki.id}>
-                <SidebarMenuButton
-                  onClick={() => handleSwitchWiki(wiki)}
-                  isActive={selectedWiki?.id === wiki.id}
+            <SidebarMenuItem>
+              <SidebarMenuButton>Синхронізувати з GitHub</SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarHeader>
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupLabel>Сторінки</SidebarGroupLabel>
+            <CreateWikiModal
+              installationId={Number(params.installationId)}
+              repositoryId={Number(params.repositoryId)}
+              wikiPaths={sortedWikis.map(wiki => wiki.path)}
+            />
+            <SidebarMenu>
+              {sortedWikis.map(wiki => (
+                <SidebarMenuItem key={wiki.id}>
+                  <SidebarMenuButton
+                    onClick={() => handleSwitchWiki(wiki)}
+                    isActive={selectedWiki?.id === wiki.id}
+                  >
+                    {wiki.path}
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroup>
+        </SidebarContent>
+        {selectedWiki && (
+          <SidebarFooter>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <ConfirmationDialog
+                  title='Ви впевнені?'
+                  description={
+                    <>
+                      Ця дія видалить{' '}
+                      <span className='font-bold'>{selectedWiki.path}</span>. Ви
+                      впевнені, що хочете продовжити?
+                    </>
+                  }
+                  action={async () => {}}
+                  asChild
                 >
-                  {wiki.path}
-                </SidebarMenuButton>
+                  <SidebarMenuButton variant='destructive'>
+                    Видалити сторінку
+                  </SidebarMenuButton>
+                </ConfirmationDialog>
               </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
-        </SidebarGroup>
-      </SidebarContent>
-      {selectedWiki && (
-        <SidebarFooter>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <ConfirmationDialog
-                title='Ви впевнені?'
-                description={
-                  <>
-                    Ця дія видалить{' '}
-                    <span className='font-bold'>{selectedWiki.path}</span>. Ви
-                    впевнені, що хочете продовжити?
-                  </>
-                }
-                action={async () => {}}
-                asChild
-              >
-                <SidebarMenuButton variant='destructive'>
-                  Видалити сторінку
-                </SidebarMenuButton>
-              </ConfirmationDialog>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <ConfirmationDialog
-                title='Ви впевнені?'
-                description={
-                  <>
-                    Ця дія скине всі зміни, внесені до{' '}
-                    <span className='font-bold'>{selectedWiki.path}</span>. Ви
-                    впевнені, що хочете продовжити?
-                  </>
-                }
-                action={async () => {}}
-                asChild
-              >
-                <SidebarMenuButton variant='destructive'>
-                  Скинути зміни
-                </SidebarMenuButton>
-              </ConfirmationDialog>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarFooter>
-      )}
-    </Sidebar>
+              <SidebarMenuItem>
+                <ConfirmationDialog
+                  title='Ви впевнені?'
+                  description={
+                    <>
+                      Ця дія скине всі зміни, внесені до{' '}
+                      <span className='font-bold'>{selectedWiki.path}</span>. Ви
+                      впевнені, що хочете продовжити?
+                    </>
+                  }
+                  action={async () => {}}
+                  asChild
+                >
+                  <SidebarMenuButton variant='destructive'>
+                    Скинути зміни
+                  </SidebarMenuButton>
+                </ConfirmationDialog>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarFooter>
+        )}
+      </Sidebar>
+    </>
   );
 }

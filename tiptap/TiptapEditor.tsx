@@ -2,9 +2,9 @@
 
 import { env } from '@/lib/env.mjs';
 import { TiptapCollabProvider } from '@hocuspocus/provider';
-import 'iframe-resizer/js/iframeResizer.contentWindow';
+// import 'iframe-resizer/js/iframeResizer.contentWindow';
 import { User } from 'next-auth';
-import { useLayoutEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Doc as YDoc } from 'yjs';
 import { BlockEditor } from './components/BlockEditor';
 
@@ -17,21 +17,27 @@ export default function TiptapEditor({
   user: User;
   collabToken: string;
 }>) {
-  const ydoc = useMemo(() => new YDoc(), []);
-  const [provider, setProvider] = useState<TiptapCollabProvider | null>(null);
+  const [ydoc, setYdoc] = useState<YDoc>();
+  const [provider, setProvider] = useState<TiptapCollabProvider>();
 
-  useLayoutEffect(() => {
-    setProvider(
-      new TiptapCollabProvider({
-        name: room,
-        baseUrl: `${env.NEXT_PUBLIC_SOCKET_BASE_URL}${env.NEXT_PUBLIC_HOCUSPOCUS_PATH}`,
-        token: collabToken,
-        document: ydoc,
-      })
-    );
-  }, [setProvider, ydoc, room, collabToken]);
+  useEffect(() => {
+    const ydoc = new YDoc();
+    const newProvider = new TiptapCollabProvider({
+      name: room,
+      baseUrl: `${env.NEXT_PUBLIC_SOCKET_BASE_URL}${env.NEXT_PUBLIC_HOCUSPOCUS_PATH}`,
+      token: collabToken,
+      document: ydoc,
+    });
 
-  if (!provider) return;
+    setYdoc(ydoc);
+    setProvider(newProvider);
 
-  return <BlockEditor ydoc={ydoc} provider={provider} user={user} />;
+    return () => {
+      newProvider.destroy();
+      ydoc.destroy();
+    };
+  }, [room, collabToken]);
+
+  if (!provider || !ydoc) return;
+  return <BlockEditor key={room} ydoc={ydoc} provider={provider} user={user} />;
 }

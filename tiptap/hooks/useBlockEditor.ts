@@ -33,7 +33,7 @@ export const useBlockEditor = ({
 
   const editor = useEditor(
     {
-      immediatelyRender: true,
+      immediatelyRender: false,
       autofocus: true,
       extensions: [
         ...ExtensionKit({

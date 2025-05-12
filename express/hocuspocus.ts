@@ -23,6 +23,16 @@ const hocuspocusServer = Server.configure({
           });
 
           return issue?.description ?? null;
+        } else if (entity === 'githubWikiFile') {
+          const wiki = await prisma.githubWikiFile.findUnique({
+            where: {
+              id,
+            },
+            select: {
+              content: true,
+            },
+          });
+          return wiki?.content ?? null;
         }
         return null;
       },
@@ -36,6 +46,15 @@ const hocuspocusServer = Server.configure({
             },
             data: {
               description: new Uint8Array(state),
+            },
+          });
+        } else if (entity === 'githubWikiFile') {
+          await prisma.githubWikiFile.update({
+            where: {
+              id,
+            },
+            data: {
+              content: new Uint8Array(state),
             },
           });
         }
