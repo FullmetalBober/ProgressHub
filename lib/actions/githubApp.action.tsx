@@ -5,7 +5,7 @@ import { ProbotOctokit } from 'probot';
 import prisma from '../db';
 import { env } from '../env.mjs';
 import { protectAction } from '../protection';
-import { getGithubWikis, notifyUsers, zodValidate } from './utils';
+import { getGithubWikis, notifyUsers, pushMdFile, zodValidate } from './utils';
 
 const octokit = new ProbotOctokit({
   auth: {
@@ -164,12 +164,20 @@ export async function createGithubWikiFile(body: unknown) {
     },
   });
 
-  await notifyUsers(
-    githubWikiFile.installation.workspace.id,
-    'githubWikiFile',
-    'create',
-    githubWikiFile
-  );
+  await Promise.all([
+    notifyUsers(
+      githubWikiFile.installation.workspace.id,
+      'githubWikiFile',
+      'create',
+      githubWikiFile
+    ),
+    pushMdFile(
+      githubWikiFile.installationId,
+      githubWikiFile.githubRepositoryId,
+      githubWikiFile.path,
+      ''
+    ),
+  ]);
 
   return githubWikiFile;
 }

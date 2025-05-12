@@ -3,7 +3,12 @@ import { env } from '@/lib/env.mjs';
 import express from 'express';
 import { z } from 'zod';
 import io from './socket';
-import { getMDFilesGithubWiki, pullGithubWiki } from './utils/git';
+import {
+  createGithubWikiFile,
+  getMDFilesGithubWiki,
+  pullGithubWiki,
+  pushGithubWiki,
+} from './utils/git';
 import { getGithubToken, getRepoInfo } from './utils/github';
 
 const router = express.Router();
@@ -89,6 +94,34 @@ router.get('/github/wiki/:installationId/:repoId', async (req, res) => {
   const repoContent = await getMDFilesGithubWiki(repoId);
 
   res.status(200).json(repoContent);
+});
+
+const upsertGithubWikiFileSchema = z.object({
+  params: getGithubWikiParamsSchema,
+  body: z.object({
+    name: z.string(),
+    content: z.string(),
+  }),
+});
+
+router.post('/github/wiki/:installationId/:repoId/file', async (req, res) => {
+  const { params, body } = upsertGithubWikiFileSchema.parse({
+    params: req.params,
+    body: req.body,
+  });
+
+  const [repoData, token] = await Promise.all([
+    getRepoInfo(params.installationId, params.repoId),
+    getGithubToken(params.installationId),
+  ]);
+
+  await pullGithubWiki(params.repoId, repoData.full_name, token);
+  await createGithubWikiFile(params.repoId, body.name, body.content);
+  await pushGithubWiki(params.repoId, repoData.full_name, token);
+
+  res.status(200).json({
+    message: 'File created or updated successfully',
+  });
 });
 
 export default router;

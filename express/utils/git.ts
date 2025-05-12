@@ -32,13 +32,13 @@ export async function pullGithubWiki(
 }
 
 export async function pushGithubWiki(
-  repoId: string,
+  repoId: number,
   repoFullName: string,
   token: string
 ) {
-  const path = join(__dirname, gitSavesDir, repoId);
-
+  const path = join(basePath, repoId.toString());
   const gitMain = simpleGit(path);
+
   await gitMain.add(path);
   await gitMain.commit(
     `update wiki via ProgressHub ${new Date().toISOString()}`
@@ -65,4 +65,31 @@ export async function getMDFilesGithubWiki(repoId: number) {
   );
 
   return mdFilesWithContent;
+}
+
+export async function createGithubWikiFile(
+  repoId: number,
+  fileName: string,
+  content: string
+) {
+  const path = join(basePath, repoId.toString(), fileName + '.md');
+
+  await fs.writeFile(path, content);
+}
+
+export async function deleteGithubWikiFile(repoId: number, fileName: string) {
+  const path = join(basePath, repoId.toString(), fileName);
+
+  await fs.unlink(path);
+}
+
+export async function renameGithubWikiFile(
+  repoId: number,
+  oldFileName: string,
+  newFileName: string
+) {
+  const oldPath = join(basePath, repoId.toString(), oldFileName);
+  const newPath = join(basePath, repoId.toString(), newFileName);
+
+  await fs.rename(oldPath, newPath);
 }

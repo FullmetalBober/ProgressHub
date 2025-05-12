@@ -24,6 +24,8 @@ export default function WikiSidebar(
   const params = useParams<{ installationId: string; repositoryId: string }>();
   const { selectedWiki, handleWikiChange } = useWiki();
 
+  const handleSyncWikis = async () => {}
+
   const handleSwitchWiki = (wiki: GithubWikiFile) => {
     handleWikiChange(wiki);
   };
