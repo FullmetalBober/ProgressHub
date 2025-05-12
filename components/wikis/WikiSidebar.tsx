@@ -22,14 +22,10 @@ export default function WikiSidebar(
   }>
 ) {
   const params = useParams<{ installationId: string; repositoryId: string }>();
-  const { selectedWiki, setSelectedWiki } = useWiki();
-
-  const sortedWikis = props.wikis.toSorted((a, b) =>
-    a.path.localeCompare(b.path)
-  );
+  const { selectedWiki, handleWikiChange } = useWiki();
 
   const handleSwitchWiki = (wiki: GithubWikiFile) => {
-    setSelectedWiki(wiki);
+    handleWikiChange(wiki);
   };
   const handleDeleteWiki = () => {};
   const handleResetLocalWiki = () => {};
@@ -52,10 +48,10 @@ export default function WikiSidebar(
             <CreateWikiModal
               installationId={Number(params.installationId)}
               repositoryId={Number(params.repositoryId)}
-              wikiPaths={sortedWikis.map(wiki => wiki.path)}
+              wikiPaths={props.wikis.map(wiki => wiki.path)}
             />
             <SidebarMenu>
-              {sortedWikis.map(wiki => (
+              {props.wikis.map(wiki => (
                 <SidebarMenuItem key={wiki.id}>
                   <SidebarMenuButton
                     onClick={() => handleSwitchWiki(wiki)}

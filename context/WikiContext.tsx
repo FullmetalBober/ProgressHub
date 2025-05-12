@@ -1,5 +1,6 @@
 'use client';
 
+import useQueryParams from '@/hooks/useQueryParams';
 import { GithubWikiFile } from '@prisma/client';
 import { createContext, useContext, useMemo, useState } from 'react';
 
@@ -9,19 +10,25 @@ type TProvider = {
 };
 type TContext = {
   selectedWiki: GithubWikiFile | undefined;
-  setSelectedWiki: React.Dispatch<
-    React.SetStateAction<GithubWikiFile | undefined>
-  >;
+  handleWikiChange: (wiki: GithubWikiFile) => void;
 };
 
 const WikiContext = createContext<TContext | null>(null);
 
 export function WikiProvider({ children, initialSelectedWiki }: TProvider) {
+  const { setQueryParams } = useQueryParams();
   const [selectedWiki, setSelectedWiki] = useState(initialSelectedWiki);
 
+  const handleWikiChange = (wiki: GithubWikiFile) => {
+    setSelectedWiki(wiki);
+    setQueryParams('pageId', wiki.id, {
+      shallow: true,
+    });
+  };
+
   const contextValue = useMemo(
-    () => ({ selectedWiki, setSelectedWiki }),
-    [selectedWiki, setSelectedWiki]
+    () => ({ selectedWiki, handleWikiChange }),
+    [selectedWiki]
   );
 
   return (

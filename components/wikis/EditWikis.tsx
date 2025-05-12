@@ -6,7 +6,7 @@ import { SocketWikiEmitterProvider } from '@/providers/SocketWikiProvider';
 import TiptapEditor from '@/tiptap/TiptapEditor';
 import { GithubWikiFile } from '@prisma/client';
 import { User as SessionUser } from 'next-auth';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import { SidebarInset, SidebarProvider } from '../ui/sidebar';
 import WikiSidebar from './WikiSidebar';
 
@@ -17,14 +17,22 @@ type TEditWikisProps = Readonly<{
 }>;
 
 export default function EditWikis(props: TEditWikisProps) {
-  const observableWikis = useSocketObserver('githubWikiFile', props.wikis);
   const params = useParams<{ repositoryId: string }>();
+  const searchParams = useSearchParams();
+  const observableWikis = useSocketObserver('githubWikiFile', props.wikis);
+  const sortedWikis = observableWikis.toSorted((a, b) =>
+    a.path.localeCompare(b.path)
+  );
+
+  const selectedWiki =
+    sortedWikis.find(wiki => wiki.id === searchParams.get('pageId')) ||
+    sortedWikis[0];
 
   return (
-    <WikiProvider initialSelectedWiki={observableWikis[0]}>
+    <WikiProvider initialSelectedWiki={selectedWiki}>
       <SocketWikiEmitterProvider room={params.repositoryId}>
         <SidebarProvider>
-          <EditWikisComponent {...props} wikis={observableWikis} />
+          <EditWikisComponent {...props} wikis={sortedWikis} />
         </SidebarProvider>
       </SocketWikiEmitterProvider>
     </WikiProvider>
