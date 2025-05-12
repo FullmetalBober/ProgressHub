@@ -1,6 +1,10 @@
+import { useTiptapEditor } from '@/context/TiptapEditorContext';
 import { useWiki } from '@/context/WikiContext';
+import { updateGithubWikiRemoteFile } from '@/lib/actions/githubApp.action';
 import { GithubWikiFile } from '@prisma/client';
 import { useParams } from 'next/navigation';
+import { useState } from 'react';
+import { toast } from 'sonner';
 import ConfirmationDialog from '../ConfirmationDialog';
 import {
   Sidebar,
@@ -23,8 +27,24 @@ export default function WikiSidebar(
 ) {
   const params = useParams<{ installationId: string; repositoryId: string }>();
   const { selectedWiki, handleWikiChange } = useWiki();
+  const { currentTiptapEditor } = useTiptapEditor();
+  const [isSyncing, setIsSyncing] = useState(false);
 
-  const handleSyncWikis = async () => {}
+  const handleSyncWikis = async () => {
+    setIsSyncing(true);
+    if (!selectedWiki || !currentTiptapEditor.current) return;
+    const html = currentTiptapEditor.current.getHTML();
+
+    const action = updateGithubWikiRemoteFile(selectedWiki.id, html);
+    toast.promise(action, {
+      loading: 'Syncing wiki page...',
+      success: 'Wiki page synced!',
+      error: 'Failed to sync wiki page',
+    });
+    await action;
+
+    setIsSyncing(false);
+  };
 
   const handleSwitchWiki = (wiki: GithubWikiFile) => {
     handleWikiChange(wiki);
@@ -40,7 +60,9 @@ export default function WikiSidebar(
         <SidebarHeader>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton>Синхронізувати з GitHub</SidebarMenuButton>
+              <SidebarMenuButton onClick={handleSyncWikis} disabled={isSyncing}>
+                Синхронізувати з GitHub
+              </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarHeader>

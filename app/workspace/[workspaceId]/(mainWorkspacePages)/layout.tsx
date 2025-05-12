@@ -1,4 +1,5 @@
 import WorkspaceSideBar from '@/components/workspace/WorkspaceSideBar';
+import { TiptapEditorProvider } from '@/context/TiptapEditorContext';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -17,11 +18,13 @@ export default async function RootLayout(
   const { children } = props;
 
   return (
-    <div className='flex flex-col h-screen justify-between'>
-      <div className='mb-auto p-8 pt-2 md:p-8 grid grid-cols-1 lg:grid-cols-5'>
-        <WorkspaceSideBar workspaceId={params.workspaceId} />
-        <main className='lg:col-span-4'>{children}</main>
+    <TiptapEditorProvider>
+      <div className='flex flex-col h-screen justify-between'>
+        <div className='mb-auto p-8 pt-2 md:p-8 grid grid-cols-1 lg:grid-cols-5'>
+          <WorkspaceSideBar workspaceId={params.workspaceId} />
+          <main className='lg:col-span-4'>{children}</main>
+        </div>
       </div>
-    </div>
+    </TiptapEditorProvider>
   );
 }

@@ -181,3 +181,26 @@ export async function createGithubWikiFile(body: unknown) {
 
   return githubWikiFile;
 }
+
+export async function updateGithubWikiRemoteFile(
+  wikiId: string,
+  mdFile: string
+) {
+  const [githubWikiFile] = await Promise.all([
+    prisma.githubWikiFile.findFirstOrThrow({
+      where: {
+        id: wikiId,
+      },
+    }),
+    protectAction({
+      githubWikiFileId: wikiId,
+    }),
+  ]);
+
+  await pushMdFile(
+    githubWikiFile.installationId,
+    githubWikiFile.githubRepositoryId,
+    githubWikiFile.path,
+    mdFile
+  );
+}

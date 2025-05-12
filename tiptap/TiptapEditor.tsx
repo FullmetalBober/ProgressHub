@@ -31,7 +31,6 @@ export default function TiptapEditor({
 
     setYdoc(ydoc);
     setProvider(newProvider);
-    console.log('TiptapEditor: provider', newProvider);
 
     return () => {
       newProvider.destroy();
