@@ -8,6 +8,7 @@ import { GithubWikiFile } from '@prisma/client';
 import { User as SessionUser } from 'next-auth';
 import { useParams, useSearchParams } from 'next/navigation';
 import { SidebarInset, SidebarProvider } from '../ui/sidebar';
+import EditWikiTitle from './EditWikiTitle';
 import WikiSidebar from './WikiSidebar';
 
 type TEditWikisProps = Readonly<{
@@ -46,14 +47,16 @@ function EditWikisComponent({ wikis, user, tiptapToken }: TEditWikisProps) {
 
   return (
     <>
-      {/* <EditIssueTitle {...issue} /> */}
       <SidebarInset>
         {selectedWiki && (
-          <TiptapEditor
-            room={roomDescription}
-            user={user}
-            collabToken={tiptapToken}
-          />
+          <>
+            <EditWikiTitle wiki={selectedWiki} key={selectedWiki.id} />
+            <TiptapEditor
+              room={roomDescription}
+              user={user}
+              collabToken={tiptapToken}
+            />
+          </>
         )}
       </SidebarInset>
       <WikiSidebar wikis={wikis} />

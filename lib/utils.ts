@@ -34,3 +34,17 @@ export function checkIsOwnerOrAdmin(
       sessionUserId === userId && (role === 'OWNER' || role === 'ADMIN')
   );
 }
+
+export function mergeRefs<T>(
+  ...refs: (React.Ref<T> | undefined)[]
+): React.RefCallback<T> {
+  return value => {
+    for (const ref of refs) {
+      if (typeof ref === 'function') {
+        ref(value);
+      } else if (ref != null) {
+        ref.current = value;
+      }
+    }
+  };
+}

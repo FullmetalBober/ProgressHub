@@ -1,6 +1,9 @@
 'use server';
 
-import { GithubWikiFileUncheckedCreateInputSchema } from '@/prisma/zod';
+import {
+  GithubWikiFileUncheckedCreateInputSchema,
+  GithubWikiFileUncheckedUpdateInputSchema,
+} from '@/prisma/zod';
 import { ProbotOctokit } from 'probot';
 import prisma from '../db';
 import { env } from '../env.mjs';
@@ -180,6 +183,36 @@ export async function createGithubWikiFile(body: unknown) {
   ]);
 
   return githubWikiFile;
+}
+
+export async function updateGithubWikiFile(id: string, body: unknown) {
+  const data = zodValidate(GithubWikiFileUncheckedUpdateInputSchema, body);
+  const [githubWikiFile] = await Promise.all([
+    prisma.githubWikiFile.findFirstOrThrow({
+      where: {
+        id: id,
+      },
+    }),
+    protectAction({
+      githubWikiFileId: id,
+    }),
+  ]);
+
+  const updatedGithubWikiFile = await prisma.githubWikiFile.update({
+    where: {
+      id: githubWikiFile.id,
+    },
+    data,
+  });
+
+  await notifyUsers(
+    String(githubWikiFile.githubRepositoryId),
+    'githubWikiFile',
+    'update',
+    updatedGithubWikiFile
+  );
+
+  return updatedGithubWikiFile;
 }
 
 export async function updateGithubWikiRemoteFile(

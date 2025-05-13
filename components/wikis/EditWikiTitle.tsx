@@ -1,11 +1,11 @@
 'use client';
 
 import { useSocketObserver } from '@/hooks/useSocketObserver';
-import { updateIssue } from '@/lib/actions/issues.action';
+import { updateGithubWikiFile } from '@/lib/actions/githubApp.action';
 import {
-  Issue,
-  IssuePartial,
-  IssueUncheckedUpdateInputSchema,
+  GithubWikiFile,
+  GithubWikiFilePartial,
+  GithubWikiFileUncheckedUpdateInputSchema,
 } from '@/prisma/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
@@ -13,41 +13,43 @@ import { useForm } from 'react-hook-form';
 import TextareaAutoSize from '../TextareaAutoSize';
 import { Form, FormControl, FormField, FormItem } from '../ui/form';
 
-export default function EditIssueTitle(
-  issue: Readonly<Pick<Issue, 'id' | 'title'>>
+export default function EditWikiTitle(
+  props: Readonly<{
+    wiki: Pick<GithubWikiFile, 'id' | 'path'>;
+  }>
 ) {
-  const [issueObservable] = useSocketObserver('issue', [issue]);
-  const { id, title } = issueObservable;
+  const [wikiObservable] = useSocketObserver('githubWikiFile', [props.wiki]);
+  const { id, path } = wikiObservable;
 
-  const form = useForm<IssuePartial>({
-    resolver: zodResolver(IssueUncheckedUpdateInputSchema),
+  const form = useForm<GithubWikiFilePartial>({
+    resolver: zodResolver(GithubWikiFileUncheckedUpdateInputSchema),
     defaultValues: {
-      title,
+      path,
     },
   });
 
   useEffect(() => {
-    form.reset({ title });
-  }, [form, title]);
+    form.reset({ path });
+  }, [form, path]);
 
-  const onSubmit = async (data: IssuePartial) => {
+  const onSubmit = async (data: GithubWikiFilePartial) => {
     if (Object.keys(form.formState.dirtyFields).length === 0) return;
     form.reset(data);
 
-    await updateIssue(id, data);
+    await updateGithubWikiFile(id, data);
   };
 
   return (
     <Form {...form}>
       <FormField
         control={form.control}
-        name='title'
+        name='path'
         render={({ field }) => (
           <FormItem>
             <FormControl>
               <TextareaAutoSize
                 {...field}
-                currentValue={title}
+                currentValue={path}
                 onBlur={form.handleSubmit(onSubmit)}
               />
             </FormControl>
