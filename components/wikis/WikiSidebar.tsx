@@ -1,6 +1,7 @@
 import { useTiptapEditor } from '@/context/TiptapEditorContext';
 import { useWiki } from '@/context/WikiContext';
 import { updateGithubWikiRemoteFile } from '@/lib/actions/githubApp.action';
+import { convertHtmlTaskListToMdCompatible } from '@/lib/utils';
 import { GithubWikiFile } from '@prisma/client';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
@@ -33,7 +34,9 @@ export default function WikiSidebar(
   const handleSyncWikis = async () => {
     setIsSyncing(true);
     if (!selectedWiki || !currentTiptapEditor.current) return;
-    const html = currentTiptapEditor.current.getHTML();
+    const html = convertHtmlTaskListToMdCompatible(
+      currentTiptapEditor.current.getHTML()
+    );
 
     const action = updateGithubWikiRemoteFile(selectedWiki.id, html);
     toast.promise(action, {
@@ -72,7 +75,14 @@ export default function WikiSidebar(
             <CreateWikiModal
               installationId={Number(params.installationId)}
               repositoryId={Number(params.repositoryId)}
-              wikiPaths={props.wikis.map(wiki => wiki.path)}
+              wikiPaths={props.wikis
+                .map(wiki => {
+                  const paths = [wiki.path];
+                  if (wiki.previousPath) paths.push(wiki.previousPath);
+
+                  return paths;
+                })
+                .flat()}
             />
             <SidebarMenu>
               {props.wikis.map(wiki => (

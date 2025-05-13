@@ -8,6 +8,7 @@ import {
   getMDFilesGithubWiki,
   pullGithubWiki,
   pushGithubWiki,
+  renameGithubWikiFile,
 } from './utils/git';
 import { getGithubToken, getRepoInfo } from './utils/github';
 
@@ -98,10 +99,15 @@ router.get('/github/wiki/:installationId/:repoId', async (req, res) => {
 
 const upsertGithubWikiFileSchema = z.object({
   params: getGithubWikiParamsSchema,
-  body: z.object({
-    name: z.string(),
-    content: z.string(),
-  }),
+  body: z
+    .object({
+      name: z.string(),
+      oldName: z.string().optional(),
+      content: z.string().optional(),
+    })
+    .refine(data => data.name || data.content, {
+      message: 'Either name or content must be provided',
+    }),
 });
 
 router.post('/github/wiki/:installationId/:repoId/file', async (req, res) => {
@@ -116,7 +122,10 @@ router.post('/github/wiki/:installationId/:repoId/file', async (req, res) => {
   ]);
 
   await pullGithubWiki(params.repoId, repoData.full_name, token);
-  await createGithubWikiFile(params.repoId, body.name, body.content);
+  if (body.oldName)
+    await renameGithubWikiFile(params.repoId, body.oldName, body.name);
+  if (body.content)
+    await createGithubWikiFile(params.repoId, body.name, body.content);
   await pushGithubWiki(params.repoId, repoData.full_name, token);
 
   res.status(200).json({

@@ -1899,18 +1899,18 @@ export const GithubWikiFileOrderByWithRelationInputSchema: z.ZodType<Prisma.Gith
 export const GithubWikiFileWhereUniqueInputSchema: z.ZodType<Prisma.GithubWikiFileWhereUniqueInput> = z.union([
   z.object({
     id: z.string().cuid(),
-    path_installationId: z.lazy(() => GithubWikiFilePathInstallationIdCompoundUniqueInputSchema)
+    path_githubRepositoryId: z.lazy(() => GithubWikiFilePathGithubRepositoryIdCompoundUniqueInputSchema)
   }),
   z.object({
     id: z.string().cuid(),
   }),
   z.object({
-    path_installationId: z.lazy(() => GithubWikiFilePathInstallationIdCompoundUniqueInputSchema),
+    path_githubRepositoryId: z.lazy(() => GithubWikiFilePathGithubRepositoryIdCompoundUniqueInputSchema),
   }),
 ])
 .and(z.object({
   id: z.string().cuid().optional(),
-  path_installationId: z.lazy(() => GithubWikiFilePathInstallationIdCompoundUniqueInputSchema).optional(),
+  path_githubRepositoryId: z.lazy(() => GithubWikiFilePathGithubRepositoryIdCompoundUniqueInputSchema).optional(),
   AND: z.union([ z.lazy(() => GithubWikiFileWhereInputSchema),z.lazy(() => GithubWikiFileWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => GithubWikiFileWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => GithubWikiFileWhereInputSchema),z.lazy(() => GithubWikiFileWhereInputSchema).array() ]).optional(),
@@ -3444,10 +3444,10 @@ export const GithubAppInstallationScalarRelationFilterSchema: z.ZodType<Prisma.G
   isNot: z.lazy(() => GithubAppInstallationWhereInputSchema).optional()
 }).strict() as z.ZodType<Prisma.GithubAppInstallationScalarRelationFilter>;
 
-export const GithubWikiFilePathInstallationIdCompoundUniqueInputSchema: z.ZodType<Prisma.GithubWikiFilePathInstallationIdCompoundUniqueInput> = z.object({
+export const GithubWikiFilePathGithubRepositoryIdCompoundUniqueInputSchema: z.ZodType<Prisma.GithubWikiFilePathGithubRepositoryIdCompoundUniqueInput> = z.object({
   path: z.string(),
-  installationId: z.number()
-}).strict() as z.ZodType<Prisma.GithubWikiFilePathInstallationIdCompoundUniqueInput>;
+  githubRepositoryId: z.number()
+}).strict() as z.ZodType<Prisma.GithubWikiFilePathGithubRepositoryIdCompoundUniqueInput>;
 
 export const GithubWikiFileCountOrderByAggregateInputSchema: z.ZodType<Prisma.GithubWikiFileCountOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),

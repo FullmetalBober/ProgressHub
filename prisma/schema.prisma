@@ -220,5 +220,5 @@ model GithubWikiFile {
   createdAt          DateTime              @default(now())
   updatedAt          DateTime              @updatedAt
 
-  @@unique([path, installationId])
+  @@unique([path, githubRepositoryId])
 }

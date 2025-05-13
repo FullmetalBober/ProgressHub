@@ -153,34 +153,18 @@ export async function createGithubWikiFile(body: unknown) {
   });
 
   const githubWikiFile = await prisma.githubWikiFile.create({
-    data,
-    include: {
-      installation: {
-        include: {
-          workspace: {
-            select: {
-              id: true,
-            },
-          },
-        },
-      },
+    data: {
+      ...data,
+      previousPath: data.path,
     },
   });
 
-  await Promise.all([
-    notifyUsers(
-      githubWikiFile.installation.workspace.id,
-      'githubWikiFile',
-      'create',
-      githubWikiFile
-    ),
-    pushMdFile(
-      githubWikiFile.installationId,
-      githubWikiFile.githubRepositoryId,
-      githubWikiFile.path,
-      ''
-    ),
-  ]);
+  await notifyUsers(
+    String(githubWikiFile.githubRepositoryId),
+    'githubWikiFile',
+    'create',
+    githubWikiFile
+  );
 
   return githubWikiFile;
 }
@@ -219,7 +203,7 @@ export async function updateGithubWikiRemoteFile(
   wikiId: string,
   mdFile: string
 ) {
-  const [githubWikiFile] = await Promise.all([
+  let [githubWikiFile] = await Promise.all([
     prisma.githubWikiFile.findFirstOrThrow({
       where: {
         id: wikiId,
@@ -230,10 +214,32 @@ export async function updateGithubWikiRemoteFile(
     }),
   ]);
 
-  await pushMdFile(
-    githubWikiFile.installationId,
-    githubWikiFile.githubRepositoryId,
-    githubWikiFile.path,
-    mdFile
+  [githubWikiFile] = await Promise.all([
+    prisma.githubWikiFile.update({
+      where: {
+        id: githubWikiFile.id,
+      },
+      data: {
+        previousPath: githubWikiFile.path,
+      },
+    }),
+    pushMdFile(
+      githubWikiFile.installationId,
+      githubWikiFile.githubRepositoryId,
+      githubWikiFile.path,
+      {
+        oldFileName: githubWikiFile.previousPath,
+        content: mdFile,
+      }
+    ),
+  ]);
+
+  await notifyUsers(
+    String(githubWikiFile.githubRepositoryId),
+    'githubWikiFile',
+    'update',
+    githubWikiFile
   );
+
+  return githubWikiFile;
 }

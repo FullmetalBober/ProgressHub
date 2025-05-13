@@ -55,7 +55,7 @@ export async function pushMdFile(
   installationId: number,
   repoId: number,
   fileName: string,
-  content: string
+  { oldFileName, content }: { oldFileName?: string | null; content?: string }
 ) {
   const res = await fetch(
     `${env.SOCKET_BASE_URL}/api/github/wiki/${installationId}/${repoId}/file`,
@@ -66,6 +66,7 @@ export async function pushMdFile(
       },
       body: JSON.stringify({
         name: fileName,
+        oldName: oldFileName,
         content,
       }),
     }

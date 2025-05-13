@@ -40,6 +40,13 @@ export async function pushGithubWiki(
   const gitMain = simpleGit(path);
 
   await gitMain.add(path);
+
+  const changes = await gitMain.status();
+  if (changes.isClean()) {
+    console.log('No changes to commit');
+    return;
+  }
+
   await gitMain.commit(
     `update wiki via ProgressHub ${new Date().toISOString()}`
   );
@@ -88,8 +95,17 @@ export async function renameGithubWikiFile(
   oldFileName: string,
   newFileName: string
 ) {
-  const oldPath = join(basePath, repoId.toString(), oldFileName);
-  const newPath = join(basePath, repoId.toString(), newFileName);
+  if (oldFileName === newFileName) return;
+
+  const oldPath = join(basePath, repoId.toString(), oldFileName + '.md');
+  const newPath = join(basePath, repoId.toString(), newFileName + '.md');
+
+  const fileExists = await fs
+    .access(oldPath)
+    .then(() => true)
+    .catch(() => false);
+
+  if (!fileExists) return;
 
   await fs.rename(oldPath, newPath);
 }

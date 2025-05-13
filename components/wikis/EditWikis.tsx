@@ -50,7 +50,19 @@ function EditWikisComponent({ wikis, user, tiptapToken }: TEditWikisProps) {
       <SidebarInset>
         {selectedWiki && (
           <>
-            <EditWikiTitle wiki={selectedWiki} key={selectedWiki.id} />
+            <EditWikiTitle
+              key={selectedWiki.id}
+              wiki={selectedWiki}
+              wikiPaths={wikis
+                .map(wiki => {
+                  const paths = [wiki.path];
+                  if (wiki.previousPath) paths.push(wiki.previousPath);
+
+                  return paths;
+                })
+                .flat()
+                .filter(path => path !== selectedWiki.path)}
+            />
             <TiptapEditor
               room={roomDescription}
               user={user}

@@ -16,6 +16,7 @@ import { Form, FormControl, FormField, FormItem } from '../ui/form';
 export default function EditWikiTitle(
   props: Readonly<{
     wiki: Pick<GithubWikiFile, 'id' | 'path'>;
+    wikiPaths: string[];
   }>
 ) {
   const [wikiObservable] = useSocketObserver('githubWikiFile', [props.wiki]);
