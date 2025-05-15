@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useMemo } from 'react';
 import { Button } from '../ui/button';
 
 export default function SidebarButton({
@@ -14,8 +15,7 @@ export default function SidebarButton({
   href: string;
 }>) {
   const pathname = usePathname();
-
-  const isActive = pathname === href;
+  const isActive = useMemo(() => pathname.startsWith(href), [pathname, href]);
   const buttonVariant = isActive ? 'secondary' : 'ghost';
 
   return (

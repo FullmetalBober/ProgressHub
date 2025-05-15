@@ -26,7 +26,6 @@ export default function EditWikiTitle(
     [props.wiki],
     () => handleWikiChange(null)
   );
-  console.log(wikiObservable);
   const { id, path } = wikiObservable ?? {};
 
   const form = useForm<GithubWikiFilePartial>({

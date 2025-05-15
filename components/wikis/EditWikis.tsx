@@ -45,7 +45,6 @@ function EditWikisComponent({ wikis, user, tiptapToken }: TEditWikisProps) {
 
   const roomDescription = `githubWikiFile.${selectedWiki?.id}`;
 
-  console.log('EditWikisComponent', roomDescription, tiptapToken);
   return (
     <>
       <SidebarInset>
