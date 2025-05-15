@@ -4,6 +4,12 @@ import simpleGit from 'simple-git';
 
 const gitSavesDir = '.resources/githubWikis';
 const basePath = join(process.cwd(), gitSavesDir);
+const gitBaseConfig = {
+  config: [
+    "user.name='ProgressHub'",
+    "user.email='vladyslav.mankivskyi@gmail.com'",
+  ],
+};
 
 function buildFilePath(repoId: number, fileName: string) {
   return join(basePath, repoId.toString(), fileName + '.md');
@@ -24,7 +30,7 @@ export async function pullGithubWiki(
   if (!dirExists) {
     await fs.mkdir(path, { recursive: true });
 
-    const gitClone = simpleGit(basePath);
+    const gitClone = simpleGit(basePath, gitBaseConfig);
     await gitClone.clone(
       `https://x-access-token:${token}@github.com/${repoFullName}.wiki.git`,
       path
@@ -41,7 +47,7 @@ export async function pushGithubWiki(
   token: string
 ) {
   const path = join(basePath, repoId.toString());
-  const gitMain = simpleGit(path);
+  const gitMain = simpleGit(path, gitBaseConfig);
 
   await gitMain.add(path);
 
