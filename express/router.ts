@@ -5,6 +5,7 @@ import { z } from 'zod';
 import io from './socket';
 import {
   createGithubWikiFile,
+  deleteGithubWikiFile,
   getMDFilesGithubWiki,
   pullGithubWiki,
   pushGithubWiki,
@@ -130,6 +131,32 @@ router.post('/github/wiki/:installationId/:repoId/file', async (req, res) => {
 
   res.status(200).json({
     message: 'File created or updated successfully',
+  });
+});
+
+const deleteGithubWikiFileSchema = z.object({
+  params: getGithubWikiParamsSchema,
+  body: z.object({
+    name: z.string(),
+  }),
+});
+router.delete('/github/wiki/:installationId/:repoId/file', async (req, res) => {
+  const { params, body } = deleteGithubWikiFileSchema.parse({
+    params: req.params,
+    body: req.body,
+  });
+
+  const [repoData, token] = await Promise.all([
+    getRepoInfo(params.installationId, params.repoId),
+    getGithubToken(params.installationId),
+  ]);
+
+  await pullGithubWiki(params.repoId, repoData.full_name, token);
+  await deleteGithubWikiFile(params.repoId, body.name);
+  await pushGithubWiki(params.repoId, repoData.full_name, token);
+
+  res.status(200).json({
+    message: 'File deleted successfully',
   });
 });
 

@@ -1,5 +1,6 @@
 'use client';
 
+import { useWiki } from '@/context/WikiContext';
 import { useSocketObserver } from '@/hooks/useSocketObserver';
 import { updateGithubWikiFile } from '@/lib/actions/githubApp.action';
 import {
@@ -19,8 +20,14 @@ export default function EditWikiTitle(
     wikiPaths: string[];
   }>
 ) {
-  const [wikiObservable] = useSocketObserver('githubWikiFile', [props.wiki]);
-  const { id, path } = wikiObservable;
+  const { handleWikiChange } = useWiki();
+  const [wikiObservable] = useSocketObserver(
+    'githubWikiFile',
+    [props.wiki],
+    () => handleWikiChange(null)
+  );
+  console.log(wikiObservable);
+  const { id, path } = wikiObservable ?? {};
 
   const form = useForm<GithubWikiFilePartial>({
     resolver: zodResolver(GithubWikiFileUncheckedUpdateInputSchema),

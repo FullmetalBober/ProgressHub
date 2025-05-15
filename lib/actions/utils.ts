@@ -74,6 +74,26 @@ export async function pushMdFile(
   if (!res.ok) throw new Error('Failed to create wiki file');
 }
 
+export async function deleteMdFile(
+  installationId: number,
+  repoId: number,
+  fileName: string
+) {
+  const res = await fetch(
+    `${env.SOCKET_BASE_URL}/api/github/wiki/${installationId}/${repoId}/file`,
+    {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: fileName,
+      }),
+    }
+  );
+  if (!res.ok) throw new Error('Failed to delete wiki file');
+}
+
 export function zodValidate<T>(schema: ZodType<T>, data: unknown) {
   const validatedFields = schema.safeParse(data);
   if (!validatedFields.success)

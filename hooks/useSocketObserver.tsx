@@ -13,7 +13,7 @@ type entities =
 export function useSocketObserver<T extends { id: string }>(
   eventName: entities,
   initValues: T[],
-  navigateOnDeletePath?: string
+  onDelete?: () => void
 ) {
   const { socket } = useSocket();
   const [state, setState] = useState<T[]>(initValues);
@@ -22,31 +22,34 @@ export function useSocketObserver<T extends { id: string }>(
   useEffect(() => {
     if (!socket) return;
 
-    socket.on(`${eventName}/update`, (data: T) => {
+    const handleUpdate = (data: T) => {
       setState(prev =>
         prev.map(issue =>
           issue.id === data.id ? { ...issue, ...data } : issue
         )
       );
-    });
+    };
 
-    socket.on(`${eventName}/create`, (data: T) => {
+    const handleCreate = (data: T) => {
       setState(prev => [...prev, data]);
-    });
+    };
 
-    socket.on(`${eventName}/delete`, (data: T) => {
+    const handleDelete = (data: T) => {
       setState(prev => prev.filter(issue => issue.id !== data.id));
-      if (navigateOnDeletePath) {
-        router.push(navigateOnDeletePath);
-      }
-    });
+      onDelete?.();
+    };
+
+    socket.on(`${eventName}/update`, handleUpdate);
+    socket.on(`${eventName}/create`, handleCreate);
+
+    socket.on(`${eventName}/delete`, handleDelete);
 
     return () => {
-      socket.off(`${eventName}/update`);
-      socket.off(`${eventName}/create`);
-      socket.off(`${eventName}/delete`);
+      socket.off(`${eventName}/update`, handleUpdate);
+      socket.off(`${eventName}/create`, handleCreate);
+      socket.off(`${eventName}/delete`, handleDelete);
     };
-  }, [socket, eventName, navigateOnDeletePath, router]);
+  }, [socket, eventName, onDelete, router]);
 
   return state;
 }

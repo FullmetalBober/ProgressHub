@@ -30,13 +30,13 @@ export default function EditWikis(props: TEditWikisProps) {
     sortedWikis[0];
 
   return (
-    <WikiProvider initialSelectedWiki={selectedWiki}>
-      <SocketWikiEmitterProvider room={params.repositoryId}>
+    <SocketWikiEmitterProvider room={params.repositoryId}>
+      <WikiProvider initialSelectedWiki={selectedWiki}>
         <SidebarProvider>
           <EditWikisComponent {...props} wikis={sortedWikis} />
         </SidebarProvider>
-      </SocketWikiEmitterProvider>
-    </WikiProvider>
+      </WikiProvider>
+    </SocketWikiEmitterProvider>
   );
 }
 
@@ -45,13 +45,13 @@ function EditWikisComponent({ wikis, user, tiptapToken }: TEditWikisProps) {
 
   const roomDescription = `githubWikiFile.${selectedWiki?.id}`;
 
+  console.log('EditWikisComponent', roomDescription, tiptapToken);
   return (
     <>
       <SidebarInset>
         {selectedWiki && (
-          <>
+          <div key={selectedWiki.id}>
             <EditWikiTitle
-              key={selectedWiki.id}
               wiki={selectedWiki}
               wikiPaths={wikis
                 .map(wiki => {
@@ -68,7 +68,7 @@ function EditWikisComponent({ wikis, user, tiptapToken }: TEditWikisProps) {
               user={user}
               collabToken={tiptapToken}
             />
-          </>
+          </div>
         )}
       </SidebarInset>
       <WikiSidebar wikis={wikis} />

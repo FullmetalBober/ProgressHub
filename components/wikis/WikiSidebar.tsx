@@ -1,6 +1,9 @@
 import { useTiptapEditor } from '@/context/TiptapEditorContext';
 import { useWiki } from '@/context/WikiContext';
-import { updateGithubWikiRemoteFile } from '@/lib/actions/githubApp.action';
+import {
+  deleteGithubWikiRemoteFile,
+  updateGithubWikiRemoteFile,
+} from '@/lib/actions/githubApp.action';
 import { convertHtmlTaskListToMdCompatible } from '@/lib/utils';
 import { GithubWikiFile } from '@prisma/client';
 import { useParams } from 'next/navigation';
@@ -32,8 +35,9 @@ export default function WikiSidebar(
   const [isSyncing, setIsSyncing] = useState(false);
 
   const handleSyncWikis = async () => {
-    setIsSyncing(true);
     if (!selectedWiki || !currentTiptapEditor.current) return;
+    setIsSyncing(true);
+
     const html = convertHtmlTaskListToMdCompatible(
       currentTiptapEditor.current.getHTML()
     );
@@ -52,8 +56,20 @@ export default function WikiSidebar(
   const handleSwitchWiki = (wiki: GithubWikiFile) => {
     handleWikiChange(wiki);
   };
-  const handleDeleteWiki = () => {};
-  const handleResetLocalWiki = () => {};
+  const handleDeleteWiki = async () => {
+    if (!selectedWiki) return;
+
+    setIsSyncing(true);
+    const action = deleteGithubWikiRemoteFile(selectedWiki.id);
+    toast.promise(action, {
+      loading: 'Deleting wiki page...',
+      success: 'Wiki page deleted!',
+      error: 'Failed to delete wiki page',
+    });
+    await action;
+
+    setIsSyncing(false);
+  };
 
   return (
     <>
@@ -111,29 +127,11 @@ export default function WikiSidebar(
                       впевнені, що хочете продовжити?
                     </>
                   }
-                  action={async () => {}}
+                  action={handleDeleteWiki}
                   asChild
                 >
                   <SidebarMenuButton variant='destructive'>
                     Видалити сторінку
-                  </SidebarMenuButton>
-                </ConfirmationDialog>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <ConfirmationDialog
-                  title='Ви впевнені?'
-                  description={
-                    <>
-                      Ця дія скине всі зміни, внесені до{' '}
-                      <span className='font-bold'>{selectedWiki.path}</span>. Ви
-                      впевнені, що хочете продовжити?
-                    </>
-                  }
-                  action={async () => {}}
-                  asChild
-                >
-                  <SidebarMenuButton variant='destructive'>
-                    Скинути зміни
                   </SidebarMenuButton>
                 </ConfirmationDialog>
               </SidebarMenuItem>

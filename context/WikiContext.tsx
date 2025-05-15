@@ -10,7 +10,7 @@ type TProvider = {
 };
 type TContext = {
   selectedWiki: GithubWikiFile | undefined;
-  handleWikiChange: (wiki: GithubWikiFile) => void;
+  handleWikiChange: (wiki: GithubWikiFile | null) => void;
 };
 
 const WikiContext = createContext<TContext | null>(null);
@@ -19,9 +19,10 @@ export function WikiProvider({ children, initialSelectedWiki }: TProvider) {
   const { setQueryParams } = useQueryParams();
   const [selectedWiki, setSelectedWiki] = useState(initialSelectedWiki);
 
-  const handleWikiChange = (wiki: GithubWikiFile) => {
-    setSelectedWiki(wiki);
-    setQueryParams('pageId', wiki.id, {
+  const handleWikiChange = (wiki: GithubWikiFile | null) => {
+    const pageId = wiki?.id ?? '';
+    setSelectedWiki(wiki ?? undefined);
+    setQueryParams('pageId', pageId, {
       shallow: true,
     });
   };

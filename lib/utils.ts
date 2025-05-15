@@ -57,7 +57,7 @@ export function convertHtmlTaskListToMdCompatible(html: string) {
 
   taskLists.forEach(taskList => {
     const items = taskList.querySelectorAll('li[data-type="taskItem"]');
-    const markdownLines = Array.from(items).map((item, i) => {
+    const markdownLines = Array.from(items).map(item => {
       const checked = item.getAttribute('data-checked') === 'true' ? 'x' : ' ';
       const text = item.querySelector('div')?.textContent?.trim() ?? '';
 

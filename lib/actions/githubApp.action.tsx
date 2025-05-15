@@ -8,7 +8,13 @@ import { ProbotOctokit } from 'probot';
 import prisma from '../db';
 import { env } from '../env.mjs';
 import { protectAction } from '../protection';
-import { getGithubWikis, notifyUsers, pushMdFile, zodValidate } from './utils';
+import {
+  deleteMdFile,
+  getGithubWikis,
+  notifyUsers,
+  pushMdFile,
+  zodValidate,
+} from './utils';
 
 const octokit = new ProbotOctokit({
   auth: {
@@ -240,6 +246,40 @@ export async function updateGithubWikiRemoteFile(
     'update',
     githubWikiFile
   );
+
+  return githubWikiFile;
+}
+
+export async function deleteGithubWikiRemoteFile(id: string) {
+  const [githubWikiFile] = await Promise.all([
+    prisma.githubWikiFile.findFirstOrThrow({
+      where: {
+        id,
+      },
+    }),
+    protectAction({
+      githubWikiFileId: id,
+    }),
+  ]);
+
+  await Promise.all([
+    prisma.githubWikiFile.delete({
+      where: {
+        id: githubWikiFile.id,
+      },
+    }),
+    notifyUsers(
+      String(githubWikiFile.githubRepositoryId),
+      'githubWikiFile',
+      'delete',
+      githubWikiFile
+    ),
+    deleteMdFile(
+      githubWikiFile.installationId,
+      githubWikiFile.githubRepositoryId,
+      githubWikiFile.path
+    ),
+  ]);
 
   return githubWikiFile;
 }

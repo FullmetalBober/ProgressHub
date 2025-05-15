@@ -36,7 +36,7 @@ export default function TiptapEditor({
       newProvider.destroy();
       ydoc.destroy();
     };
-  }, [room, collabToken]);
+  }, [room]);
 
   if (!provider || !ydoc) return;
   return <BlockEditor key={room} ydoc={ydoc} provider={provider} user={user} />;

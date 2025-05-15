@@ -5,6 +5,10 @@ import simpleGit from 'simple-git';
 const gitSavesDir = '.resources/githubWikis';
 const basePath = join(process.cwd(), gitSavesDir);
 
+function buildFilePath(repoId: number, fileName: string) {
+  return join(basePath, repoId.toString(), fileName + '.md');
+}
+
 export async function pullGithubWiki(
   repoId: number,
   repoFullName: string,
@@ -79,15 +83,21 @@ export async function createGithubWikiFile(
   fileName: string,
   content: string
 ) {
-  const path = join(basePath, repoId.toString(), fileName + '.md');
+  const path = buildFilePath(repoId, fileName);
 
   await fs.writeFile(path, content);
 }
 
 export async function deleteGithubWikiFile(repoId: number, fileName: string) {
-  const path = join(basePath, repoId.toString(), fileName);
+  const path = buildFilePath(repoId, fileName);
 
-  await fs.unlink(path);
+  const fileExists = await fs
+    .access(path)
+    .then(() => true)
+    .catch(() => false);
+
+  if (!fileExists) return;
+  return fs.unlink(path);
 }
 
 export async function renameGithubWikiFile(
@@ -97,8 +107,8 @@ export async function renameGithubWikiFile(
 ) {
   if (oldFileName === newFileName) return;
 
-  const oldPath = join(basePath, repoId.toString(), oldFileName + '.md');
-  const newPath = join(basePath, repoId.toString(), newFileName + '.md');
+  const oldPath = buildFilePath(repoId, oldFileName);
+  const newPath = buildFilePath(repoId, newFileName);
 
   const fileExists = await fs
     .access(oldPath)
