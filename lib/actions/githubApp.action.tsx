@@ -161,7 +161,6 @@ export async function createGithubWikiFile(body: unknown) {
   const githubWikiFile = await prisma.githubWikiFile.create({
     data: {
       ...data,
-      previousPath: data.path,
     },
   });
 
@@ -227,6 +226,7 @@ export async function updateGithubWikiRemoteFile(
       },
       data: {
         previousPath: githubWikiFile.path,
+        isModified: false,
       },
     }),
     pushMdFile(
@@ -234,7 +234,7 @@ export async function updateGithubWikiRemoteFile(
       githubWikiFile.githubRepositoryId,
       githubWikiFile.path,
       {
-        oldFileName: githubWikiFile.previousPath,
+        oldFileName: githubWikiFile.previousPath ?? githubWikiFile.path,
         content: mdFile,
       }
     ),

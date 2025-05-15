@@ -4,6 +4,7 @@ import { Database } from '@hocuspocus/extension-database';
 import { Logger } from '@hocuspocus/extension-logger';
 import { Server } from '@hocuspocus/server';
 import jwt from 'jsonwebtoken';
+import io from './socket';
 
 const hocuspocusServer = Server.configure({
   extensions: [
@@ -49,14 +50,22 @@ const hocuspocusServer = Server.configure({
             },
           });
         } else if (entity === 'githubWikiFile') {
-          await prisma.githubWikiFile.update({
+          const githubWikiFile = await prisma.githubWikiFile.update({
             where: {
               id,
             },
             data: {
               content: new Uint8Array(state),
+              isModified: true,
             },
           });
+          io.to(String(githubWikiFile.githubRepositoryId)).emit(
+            'githubWikiFile/update',
+            {
+              id: githubWikiFile.id,
+              isModified: githubWikiFile.isModified,
+            }
+          );
         }
       },
     }),

@@ -22,6 +22,7 @@ import {
   SidebarMenuItem,
   SidebarTrigger,
 } from '../ui/sidebar';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 import CreateWikiModal from './CreateWikiModal';
 
 export default function WikiSidebar(
@@ -107,6 +108,20 @@ export default function WikiSidebar(
                     onClick={() => handleSwitchWiki(wiki)}
                     isActive={selectedWiki?.id === wiki.id}
                   >
+                    {!wiki.previousPath && (
+                      <span className='bold text-green-600'>N</span>
+                    )}
+                    {wiki.previousPath && wiki.previousPath !== wiki.path && (
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span className='bold text-green-600'>R</span>
+                        </TooltipTrigger>
+                        <TooltipContent>{wiki.previousPath}</TooltipContent>
+                      </Tooltip>
+                    )}
+                    {wiki.previousPath && wiki.isModified && (
+                      <span className='bold text-yellow-500'>M</span>
+                    )}{' '}
                     {wiki.path}
                   </SidebarMenuButton>
                 </SidebarMenuItem>

@@ -67,6 +67,7 @@ export default function CreateWikiModal({
     });
     await action;
 
+    form.reset();
     setOpen(false);
   }
 

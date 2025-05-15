@@ -216,7 +216,7 @@ model GithubWikiFile {
   installation       GithubAppInstallation @relation(fields: [installationId], references: [id], onDelete: Cascade)
   githubRepositoryId Int
   content            Bytes?
-  previousContent    Bytes?
+  isModified         Boolean               @default(false)
   createdAt          DateTime              @default(now())
   updatedAt          DateTime              @updatedAt
 
