@@ -19,20 +19,21 @@ datasource db {
 
 /// @zod.strip()
 model User {
-  id                String            @id @default(cuid())
+  id                    String                  @id @default(cuid())
   /// @zod.string.trim().min(1).max(255)
-  name              String
+  name                  String
   /// @zod.string.trim().min(1).max(255)
-  email             String            @unique
-  emailVerified     DateTime?
-  image             String?
-  accounts          Account[]
-  sessions          Session[]
-  workspaces        WorkspaceMember[]
-  issues            Issue[]
-  workspacesInvites WorkspaceInvite[]
-  createdAt         DateTime          @default(now())
-  updatedAt         DateTime          @updatedAt
+  email                 String                  @unique
+  emailVerified         DateTime?
+  image                 String?
+  accounts              Account[]
+  sessions              Session[]
+  workspaces            WorkspaceMember[]
+  issues                Issue[]
+  workspacesInvites     WorkspaceInvite[]
+  githubAppInstallation GithubAppInstallation[]
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
 }
 
 /// @zod.strip()
@@ -91,14 +92,15 @@ model VerificationToken {
 
 /// @zod.strip()
 model Workspace {
-  id              String            @id @default(cuid())
+  id                    String                  @id @default(cuid())
   /// @zod.string.trim().min(1).max(255)
-  name            String
-  image           String?
-  issueCount      Int               @default(0)
-  members         WorkspaceMember[]
-  issues          Issue[]
-  workspaceInvite WorkspaceInvite[]
+  name                  String
+  image                 String?
+  issueCount            Int                     @default(0)
+  members               WorkspaceMember[]
+  issues                Issue[]
+  workspaceInvite       WorkspaceInvite[]
+  githubAppInstallation GithubAppInstallation[]
 }
 
 enum Role {
@@ -189,4 +191,34 @@ model Comment {
   authorId  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+/// @zod.strip()
+model GithubAppInstallation {
+  id             Int              @id
+  workspaceId    String
+  workspace      Workspace        @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  createdById    String
+  createdBy      User             @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  githubWikiFile GithubWikiFile[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+}
+
+/// @zod.strip()
+model GithubWikiFile {
+  id                 String                @id @default(cuid())
+  /// @zod.string.trim().min(1).max(255)
+  path               String
+  /// @zod.string.trim().min(1).max(255)
+  previousPath       String?
+  installationId     Int
+  installation       GithubAppInstallation @relation(fields: [installationId], references: [id], onDelete: Cascade)
+  githubRepositoryId Int
+  content            Bytes?
+  isModified         Boolean               @default(false)
+  createdAt          DateTime              @default(now())
+  updatedAt          DateTime              @updatedAt
+
+  @@unique([path, githubRepositoryId])
 }

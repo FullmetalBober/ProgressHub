@@ -1,6 +1,6 @@
-import { SocketEmitterProvider } from '@/components/SocketWorkspaceProvider';
 import { auth } from '@/lib/auth/utils';
 import prisma from '@/lib/db';
+import { SocketWorkspaceEmitterProvider } from '@/providers/SocketWorkspaceProvider';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -39,8 +39,8 @@ export default async function RootLayout(
     return <main>You are not a member of this workspace</main>;
 
   return (
-    <SocketEmitterProvider room={params.workspaceId}>
+    <SocketWorkspaceEmitterProvider room={params.workspaceId}>
       {children}
-    </SocketEmitterProvider>
+    </SocketWorkspaceEmitterProvider>
   );
 }

@@ -1,6 +1,6 @@
 import { auth } from '@/lib/auth/utils';
 import prisma from '@/lib/db/index';
-import { FolderKanban } from 'lucide-react';
+import { BookOpen, FolderKanban } from 'lucide-react';
 import Link from 'next/link';
 import CustomAvatar from '../CustomAvatar';
 import SignOut from '../auth/SignOut';
@@ -116,6 +116,11 @@ export default async function WorkspaceSideBar({
               icon={<FolderKanban />}
               label='Issues'
               href={`/workspace/${workspaceId}/issues`}
+            />
+            <SidebarButton
+              icon={<BookOpen />}
+              label='Wiki'
+              href={`/workspace/${workspaceId}/wikis`}
             />
           </ScrollArea>
         </div>

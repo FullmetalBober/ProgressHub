@@ -1,3 +1,4 @@
+import { useTiptapEditor } from '@/context/TiptapEditorContext';
 import { LinkMenu } from '@/tiptap/components/menus';
 import { EditorContext } from '@/tiptap/context/EditorContext';
 import ImageBlockMenu from '@/tiptap/extensions/ImageBlock/components/ImageBlockMenu';
@@ -20,10 +21,12 @@ import { TextMenu } from '../menus/TextMenu';
 import { TiptapProps } from './types';
 
 export const BlockEditor = ({ ydoc, provider, user }: TiptapProps) => {
+  const currentTiptapEditor = useTiptapEditor();
   const menuContainerRef = useRef(null);
   const editorRef = useRef<HTMLDivElement | null>(null);
 
   const { editor } = useBlockEditor({ ydoc, provider, user });
+  currentTiptapEditor.currentTiptapEditor.current = editor;
 
   const providerValue = useMemo(() => {
     return {};

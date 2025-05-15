@@ -24,7 +24,7 @@ export const useBlockEditor = ({
   user,
 }: {
   ydoc: YDoc;
-  provider?: TiptapCollabProvider | null | undefined;
+  provider?: TiptapCollabProvider | null;
   user: User;
 }) => {
   const [collabState, setCollabState] = useState<WebSocketStatus>(
@@ -33,7 +33,7 @@ export const useBlockEditor = ({
 
   const editor = useEditor(
     {
-      immediatelyRender: true,
+      immediatelyRender: false,
       autofocus: true,
       extensions: [
         ...ExtensionKit({

@@ -6,7 +6,7 @@ import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
 
-export function SocketEmitterProvider({
+export function SocketWorkspaceEmitterProvider({
   children,
   room,
 }: {

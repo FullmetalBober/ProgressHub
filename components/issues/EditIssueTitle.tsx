@@ -8,23 +8,14 @@ import {
   IssueUncheckedUpdateInputSchema,
 } from '@/prisma/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import TextareaAutoSize from '../TextareaAutoSize';
 import { Form, FormControl, FormField, FormItem } from '../ui/form';
-import { Textarea } from '../ui/textarea';
-
-const resizeTextarea = (
-  e: React.FormEvent<HTMLTextAreaElement> | HTMLTextAreaElement
-) => {
-  const target = e instanceof HTMLTextAreaElement ? e : e.currentTarget;
-  target.style.height = '0px';
-  target.style.height = target.scrollHeight + 'px';
-};
 
 export default function EditIssueTitle(
   issue: Readonly<Pick<Issue, 'id' | 'title'>>
 ) {
-  const titleRef = useRef<HTMLTextAreaElement | null>(null);
   const [issueObservable] = useSocketObserver('issue', [issue]);
   const { id, title } = issueObservable;
 
@@ -36,10 +27,6 @@ export default function EditIssueTitle(
   });
 
   useEffect(() => {
-    if (titleRef.current) {
-      titleRef.current.value = title;
-      resizeTextarea(titleRef.current);
-    }
     form.reset({ title });
   }, [form, title]);
 
@@ -58,20 +45,10 @@ export default function EditIssueTitle(
         render={({ field }) => (
           <FormItem>
             <FormControl>
-              <Textarea
+              <TextareaAutoSize
                 {...field}
-                ref={node => {
-                  field.ref(node);
-                  titleRef.current = node;
-                }}
-                variant='ghost'
-                textSize='3xl'
-                className='pl-3 overflow-hidden resize-none h-[80px]'
+                currentValue={title}
                 onBlur={form.handleSubmit(onSubmit)}
-                onInput={resizeTextarea}
-                onKeyDown={e => {
-                  if (e.key === 'Enter') e.preventDefault();
-                }}
               />
             </FormControl>
           </FormItem>
