@@ -1,3 +1,4 @@
+import prisma from '@/lib/db';
 import { env } from '@/lib/env.mjs';
 import { createNodeMiddleware, Probot } from 'probot';
 
@@ -9,16 +10,13 @@ const probot = new Probot({
 });
 
 function handle(app: Probot) {
-  app.on('installation.deleted', async context => {});
-  app.on('issues.edited', async context => {
-    // console.log(context);
-    // `context` extracts information from the event, which can be passed to
-    // GitHub API calls. This will return:
-    //   { owner: 'yourname', repo: 'yourrepo', number: 123, body: 'Hello World! }
-    const params = context.issue({ body: 'Hello World!' });
-    console.log(env.GITHUB_PRIVATE_KEY);
-    // Post a comment on the issue
-    return context.octokit.issues.createComment(params);
+  app.on('installation.deleted', async context => {
+    console.log(context.payload.installation.id);
+    await prisma.githubAppInstallation.delete({
+      where: {
+        id: context.payload.installation.id,
+      },
+    });
   });
 }
 
