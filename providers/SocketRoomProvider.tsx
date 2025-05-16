@@ -3,7 +3,7 @@
 import { useSocket } from '@/context/SocketContext';
 import { useEffect } from 'react';
 
-export function SocketWikiEmitterProvider({
+export function SocketRoomEmitterProvider({
   children,
   room,
 }: {

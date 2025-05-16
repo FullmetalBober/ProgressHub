@@ -8,7 +8,7 @@ import EditIssueProperties from './EditIssueProperties';
 import EditIssueTitle from './EditIssueTitle';
 const TiptapEditor = dynamic(() => import('@/tiptap/TiptapEditor'));
 
-export default function EditIssue({
+export default async function EditIssue({
   issue,
   user,
   users,

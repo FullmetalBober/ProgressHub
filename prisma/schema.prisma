@@ -31,6 +31,7 @@ model User {
   workspaces            WorkspaceMember[]
   issues                Issue[]
   workspacesInvites     WorkspaceInvite[]
+  comments              Comment[]
   githubAppInstallation GithubAppInstallation[]
   createdAt             DateTime                @default(now())
   updatedAt             DateTime                @updatedAt
@@ -183,14 +184,18 @@ model Issue {
 
 /// @zod.strip()
 model Comment {
-  id        String   @id @default(cuid())
-  /// @zod.string.trim().min(1).max(255)
+  id        String    @id @default(cuid())
+  /// @zod.string.trim().min(1).max(1000)
   body      String
   issueId   String
-  issue     Issue    @relation(fields: [issueId], references: [id])
+  issue     Issue     @relation(fields: [issueId], references: [id])
   authorId  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  parentId  String?
+  parent    Comment?  @relation("CommentToComment", fields: [parentId], references: [id])
+  children  Comment[] @relation("CommentToComment")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 /// @zod.strip()

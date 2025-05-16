@@ -1,4 +1,6 @@
+import CommentsSection from '@/components/comments/CommentsSection';
 import EditIssue from '@/components/issues/EditIssue';
+import { Separator } from '@/components/ui/separator';
 import { auth } from '@/lib/auth/utils';
 import prisma from '@/lib/db';
 import type { Metadata } from 'next';
@@ -34,6 +36,11 @@ export default async function IssuePage(
             },
           },
         },
+        comments: {
+          include: {
+            author: true,
+          },
+        },
       },
     });
 
@@ -45,6 +52,12 @@ export default async function IssuePage(
   return (
     <div>
       <EditIssue issue={issue} user={session.user} users={workspaceUsers} />
+      <Separator className='my-4' />
+      <CommentsSection
+        issueId={issue.id}
+        user={session.user}
+        comments={issue.comments}
+      />
     </div>
   );
 }
