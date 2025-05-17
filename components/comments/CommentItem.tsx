@@ -117,7 +117,9 @@ export default function CommentItem({
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Відмінити</AlertDialogCancel>
-                      <AlertDialogAction onClick={() => deleteComment}>
+                      <AlertDialogAction
+                        onClick={() => deleteComment(comment.id)}
+                      >
                         Продовжити
                       </AlertDialogAction>
                     </AlertDialogFooter>

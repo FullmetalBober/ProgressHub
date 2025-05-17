@@ -193,7 +193,7 @@ model Comment {
   authorId  String
   author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   parentId  String?
-  parent    Comment?  @relation("CommentToComment", fields: [parentId], references: [id])
+  parent    Comment?  @relation("CommentToComment", fields: [parentId], references: [id], onDelete: Cascade)
   children  Comment[] @relation("CommentToComment")
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
