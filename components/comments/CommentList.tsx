@@ -1,10 +1,13 @@
 import { useSocketObserver } from '@/hooks/useSocketObserver';
 import { Comment, User } from '@/prisma/zod';
+import type { User as SessionUser } from 'next-auth';
 import CommentItem from './CommentItem';
 
 export default function CommentList({
+  user,
   comments,
 }: {
+  user: SessionUser;
   comments: (Comment & {
     author: User;
   })[];
@@ -23,6 +26,7 @@ export default function CommentList({
       {topLevelComments.map(comment => (
         <CommentItem
           key={comment.id}
+          user={user}
           comment={comment}
           childComment={getReplies(comment.id)}
         />

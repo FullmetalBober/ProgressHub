@@ -40,6 +40,9 @@ export default async function IssuePage(
           include: {
             author: true,
           },
+          orderBy: {
+            createdAt: 'asc',
+          },
         },
       },
     });

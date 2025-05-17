@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { createComment } from '@/lib/actions/comments.action';
+import { cn } from '@/lib/utils';
 import { Comment, CommentUncheckedCreateInputSchema } from '@/prisma/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { MoveUp } from 'lucide-react';
@@ -12,16 +13,19 @@ import { AutosizeTextarea } from '../ui/autosize-textarea';
 import { Card, CardContent, CardFooter } from '../ui/card';
 import { Form, FormControl, FormField, FormItem } from '../ui/form';
 
-export default function CommentForm({
+export default function CommentCreateForm({
   user,
   issueId,
+  parentId,
 }: Readonly<{
   user: SessionUser;
   issueId: string;
+  parentId?: string;
 }>) {
   const form = useForm<Comment>({
     resolver: zodResolver(CommentUncheckedCreateInputSchema),
     defaultValues: {
+      parentId,
       authorId: user.id,
       issueId,
       body: '',
@@ -43,35 +47,38 @@ export default function CommentForm({
   const isFormDisabled = form.formState.isSubmitting || !form.formState.isValid;
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <Card>
-          <CardContent className='p-0'>
-            <FormField
-              control={form.control}
-              name='body'
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <AutosizeTextarea
-                      placeholder='Залиште коментар...'
-                      className='resize-none border-none focus-visible:ring-offset-0 focus-visible:ring-0'
-                      {...field}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </CardContent>
-          <CardFooter className='flex justify-end p-2'>
+      <form className='w-full' onSubmit={form.handleSubmit(onSubmit)}>
+        <Card className={cn(parentId && 'border-none')}>
+          <CardContent className='p-0 flex items-end'>
+            <div className='flex-1'>
+              <FormField
+                control={form.control}
+                name='body'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <AutosizeTextarea
+                        minHeight={parentId ? 30 : 55}
+                        placeholder='Залиште коментар...'
+                        className='resize-none border-none focus-visible:ring-offset-0 focus-visible:ring-0 text-base'
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
             <Button
               type='submit'
-              className='rounded-full h-12 w-12'
+              className='rounded-full m-2 w-8 h-8'
+              size='icon'
               variant='outline'
               disabled={isFormDisabled}
             >
               <MoveUp />
             </Button>
-          </CardFooter>
+          </CardContent>
+          <CardFooter className='flex justify-end p-0'></CardFooter>
         </Card>
       </form>
     </Form>

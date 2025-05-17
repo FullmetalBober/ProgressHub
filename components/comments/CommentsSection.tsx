@@ -4,7 +4,7 @@ import { Separator } from '@/components/ui/separator';
 import { Comment, User } from '@/prisma/zod';
 import { SocketRoomEmitterProvider } from '@/providers/SocketRoomProvider';
 import type { User as SessionUser } from 'next-auth';
-import CommentForm from './CommentCreateForm';
+import CommentCreateForm from './CommentCreateForm';
 import CommentList from './CommentList';
 
 export default function CommentsSection({
@@ -30,11 +30,11 @@ export default function CommentsSection({
           </div>
         </div>
 
-        <CommentList comments={comments} />
+        <CommentList comments={comments} user={user} />
 
         <Separator className='my-4' />
 
-        <CommentForm user={user} issueId={issueId} />
+        <CommentCreateForm user={user} issueId={issueId} />
       </div>
     </SocketRoomEmitterProvider>
   );
