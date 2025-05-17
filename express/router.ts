@@ -23,6 +23,7 @@ const notifySchema = z.object({
     'workspaceInvite',
     'workspaceMember',
     'githubWikiFile',
+    'comment',
   ]),
   event: z.enum(['create', 'update', 'delete']),
   payload: z.record(z.unknown()).refine(data => data.id, {

@@ -32,8 +32,8 @@ export default function ConfirmationDialog({
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={action}>Continue</AlertDialogAction>
+          <AlertDialogCancel>Відмінити</AlertDialogCancel>
+          <AlertDialogAction onClick={action}>Продовжити</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

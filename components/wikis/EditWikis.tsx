@@ -2,7 +2,7 @@
 
 import { useWiki, WikiProvider } from '@/context/WikiContext';
 import { useSocketObserver } from '@/hooks/useSocketObserver';
-import { SocketWikiEmitterProvider } from '@/providers/SocketWikiProvider';
+import { SocketRoomEmitterProvider } from '@/providers/SocketRoomProvider';
 import TiptapEditor from '@/tiptap/TiptapEditor';
 import { GithubWikiFile } from '@prisma/client';
 import { User as SessionUser } from 'next-auth';
@@ -30,13 +30,13 @@ export default function EditWikis(props: TEditWikisProps) {
     sortedWikis[0];
 
   return (
-    <SocketWikiEmitterProvider room={params.repositoryId}>
+    <SocketRoomEmitterProvider room={params.repositoryId}>
       <WikiProvider initialSelectedWiki={selectedWiki}>
         <SidebarProvider>
           <EditWikisComponent {...props} wikis={sortedWikis} />
         </SidebarProvider>
       </WikiProvider>
-    </SocketWikiEmitterProvider>
+    </SocketRoomEmitterProvider>
   );
 }
 

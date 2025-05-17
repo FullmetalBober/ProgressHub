@@ -8,7 +8,8 @@ type entities =
   | 'issue'
   | 'workspaceInvite'
   | 'workspaceMember'
-  | 'githubWikiFile';
+  | 'githubWikiFile'
+  | 'comment';
 
 export function useSocketObserver<T extends { id: string }>(
   eventName: entities,
