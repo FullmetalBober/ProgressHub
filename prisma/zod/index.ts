@@ -28,7 +28,7 @@ export const WorkspaceInviteScalarFieldEnumSchema = z.enum(['id','email','worksp
 
 export const IssueScalarFieldEnumSchema = z.enum(['id','identifier','title','description','status','priority','workspaceId','assigneeId','createdAt','updatedAt']);
 
-export const CommentScalarFieldEnumSchema = z.enum(['id','body','issueId','authorId','parentId','createdAt','updatedAt']);
+export const CommentScalarFieldEnumSchema = z.enum(['id','body','isEdited','issueId','authorId','parentId','createdAt','updatedAt']);
 
 export const GithubAppInstallationScalarFieldEnumSchema = z.enum(['id','workspaceId','createdById','createdAt','updatedAt']);
 
@@ -609,7 +609,8 @@ export const IssueWithPartialRelationsSchema: z.ZodType<IssueWithPartialRelation
 
 export const CommentSchema = z.object({
   id: z.string().cuid(),
-  body: z.string().trim().min(1).max(255),
+  body: z.string().trim().min(1).max(1000),
+  isEdited: z.boolean(),
   issueId: z.string(),
   authorId: z.string(),
   parentId: z.string().nullable(),
@@ -1088,6 +1089,7 @@ export const CommentCountOutputTypeSelectSchema: z.ZodType<Prisma.CommentCountOu
 export const CommentSelectSchema: z.ZodType<Prisma.CommentSelect> = z.object({
   id: z.boolean().optional(),
   body: z.boolean().optional(),
+  isEdited: z.boolean().optional(),
   issueId: z.boolean().optional(),
   authorId: z.boolean().optional(),
   parentId: z.boolean().optional(),
@@ -1788,6 +1790,7 @@ export const CommentWhereInputSchema: z.ZodType<Prisma.CommentWhereInput> = z.ob
   NOT: z.union([ z.lazy(() => CommentWhereInputSchema),z.lazy(() => CommentWhereInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   body: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  isEdited: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   issueId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   authorId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   parentId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
@@ -1802,6 +1805,7 @@ export const CommentWhereInputSchema: z.ZodType<Prisma.CommentWhereInput> = z.ob
 export const CommentOrderByWithRelationInputSchema: z.ZodType<Prisma.CommentOrderByWithRelationInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   body: z.lazy(() => SortOrderSchema).optional(),
+  isEdited: z.lazy(() => SortOrderSchema).optional(),
   issueId: z.lazy(() => SortOrderSchema).optional(),
   authorId: z.lazy(() => SortOrderSchema).optional(),
   parentId: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
@@ -1821,7 +1825,8 @@ export const CommentWhereUniqueInputSchema: z.ZodType<Prisma.CommentWhereUniqueI
   AND: z.union([ z.lazy(() => CommentWhereInputSchema),z.lazy(() => CommentWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => CommentWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => CommentWhereInputSchema),z.lazy(() => CommentWhereInputSchema).array() ]).optional(),
-  body: z.union([ z.lazy(() => StringFilterSchema),z.string().trim().min(1).max(255) ]).optional(),
+  body: z.union([ z.lazy(() => StringFilterSchema),z.string().trim().min(1).max(1000) ]).optional(),
+  isEdited: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   issueId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   authorId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   parentId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
@@ -1836,6 +1841,7 @@ export const CommentWhereUniqueInputSchema: z.ZodType<Prisma.CommentWhereUniqueI
 export const CommentOrderByWithAggregationInputSchema: z.ZodType<Prisma.CommentOrderByWithAggregationInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   body: z.lazy(() => SortOrderSchema).optional(),
+  isEdited: z.lazy(() => SortOrderSchema).optional(),
   issueId: z.lazy(() => SortOrderSchema).optional(),
   authorId: z.lazy(() => SortOrderSchema).optional(),
   parentId: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
@@ -1852,6 +1858,7 @@ export const CommentScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.Comme
   NOT: z.union([ z.lazy(() => CommentScalarWhereWithAggregatesInputSchema),z.lazy(() => CommentScalarWhereWithAggregatesInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   body: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  isEdited: z.union([ z.lazy(() => BoolWithAggregatesFilterSchema),z.boolean() ]).optional(),
   issueId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   authorId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   parentId: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
@@ -2603,7 +2610,8 @@ export const IssueUncheckedUpdateManyInputSchema: z.ZodType<Prisma.IssueUnchecke
 
 export const CommentCreateInputSchema: z.ZodType<Prisma.CommentCreateInput> = z.object({
   id: z.string().cuid().optional(),
-  body: z.string().trim().min(1).max(255),
+  body: z.string().trim().min(1).max(1000),
+  isEdited: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   issue: z.lazy(() => IssueCreateNestedOneWithoutCommentsInputSchema),
@@ -2614,7 +2622,8 @@ export const CommentCreateInputSchema: z.ZodType<Prisma.CommentCreateInput> = z.
 
 export const CommentUncheckedCreateInputSchema: z.ZodType<Prisma.CommentUncheckedCreateInput> = z.object({
   id: z.string().cuid().optional(),
-  body: z.string().trim().min(1).max(255),
+  body: z.string().trim().min(1).max(1000),
+  isEdited: z.boolean().optional(),
   issueId: z.string(),
   authorId: z.string(),
   parentId: z.string().optional().nullable(),
@@ -2625,7 +2634,8 @@ export const CommentUncheckedCreateInputSchema: z.ZodType<Prisma.CommentUnchecke
 
 export const CommentUpdateInputSchema: z.ZodType<Prisma.CommentUpdateInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  body: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  body: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  isEdited: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   issue: z.lazy(() => IssueUpdateOneRequiredWithoutCommentsNestedInputSchema).optional(),
@@ -2636,7 +2646,8 @@ export const CommentUpdateInputSchema: z.ZodType<Prisma.CommentUpdateInput> = z.
 
 export const CommentUncheckedUpdateInputSchema: z.ZodType<Prisma.CommentUncheckedUpdateInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  body: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  body: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  isEdited: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   issueId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   authorId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   parentId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -2647,7 +2658,8 @@ export const CommentUncheckedUpdateInputSchema: z.ZodType<Prisma.CommentUnchecke
 
 export const CommentCreateManyInputSchema: z.ZodType<Prisma.CommentCreateManyInput> = z.object({
   id: z.string().cuid().optional(),
-  body: z.string().trim().min(1).max(255),
+  body: z.string().trim().min(1).max(1000),
+  isEdited: z.boolean().optional(),
   issueId: z.string(),
   authorId: z.string(),
   parentId: z.string().optional().nullable(),
@@ -2657,14 +2669,16 @@ export const CommentCreateManyInputSchema: z.ZodType<Prisma.CommentCreateManyInp
 
 export const CommentUpdateManyMutationInputSchema: z.ZodType<Prisma.CommentUpdateManyMutationInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  body: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  body: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  isEdited: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.CommentUpdateManyMutationInput>;
 
 export const CommentUncheckedUpdateManyInputSchema: z.ZodType<Prisma.CommentUncheckedUpdateManyInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  body: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  body: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  isEdited: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   issueId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   authorId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   parentId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -3436,6 +3450,11 @@ export const EnumPriorityWithAggregatesFilterSchema: z.ZodType<Prisma.EnumPriori
   _max: z.lazy(() => NestedEnumPriorityFilterSchema).optional()
 }).strict() as z.ZodType<Prisma.EnumPriorityWithAggregatesFilter>;
 
+export const BoolFilterSchema: z.ZodType<Prisma.BoolFilter> = z.object({
+  equals: z.boolean().optional(),
+  not: z.union([ z.boolean(),z.lazy(() => NestedBoolFilterSchema) ]).optional(),
+}).strict() as z.ZodType<Prisma.BoolFilter>;
+
 export const IssueScalarRelationFilterSchema: z.ZodType<Prisma.IssueScalarRelationFilter> = z.object({
   is: z.lazy(() => IssueWhereInputSchema).optional(),
   isNot: z.lazy(() => IssueWhereInputSchema).optional()
@@ -3449,6 +3468,7 @@ export const CommentNullableScalarRelationFilterSchema: z.ZodType<Prisma.Comment
 export const CommentCountOrderByAggregateInputSchema: z.ZodType<Prisma.CommentCountOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   body: z.lazy(() => SortOrderSchema).optional(),
+  isEdited: z.lazy(() => SortOrderSchema).optional(),
   issueId: z.lazy(() => SortOrderSchema).optional(),
   authorId: z.lazy(() => SortOrderSchema).optional(),
   parentId: z.lazy(() => SortOrderSchema).optional(),
@@ -3459,6 +3479,7 @@ export const CommentCountOrderByAggregateInputSchema: z.ZodType<Prisma.CommentCo
 export const CommentMaxOrderByAggregateInputSchema: z.ZodType<Prisma.CommentMaxOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   body: z.lazy(() => SortOrderSchema).optional(),
+  isEdited: z.lazy(() => SortOrderSchema).optional(),
   issueId: z.lazy(() => SortOrderSchema).optional(),
   authorId: z.lazy(() => SortOrderSchema).optional(),
   parentId: z.lazy(() => SortOrderSchema).optional(),
@@ -3469,12 +3490,21 @@ export const CommentMaxOrderByAggregateInputSchema: z.ZodType<Prisma.CommentMaxO
 export const CommentMinOrderByAggregateInputSchema: z.ZodType<Prisma.CommentMinOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   body: z.lazy(() => SortOrderSchema).optional(),
+  isEdited: z.lazy(() => SortOrderSchema).optional(),
   issueId: z.lazy(() => SortOrderSchema).optional(),
   authorId: z.lazy(() => SortOrderSchema).optional(),
   parentId: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
 }).strict() as z.ZodType<Prisma.CommentMinOrderByAggregateInput>;
+
+export const BoolWithAggregatesFilterSchema: z.ZodType<Prisma.BoolWithAggregatesFilter> = z.object({
+  equals: z.boolean().optional(),
+  not: z.union([ z.boolean(),z.lazy(() => NestedBoolWithAggregatesFilterSchema) ]).optional(),
+  _count: z.lazy(() => NestedIntFilterSchema).optional(),
+  _min: z.lazy(() => NestedBoolFilterSchema).optional(),
+  _max: z.lazy(() => NestedBoolFilterSchema).optional()
+}).strict() as z.ZodType<Prisma.BoolWithAggregatesFilter>;
 
 export const GithubWikiFileListRelationFilterSchema: z.ZodType<Prisma.GithubWikiFileListRelationFilter> = z.object({
   every: z.lazy(() => GithubWikiFileWhereInputSchema).optional(),
@@ -3517,11 +3547,6 @@ export const GithubAppInstallationMinOrderByAggregateInputSchema: z.ZodType<Pris
 export const GithubAppInstallationSumOrderByAggregateInputSchema: z.ZodType<Prisma.GithubAppInstallationSumOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional()
 }).strict() as z.ZodType<Prisma.GithubAppInstallationSumOrderByAggregateInput>;
-
-export const BoolFilterSchema: z.ZodType<Prisma.BoolFilter> = z.object({
-  equals: z.boolean().optional(),
-  not: z.union([ z.boolean(),z.lazy(() => NestedBoolFilterSchema) ]).optional(),
-}).strict() as z.ZodType<Prisma.BoolFilter>;
 
 export const GithubAppInstallationScalarRelationFilterSchema: z.ZodType<Prisma.GithubAppInstallationScalarRelationFilter> = z.object({
   is: z.lazy(() => GithubAppInstallationWhereInputSchema).optional(),
@@ -3578,14 +3603,6 @@ export const GithubWikiFileSumOrderByAggregateInputSchema: z.ZodType<Prisma.Gith
   installationId: z.lazy(() => SortOrderSchema).optional(),
   githubRepositoryId: z.lazy(() => SortOrderSchema).optional()
 }).strict() as z.ZodType<Prisma.GithubWikiFileSumOrderByAggregateInput>;
-
-export const BoolWithAggregatesFilterSchema: z.ZodType<Prisma.BoolWithAggregatesFilter> = z.object({
-  equals: z.boolean().optional(),
-  not: z.union([ z.boolean(),z.lazy(() => NestedBoolWithAggregatesFilterSchema) ]).optional(),
-  _count: z.lazy(() => NestedIntFilterSchema).optional(),
-  _min: z.lazy(() => NestedBoolFilterSchema).optional(),
-  _max: z.lazy(() => NestedBoolFilterSchema).optional()
-}).strict() as z.ZodType<Prisma.BoolWithAggregatesFilter>;
 
 export const AccountCreateNestedManyWithoutUserInputSchema: z.ZodType<Prisma.AccountCreateNestedManyWithoutUserInput> = z.object({
   create: z.union([ z.lazy(() => AccountCreateWithoutUserInputSchema),z.lazy(() => AccountCreateWithoutUserInputSchema).array(),z.lazy(() => AccountUncheckedCreateWithoutUserInputSchema),z.lazy(() => AccountUncheckedCreateWithoutUserInputSchema).array() ]).optional(),
@@ -4287,6 +4304,10 @@ export const CommentUncheckedCreateNestedManyWithoutParentInputSchema: z.ZodType
   connect: z.union([ z.lazy(() => CommentWhereUniqueInputSchema),z.lazy(() => CommentWhereUniqueInputSchema).array() ]).optional(),
 }).strict() as z.ZodType<Prisma.CommentUncheckedCreateNestedManyWithoutParentInput>;
 
+export const BoolFieldUpdateOperationsInputSchema: z.ZodType<Prisma.BoolFieldUpdateOperationsInput> = z.object({
+  set: z.boolean().optional()
+}).strict() as z.ZodType<Prisma.BoolFieldUpdateOperationsInput>;
+
 export const IssueUpdateOneRequiredWithoutCommentsNestedInputSchema: z.ZodType<Prisma.IssueUpdateOneRequiredWithoutCommentsNestedInput> = z.object({
   create: z.union([ z.lazy(() => IssueCreateWithoutCommentsInputSchema),z.lazy(() => IssueUncheckedCreateWithoutCommentsInputSchema) ]).optional(),
   connectOrCreate: z.lazy(() => IssueCreateOrConnectWithoutCommentsInputSchema).optional(),
@@ -4416,10 +4437,6 @@ export const GithubAppInstallationCreateNestedOneWithoutGithubWikiFileInputSchem
   connectOrCreate: z.lazy(() => GithubAppInstallationCreateOrConnectWithoutGithubWikiFileInputSchema).optional(),
   connect: z.lazy(() => GithubAppInstallationWhereUniqueInputSchema).optional()
 }).strict() as z.ZodType<Prisma.GithubAppInstallationCreateNestedOneWithoutGithubWikiFileInput>;
-
-export const BoolFieldUpdateOperationsInputSchema: z.ZodType<Prisma.BoolFieldUpdateOperationsInput> = z.object({
-  set: z.boolean().optional()
-}).strict() as z.ZodType<Prisma.BoolFieldUpdateOperationsInput>;
 
 export const GithubAppInstallationUpdateOneRequiredWithoutGithubWikiFileNestedInputSchema: z.ZodType<Prisma.GithubAppInstallationUpdateOneRequiredWithoutGithubWikiFileNestedInput> = z.object({
   create: z.union([ z.lazy(() => GithubAppInstallationCreateWithoutGithubWikiFileInputSchema),z.lazy(() => GithubAppInstallationUncheckedCreateWithoutGithubWikiFileInputSchema) ]).optional(),
@@ -4869,7 +4886,8 @@ export const WorkspaceInviteCreateManyInvitedByInputEnvelopeSchema: z.ZodType<Pr
 
 export const CommentCreateWithoutAuthorInputSchema: z.ZodType<Prisma.CommentCreateWithoutAuthorInput> = z.object({
   id: z.string().cuid().optional(),
-  body: z.string().trim().min(1).max(255),
+  body: z.string().trim().min(1).max(1000),
+  isEdited: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   issue: z.lazy(() => IssueCreateNestedOneWithoutCommentsInputSchema),
@@ -4879,7 +4897,8 @@ export const CommentCreateWithoutAuthorInputSchema: z.ZodType<Prisma.CommentCrea
 
 export const CommentUncheckedCreateWithoutAuthorInputSchema: z.ZodType<Prisma.CommentUncheckedCreateWithoutAuthorInput> = z.object({
   id: z.string().cuid().optional(),
-  body: z.string().trim().min(1).max(255),
+  body: z.string().trim().min(1).max(1000),
+  isEdited: z.boolean().optional(),
   issueId: z.string(),
   parentId: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
@@ -5095,6 +5114,7 @@ export const CommentScalarWhereInputSchema: z.ZodType<Prisma.CommentScalarWhereI
   NOT: z.union([ z.lazy(() => CommentScalarWhereInputSchema),z.lazy(() => CommentScalarWhereInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   body: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  isEdited: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   issueId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   authorId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   parentId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
@@ -5803,7 +5823,8 @@ export const UserCreateOrConnectWithoutIssuesInputSchema: z.ZodType<Prisma.UserC
 
 export const CommentCreateWithoutIssueInputSchema: z.ZodType<Prisma.CommentCreateWithoutIssueInput> = z.object({
   id: z.string().cuid().optional(),
-  body: z.string().trim().min(1).max(255),
+  body: z.string().trim().min(1).max(1000),
+  isEdited: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   author: z.lazy(() => UserCreateNestedOneWithoutCommentsInputSchema),
@@ -5813,7 +5834,8 @@ export const CommentCreateWithoutIssueInputSchema: z.ZodType<Prisma.CommentCreat
 
 export const CommentUncheckedCreateWithoutIssueInputSchema: z.ZodType<Prisma.CommentUncheckedCreateWithoutIssueInput> = z.object({
   id: z.string().cuid().optional(),
-  body: z.string().trim().min(1).max(255),
+  body: z.string().trim().min(1).max(1000),
+  isEdited: z.boolean().optional(),
   authorId: z.string(),
   parentId: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
@@ -5991,7 +6013,8 @@ export const UserCreateOrConnectWithoutCommentsInputSchema: z.ZodType<Prisma.Use
 
 export const CommentCreateWithoutChildrenInputSchema: z.ZodType<Prisma.CommentCreateWithoutChildrenInput> = z.object({
   id: z.string().cuid().optional(),
-  body: z.string().trim().min(1).max(255),
+  body: z.string().trim().min(1).max(1000),
+  isEdited: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   issue: z.lazy(() => IssueCreateNestedOneWithoutCommentsInputSchema),
@@ -6001,7 +6024,8 @@ export const CommentCreateWithoutChildrenInputSchema: z.ZodType<Prisma.CommentCr
 
 export const CommentUncheckedCreateWithoutChildrenInputSchema: z.ZodType<Prisma.CommentUncheckedCreateWithoutChildrenInput> = z.object({
   id: z.string().cuid().optional(),
-  body: z.string().trim().min(1).max(255),
+  body: z.string().trim().min(1).max(1000),
+  isEdited: z.boolean().optional(),
   issueId: z.string(),
   authorId: z.string(),
   parentId: z.string().optional().nullable(),
@@ -6016,7 +6040,8 @@ export const CommentCreateOrConnectWithoutChildrenInputSchema: z.ZodType<Prisma.
 
 export const CommentCreateWithoutParentInputSchema: z.ZodType<Prisma.CommentCreateWithoutParentInput> = z.object({
   id: z.string().cuid().optional(),
-  body: z.string().trim().min(1).max(255),
+  body: z.string().trim().min(1).max(1000),
+  isEdited: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   issue: z.lazy(() => IssueCreateNestedOneWithoutCommentsInputSchema),
@@ -6026,7 +6051,8 @@ export const CommentCreateWithoutParentInputSchema: z.ZodType<Prisma.CommentCrea
 
 export const CommentUncheckedCreateWithoutParentInputSchema: z.ZodType<Prisma.CommentUncheckedCreateWithoutParentInput> = z.object({
   id: z.string().cuid().optional(),
-  body: z.string().trim().min(1).max(255),
+  body: z.string().trim().min(1).max(1000),
+  isEdited: z.boolean().optional(),
   issueId: z.string(),
   authorId: z.string(),
   createdAt: z.coerce.date().optional(),
@@ -6137,7 +6163,8 @@ export const CommentUpdateToOneWithWhereWithoutChildrenInputSchema: z.ZodType<Pr
 
 export const CommentUpdateWithoutChildrenInputSchema: z.ZodType<Prisma.CommentUpdateWithoutChildrenInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  body: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  body: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  isEdited: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   issue: z.lazy(() => IssueUpdateOneRequiredWithoutCommentsNestedInputSchema).optional(),
@@ -6147,7 +6174,8 @@ export const CommentUpdateWithoutChildrenInputSchema: z.ZodType<Prisma.CommentUp
 
 export const CommentUncheckedUpdateWithoutChildrenInputSchema: z.ZodType<Prisma.CommentUncheckedUpdateWithoutChildrenInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  body: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  body: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  isEdited: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   issueId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   authorId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   parentId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -6470,7 +6498,8 @@ export const WorkspaceInviteCreateManyInvitedByInputSchema: z.ZodType<Prisma.Wor
 
 export const CommentCreateManyAuthorInputSchema: z.ZodType<Prisma.CommentCreateManyAuthorInput> = z.object({
   id: z.string().cuid().optional(),
-  body: z.string().trim().min(1).max(255),
+  body: z.string().trim().min(1).max(1000),
+  isEdited: z.boolean().optional(),
   issueId: z.string(),
   parentId: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
@@ -6638,7 +6667,8 @@ export const WorkspaceInviteUncheckedUpdateManyWithoutInvitedByInputSchema: z.Zo
 
 export const CommentUpdateWithoutAuthorInputSchema: z.ZodType<Prisma.CommentUpdateWithoutAuthorInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  body: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  body: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  isEdited: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   issue: z.lazy(() => IssueUpdateOneRequiredWithoutCommentsNestedInputSchema).optional(),
@@ -6648,7 +6678,8 @@ export const CommentUpdateWithoutAuthorInputSchema: z.ZodType<Prisma.CommentUpda
 
 export const CommentUncheckedUpdateWithoutAuthorInputSchema: z.ZodType<Prisma.CommentUncheckedUpdateWithoutAuthorInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  body: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  body: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  isEdited: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   issueId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   parentId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -6658,7 +6689,8 @@ export const CommentUncheckedUpdateWithoutAuthorInputSchema: z.ZodType<Prisma.Co
 
 export const CommentUncheckedUpdateManyWithoutAuthorInputSchema: z.ZodType<Prisma.CommentUncheckedUpdateManyWithoutAuthorInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  body: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  body: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  isEdited: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   issueId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   parentId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -6834,7 +6866,8 @@ export const GithubAppInstallationUncheckedUpdateManyWithoutWorkspaceInputSchema
 
 export const CommentCreateManyIssueInputSchema: z.ZodType<Prisma.CommentCreateManyIssueInput> = z.object({
   id: z.string().cuid().optional(),
-  body: z.string().trim().min(1).max(255),
+  body: z.string().trim().min(1).max(1000),
+  isEdited: z.boolean().optional(),
   authorId: z.string(),
   parentId: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
@@ -6843,7 +6876,8 @@ export const CommentCreateManyIssueInputSchema: z.ZodType<Prisma.CommentCreateMa
 
 export const CommentUpdateWithoutIssueInputSchema: z.ZodType<Prisma.CommentUpdateWithoutIssueInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  body: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  body: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  isEdited: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   author: z.lazy(() => UserUpdateOneRequiredWithoutCommentsNestedInputSchema).optional(),
@@ -6853,7 +6887,8 @@ export const CommentUpdateWithoutIssueInputSchema: z.ZodType<Prisma.CommentUpdat
 
 export const CommentUncheckedUpdateWithoutIssueInputSchema: z.ZodType<Prisma.CommentUncheckedUpdateWithoutIssueInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  body: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  body: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  isEdited: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   authorId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   parentId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -6863,7 +6898,8 @@ export const CommentUncheckedUpdateWithoutIssueInputSchema: z.ZodType<Prisma.Com
 
 export const CommentUncheckedUpdateManyWithoutIssueInputSchema: z.ZodType<Prisma.CommentUncheckedUpdateManyWithoutIssueInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  body: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  body: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  isEdited: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   authorId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   parentId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -6872,7 +6908,8 @@ export const CommentUncheckedUpdateManyWithoutIssueInputSchema: z.ZodType<Prisma
 
 export const CommentCreateManyParentInputSchema: z.ZodType<Prisma.CommentCreateManyParentInput> = z.object({
   id: z.string().cuid().optional(),
-  body: z.string().trim().min(1).max(255),
+  body: z.string().trim().min(1).max(1000),
+  isEdited: z.boolean().optional(),
   issueId: z.string(),
   authorId: z.string(),
   createdAt: z.coerce.date().optional(),
@@ -6881,7 +6918,8 @@ export const CommentCreateManyParentInputSchema: z.ZodType<Prisma.CommentCreateM
 
 export const CommentUpdateWithoutParentInputSchema: z.ZodType<Prisma.CommentUpdateWithoutParentInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  body: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  body: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  isEdited: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   issue: z.lazy(() => IssueUpdateOneRequiredWithoutCommentsNestedInputSchema).optional(),
@@ -6891,7 +6929,8 @@ export const CommentUpdateWithoutParentInputSchema: z.ZodType<Prisma.CommentUpda
 
 export const CommentUncheckedUpdateWithoutParentInputSchema: z.ZodType<Prisma.CommentUncheckedUpdateWithoutParentInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  body: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  body: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  isEdited: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   issueId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   authorId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -6901,7 +6940,8 @@ export const CommentUncheckedUpdateWithoutParentInputSchema: z.ZodType<Prisma.Co
 
 export const CommentUncheckedUpdateManyWithoutParentInputSchema: z.ZodType<Prisma.CommentUncheckedUpdateManyWithoutParentInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  body: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  body: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  isEdited: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   issueId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   authorId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),

@@ -40,6 +40,7 @@ export async function updateComment(id: string, body: unknown) {
   const data = zodValidate(CommentUncheckedUpdateInputSchema, body);
   const user = await protectAction();
 
+  data.isEdited = true;
   const response = await prisma.comment.update({
     where: {
       id,

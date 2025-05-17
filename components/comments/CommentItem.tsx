@@ -67,6 +67,9 @@ export default function CommentItem({
                 addSuffix: true,
               })}
             </span>
+            {comment.isEdited && (
+              <span className='text-xs text-muted-foreground'>(edited)</span>
+            )}
           </div>
           <div
             className={cn(

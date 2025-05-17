@@ -187,6 +187,7 @@ model Comment {
   id        String    @id @default(cuid())
   /// @zod.string.trim().min(1).max(1000)
   body      String
+  isEdited  Boolean   @default(false)
   issueId   String
   issue     Issue     @relation(fields: [issueId], references: [id])
   authorId  String
