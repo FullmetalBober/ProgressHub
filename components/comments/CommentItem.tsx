@@ -28,6 +28,7 @@ import {
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
 import CommentCreateForm from './CommentCreateForm';
+import CommentEditForm from './CommentEditForm';
 
 export default function CommentItem({
   comment,
@@ -44,6 +45,7 @@ export default function CommentItem({
 }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isOpenedReply, setIsOpenedReply] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
   const { author } = comment;
 
   const isChild = Boolean(comment.parentId);
@@ -82,7 +84,7 @@ export default function CommentItem({
               </Button>
             )}
             <AlertDialog>
-              {isUserAuthor && (
+              {isUserAuthor && !isEditMode && (
                 <>
                   <DropdownMenu onOpenChange={setIsDropdownOpen}>
                     <DropdownMenuTrigger asChild>
@@ -91,7 +93,9 @@ export default function CommentItem({
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                      <DropdownMenuItem>Редагувати</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => setIsEditMode(true)}>
+                        Редагувати
+                      </DropdownMenuItem>
                       <AlertDialogTrigger asChild>
                         <DropdownMenuItem>Видалити</DropdownMenuItem>
                       </AlertDialogTrigger>
@@ -121,8 +125,13 @@ export default function CommentItem({
           </div>
         </div>
       </CardHeader>
-      <CardContent className='px-3 py-2'>
-        <p className='group'>{comment.body}</p>
+      <CardContent className='px-3 py-2 group'>
+        <CommentEditForm
+          commentId={comment.id}
+          body={comment.body}
+          isEditMode={isEditMode}
+          onEditModeChange={setIsEditMode}
+        />
       </CardContent>
       {childComment && childComment?.length !== 0 && (
         <CardContent className='space-y-1 p-4'>
