@@ -96,7 +96,7 @@ function handle(app: Probot) {
       );
     }
   });
-  app.on('pull_request.opened', async context => {
+  app.on(['pull_request.opened', 'pull_request.reopened'], async context => {
     const { pull_request, installation } = context.payload;
     if (!installation) return;
     const branchName = pull_request.head.ref;
@@ -107,6 +107,27 @@ function handle(app: Probot) {
       `Pull request for ${branchName} opened`,
       'IN_REVIEW'
     );
+  });
+  app.on('pull_request.closed', async context => {
+    const { pull_request, installation } = context.payload;
+    if (!installation) return;
+    const branchName = pull_request.head.ref;
+
+    if (pull_request.merged) {
+      moveIssueTo(
+        installation.id,
+        branchName,
+        `Pull request for ${branchName} merged`,
+        'DONE'
+      );
+    } else {
+      moveIssueTo(
+        installation.id,
+        branchName,
+        `Pull request for ${branchName} closed without merging`,
+        'IN_PROGRESS'
+      );
+    }
   });
 }
 
