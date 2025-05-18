@@ -15,6 +15,7 @@ const mappedStatus: Record<StatusType, string> = {
   BACKLOG: 'Backlog',
   TODO: 'Todo',
   IN_PROGRESS: 'In Progress',
+  IN_REVIEW: 'In Review',
   DONE: 'Done',
   CANCELED: 'Canceled',
 };
@@ -22,6 +23,7 @@ const mappedStatus: Record<StatusType, string> = {
 async function moveIssueTo(
   installationId: number,
   branchName: string,
+  message: string,
   status: StatusType
 ) {
   const issueIdentifier = RegExp(/#(\d+)/).exec(branchName);
@@ -56,7 +58,7 @@ async function moveIssueTo(
     }),
     prisma.comment.create({
       data: {
-        body: `Branch ${branchName} created, issue moved to '${mappedStatus[status]}'`,
+        body: `${message}, issue moved to '${mappedStatus[status]}'`,
         issueId: issue.id,
         isSystem: true,
       },
@@ -81,14 +83,30 @@ function handle(app: Probot) {
   });
   app.on('create', async context => {
     const { ref_type, ref, installation } = context.payload;
-
     if (!installation) return;
 
     if (ref_type === 'branch') {
       const branchName = ref;
 
-      moveIssueTo(installation.id, branchName, 'IN_PROGRESS');
+      moveIssueTo(
+        installation.id,
+        branchName,
+        `Branch ${branchName} created`,
+        'IN_PROGRESS'
+      );
     }
+  });
+  app.on('pull_request.opened', async context => {
+    const { pull_request, installation } = context.payload;
+    if (!installation) return;
+    const branchName = pull_request.head.ref;
+
+    moveIssueTo(
+      installation.id,
+      branchName,
+      `Pull request for ${branchName} opened`,
+      'IN_REVIEW'
+    );
   });
 }
 

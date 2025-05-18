@@ -1,5 +1,6 @@
 import { WorkspaceMember } from '@/prisma/zod';
 import { clsx, type ClassValue } from 'clsx';
+import { isValid, parseISO } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -73,4 +74,29 @@ export function convertHtmlTaskListToMdCompatible(html: string) {
   });
 
   return doc.body.innerHTML;
+}
+
+export function transformDatesInObject<T>(obj: T): T {
+  if (!obj || typeof obj !== 'object') {
+    return obj;
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map(transformDatesInObject) as unknown as T;
+  }
+
+  const result: Record<string, any> = {};
+
+  for (const [key, value] of Object.entries(obj)) {
+    if (typeof value === 'string') {
+      const date = parseISO(value);
+      result[key] = isValid(date) ? date : value;
+    } else if (typeof value === 'object' && value !== null) {
+      result[key] = transformDatesInObject(value);
+    } else {
+      result[key] = value;
+    }
+  }
+
+  return result as T;
 }
