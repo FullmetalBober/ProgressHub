@@ -190,8 +190,9 @@ model Comment {
   isEdited  Boolean   @default(false)
   issueId   String
   issue     Issue     @relation(fields: [issueId], references: [id])
-  authorId  String
-  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  isSystem  Boolean   @default(false)
+  authorId  String?
+  author    User?     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   parentId  String?
   parent    Comment?  @relation("CommentToComment", fields: [parentId], references: [id], onDelete: Cascade)
   children  Comment[] @relation("CommentToComment")

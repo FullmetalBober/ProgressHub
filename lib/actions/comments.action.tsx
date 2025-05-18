@@ -70,3 +70,89 @@ export async function deleteComment(id: string) {
 
   return response;
 }
+
+export async function createOrUpdateSystemComment(
+  issueId: string,
+  body: {
+    main: string;
+    sub?: string;
+  },
+  authorId?: string
+) {
+  const fullBody = body.main + (body.sub ? ` ${body.sub}` : '');
+  const existingComment = await prisma.comment.findFirst({
+    where: {
+      issueId,
+      authorId,
+      body: {
+        startsWith: body.main,
+      },
+      isSystem: true,
+      createdAt: {
+        gte: new Date(Date.now() - 1000 * 60 * 60 * 3), // 3 hours
+      },
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  if (existingComment) {
+    return updateSystemComment(existingComment.id, fullBody);
+  } else {
+    return createSystemComment(issueId, fullBody, authorId);
+  }
+}
+
+export async function createSystemComment(
+  issueId: string,
+  body: string,
+  authorId?: string
+) {
+  const response = await prisma.comment.create({
+    data: {
+      issueId,
+      body,
+      authorId,
+      isSystem: true,
+    },
+    include: {
+      author: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          image: true,
+        },
+      },
+    },
+  });
+  await notifyUsers(issueId, 'comment', 'create', response);
+
+  return response;
+}
+
+export async function updateSystemComment(id: string, body: string) {
+  const response = await prisma.comment.update({
+    where: {
+      id,
+    },
+    data: {
+      body,
+    },
+    include: {
+      author: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          image: true,
+        },
+      },
+    },
+  });
+
+  await notifyUsers(response.issueId, 'comment', 'update', response);
+
+  return response;
+}

@@ -15,7 +15,7 @@ export default function CommentsSection({
   issueId: string;
   user: SessionUser;
   comments: (Comment & {
-    author: User;
+    author: User | null;
   })[];
 }>) {
   return (
