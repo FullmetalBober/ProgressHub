@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Comment" ADD COLUMN     "isSystem" BOOLEAN NOT NULL DEFAULT false,
+ALTER COLUMN "authorId" DROP NOT NULL;
