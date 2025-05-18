@@ -20,7 +20,7 @@ export default function SystemCommentItem({
       />
       <span className='font-medium text-sm'>{author?.name} {comment.body}</span>
       <span className='text-xs text-muted-foreground'>
-        {formatDistanceToNow(new Date(comment.createdAt), {
+        {formatDistanceToNow(new Date(comment.updatedAt), {
           addSuffix: true,
         })}
       </span>
