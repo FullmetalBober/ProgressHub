@@ -85,7 +85,7 @@ export function transformDatesInObject<T>(obj: T): T {
     return obj.map(transformDatesInObject) as unknown as T;
   }
 
-  const result: Record<string, any> = {};
+  const result: Record<string, unknown> = {};
 
   for (const [key, value] of Object.entries(obj)) {
     if (typeof value === 'string') {
