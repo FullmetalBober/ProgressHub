@@ -27,9 +27,14 @@ export default function CommentList({
 }) {
   const observedComments = useSocketObserver('comment', comments);
 
-  const topLevelComments = observedComments.filter(
-    comment => !comment.parentId
-  );
+  const topLevelComments = observedComments
+    .filter(comment => !comment.parentId)
+    .sort((a, b) => {
+      const aDate = !a.isSystem ? a.createdAt : a.updatedAt;
+      const bDate = !b.isSystem ? b.createdAt : b.updatedAt;
+
+      return aDate.getTime() - bDate.getTime();
+    });
 
   const getReplies = (commentId: string) =>
     observedComments.filter(comment => comment.parentId === commentId);

@@ -48,7 +48,7 @@ export const InviteStatusSchema = z.enum(['PENDING','ACCEPTED','DECLINED']);
 
 export type InviteStatusType = `${z.infer<typeof InviteStatusSchema>}`
 
-export const StatusSchema = z.enum(['BACKLOG','TODO','IN_PROGRESS','DONE','CANCELED']);
+export const StatusSchema = z.enum(['BACKLOG','TODO','IN_PROGRESS','IN_REVIEW','DONE','CANCELED']);
 
 export type StatusType = `${z.infer<typeof StatusSchema>}`
 

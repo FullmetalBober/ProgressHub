@@ -88,8 +88,8 @@ export async function createOrUpdateSystemComment(
         startsWith: body.main,
       },
       isSystem: true,
-      createdAt: {
-        gte: new Date(Date.now() - 1000 * 60 * 60 * 3), // 3 hours
+      updatedAt: {
+        gte: new Date(Date.now() - 1000 * 60 * 15), // 15 minutes
       },
     },
     select: {
@@ -152,7 +152,11 @@ export async function updateSystemComment(id: string, body: string) {
     },
   });
 
-  await notifyUsers(response.issueId, 'comment', 'update', response);
+  await notifyUsers(response.issueId, 'comment', 'update', {
+    id: response.id,
+    body: response.body,
+    updatedAt: response.updatedAt,
+  });
 
   return response;
 }

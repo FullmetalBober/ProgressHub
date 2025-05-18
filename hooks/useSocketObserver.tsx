@@ -1,6 +1,7 @@
 'use client';
 
 import { useSocket } from '@/context/SocketContext';
+import { transformDatesInObject } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -24,6 +25,7 @@ export function useSocketObserver<T extends { id: string }>(
     if (!socket) return;
 
     const handleUpdate = (data: T) => {
+      data = transformDatesInObject(data);
       setState(prev =>
         prev.map(issue =>
           issue.id === data.id ? { ...issue, ...data } : issue
@@ -32,6 +34,7 @@ export function useSocketObserver<T extends { id: string }>(
     };
 
     const handleCreate = (data: T) => {
+      data = transformDatesInObject(data);
       setState(prev => [...prev, data]);
     };
 

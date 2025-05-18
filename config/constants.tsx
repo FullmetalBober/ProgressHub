@@ -3,6 +3,7 @@ import {
   ArrowUpCircle,
   CheckCircle2,
   Circle,
+  Eye,
   HelpCircle,
   XCircle,
 } from 'lucide-react';
@@ -74,6 +75,11 @@ const statusesIssue: TStatusIssue[] = [
     value: 'IN_PROGRESS',
     label: 'In Progress',
     icon: <ArrowUpCircle />,
+  },
+  {
+    value: 'IN_REVIEW',
+    label: 'In Review',
+    icon: <Eye />,
   },
   {
     value: 'DONE',
