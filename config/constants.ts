@@ -3,14 +3,15 @@ import {
   ArrowUpCircle,
   CheckCircle2,
   Circle,
+  Eye,
   HelpCircle,
   XCircle,
+  type LucideIcon,
 } from 'lucide-react';
-import type { JSX } from 'react';
 
 type TField = {
   label: string;
-  icon: JSX.Element;
+  icon: LucideIcon;
 };
 
 type TPriorityIssue = {
@@ -35,27 +36,27 @@ const prioritiesIssue: TPriorityIssue[] = [
   {
     value: 'NO_PRIORITY',
     label: 'No priority',
-    icon: <HelpCircle />,
+    icon: HelpCircle,
   },
   {
     value: 'URGENT',
     label: 'Urgent',
-    icon: <Circle />,
+    icon: Circle,
   },
   {
     value: 'HIGH',
     label: 'High',
-    icon: <ArrowUpCircle />,
+    icon: ArrowUpCircle,
   },
   {
     value: 'MEDIUM',
     label: 'Medium',
-    icon: <CheckCircle2 />,
+    icon: CheckCircle2,
   },
   {
     value: 'LOW',
     label: 'Low',
-    icon: <XCircle />,
+    icon: XCircle,
   },
 ];
 
@@ -63,27 +64,32 @@ const statusesIssue: TStatusIssue[] = [
   {
     value: 'BACKLOG',
     label: 'Backlog',
-    icon: <HelpCircle />,
+    icon: HelpCircle,
   },
   {
     value: 'TODO',
     label: 'Todo',
-    icon: <Circle />,
+    icon: Circle,
   },
   {
     value: 'IN_PROGRESS',
     label: 'In Progress',
-    icon: <ArrowUpCircle />,
+    icon: ArrowUpCircle,
+  },
+  {
+    value: 'IN_REVIEW',
+    label: 'In Review',
+    icon: Eye,
   },
   {
     value: 'DONE',
     label: 'Done',
-    icon: <CheckCircle2 />,
+    icon: CheckCircle2,
   },
   {
     value: 'CANCELED',
     label: 'Canceled',
-    icon: <XCircle />,
+    icon: XCircle,
   },
 ];
 

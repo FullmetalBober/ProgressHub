@@ -2,7 +2,6 @@
 
 import { env } from '@/lib/env.mjs';
 import { TiptapCollabProvider } from '@hocuspocus/provider';
-// import 'iframe-resizer/js/iframeResizer.contentWindow';
 import { User } from 'next-auth';
 import { useEffect, useState } from 'react';
 import { Doc as YDoc } from 'yjs';

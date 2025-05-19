@@ -152,7 +152,11 @@ export async function updateSystemComment(id: string, body: string) {
     },
   });
 
-  await notifyUsers(response.issueId, 'comment', 'update', response);
+  await notifyUsers(response.issueId, 'comment', 'update', {
+    id: response.id,
+    body: response.body,
+    updatedAt: response.updatedAt,
+  });
 
   return response;
 }

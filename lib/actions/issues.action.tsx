@@ -1,5 +1,6 @@
 'use server';
 
+import { prioritiesIssue, statusesIssue } from '@/config/constants';
 import {
   IssueUncheckedCreateInputSchema,
   IssueUncheckedUpdateInputSchema,
@@ -58,7 +59,11 @@ export async function createIssue(body: unknown) {
     }),
   ]);
 
-  createSystemComment(response.id, 'created the issue', user.id);
+  createSystemComment(
+    response.id,
+    'created the issue',
+    user.name ?? user.email
+  );
 
   await notifyUsers(response.workspaceId, 'issue', 'create', response);
 
@@ -82,45 +87,48 @@ export async function updateIssue(id: string, body: unknown) {
   });
 
   if (data.assigneeId) {
+    const sub = response.assignee.name;
     createOrUpdateSystemComment(
       id,
       {
         main: 'assigned the issue to',
-        sub: String(data.assigneeId),
+        sub,
       },
       user.id
     );
     upsertNotification(id, String(data.assigneeId), user.id, {
       main: 'assigned you the issue',
-      sub: String(data.assigneeId),
+      sub,
     });
   }
   if (data.status) {
+    const sub = statusesIssue.find(s => s.value === data.status)?.label;
     createOrUpdateSystemComment(
       id,
       {
         main: 'changed the status to',
-        sub: String(data.status),
+        sub,
       },
       user.id
     );
     upsertNotification(id, String(data.assigneeId), user.id, {
       main: 'changed the status to',
-      sub: String(data.status),
+      sub,
     });
   }
   if (data.priority) {
+    const sub = prioritiesIssue.find(s => s.value === data.priority)?.label;
     createOrUpdateSystemComment(
       id,
       {
         main: 'changed the priority to',
-        sub: String(data.priority),
+        sub,
       },
       user.id
     );
     upsertNotification(id, String(data.assigneeId), user.id, {
       main: 'changed the priority to',
-      sub: String(data.priority),
+      sub,
     });
   }
   if (data.title) {

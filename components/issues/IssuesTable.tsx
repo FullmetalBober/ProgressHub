@@ -85,7 +85,7 @@ const columns: ColumnDef<
         <div className='flex items-center'>
           {status.icon && (
             <div className='*:mr-2 *:h-4 *:w-4 *:text-muted-foreground'>
-              {status.icon}
+              <status.icon />
             </div>
           )}
           <span>{status.label}</span>
@@ -114,7 +114,7 @@ const columns: ColumnDef<
         <div className='flex items-center'>
           {priority.icon && (
             <div className='*:mr-2 *:h-4 *:w-4 *:text-muted-foreground'>
-              {priority.icon}
+              <priority.icon />
             </div>
           )}
           <span>{priority.label}</span>
