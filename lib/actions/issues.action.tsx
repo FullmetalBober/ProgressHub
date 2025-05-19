@@ -1,5 +1,6 @@
 'use server';
 
+import { prioritiesIssue, statusesIssue } from '@/config/constants';
 import {
   IssueUncheckedCreateInputSchema,
   IssueUncheckedUpdateInputSchema,
@@ -57,7 +58,11 @@ export async function createIssue(body: unknown) {
     }),
   ]);
 
-  createSystemComment(response.id, 'created the issue', user.id);
+  createSystemComment(
+    response.id,
+    'created the issue',
+    user.name ?? user.email
+  );
 
   await notifyUsers(response.workspaceId, 'issue', 'create', response);
 
@@ -70,12 +75,22 @@ export async function updateIssue(id: string, body: unknown) {
   });
   const data = zodValidate(IssueUncheckedUpdateInputSchema, body);
 
+  const response = await prisma.issue.update({
+    where: {
+      id,
+    },
+    data,
+    include: {
+      assignee: true,
+    },
+  });
+
   if (data.assigneeId)
     createOrUpdateSystemComment(
       id,
       {
         main: 'assigned the issue to',
-        sub: String(data.assigneeId),
+        sub: response.assignee.name,
       },
       user.id
     );
@@ -84,7 +99,7 @@ export async function updateIssue(id: string, body: unknown) {
       id,
       {
         main: 'changed the status to',
-        sub: String(data.status),
+        sub: statusesIssue.find(s => s.value === data.status)?.label,
       },
       user.id
     );
@@ -93,7 +108,7 @@ export async function updateIssue(id: string, body: unknown) {
       id,
       {
         main: 'changed the priority to',
-        sub: String(data.priority),
+        sub: prioritiesIssue.find(s => s.value === data.priority)?.label,
       },
       user.id
     );
@@ -106,16 +121,6 @@ export async function updateIssue(id: string, body: unknown) {
       },
       user.id
     );
-
-  const response = await prisma.issue.update({
-    where: {
-      id,
-    },
-    data,
-    include: {
-      assignee: true,
-    },
-  });
 
   const notifyData = {
     ...data,

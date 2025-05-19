@@ -95,7 +95,6 @@
     "cmdk": "^1.0.4",
     "date-fns": "^4.1.0",
     "express": "^4.21.2",
-    "iframe-resizer": "^4.4.5",
     "import-in-the-middle": "^1.13.1",
     "jsonwebtoken": "^9.0.2",
     "lowlight": "^3.3.0",
@@ -167,7 +166,6 @@
       "@prisma/engines",
       "@vercel/speed-insights",
       "esbuild",
-      "iframe-resizer",
       "prisma",
       "sharp"
     ]

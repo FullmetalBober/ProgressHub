@@ -12,8 +12,8 @@ export default function AssigneeComboboxFormField({
 }>) {
   const properties = users.map(user => ({
     value: user.id,
-    label: user.email || user.name || user.id,
-    icon: <CustomAvatar src={user.image} name={user.email} />,
+    label: user.name || user.email || user.id,
+    icon: () => <CustomAvatar src={user.image} name={user.email} />,
   }));
 
   return (
