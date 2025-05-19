@@ -1,3 +1,4 @@
+import { statusesIssue } from '@/config/constants';
 import prisma from '@/lib/db';
 import { env } from '@/lib/env.mjs';
 import { StatusType } from '@/prisma/zod';
@@ -10,15 +11,6 @@ const probot = new Probot({
   secret: env.GITHUB_WEBHOOK_SECRET,
   logLevel: 'debug',
 });
-
-const mappedStatus: Record<StatusType, string> = {
-  BACKLOG: 'Backlog',
-  TODO: 'Todo',
-  IN_PROGRESS: 'In Progress',
-  IN_REVIEW: 'In Review',
-  DONE: 'Done',
-  CANCELED: 'Canceled',
-};
 
 async function moveIssueTo(
   installationId: number,
@@ -56,9 +48,12 @@ async function moveIssueTo(
         status,
       },
     }),
+
     prisma.comment.create({
       data: {
-        body: `${message}, issue moved to '${mappedStatus[status]}'`,
+        body: `${message}, issue moved to '${
+          statusesIssue.find(s => s.value === status)?.label
+        }'`,
         issueId: issue.id,
         isSystem: true,
       },

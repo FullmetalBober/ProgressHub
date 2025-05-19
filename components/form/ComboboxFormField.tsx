@@ -1,6 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
+import { LucideIcon } from 'lucide-react';
 import { useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { Button } from '../ui/button';
@@ -17,7 +18,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 type Property = {
   value: string;
   label: string;
-  icon: React.ReactElement<unknown>;
+  icon: LucideIcon | (() => React.ReactElement<unknown>);
 };
 
 export default function ComboboxFormField({
@@ -56,7 +57,7 @@ export default function ComboboxFormField({
                   {field.value && selectedStatus ? (
                     <>
                       <div className='*:mr-2 *:h-4 *:w-4 *:shrink-0'>
-                        {selectedStatus.icon}
+                        <selectedStatus.icon />
                       </div>
                       <span>{selectedStatus.label}</span>
                     </>
@@ -92,7 +93,7 @@ export default function ComboboxFormField({
                               : '*:opacity-40'
                           )}
                         >
-                          {status.icon}
+                          <status.icon />
                         </div>
                         <span>{status.label}</span>
                       </CommandItem>
