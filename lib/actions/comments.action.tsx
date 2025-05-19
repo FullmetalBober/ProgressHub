@@ -88,8 +88,8 @@ export async function createOrUpdateSystemComment(
         startsWith: body.main,
       },
       isSystem: true,
-      createdAt: {
-        gte: new Date(Date.now() - 1000 * 60 * 60 * 3), // 3 hours
+      updatedAt: {
+        gte: new Date(Date.now() - 1000 * 60 * 15), // 15 minutes
       },
     },
     select: {
