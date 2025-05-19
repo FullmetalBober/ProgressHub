@@ -68,6 +68,7 @@ export async function deleteNotification(id: string) {
 export async function upsertNotification(
   issueId: string,
   recipientId: string,
+  senderId: string,
   message: {
     main: string;
     sub?: string;
@@ -100,12 +101,14 @@ export async function upsertNotification(
   if (notification) {
     return updateNotification(notification.id, {
       recipientId,
+      senderId,
       message: fullMessage,
     });
   } else {
     return createNotification({
       issueId,
       recipientId,
+      senderId,
       message: fullMessage,
     });
   }

@@ -10,6 +10,7 @@ import {
   createOrUpdateSystemComment,
   createSystemComment,
 } from './comments.action';
+import { upsertNotification } from './notifications.action';
 import { notifyUsers, zodValidate } from './utils';
 
 export async function createIssue(body: unknown) {
@@ -70,43 +71,6 @@ export async function updateIssue(id: string, body: unknown) {
   });
   const data = zodValidate(IssueUncheckedUpdateInputSchema, body);
 
-  if (data.assigneeId)
-    createOrUpdateSystemComment(
-      id,
-      {
-        main: 'assigned the issue to',
-        sub: String(data.assigneeId),
-      },
-      user.id
-    );
-  if (data.status)
-    createOrUpdateSystemComment(
-      id,
-      {
-        main: 'changed the status to',
-        sub: String(data.status),
-      },
-      user.id
-    );
-  if (data.priority)
-    createOrUpdateSystemComment(
-      id,
-      {
-        main: 'changed the priority to',
-        sub: String(data.priority),
-      },
-      user.id
-    );
-  if (data.title)
-    createOrUpdateSystemComment(
-      id,
-      {
-        main: 'changed the title to',
-        sub: String(data.title),
-      },
-      user.id
-    );
-
   const response = await prisma.issue.update({
     where: {
       id,
@@ -116,6 +80,63 @@ export async function updateIssue(id: string, body: unknown) {
       assignee: true,
     },
   });
+
+  if (data.assigneeId) {
+    createOrUpdateSystemComment(
+      id,
+      {
+        main: 'assigned the issue to',
+        sub: String(data.assigneeId),
+      },
+      user.id
+    );
+    upsertNotification(id, String(data.assigneeId), user.id, {
+      main: 'assigned you the issue',
+      sub: String(data.assigneeId),
+    });
+  }
+  if (data.status) {
+    createOrUpdateSystemComment(
+      id,
+      {
+        main: 'changed the status to',
+        sub: String(data.status),
+      },
+      user.id
+    );
+    upsertNotification(id, String(data.assigneeId), user.id, {
+      main: 'changed the status to',
+      sub: String(data.status),
+    });
+  }
+  if (data.priority) {
+    createOrUpdateSystemComment(
+      id,
+      {
+        main: 'changed the priority to',
+        sub: String(data.priority),
+      },
+      user.id
+    );
+    upsertNotification(id, String(data.assigneeId), user.id, {
+      main: 'changed the priority to',
+      sub: String(data.priority),
+    });
+  }
+  if (data.title) {
+    createOrUpdateSystemComment(
+      id,
+      {
+        main: 'changed the title to',
+        sub: String(data.title),
+      },
+      user.id
+    );
+    upsertNotification(id, String(data.assigneeId), user.id, {
+      main: 'changed the title to',
+      sub: String(data.title),
+    });
+  }
 
   const notifyData = {
     ...data,
