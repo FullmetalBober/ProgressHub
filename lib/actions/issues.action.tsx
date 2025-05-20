@@ -92,7 +92,7 @@ export async function updateIssue(id: string, body: unknown) {
       },
       user.id
     );
-    upsertNotification(id, String(data.assigneeId), user.id, {
+    upsertNotification(id, response.assigneeId, user.id, {
       main: 'assigned you the issue',
       sub,
     });
@@ -107,7 +107,7 @@ export async function updateIssue(id: string, body: unknown) {
       },
       user.id
     );
-    upsertNotification(id, String(data.assigneeId), user.id, {
+    upsertNotification(id, response.assigneeId, user.id, {
       main: 'changed the status to',
       sub,
     });
@@ -122,7 +122,7 @@ export async function updateIssue(id: string, body: unknown) {
       },
       user.id
     );
-    upsertNotification(id, String(data.assigneeId), user.id, {
+    upsertNotification(id, response.assigneeId, user.id, {
       main: 'changed the priority to',
       sub,
     });
@@ -136,7 +136,7 @@ export async function updateIssue(id: string, body: unknown) {
       },
       user.id
     );
-    upsertNotification(id, String(data.assigneeId), user.id, {
+    upsertNotification(id, response.assigneeId, user.id, {
       main: 'changed the title to',
       sub: String(data.title),
     });

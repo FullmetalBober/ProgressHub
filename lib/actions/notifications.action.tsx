@@ -11,8 +11,22 @@ const notificationInclude = {
     select: {
       id: true,
       title: true,
+      identifier: true,
       status: true,
       priority: true,
+      workspace: {
+        select: {
+          id: true,
+        },
+      },
+    },
+  },
+  sender: {
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      image: true,
     },
   },
 };
@@ -25,7 +39,12 @@ export async function createNotification(
     include: notificationInclude,
   });
 
-  await notifyUsers(response.recipientId, 'notification', 'create', response);
+  await notifyUsers(
+    `${response.recipientId}-${response.issue?.workspace.id}`,
+    'notification',
+    'create',
+    response
+  );
 
   return response;
 }
@@ -42,11 +61,16 @@ export async function updateNotification(
     include: notificationInclude,
   });
 
-  await notifyUsers(response.recipientId, 'notification', 'update', {
-    id: response.id,
-    issue: response.issue,
-    ...body,
-  });
+  await notifyUsers(
+    `${response.recipientId}-${response.issue?.workspace.id}`,
+    'notification',
+    'update',
+    {
+      id: response.id,
+      issue: response.issue,
+      ...body,
+    }
+  );
 
   return response;
 }
@@ -56,11 +80,17 @@ export async function deleteNotification(id: string) {
     where: {
       id,
     },
+    include: notificationInclude,
   });
 
-  await notifyUsers(response.recipientId, 'notification', 'delete', {
-    id: response.id,
-  });
+  await notifyUsers(
+    `${response.recipientId}-${response.issue?.workspace.id}`,
+    'notification',
+    'delete',
+    {
+      id: response.id,
+    }
+  );
 
   return response;
 }
@@ -74,6 +104,7 @@ export async function upsertNotification(
     sub?: string;
   }
 ) {
+  if (recipientId === senderId) return;
   const fullMessage = message.main + (message.sub ? ` ${message.sub}` : '');
   let notification = await prisma.notification.findFirst({
     where: {

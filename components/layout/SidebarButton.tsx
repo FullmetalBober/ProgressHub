@@ -19,7 +19,11 @@ export default function SidebarButton({
   const buttonVariant = isActive ? 'secondary' : 'ghost';
 
   return (
-    <Button variant={buttonVariant} className='w-full justify-start' asChild>
+    <Button
+      variant={buttonVariant}
+      className='w-full my-0.5 justify-start'
+      asChild
+    >
       <Link href={href}>
         {icon}
         <span className='ml-2'>{label}</span>

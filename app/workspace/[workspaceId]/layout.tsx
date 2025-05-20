@@ -1,5 +1,6 @@
 import { auth } from '@/lib/auth/utils';
 import prisma from '@/lib/db';
+import { SocketRoomEmitterProvider } from '@/providers/SocketRoomProvider';
 import { SocketWorkspaceEmitterProvider } from '@/providers/SocketWorkspaceProvider';
 import type { Metadata } from 'next';
 
@@ -40,7 +41,9 @@ export default async function RootLayout(
 
   return (
     <SocketWorkspaceEmitterProvider room={params.workspaceId}>
-      {children}
+      <SocketRoomEmitterProvider room={`${userId}-${params.workspaceId}`}>
+        {children}
+      </SocketRoomEmitterProvider>
     </SocketWorkspaceEmitterProvider>
   );
 }
