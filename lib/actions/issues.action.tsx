@@ -59,11 +59,7 @@ export async function createIssue(body: unknown) {
     }),
   ]);
 
-  createSystemComment(
-    response.id,
-    'created the issue',
-    user.name ?? user.email
-  );
+  createSystemComment(response.id, 'created the issue', user.id);
 
   await notifyUsers(response.workspaceId, 'issue', 'create', response);
 
