@@ -1,6 +1,7 @@
 import CommentsSection from '@/components/comments/CommentsSection';
 import EditIssue from '@/components/issues/EditIssue';
 import { Separator } from '@/components/ui/separator';
+import { markAllNotificationsAsReadByIssue } from '@/lib/actions/notifications.action';
 import { auth } from '@/lib/auth/utils';
 import prisma from '@/lib/db';
 import type { Metadata } from 'next';
@@ -49,6 +50,8 @@ export default async function IssuePage(
 
   if (!session?.user) return <div>Not authenticated</div>;
   if (!issue) return <div>Issue not found</div>;
+
+  await markAllNotificationsAsReadByIssue(issue.id);
 
   const workspaceUsers = issue.workspace.members.map(m => m.user);
 

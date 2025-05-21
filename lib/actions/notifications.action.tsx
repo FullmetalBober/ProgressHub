@@ -2,6 +2,7 @@
 
 import { Prisma } from '@prisma/client';
 import prisma from '../db';
+import { protectAction } from '../protection';
 import { notifyUsers } from './utils';
 
 // Should be used only in the server
@@ -143,4 +144,83 @@ export async function upsertNotification(
       message: fullMessage,
     });
   }
+}
+
+export async function markAllNotificationsAsRead() {
+  const user = await protectAction();
+
+  const notifications = await prisma.notification.findMany({
+    where: {
+      recipientId: user.id,
+      isRead: false,
+    },
+    include: notificationInclude,
+  });
+
+  await prisma.notification.updateMany({
+    where: {
+      id: {
+        in: notifications.map(notification => notification.id),
+      },
+    },
+    data: {
+      isRead: true,
+    },
+  });
+
+  await Promise.all(
+    notifications.map(notification =>
+      notifyUsers(
+        `${notification.recipientId}-${notification.issue?.workspace.id}`,
+        'notification',
+        'update',
+        {
+          id: notification.id,
+          isRead: true,
+        }
+      )
+    )
+  );
+
+  return notifications;
+}
+
+export async function markAllNotificationsAsReadByIssue(issueId: string) {
+  const user = await protectAction();
+
+  const notifications = await prisma.notification.findMany({
+    where: {
+      recipientId: user.id,
+      issueId,
+      isRead: false,
+    },
+    include: notificationInclude,
+  });
+
+  await prisma.notification.updateMany({
+    where: {
+      id: {
+        in: notifications.map(notification => notification.id),
+      },
+    },
+    data: {
+      isRead: true,
+    },
+  });
+
+  await Promise.all(
+    notifications.map(notification =>
+      notifyUsers(
+        `${notification.recipientId}-${notification.issue?.workspace.id}`,
+        'notification',
+        'update',
+        {
+          id: notification.id,
+          isRead: true,
+        }
+      )
+    )
+  );
+
+  return notifications;
 }

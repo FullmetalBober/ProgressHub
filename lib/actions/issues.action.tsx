@@ -136,10 +136,6 @@ export async function updateIssue(id: string, body: unknown) {
       },
       user.id
     );
-    upsertNotification(id, response.assigneeId, user.id, {
-      main: 'changed the title to',
-      sub: String(data.title),
-    });
   }
 
   const notifyData = {

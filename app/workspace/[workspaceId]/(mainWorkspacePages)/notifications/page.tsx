@@ -41,7 +41,7 @@ export default async function NotificationsPage(
       },
     },
     orderBy: {
-      updatedAt: 'asc',
+      createdAt: 'asc',
     },
   });
 
