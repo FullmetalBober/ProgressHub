@@ -3,10 +3,13 @@ import express from 'express';
 import http from 'http';
 import SmeeClient from 'smee-client';
 import { WebSocket } from 'ws';
+import startCronJobs from './cron';
 import hocuspocusServer from './hocuspocus';
 import probotMiddleware from './probot';
 import router from './router';
 import io from './socket';
+
+if (env.ENABLE_CRON_JOBS) startCronJobs();
 
 const app = express();
 app.use(probotMiddleware);

@@ -16,4 +16,25 @@ io.on('connection', socket => {
   });
 });
 
+export const availableEntities = [
+  'workspace',
+  'issue',
+  'workspaceInvite',
+  'workspaceMember',
+  'githubWikiFile',
+  'comment',
+  'notification',
+] as const;
+export const availableEvents = ['create', 'update', 'delete'] as const;
+
+export const emitToRoomChanges = (
+  room: string,
+  entity: (typeof availableEntities)[number],
+  event: (typeof availableEvents)[number],
+  payload: Record<string, unknown> & { id: string }
+) => {
+  io.to(room).emit(`${entity}/${event}`, payload);
+  console.log(`Notified room ${room} about ${entity}/${event}`);
+};
+
 export default io;

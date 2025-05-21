@@ -37,7 +37,6 @@ model User {
   notificationsSent     Notification[]          @relation("NotificationSender")
   createdAt             DateTime                @default(now())
   updatedAt             DateTime                @updatedAt
-  Notification          Notification[]
 }
 
 /// @zod.strip()
@@ -250,6 +249,4 @@ model Notification {
   recipient   User     @relation("NotificationRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  User        User?    @relation(fields: [userId], references: [id])
-  userId      String?
 }

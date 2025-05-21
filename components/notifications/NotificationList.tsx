@@ -26,11 +26,11 @@ export default function NotificationList({
   return (
     <div className='flex flex-col gap-2'>
       {notificationSorted.map(notification => {
-        if (notification.issue)
+        if (notification.issue !== null)
           return (
             <NotificationItem
               key={notification.id}
-              notification={notification}
+              notification={{ ...notification, issue: notification.issue }}
             />
           );
       })}
