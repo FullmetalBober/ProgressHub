@@ -10,7 +10,6 @@ export { CollaborationCursor } from '@tiptap/extension-collaboration-cursor';
 export { Color } from '@tiptap/extension-color';
 export { Dropcursor } from '@tiptap/extension-dropcursor';
 export { FocusClasses as Focus } from '@tiptap/extension-focus';
-export { FontFamily } from '@tiptap/extension-font-family';
 export { Highlight } from '@tiptap/extension-highlight';
 export { OrderedList } from '@tiptap/extension-ordered-list';
 export { Paragraph } from '@tiptap/extension-paragraph';

@@ -14,7 +14,6 @@ import {
   Dropcursor,
   Figcaption,
   Focus,
-  FontFamily,
   Heading,
   Highlight,
   HorizontalRule,
@@ -80,7 +79,6 @@ export const ExtensionKit = ({
     defaultLanguage: null,
   }),
   TextStyle,
-  FontFamily,
   Color,
   TrailingNode,
   Link.configure({
