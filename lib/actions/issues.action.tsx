@@ -60,6 +60,10 @@ export async function createIssue(body: unknown) {
   ]);
 
   createSystemComment(response.id, 'created the issue', user.id);
+  upsertNotification(response.id, response.assigneeId, user.id, {
+    main: 'assigned you the issue',
+    sub: response.title,
+  });
 
   await notifyUsers(response.workspaceId, 'issue', 'create', response);
 

@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
 import { ScrollArea } from '../ui/scroll-area';
+import SidebarButtonNotification from './SidebarButtonNotification';
 
 export default async function WorkspaceSideBar({
   workspaceId,
@@ -23,15 +24,29 @@ export default async function WorkspaceSideBar({
   workspaceId: string;
 }>) {
   const session = await auth();
-
-  const workspaces = await prisma.workspace.findMany({
-    where: { members: { some: { userId: session?.user?.id } } },
-    include: {
-      members: {
-        select: { user: true },
+  const [workspaces, userUnreadNotifications] = await Promise.all([
+    prisma.workspace.findMany({
+      where: { members: { some: { userId: session?.user?.id } } },
+      include: {
+        members: {
+          select: { user: true },
+        },
       },
-    },
-  });
+    }),
+    prisma.notification.findMany({
+      where: {
+        recipientId: session?.user?.id,
+        issue: {
+          workspaceId,
+        },
+        isRead: false,
+      },
+      select: {
+        id: true,
+        isRead: true,
+      },
+    }),
+  ]);
 
   const currentWorkspace = workspaces.find(w => w.id === workspaceId);
   const otherWorkspaces = workspaces.filter(w => w.id !== workspaceId);
@@ -100,10 +115,11 @@ export default async function WorkspaceSideBar({
           </div>
 
           <ScrollArea>
-            <SidebarButton
+            <SidebarButtonNotification
               icon={<Inbox />}
               label='Notifications'
               href={`/workspace/${workspaceId}/notifications`}
+              notifications={userUnreadNotifications}
             />
             <SidebarButton
               icon={<FolderKanban />}
