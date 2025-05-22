@@ -30,11 +30,11 @@ model User {
   sessions              Session[]
   workspaces            WorkspaceMember[]
   issues                Issue[]
-  workspacesInvites     WorkspaceInvite[]
   comments              Comment[]
   githubAppInstallation GithubAppInstallation[]
   notifications         Notification[]          @relation("NotificationRecipient")
   notificationsSent     Notification[]          @relation("NotificationSender")
+  workspacesInvitations WorkspaceInvite[]
   createdAt             DateTime                @default(now())
   updatedAt             DateTime                @updatedAt
 }
@@ -82,18 +82,6 @@ model VerificationToken {
 }
 
 /// @zod.strip()
-// model Subscription {
-//   userId                 String    @unique
-//   user                   User      @relation(fields: [userId], references: [id])
-//   stripeCustomerId       String    @unique @map(name: "stripe_customer_id")
-//   stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
-//   stripePriceId          String?   @map(name: "stripe_price_id")
-//   stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
-
-//   @@id([userId, stripeCustomerId])
-// }
-
-/// @zod.strip()
 model Workspace {
   id                    String                  @id @default(cuid())
   /// @zod.string.trim().min(1).max(255)
@@ -137,10 +125,10 @@ model WorkspaceInvite {
   id          String       @id @default(cuid())
   /// @zod.string.email().trim().max(255)
   email       String
+  invitee     User?        @relation(fields: [email], references: [email])
   workspaceId String
   workspace   Workspace    @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   invitedById String
-  invitedBy   User         @relation(fields: [invitedById], references: [id], onDelete: Cascade)
   status      InviteStatus @default(PENDING)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
