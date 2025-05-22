@@ -15,6 +15,17 @@ function buildFilePath(repoId: number, fileName: string) {
   return join(basePath, repoId.toString(), fileName + '.md');
 }
 
+export async function checkGithubWikiExists(
+  repoFullName: string,
+  token: string
+) {
+  const gitClone = simpleGit(basePath, gitBaseConfig);
+  await gitClone.raw(
+    'ls-remote',
+    `https://x-access-token:${token}@github.com/${repoFullName}.wiki.git`
+  );
+}
+
 export async function pullGithubWiki(
   repoId: number,
   repoFullName: string,
@@ -63,25 +74,6 @@ export async function pushGithubWiki(
   await gitMain.push(
     `https://x-access-token:${token}@github.com/${repoFullName}.wiki.git`
   );
-}
-
-export async function getMDFilesGithubWiki(repoId: number) {
-  const path = join(basePath, repoId.toString());
-
-  const files = await fs.readdir(path);
-  const mdFiles = files.filter(file => file.endsWith('.md'));
-  const mdFilesWithContent = await Promise.all(
-    mdFiles.map(async file => {
-      const filePath = join(path, file);
-      const content = await fs.readFile(filePath, 'utf-8');
-      return {
-        name: file,
-        content,
-      };
-    })
-  );
-
-  return mdFilesWithContent;
 }
 
 export async function createGithubWikiFile(

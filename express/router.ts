@@ -4,9 +4,9 @@ import express from 'express';
 import { z } from 'zod';
 import { emitToRoomChanges } from './socket';
 import {
+  checkGithubWikiExists,
   createGithubWikiFile,
   deleteGithubWikiFile,
-  getMDFilesGithubWiki,
   pullGithubWiki,
   pushGithubWiki,
   renameGithubWikiFile,
@@ -98,10 +98,18 @@ router.get('/github/wiki/:installationId/:repoId', async (req, res) => {
     getGithubToken(installationId),
   ]);
 
-  await pullGithubWiki(repoId, repoData.full_name, token);
-  const repoContent = await getMDFilesGithubWiki(repoId);
+  try {
+    await checkGithubWikiExists(repoData.full_name, token);
+    res.send('OK');
+  } catch (error) {
+    if (
+      !(error instanceof Error) ||
+      !error.message.includes('Repository not found')
+    )
+      throw error;
 
-  res.status(200).json(repoContent);
+    res.status(404).send('Wiki not found');
+  }
 });
 
 const upsertGithubWikiFileSchema = z.object({
@@ -129,7 +137,7 @@ router.post('/github/wiki/:installationId/:repoId/file', async (req, res) => {
   ]);
 
   await pullGithubWiki(params.repoId, repoData.full_name, token);
-  if (body.oldName)
+  if (body.oldName && body.oldName !== body.name)
     await renameGithubWikiFile(params.repoId, body.oldName, body.name);
   if (body.content)
     await createGithubWikiFile(params.repoId, body.name, body.content);

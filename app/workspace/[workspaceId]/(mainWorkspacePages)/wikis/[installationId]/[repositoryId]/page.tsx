@@ -1,4 +1,5 @@
 import EditWikis from '@/components/wikis/EditWikis';
+import { checkIfGithubWikiAvailable } from '@/lib/actions/githubApp.action';
 import { auth } from '@/lib/auth/utils';
 import prisma from '@/lib/db';
 import { env } from '@/lib/env.mjs';
@@ -11,21 +12,34 @@ export const metadata: Metadata = {
 
 export default async function WikiPage(
   props: Readonly<{
-    params: Promise<{ workspaceId: string; repositoryId: string }>;
+    params: Promise<{
+      installationId: string;
+      workspaceId: string;
+      repositoryId: string;
+    }>;
   }>
 ) {
   const params = await props.params;
-  const { repositoryId } = params;
-  const session = await auth();
-  if (!session?.user) return <div>Not authenticated</div>;
   const tiptapToken = jwt.sign({}, env.TIPTAP_COLLAB_SECRET);
 
-  const wikis = await prisma.githubWikiFile.findMany({
-    where: {
-      githubRepositoryId: Number(repositoryId),
-    },
-  });
+  const [session, wikis, isRepositoryWikiAvailable] = await Promise.all([
+    auth(),
+    prisma.githubWikiFile.findMany({
+      where: {
+        installationId: Number(params.installationId),
+        githubRepositoryId: Number(params.repositoryId),
+      },
+    }),
+    checkIfGithubWikiAvailable(
+      Number(params.installationId),
+      Number(params.repositoryId)
+    ),
+  ]);
 
+  if (!session?.user) return <div>Not authenticated</div>;
+  if (!isRepositoryWikiAvailable) {
+    return <div>Repository wiki is not available</div>;
+  }
   return (
     <div>
       <EditWikis wikis={wikis} user={session.user} tiptapToken={tiptapToken} />
