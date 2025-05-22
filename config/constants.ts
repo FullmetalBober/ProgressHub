@@ -1,10 +1,15 @@
 import { InviteStatus, Priority, Role, Status } from '@prisma/client';
 import {
-  ArrowUpCircle,
   CheckCircle2,
   Circle,
-  Eye,
-  HelpCircle,
+  CircleDashed,
+  CircleEllipsis,
+  Ellipsis,
+  LoaderCircle,
+  SignalHigh,
+  SignalLow,
+  SignalMedium,
+  TriangleAlert,
   XCircle,
   type LucideIcon,
 } from 'lucide-react';
@@ -36,27 +41,27 @@ const prioritiesIssue: TPriorityIssue[] = [
   {
     value: 'NO_PRIORITY',
     label: 'No priority',
-    icon: HelpCircle,
+    icon: Ellipsis,
   },
   {
     value: 'URGENT',
     label: 'Urgent',
-    icon: Circle,
+    icon: TriangleAlert,
   },
   {
     value: 'HIGH',
     label: 'High',
-    icon: ArrowUpCircle,
+    icon: SignalHigh,
   },
   {
     value: 'MEDIUM',
     label: 'Medium',
-    icon: CheckCircle2,
+    icon: SignalMedium,
   },
   {
     value: 'LOW',
     label: 'Low',
-    icon: XCircle,
+    icon: SignalLow,
   },
 ];
 
@@ -64,7 +69,7 @@ const statusesIssue: TStatusIssue[] = [
   {
     value: 'BACKLOG',
     label: 'Backlog',
-    icon: HelpCircle,
+    icon: CircleDashed,
   },
   {
     value: 'TODO',
@@ -74,12 +79,12 @@ const statusesIssue: TStatusIssue[] = [
   {
     value: 'IN_PROGRESS',
     label: 'In Progress',
-    icon: ArrowUpCircle,
+    icon: LoaderCircle,
   },
   {
     value: 'IN_REVIEW',
     label: 'In Review',
-    icon: Eye,
+    icon: CircleEllipsis,
   },
   {
     value: 'DONE',

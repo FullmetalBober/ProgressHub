@@ -1,6 +1,6 @@
 import { WorkspaceMember } from '@/prisma/zod';
 import { clsx, type ClassValue } from 'clsx';
-import { isValid, parseISO } from 'date-fns';
+import { FormatDistanceToken, isValid, parseISO } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -100,3 +100,25 @@ export function transformDatesInObject<T>(obj: T): T {
 
   return result as T;
 }
+
+export const formatDistanceLocale: Record<
+  FormatDistanceToken,
+  (count: number) => string
+> = {
+  lessThanXSeconds: c => `${c}с`,
+  xSeconds: c => `${c}с`,
+  halfAMinute: () => '30с',
+  lessThanXMinutes: c => `${c}хв`,
+  xMinutes: c => `${c}м`,
+  aboutXHours: c => `${c}г`,
+  xHours: c => `${c}г`,
+  xDays: c => `${c}д`,
+  aboutXWeeks: c => `${c}т`,
+  xWeeks: c => `${c}т`,
+  aboutXMonths: c => `${c}м`,
+  xMonths: c => `${c}м`,
+  aboutXYears: c => `${c}р`,
+  xYears: c => `${c}р`,
+  overXYears: c => `${c}р`,
+  almostXYears: c => `${c}р`,
+};

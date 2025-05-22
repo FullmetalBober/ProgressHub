@@ -11,6 +11,7 @@ import {
   createOrUpdateSystemComment,
   createSystemComment,
 } from './comments.action';
+import { upsertNotification } from './notifications.action';
 import { notifyUsers, zodValidate } from './utils';
 
 export async function createIssue(body: unknown) {
@@ -58,11 +59,11 @@ export async function createIssue(body: unknown) {
     }),
   ]);
 
-  createSystemComment(
-    response.id,
-    'created the issue',
-    user.name ?? user.email
-  );
+  createSystemComment(response.id, 'created the issue', user.id);
+  upsertNotification(response.id, response.assigneeId, user.id, {
+    main: 'assigned you the issue',
+    sub: response.title,
+  });
 
   await notifyUsers(response.workspaceId, 'issue', 'create', response);
 
@@ -85,34 +86,52 @@ export async function updateIssue(id: string, body: unknown) {
     },
   });
 
-  if (data.assigneeId)
+  if (data.assigneeId) {
+    const sub = response.assignee.name;
     createOrUpdateSystemComment(
       id,
       {
         main: 'assigned the issue to',
-        sub: response.assignee.name,
+        sub,
       },
       user.id
     );
-  if (data.status)
+    upsertNotification(id, response.assigneeId, user.id, {
+      main: 'assigned you the issue',
+      sub,
+    });
+  }
+  if (data.status) {
+    const sub = statusesIssue.find(s => s.value === data.status)?.label;
     createOrUpdateSystemComment(
       id,
       {
         main: 'changed the status to',
-        sub: statusesIssue.find(s => s.value === data.status)?.label,
+        sub,
       },
       user.id
     );
-  if (data.priority)
+    upsertNotification(id, response.assigneeId, user.id, {
+      main: 'changed the status to',
+      sub,
+    });
+  }
+  if (data.priority) {
+    const sub = prioritiesIssue.find(s => s.value === data.priority)?.label;
     createOrUpdateSystemComment(
       id,
       {
         main: 'changed the priority to',
-        sub: prioritiesIssue.find(s => s.value === data.priority)?.label,
+        sub,
       },
       user.id
     );
-  if (data.title)
+    upsertNotification(id, response.assigneeId, user.id, {
+      main: 'changed the priority to',
+      sub,
+    });
+  }
+  if (data.title) {
     createOrUpdateSystemComment(
       id,
       {
@@ -121,6 +140,7 @@ export async function updateIssue(id: string, body: unknown) {
       },
       user.id
     );
+  }
 
   const notifyData = {
     ...data,

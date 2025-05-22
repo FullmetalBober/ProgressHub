@@ -2,7 +2,7 @@ import prisma from '@/lib/db';
 import { env } from '@/lib/env.mjs';
 import express from 'express';
 import { z } from 'zod';
-import io from './socket';
+import { emitToRoomChanges } from './socket';
 import {
   createGithubWikiFile,
   deleteGithubWikiFile,
@@ -24,6 +24,7 @@ const notifySchema = z.object({
     'workspaceMember',
     'githubWikiFile',
     'comment',
+    'notification',
   ]),
   event: z.enum(['create', 'update', 'delete']),
   payload: z.record(z.unknown()).refine(data => data.id, {
@@ -44,8 +45,12 @@ router.get('/', (_req, res) => {
 router.post('/notify', (req, res) => {
   const { room, entity, event, payload } = notifySchema.parse(req.body);
 
-  io.to(room).emit(`${entity}/${event}`, payload);
-  console.log(`Notified room ${room} about ${entity}/${event}`);
+  emitToRoomChanges(
+    room,
+    entity,
+    event,
+    payload as typeof payload & { id: string }
+  );
 
   res.send('OK');
 });

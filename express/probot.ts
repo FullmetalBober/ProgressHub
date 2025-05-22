@@ -3,7 +3,7 @@ import prisma from '@/lib/db';
 import { env } from '@/lib/env.mjs';
 import { StatusType } from '@/prisma/zod';
 import { createNodeMiddleware, Probot } from 'probot';
-import io from './socket';
+import { emitToRoomChanges } from './socket';
 
 const probot = new Probot({
   appId: env.GITHUB_APP_ID,
@@ -60,11 +60,11 @@ async function moveIssueTo(
     }),
   ]);
 
-  io.to(issue.workspaceId).emit(`issue/update`, {
+  emitToRoomChanges(issue.workspaceId, 'issue', 'update', {
     id: issueUpdated.id,
     status: issueUpdated.status,
   });
-  io.to(issue.id).emit(`comment/create`, comment);
+  emitToRoomChanges(issue.id, 'comment', 'create', comment);
 }
 
 function handle(app: Probot) {

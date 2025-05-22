@@ -33,6 +33,8 @@ model User {
   workspacesInvites     WorkspaceInvite[]
   comments              Comment[]
   githubAppInstallation GithubAppInstallation[]
+  notifications         Notification[]          @relation("NotificationRecipient")
+  notificationsSent     Notification[]          @relation("NotificationSender")
   createdAt             DateTime                @default(now())
   updatedAt             DateTime                @updatedAt
 }
@@ -165,20 +167,21 @@ enum Priority {
 
 /// @zod.strip()
 model Issue {
-  id          String    @id @default(cuid())
-  identifier  Int
+  id            String         @id @default(cuid())
+  identifier    Int
   /// @zod.string.trim().min(1).max(255)
-  title       String
-  description Bytes?
-  status      Status    @default(BACKLOG)
-  priority    Priority  @default(NO_PRIORITY)
-  workspaceId String
-  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  assigneeId  String
-  assignee    User      @relation(fields: [assigneeId], references: [id])
-  comments    Comment[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  title         String
+  description   Bytes?
+  status        Status         @default(BACKLOG)
+  priority      Priority       @default(NO_PRIORITY)
+  workspaceId   String
+  workspace     Workspace      @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  assigneeId    String
+  assignee      User           @relation(fields: [assigneeId], references: [id])
+  comments      Comment[]
+  notifications Notification[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 
   @@unique([identifier, workspaceId])
 }
@@ -229,4 +232,21 @@ model GithubWikiFile {
   updatedAt          DateTime              @updatedAt
 
   @@unique([path, githubRepositoryId])
+}
+
+/// @zod.strip()
+model Notification {
+  id          String   @id @default(cuid())
+  /// @zod.string.trim().min(1).max(1000)
+  message     String
+  issueId     String?
+  issue       Issue?   @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  isRead      Boolean  @default(false)
+  isEmailSent Boolean  @default(false)
+  senderId    String
+  sender      User     @relation("NotificationSender", fields: [senderId], references: [id], onDelete: Cascade)
+  recipientId String
+  recipient   User     @relation("NotificationRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
