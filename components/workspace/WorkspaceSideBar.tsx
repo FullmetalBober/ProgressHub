@@ -24,43 +24,50 @@ export default async function WorkspaceSideBar({
   workspaceId: string;
 }>) {
   const session = await auth();
+  if (!session?.user?.id || !session?.user?.email)
+    return <div>You are not logged in</div>;
 
-  const user = await prisma.user.findUnique({
-    where: { id: session?.user?.id },
-    include: {
-      workspaces: {
-        include: {
-          workspace: {
-            include: {
-              members: {
-                select: { user: true },
-                where: {
-                  workspaceId,
+  const [user, workspaceInvitation] = await Promise.all([
+    prisma.user.findUnique({
+      where: { id: session.user.id },
+      include: {
+        workspaces: {
+          include: {
+            workspace: {
+              include: {
+                members: {
+                  select: { user: true },
+                  where: {
+                    workspaceId,
+                  },
                 },
               },
             },
           },
         },
-      },
-      notifications: {
-        where: {
-          issue: {
-            workspaceId,
+        notifications: {
+          where: {
+            issue: {
+              workspaceId,
+            },
+            isRead: false,
           },
-          isRead: false,
-        },
-        select: {
-          id: true,
-          isRead: true,
-        },
-      },
-      workspacesInvitations: {
-        select: {
-          id: true,
+          select: {
+            id: true,
+            isRead: true,
+          },
         },
       },
-    },
-  });
+    }),
+    prisma.workspaceInvite.findFirst({
+      where: {
+        email: session.user.email,
+      },
+      select: {
+        id: true,
+      },
+    }),
+  ]);
   if (!user) return <div>You are not logged in</div>;
 
   const currentWorkspace = user.workspaces.find(
@@ -115,7 +122,7 @@ export default async function WorkspaceSideBar({
                 <DropdownMenuItem asChild>
                   <Link href='/join' className='relative'>
                     <span>Create or join a workspace</span>
-                    {user.workspacesInvitations.length > 0 && (
+                    {workspaceInvitation && (
                       <div className='absolute flex h-3 w-3 right-0 top-0'>
                         <div className='animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75' />
                         <div className='rounded-full inline-flex h-full w-full bg-white' />

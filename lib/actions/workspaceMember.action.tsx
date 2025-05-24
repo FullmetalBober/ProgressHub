@@ -11,7 +11,7 @@ export async function updateWorkspaceMember(id: string, body: unknown) {
     {
       workspaceMemberId: id,
     },
-    ['OWNER']
+    ['OWNER', 'ADMIN']
   );
 
   if (data.role === 'OWNER') {
