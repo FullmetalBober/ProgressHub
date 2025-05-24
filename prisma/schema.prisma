@@ -14,7 +14,6 @@ generator zod {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  // directUrl = env("DIRECT_URL")
 }
 
 /// @zod.strip()
@@ -94,27 +93,26 @@ model Workspace {
   githubAppInstallation GithubAppInstallation[]
 }
 
-enum Role {
+enum WorkspaceRole {
   OWNER
   ADMIN
   MEMBER
-  GUEST
 }
 
 /// @zod.strip()
 model WorkspaceMember {
-  id          String    @id @default(cuid())
-  role        Role      @default(MEMBER)
+  id          String        @id @default(cuid())
+  role        WorkspaceRole @default(MEMBER)
   userId      String
   workspaceId String
-  user        User      @relation(fields: [userId], references: [id])
-  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  createdAt   DateTime  @default(now())
+  user        User          @relation(fields: [userId], references: [id])
+  workspace   Workspace     @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  createdAt   DateTime      @default(now())
 
   @@unique([userId, workspaceId])
 }
 
-enum InviteStatus {
+enum WorkspaceInviteStatus {
   PENDING
   ACCEPTED
   DECLINED
@@ -122,21 +120,21 @@ enum InviteStatus {
 
 /// @zod.strip()
 model WorkspaceInvite {
-  id          String       @id @default(cuid())
+  id          String                @id @default(cuid())
   /// @zod.string.email().trim().max(255)
   email       String
-  invitee     User?        @relation(fields: [email], references: [email])
+  invitee     User?                 @relation(fields: [email], references: [email])
   workspaceId String
-  workspace   Workspace    @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspace   Workspace             @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   invitedById String
-  status      InviteStatus @default(PENDING)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  status      WorkspaceInviteStatus @default(PENDING)
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
 
   @@unique([email, workspaceId])
 }
 
-enum Status {
+enum IssueStatus {
   BACKLOG
   TODO
   IN_PROGRESS
@@ -145,7 +143,7 @@ enum Status {
   CANCELED
 }
 
-enum Priority {
+enum IssuePriority {
   NO_PRIORITY
   URGENT
   HIGH
@@ -160,8 +158,8 @@ model Issue {
   /// @zod.string.trim().min(1).max(255)
   title         String
   description   Bytes?
-  status        Status         @default(BACKLOG)
-  priority      Priority       @default(NO_PRIORITY)
+  status        IssueStatus    @default(BACKLOG)
+  priority      IssuePriority  @default(NO_PRIORITY)
   workspaceId   String
   workspace     Workspace      @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   assigneeId    String

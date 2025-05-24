@@ -1,4 +1,9 @@
-import { InviteStatus, Priority, Role, Status } from '@prisma/client';
+import {
+  IssuePriority,
+  IssueStatus,
+  WorkspaceInviteStatus,
+  WorkspaceRole,
+} from '@prisma/client';
 import {
   CheckCircle2,
   Circle,
@@ -20,20 +25,20 @@ type TField = {
 };
 
 type TPriorityIssue = {
-  value: Priority;
+  value: IssuePriority;
 } & TField;
 
 type TStatusIssue = {
-  value: Status;
+  value: IssueStatus;
 } & TField;
 
 type TStatusWorkspaceInvite = {
-  value: InviteStatus;
+  value: WorkspaceInviteStatus;
   label: string;
 };
 
 type TRoleWorkspaceMember = {
-  value: Role;
+  value: WorkspaceRole;
   label: string;
 };
 
@@ -125,10 +130,6 @@ const statusesWorkspaceMember: TRoleWorkspaceMember[] = [
   {
     value: 'MEMBER',
     label: 'Member',
-  },
-  {
-    value: 'GUEST',
-    label: 'Guest',
   },
 ];
 

@@ -42,21 +42,21 @@ export const QueryModeSchema = z.enum(['default','insensitive']);
 
 export const NullsOrderSchema = z.enum(['first','last']);
 
-export const RoleSchema = z.enum(['OWNER','ADMIN','MEMBER','GUEST']);
+export const WorkspaceRoleSchema = z.enum(['OWNER','ADMIN','MEMBER']);
 
-export type RoleType = `${z.infer<typeof RoleSchema>}`
+export type WorkspaceRoleType = `${z.infer<typeof WorkspaceRoleSchema>}`
 
-export const InviteStatusSchema = z.enum(['PENDING','ACCEPTED','DECLINED']);
+export const WorkspaceInviteStatusSchema = z.enum(['PENDING','ACCEPTED','DECLINED']);
 
-export type InviteStatusType = `${z.infer<typeof InviteStatusSchema>}`
+export type WorkspaceInviteStatusType = `${z.infer<typeof WorkspaceInviteStatusSchema>}`
 
-export const StatusSchema = z.enum(['BACKLOG','TODO','IN_PROGRESS','IN_REVIEW','DONE','CANCELED']);
+export const IssueStatusSchema = z.enum(['BACKLOG','TODO','IN_PROGRESS','IN_REVIEW','DONE','CANCELED']);
 
-export type StatusType = `${z.infer<typeof StatusSchema>}`
+export type IssueStatusType = `${z.infer<typeof IssueStatusSchema>}`
 
-export const PrioritySchema = z.enum(['NO_PRIORITY','URGENT','HIGH','MEDIUM','LOW']);
+export const IssuePrioritySchema = z.enum(['NO_PRIORITY','URGENT','HIGH','MEDIUM','LOW']);
 
-export type PriorityType = `${z.infer<typeof PrioritySchema>}`
+export type IssuePriorityType = `${z.infer<typeof IssuePrioritySchema>}`
 
 /////////////////////////////////////////
 // MODELS
@@ -407,7 +407,7 @@ export const WorkspaceWithPartialRelationsSchema: z.ZodType<WorkspaceWithPartial
 /////////////////////////////////////////
 
 export const WorkspaceMemberSchema = z.object({
-  role: RoleSchema,
+  role: WorkspaceRoleSchema,
   id: z.string().cuid(),
   userId: z.string(),
   workspaceId: z.string(),
@@ -474,7 +474,7 @@ export const WorkspaceMemberWithPartialRelationsSchema: z.ZodType<WorkspaceMembe
 /////////////////////////////////////////
 
 export const WorkspaceInviteSchema = z.object({
-  status: InviteStatusSchema,
+  status: WorkspaceInviteStatusSchema,
   id: z.string().cuid(),
   email: z.string().email().trim().max(255),
   workspaceId: z.string(),
@@ -543,8 +543,8 @@ export const WorkspaceInviteWithPartialRelationsSchema: z.ZodType<WorkspaceInvit
 /////////////////////////////////////////
 
 export const IssueSchema = z.object({
-  status: StatusSchema,
-  priority: PrioritySchema,
+  status: IssueStatusSchema,
+  priority: IssuePrioritySchema,
   id: z.string().cuid(),
   identifier: z.number().int(),
   title: z.string().trim().min(1).max(255),
@@ -1675,7 +1675,7 @@ export const WorkspaceMemberWhereInputSchema: z.ZodType<Prisma.WorkspaceMemberWh
   OR: z.lazy(() => WorkspaceMemberWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => WorkspaceMemberWhereInputSchema),z.lazy(() => WorkspaceMemberWhereInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  role: z.union([ z.lazy(() => EnumRoleFilterSchema),z.lazy(() => RoleSchema) ]).optional(),
+  role: z.union([ z.lazy(() => EnumWorkspaceRoleFilterSchema),z.lazy(() => WorkspaceRoleSchema) ]).optional(),
   userId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   workspaceId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
@@ -1711,7 +1711,7 @@ export const WorkspaceMemberWhereUniqueInputSchema: z.ZodType<Prisma.WorkspaceMe
   AND: z.union([ z.lazy(() => WorkspaceMemberWhereInputSchema),z.lazy(() => WorkspaceMemberWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => WorkspaceMemberWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => WorkspaceMemberWhereInputSchema),z.lazy(() => WorkspaceMemberWhereInputSchema).array() ]).optional(),
-  role: z.union([ z.lazy(() => EnumRoleFilterSchema),z.lazy(() => RoleSchema) ]).optional(),
+  role: z.union([ z.lazy(() => EnumWorkspaceRoleFilterSchema),z.lazy(() => WorkspaceRoleSchema) ]).optional(),
   userId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   workspaceId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
@@ -1735,7 +1735,7 @@ export const WorkspaceMemberScalarWhereWithAggregatesInputSchema: z.ZodType<Pris
   OR: z.lazy(() => WorkspaceMemberScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => WorkspaceMemberScalarWhereWithAggregatesInputSchema),z.lazy(() => WorkspaceMemberScalarWhereWithAggregatesInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
-  role: z.union([ z.lazy(() => EnumRoleWithAggregatesFilterSchema),z.lazy(() => RoleSchema) ]).optional(),
+  role: z.union([ z.lazy(() => EnumWorkspaceRoleWithAggregatesFilterSchema),z.lazy(() => WorkspaceRoleSchema) ]).optional(),
   userId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   workspaceId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
@@ -1749,7 +1749,7 @@ export const WorkspaceInviteWhereInputSchema: z.ZodType<Prisma.WorkspaceInviteWh
   email: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   workspaceId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   invitedById: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  status: z.union([ z.lazy(() => EnumInviteStatusFilterSchema),z.lazy(() => InviteStatusSchema) ]).optional(),
+  status: z.union([ z.lazy(() => EnumWorkspaceInviteStatusFilterSchema),z.lazy(() => WorkspaceInviteStatusSchema) ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   invitee: z.union([ z.lazy(() => UserNullableScalarRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional().nullable(),
@@ -1789,7 +1789,7 @@ export const WorkspaceInviteWhereUniqueInputSchema: z.ZodType<Prisma.WorkspaceIn
   email: z.union([ z.lazy(() => StringFilterSchema),z.string().email().trim().max(255) ]).optional(),
   workspaceId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   invitedById: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  status: z.union([ z.lazy(() => EnumInviteStatusFilterSchema),z.lazy(() => InviteStatusSchema) ]).optional(),
+  status: z.union([ z.lazy(() => EnumWorkspaceInviteStatusFilterSchema),z.lazy(() => WorkspaceInviteStatusSchema) ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   invitee: z.union([ z.lazy(() => UserNullableScalarRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional().nullable(),
@@ -1817,7 +1817,7 @@ export const WorkspaceInviteScalarWhereWithAggregatesInputSchema: z.ZodType<Pris
   email: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   workspaceId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   invitedById: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
-  status: z.union([ z.lazy(() => EnumInviteStatusWithAggregatesFilterSchema),z.lazy(() => InviteStatusSchema) ]).optional(),
+  status: z.union([ z.lazy(() => EnumWorkspaceInviteStatusWithAggregatesFilterSchema),z.lazy(() => WorkspaceInviteStatusSchema) ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
 }).strict() as z.ZodType<Prisma.WorkspaceInviteScalarWhereWithAggregatesInput>;
@@ -1830,8 +1830,8 @@ export const IssueWhereInputSchema: z.ZodType<Prisma.IssueWhereInput> = z.object
   identifier: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   title: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   description: z.union([ z.lazy(() => BytesNullableFilterSchema),z.instanceof(Buffer) ]).optional().nullable(),
-  status: z.union([ z.lazy(() => EnumStatusFilterSchema),z.lazy(() => StatusSchema) ]).optional(),
-  priority: z.union([ z.lazy(() => EnumPriorityFilterSchema),z.lazy(() => PrioritySchema) ]).optional(),
+  status: z.union([ z.lazy(() => EnumIssueStatusFilterSchema),z.lazy(() => IssueStatusSchema) ]).optional(),
+  priority: z.union([ z.lazy(() => EnumIssuePriorityFilterSchema),z.lazy(() => IssuePrioritySchema) ]).optional(),
   workspaceId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   assigneeId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
@@ -1880,8 +1880,8 @@ export const IssueWhereUniqueInputSchema: z.ZodType<Prisma.IssueWhereUniqueInput
   identifier: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
   title: z.union([ z.lazy(() => StringFilterSchema),z.string().trim().min(1).max(255) ]).optional(),
   description: z.union([ z.lazy(() => BytesNullableFilterSchema),z.instanceof(Buffer) ]).optional().nullable(),
-  status: z.union([ z.lazy(() => EnumStatusFilterSchema),z.lazy(() => StatusSchema) ]).optional(),
-  priority: z.union([ z.lazy(() => EnumPriorityFilterSchema),z.lazy(() => PrioritySchema) ]).optional(),
+  status: z.union([ z.lazy(() => EnumIssueStatusFilterSchema),z.lazy(() => IssueStatusSchema) ]).optional(),
+  priority: z.union([ z.lazy(() => EnumIssuePriorityFilterSchema),z.lazy(() => IssuePrioritySchema) ]).optional(),
   workspaceId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   assigneeId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
@@ -1918,8 +1918,8 @@ export const IssueScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.IssueSc
   identifier: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
   title: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   description: z.union([ z.lazy(() => BytesNullableWithAggregatesFilterSchema),z.instanceof(Buffer) ]).optional().nullable(),
-  status: z.union([ z.lazy(() => EnumStatusWithAggregatesFilterSchema),z.lazy(() => StatusSchema) ]).optional(),
-  priority: z.union([ z.lazy(() => EnumPriorityWithAggregatesFilterSchema),z.lazy(() => PrioritySchema) ]).optional(),
+  status: z.union([ z.lazy(() => EnumIssueStatusWithAggregatesFilterSchema),z.lazy(() => IssueStatusSchema) ]).optional(),
+  priority: z.union([ z.lazy(() => EnumIssuePriorityWithAggregatesFilterSchema),z.lazy(() => IssuePrioritySchema) ]).optional(),
   workspaceId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   assigneeId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
@@ -2634,7 +2634,7 @@ export const WorkspaceUncheckedUpdateManyInputSchema: z.ZodType<Prisma.Workspace
 
 export const WorkspaceMemberCreateInputSchema: z.ZodType<Prisma.WorkspaceMemberCreateInput> = z.object({
   id: z.string().cuid().optional(),
-  role: z.lazy(() => RoleSchema).optional(),
+  role: z.lazy(() => WorkspaceRoleSchema).optional(),
   createdAt: z.coerce.date().optional(),
   user: z.lazy(() => UserCreateNestedOneWithoutWorkspacesInputSchema),
   workspace: z.lazy(() => WorkspaceCreateNestedOneWithoutMembersInputSchema)
@@ -2642,7 +2642,7 @@ export const WorkspaceMemberCreateInputSchema: z.ZodType<Prisma.WorkspaceMemberC
 
 export const WorkspaceMemberUncheckedCreateInputSchema: z.ZodType<Prisma.WorkspaceMemberUncheckedCreateInput> = z.object({
   id: z.string().cuid().optional(),
-  role: z.lazy(() => RoleSchema).optional(),
+  role: z.lazy(() => WorkspaceRoleSchema).optional(),
   userId: z.string(),
   workspaceId: z.string(),
   createdAt: z.coerce.date().optional()
@@ -2650,7 +2650,7 @@ export const WorkspaceMemberUncheckedCreateInputSchema: z.ZodType<Prisma.Workspa
 
 export const WorkspaceMemberUpdateInputSchema: z.ZodType<Prisma.WorkspaceMemberUpdateInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  role: z.union([ z.lazy(() => RoleSchema),z.lazy(() => EnumRoleFieldUpdateOperationsInputSchema) ]).optional(),
+  role: z.union([ z.lazy(() => WorkspaceRoleSchema),z.lazy(() => EnumWorkspaceRoleFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   user: z.lazy(() => UserUpdateOneRequiredWithoutWorkspacesNestedInputSchema).optional(),
   workspace: z.lazy(() => WorkspaceUpdateOneRequiredWithoutMembersNestedInputSchema).optional()
@@ -2658,7 +2658,7 @@ export const WorkspaceMemberUpdateInputSchema: z.ZodType<Prisma.WorkspaceMemberU
 
 export const WorkspaceMemberUncheckedUpdateInputSchema: z.ZodType<Prisma.WorkspaceMemberUncheckedUpdateInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  role: z.union([ z.lazy(() => RoleSchema),z.lazy(() => EnumRoleFieldUpdateOperationsInputSchema) ]).optional(),
+  role: z.union([ z.lazy(() => WorkspaceRoleSchema),z.lazy(() => EnumWorkspaceRoleFieldUpdateOperationsInputSchema) ]).optional(),
   userId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   workspaceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -2666,7 +2666,7 @@ export const WorkspaceMemberUncheckedUpdateInputSchema: z.ZodType<Prisma.Workspa
 
 export const WorkspaceMemberCreateManyInputSchema: z.ZodType<Prisma.WorkspaceMemberCreateManyInput> = z.object({
   id: z.string().cuid().optional(),
-  role: z.lazy(() => RoleSchema).optional(),
+  role: z.lazy(() => WorkspaceRoleSchema).optional(),
   userId: z.string(),
   workspaceId: z.string(),
   createdAt: z.coerce.date().optional()
@@ -2674,13 +2674,13 @@ export const WorkspaceMemberCreateManyInputSchema: z.ZodType<Prisma.WorkspaceMem
 
 export const WorkspaceMemberUpdateManyMutationInputSchema: z.ZodType<Prisma.WorkspaceMemberUpdateManyMutationInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  role: z.union([ z.lazy(() => RoleSchema),z.lazy(() => EnumRoleFieldUpdateOperationsInputSchema) ]).optional(),
+  role: z.union([ z.lazy(() => WorkspaceRoleSchema),z.lazy(() => EnumWorkspaceRoleFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.WorkspaceMemberUpdateManyMutationInput>;
 
 export const WorkspaceMemberUncheckedUpdateManyInputSchema: z.ZodType<Prisma.WorkspaceMemberUncheckedUpdateManyInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  role: z.union([ z.lazy(() => RoleSchema),z.lazy(() => EnumRoleFieldUpdateOperationsInputSchema) ]).optional(),
+  role: z.union([ z.lazy(() => WorkspaceRoleSchema),z.lazy(() => EnumWorkspaceRoleFieldUpdateOperationsInputSchema) ]).optional(),
   userId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   workspaceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -2689,7 +2689,7 @@ export const WorkspaceMemberUncheckedUpdateManyInputSchema: z.ZodType<Prisma.Wor
 export const WorkspaceInviteCreateInputSchema: z.ZodType<Prisma.WorkspaceInviteCreateInput> = z.object({
   id: z.string().cuid().optional(),
   invitedById: z.string(),
-  status: z.lazy(() => InviteStatusSchema).optional(),
+  status: z.lazy(() => WorkspaceInviteStatusSchema).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   invitee: z.lazy(() => UserCreateNestedOneWithoutWorkspacesInvitationsInputSchema).optional(),
@@ -2701,7 +2701,7 @@ export const WorkspaceInviteUncheckedCreateInputSchema: z.ZodType<Prisma.Workspa
   email: z.string().email().trim().max(255),
   workspaceId: z.string(),
   invitedById: z.string(),
-  status: z.lazy(() => InviteStatusSchema).optional(),
+  status: z.lazy(() => WorkspaceInviteStatusSchema).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
 }).strict() as z.ZodType<Prisma.WorkspaceInviteUncheckedCreateInput>;
@@ -2709,7 +2709,7 @@ export const WorkspaceInviteUncheckedCreateInputSchema: z.ZodType<Prisma.Workspa
 export const WorkspaceInviteUpdateInputSchema: z.ZodType<Prisma.WorkspaceInviteUpdateInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   invitedById: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  status: z.union([ z.lazy(() => InviteStatusSchema),z.lazy(() => EnumInviteStatusFieldUpdateOperationsInputSchema) ]).optional(),
+  status: z.union([ z.lazy(() => WorkspaceInviteStatusSchema),z.lazy(() => EnumWorkspaceInviteStatusFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   invitee: z.lazy(() => UserUpdateOneWithoutWorkspacesInvitationsNestedInputSchema).optional(),
@@ -2721,7 +2721,7 @@ export const WorkspaceInviteUncheckedUpdateInputSchema: z.ZodType<Prisma.Workspa
   email: z.union([ z.string().email().trim().max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   workspaceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   invitedById: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  status: z.union([ z.lazy(() => InviteStatusSchema),z.lazy(() => EnumInviteStatusFieldUpdateOperationsInputSchema) ]).optional(),
+  status: z.union([ z.lazy(() => WorkspaceInviteStatusSchema),z.lazy(() => EnumWorkspaceInviteStatusFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.WorkspaceInviteUncheckedUpdateInput>;
@@ -2731,7 +2731,7 @@ export const WorkspaceInviteCreateManyInputSchema: z.ZodType<Prisma.WorkspaceInv
   email: z.string().email().trim().max(255),
   workspaceId: z.string(),
   invitedById: z.string(),
-  status: z.lazy(() => InviteStatusSchema).optional(),
+  status: z.lazy(() => WorkspaceInviteStatusSchema).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
 }).strict() as z.ZodType<Prisma.WorkspaceInviteCreateManyInput>;
@@ -2739,7 +2739,7 @@ export const WorkspaceInviteCreateManyInputSchema: z.ZodType<Prisma.WorkspaceInv
 export const WorkspaceInviteUpdateManyMutationInputSchema: z.ZodType<Prisma.WorkspaceInviteUpdateManyMutationInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   invitedById: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  status: z.union([ z.lazy(() => InviteStatusSchema),z.lazy(() => EnumInviteStatusFieldUpdateOperationsInputSchema) ]).optional(),
+  status: z.union([ z.lazy(() => WorkspaceInviteStatusSchema),z.lazy(() => EnumWorkspaceInviteStatusFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.WorkspaceInviteUpdateManyMutationInput>;
@@ -2749,7 +2749,7 @@ export const WorkspaceInviteUncheckedUpdateManyInputSchema: z.ZodType<Prisma.Wor
   email: z.union([ z.string().email().trim().max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   workspaceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   invitedById: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  status: z.union([ z.lazy(() => InviteStatusSchema),z.lazy(() => EnumInviteStatusFieldUpdateOperationsInputSchema) ]).optional(),
+  status: z.union([ z.lazy(() => WorkspaceInviteStatusSchema),z.lazy(() => EnumWorkspaceInviteStatusFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.WorkspaceInviteUncheckedUpdateManyInput>;
@@ -2759,8 +2759,8 @@ export const IssueCreateInputSchema: z.ZodType<Prisma.IssueCreateInput> = z.obje
   identifier: z.number().int(),
   title: z.string().trim().min(1).max(255),
   description: z.instanceof(Buffer).optional().nullable(),
-  status: z.lazy(() => StatusSchema).optional(),
-  priority: z.lazy(() => PrioritySchema).optional(),
+  status: z.lazy(() => IssueStatusSchema).optional(),
+  priority: z.lazy(() => IssuePrioritySchema).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   workspace: z.lazy(() => WorkspaceCreateNestedOneWithoutIssuesInputSchema),
@@ -2774,8 +2774,8 @@ export const IssueUncheckedCreateInputSchema: z.ZodType<Prisma.IssueUncheckedCre
   identifier: z.number().int(),
   title: z.string().trim().min(1).max(255),
   description: z.instanceof(Buffer).optional().nullable(),
-  status: z.lazy(() => StatusSchema).optional(),
-  priority: z.lazy(() => PrioritySchema).optional(),
+  status: z.lazy(() => IssueStatusSchema).optional(),
+  priority: z.lazy(() => IssuePrioritySchema).optional(),
   workspaceId: z.string(),
   assigneeId: z.string(),
   createdAt: z.coerce.date().optional(),
@@ -2789,8 +2789,8 @@ export const IssueUpdateInputSchema: z.ZodType<Prisma.IssueUpdateInput> = z.obje
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
-  priority: z.union([ z.lazy(() => PrioritySchema),z.lazy(() => EnumPriorityFieldUpdateOperationsInputSchema) ]).optional(),
+  status: z.union([ z.lazy(() => IssueStatusSchema),z.lazy(() => EnumIssueStatusFieldUpdateOperationsInputSchema) ]).optional(),
+  priority: z.union([ z.lazy(() => IssuePrioritySchema),z.lazy(() => EnumIssuePriorityFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   workspace: z.lazy(() => WorkspaceUpdateOneRequiredWithoutIssuesNestedInputSchema).optional(),
@@ -2804,8 +2804,8 @@ export const IssueUncheckedUpdateInputSchema: z.ZodType<Prisma.IssueUncheckedUpd
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
-  priority: z.union([ z.lazy(() => PrioritySchema),z.lazy(() => EnumPriorityFieldUpdateOperationsInputSchema) ]).optional(),
+  status: z.union([ z.lazy(() => IssueStatusSchema),z.lazy(() => EnumIssueStatusFieldUpdateOperationsInputSchema) ]).optional(),
+  priority: z.union([ z.lazy(() => IssuePrioritySchema),z.lazy(() => EnumIssuePriorityFieldUpdateOperationsInputSchema) ]).optional(),
   workspaceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   assigneeId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -2819,8 +2819,8 @@ export const IssueCreateManyInputSchema: z.ZodType<Prisma.IssueCreateManyInput> 
   identifier: z.number().int(),
   title: z.string().trim().min(1).max(255),
   description: z.instanceof(Buffer).optional().nullable(),
-  status: z.lazy(() => StatusSchema).optional(),
-  priority: z.lazy(() => PrioritySchema).optional(),
+  status: z.lazy(() => IssueStatusSchema).optional(),
+  priority: z.lazy(() => IssuePrioritySchema).optional(),
   workspaceId: z.string(),
   assigneeId: z.string(),
   createdAt: z.coerce.date().optional(),
@@ -2832,8 +2832,8 @@ export const IssueUpdateManyMutationInputSchema: z.ZodType<Prisma.IssueUpdateMan
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
-  priority: z.union([ z.lazy(() => PrioritySchema),z.lazy(() => EnumPriorityFieldUpdateOperationsInputSchema) ]).optional(),
+  status: z.union([ z.lazy(() => IssueStatusSchema),z.lazy(() => EnumIssueStatusFieldUpdateOperationsInputSchema) ]).optional(),
+  priority: z.union([ z.lazy(() => IssuePrioritySchema),z.lazy(() => EnumIssuePriorityFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.IssueUpdateManyMutationInput>;
@@ -2843,8 +2843,8 @@ export const IssueUncheckedUpdateManyInputSchema: z.ZodType<Prisma.IssueUnchecke
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
-  priority: z.union([ z.lazy(() => PrioritySchema),z.lazy(() => EnumPriorityFieldUpdateOperationsInputSchema) ]).optional(),
+  status: z.union([ z.lazy(() => IssueStatusSchema),z.lazy(() => EnumIssueStatusFieldUpdateOperationsInputSchema) ]).optional(),
+  priority: z.union([ z.lazy(() => IssuePrioritySchema),z.lazy(() => EnumIssuePriorityFieldUpdateOperationsInputSchema) ]).optional(),
   workspaceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   assigneeId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -3585,12 +3585,12 @@ export const IntWithAggregatesFilterSchema: z.ZodType<Prisma.IntWithAggregatesFi
   _max: z.lazy(() => NestedIntFilterSchema).optional()
 }).strict() as z.ZodType<Prisma.IntWithAggregatesFilter>;
 
-export const EnumRoleFilterSchema: z.ZodType<Prisma.EnumRoleFilter> = z.object({
-  equals: z.lazy(() => RoleSchema).optional(),
-  in: z.lazy(() => RoleSchema).array().optional(),
-  notIn: z.lazy(() => RoleSchema).array().optional(),
-  not: z.union([ z.lazy(() => RoleSchema),z.lazy(() => NestedEnumRoleFilterSchema) ]).optional(),
-}).strict() as z.ZodType<Prisma.EnumRoleFilter>;
+export const EnumWorkspaceRoleFilterSchema: z.ZodType<Prisma.EnumWorkspaceRoleFilter> = z.object({
+  equals: z.lazy(() => WorkspaceRoleSchema).optional(),
+  in: z.lazy(() => WorkspaceRoleSchema).array().optional(),
+  notIn: z.lazy(() => WorkspaceRoleSchema).array().optional(),
+  not: z.union([ z.lazy(() => WorkspaceRoleSchema),z.lazy(() => NestedEnumWorkspaceRoleFilterSchema) ]).optional(),
+}).strict() as z.ZodType<Prisma.EnumWorkspaceRoleFilter>;
 
 export const WorkspaceScalarRelationFilterSchema: z.ZodType<Prisma.WorkspaceScalarRelationFilter> = z.object({
   is: z.lazy(() => WorkspaceWhereInputSchema).optional(),
@@ -3626,22 +3626,22 @@ export const WorkspaceMemberMinOrderByAggregateInputSchema: z.ZodType<Prisma.Wor
   createdAt: z.lazy(() => SortOrderSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceMemberMinOrderByAggregateInput>;
 
-export const EnumRoleWithAggregatesFilterSchema: z.ZodType<Prisma.EnumRoleWithAggregatesFilter> = z.object({
-  equals: z.lazy(() => RoleSchema).optional(),
-  in: z.lazy(() => RoleSchema).array().optional(),
-  notIn: z.lazy(() => RoleSchema).array().optional(),
-  not: z.union([ z.lazy(() => RoleSchema),z.lazy(() => NestedEnumRoleWithAggregatesFilterSchema) ]).optional(),
+export const EnumWorkspaceRoleWithAggregatesFilterSchema: z.ZodType<Prisma.EnumWorkspaceRoleWithAggregatesFilter> = z.object({
+  equals: z.lazy(() => WorkspaceRoleSchema).optional(),
+  in: z.lazy(() => WorkspaceRoleSchema).array().optional(),
+  notIn: z.lazy(() => WorkspaceRoleSchema).array().optional(),
+  not: z.union([ z.lazy(() => WorkspaceRoleSchema),z.lazy(() => NestedEnumWorkspaceRoleWithAggregatesFilterSchema) ]).optional(),
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
-  _min: z.lazy(() => NestedEnumRoleFilterSchema).optional(),
-  _max: z.lazy(() => NestedEnumRoleFilterSchema).optional()
-}).strict() as z.ZodType<Prisma.EnumRoleWithAggregatesFilter>;
+  _min: z.lazy(() => NestedEnumWorkspaceRoleFilterSchema).optional(),
+  _max: z.lazy(() => NestedEnumWorkspaceRoleFilterSchema).optional()
+}).strict() as z.ZodType<Prisma.EnumWorkspaceRoleWithAggregatesFilter>;
 
-export const EnumInviteStatusFilterSchema: z.ZodType<Prisma.EnumInviteStatusFilter> = z.object({
-  equals: z.lazy(() => InviteStatusSchema).optional(),
-  in: z.lazy(() => InviteStatusSchema).array().optional(),
-  notIn: z.lazy(() => InviteStatusSchema).array().optional(),
-  not: z.union([ z.lazy(() => InviteStatusSchema),z.lazy(() => NestedEnumInviteStatusFilterSchema) ]).optional(),
-}).strict() as z.ZodType<Prisma.EnumInviteStatusFilter>;
+export const EnumWorkspaceInviteStatusFilterSchema: z.ZodType<Prisma.EnumWorkspaceInviteStatusFilter> = z.object({
+  equals: z.lazy(() => WorkspaceInviteStatusSchema).optional(),
+  in: z.lazy(() => WorkspaceInviteStatusSchema).array().optional(),
+  notIn: z.lazy(() => WorkspaceInviteStatusSchema).array().optional(),
+  not: z.union([ z.lazy(() => WorkspaceInviteStatusSchema),z.lazy(() => NestedEnumWorkspaceInviteStatusFilterSchema) ]).optional(),
+}).strict() as z.ZodType<Prisma.EnumWorkspaceInviteStatusFilter>;
 
 export const UserNullableScalarRelationFilterSchema: z.ZodType<Prisma.UserNullableScalarRelationFilter> = z.object({
   is: z.lazy(() => UserWhereInputSchema).optional().nullable(),
@@ -3683,15 +3683,15 @@ export const WorkspaceInviteMinOrderByAggregateInputSchema: z.ZodType<Prisma.Wor
   updatedAt: z.lazy(() => SortOrderSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceInviteMinOrderByAggregateInput>;
 
-export const EnumInviteStatusWithAggregatesFilterSchema: z.ZodType<Prisma.EnumInviteStatusWithAggregatesFilter> = z.object({
-  equals: z.lazy(() => InviteStatusSchema).optional(),
-  in: z.lazy(() => InviteStatusSchema).array().optional(),
-  notIn: z.lazy(() => InviteStatusSchema).array().optional(),
-  not: z.union([ z.lazy(() => InviteStatusSchema),z.lazy(() => NestedEnumInviteStatusWithAggregatesFilterSchema) ]).optional(),
+export const EnumWorkspaceInviteStatusWithAggregatesFilterSchema: z.ZodType<Prisma.EnumWorkspaceInviteStatusWithAggregatesFilter> = z.object({
+  equals: z.lazy(() => WorkspaceInviteStatusSchema).optional(),
+  in: z.lazy(() => WorkspaceInviteStatusSchema).array().optional(),
+  notIn: z.lazy(() => WorkspaceInviteStatusSchema).array().optional(),
+  not: z.union([ z.lazy(() => WorkspaceInviteStatusSchema),z.lazy(() => NestedEnumWorkspaceInviteStatusWithAggregatesFilterSchema) ]).optional(),
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
-  _min: z.lazy(() => NestedEnumInviteStatusFilterSchema).optional(),
-  _max: z.lazy(() => NestedEnumInviteStatusFilterSchema).optional()
-}).strict() as z.ZodType<Prisma.EnumInviteStatusWithAggregatesFilter>;
+  _min: z.lazy(() => NestedEnumWorkspaceInviteStatusFilterSchema).optional(),
+  _max: z.lazy(() => NestedEnumWorkspaceInviteStatusFilterSchema).optional()
+}).strict() as z.ZodType<Prisma.EnumWorkspaceInviteStatusWithAggregatesFilter>;
 
 export const BytesNullableFilterSchema: z.ZodType<Prisma.BytesNullableFilter> = z.object({
   equals: z.instanceof(Buffer).optional().nullable(),
@@ -3700,19 +3700,19 @@ export const BytesNullableFilterSchema: z.ZodType<Prisma.BytesNullableFilter> = 
   not: z.union([ z.instanceof(Buffer),z.lazy(() => NestedBytesNullableFilterSchema) ]).optional().nullable(),
 }).strict() as z.ZodType<Prisma.BytesNullableFilter>;
 
-export const EnumStatusFilterSchema: z.ZodType<Prisma.EnumStatusFilter> = z.object({
-  equals: z.lazy(() => StatusSchema).optional(),
-  in: z.lazy(() => StatusSchema).array().optional(),
-  notIn: z.lazy(() => StatusSchema).array().optional(),
-  not: z.union([ z.lazy(() => StatusSchema),z.lazy(() => NestedEnumStatusFilterSchema) ]).optional(),
-}).strict() as z.ZodType<Prisma.EnumStatusFilter>;
+export const EnumIssueStatusFilterSchema: z.ZodType<Prisma.EnumIssueStatusFilter> = z.object({
+  equals: z.lazy(() => IssueStatusSchema).optional(),
+  in: z.lazy(() => IssueStatusSchema).array().optional(),
+  notIn: z.lazy(() => IssueStatusSchema).array().optional(),
+  not: z.union([ z.lazy(() => IssueStatusSchema),z.lazy(() => NestedEnumIssueStatusFilterSchema) ]).optional(),
+}).strict() as z.ZodType<Prisma.EnumIssueStatusFilter>;
 
-export const EnumPriorityFilterSchema: z.ZodType<Prisma.EnumPriorityFilter> = z.object({
-  equals: z.lazy(() => PrioritySchema).optional(),
-  in: z.lazy(() => PrioritySchema).array().optional(),
-  notIn: z.lazy(() => PrioritySchema).array().optional(),
-  not: z.union([ z.lazy(() => PrioritySchema),z.lazy(() => NestedEnumPriorityFilterSchema) ]).optional(),
-}).strict() as z.ZodType<Prisma.EnumPriorityFilter>;
+export const EnumIssuePriorityFilterSchema: z.ZodType<Prisma.EnumIssuePriorityFilter> = z.object({
+  equals: z.lazy(() => IssuePrioritySchema).optional(),
+  in: z.lazy(() => IssuePrioritySchema).array().optional(),
+  notIn: z.lazy(() => IssuePrioritySchema).array().optional(),
+  not: z.union([ z.lazy(() => IssuePrioritySchema),z.lazy(() => NestedEnumIssuePriorityFilterSchema) ]).optional(),
+}).strict() as z.ZodType<Prisma.EnumIssuePriorityFilter>;
 
 export const IssueIdentifierWorkspaceIdCompoundUniqueInputSchema: z.ZodType<Prisma.IssueIdentifierWorkspaceIdCompoundUniqueInput> = z.object({
   identifier: z.number(),
@@ -3776,25 +3776,25 @@ export const BytesNullableWithAggregatesFilterSchema: z.ZodType<Prisma.BytesNull
   _max: z.lazy(() => NestedBytesNullableFilterSchema).optional()
 }).strict() as z.ZodType<Prisma.BytesNullableWithAggregatesFilter>;
 
-export const EnumStatusWithAggregatesFilterSchema: z.ZodType<Prisma.EnumStatusWithAggregatesFilter> = z.object({
-  equals: z.lazy(() => StatusSchema).optional(),
-  in: z.lazy(() => StatusSchema).array().optional(),
-  notIn: z.lazy(() => StatusSchema).array().optional(),
-  not: z.union([ z.lazy(() => StatusSchema),z.lazy(() => NestedEnumStatusWithAggregatesFilterSchema) ]).optional(),
+export const EnumIssueStatusWithAggregatesFilterSchema: z.ZodType<Prisma.EnumIssueStatusWithAggregatesFilter> = z.object({
+  equals: z.lazy(() => IssueStatusSchema).optional(),
+  in: z.lazy(() => IssueStatusSchema).array().optional(),
+  notIn: z.lazy(() => IssueStatusSchema).array().optional(),
+  not: z.union([ z.lazy(() => IssueStatusSchema),z.lazy(() => NestedEnumIssueStatusWithAggregatesFilterSchema) ]).optional(),
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
-  _min: z.lazy(() => NestedEnumStatusFilterSchema).optional(),
-  _max: z.lazy(() => NestedEnumStatusFilterSchema).optional()
-}).strict() as z.ZodType<Prisma.EnumStatusWithAggregatesFilter>;
+  _min: z.lazy(() => NestedEnumIssueStatusFilterSchema).optional(),
+  _max: z.lazy(() => NestedEnumIssueStatusFilterSchema).optional()
+}).strict() as z.ZodType<Prisma.EnumIssueStatusWithAggregatesFilter>;
 
-export const EnumPriorityWithAggregatesFilterSchema: z.ZodType<Prisma.EnumPriorityWithAggregatesFilter> = z.object({
-  equals: z.lazy(() => PrioritySchema).optional(),
-  in: z.lazy(() => PrioritySchema).array().optional(),
-  notIn: z.lazy(() => PrioritySchema).array().optional(),
-  not: z.union([ z.lazy(() => PrioritySchema),z.lazy(() => NestedEnumPriorityWithAggregatesFilterSchema) ]).optional(),
+export const EnumIssuePriorityWithAggregatesFilterSchema: z.ZodType<Prisma.EnumIssuePriorityWithAggregatesFilter> = z.object({
+  equals: z.lazy(() => IssuePrioritySchema).optional(),
+  in: z.lazy(() => IssuePrioritySchema).array().optional(),
+  notIn: z.lazy(() => IssuePrioritySchema).array().optional(),
+  not: z.union([ z.lazy(() => IssuePrioritySchema),z.lazy(() => NestedEnumIssuePriorityWithAggregatesFilterSchema) ]).optional(),
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
-  _min: z.lazy(() => NestedEnumPriorityFilterSchema).optional(),
-  _max: z.lazy(() => NestedEnumPriorityFilterSchema).optional()
-}).strict() as z.ZodType<Prisma.EnumPriorityWithAggregatesFilter>;
+  _min: z.lazy(() => NestedEnumIssuePriorityFilterSchema).optional(),
+  _max: z.lazy(() => NestedEnumIssuePriorityFilterSchema).optional()
+}).strict() as z.ZodType<Prisma.EnumIssuePriorityWithAggregatesFilter>;
 
 export const BoolFilterSchema: z.ZodType<Prisma.BoolFilter> = z.object({
   equals: z.boolean().optional(),
@@ -4612,9 +4612,9 @@ export const WorkspaceCreateNestedOneWithoutMembersInputSchema: z.ZodType<Prisma
   connect: z.lazy(() => WorkspaceWhereUniqueInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceCreateNestedOneWithoutMembersInput>;
 
-export const EnumRoleFieldUpdateOperationsInputSchema: z.ZodType<Prisma.EnumRoleFieldUpdateOperationsInput> = z.object({
-  set: z.lazy(() => RoleSchema).optional()
-}).strict() as z.ZodType<Prisma.EnumRoleFieldUpdateOperationsInput>;
+export const EnumWorkspaceRoleFieldUpdateOperationsInputSchema: z.ZodType<Prisma.EnumWorkspaceRoleFieldUpdateOperationsInput> = z.object({
+  set: z.lazy(() => WorkspaceRoleSchema).optional()
+}).strict() as z.ZodType<Prisma.EnumWorkspaceRoleFieldUpdateOperationsInput>;
 
 export const UserUpdateOneRequiredWithoutWorkspacesNestedInputSchema: z.ZodType<Prisma.UserUpdateOneRequiredWithoutWorkspacesNestedInput> = z.object({
   create: z.union([ z.lazy(() => UserCreateWithoutWorkspacesInputSchema),z.lazy(() => UserUncheckedCreateWithoutWorkspacesInputSchema) ]).optional(),
@@ -4644,9 +4644,9 @@ export const WorkspaceCreateNestedOneWithoutWorkspaceInviteInputSchema: z.ZodTyp
   connect: z.lazy(() => WorkspaceWhereUniqueInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceCreateNestedOneWithoutWorkspaceInviteInput>;
 
-export const EnumInviteStatusFieldUpdateOperationsInputSchema: z.ZodType<Prisma.EnumInviteStatusFieldUpdateOperationsInput> = z.object({
-  set: z.lazy(() => InviteStatusSchema).optional()
-}).strict() as z.ZodType<Prisma.EnumInviteStatusFieldUpdateOperationsInput>;
+export const EnumWorkspaceInviteStatusFieldUpdateOperationsInputSchema: z.ZodType<Prisma.EnumWorkspaceInviteStatusFieldUpdateOperationsInput> = z.object({
+  set: z.lazy(() => WorkspaceInviteStatusSchema).optional()
+}).strict() as z.ZodType<Prisma.EnumWorkspaceInviteStatusFieldUpdateOperationsInput>;
 
 export const UserUpdateOneWithoutWorkspacesInvitationsNestedInputSchema: z.ZodType<Prisma.UserUpdateOneWithoutWorkspacesInvitationsNestedInput> = z.object({
   create: z.union([ z.lazy(() => UserCreateWithoutWorkspacesInvitationsInputSchema),z.lazy(() => UserUncheckedCreateWithoutWorkspacesInvitationsInputSchema) ]).optional(),
@@ -4710,13 +4710,13 @@ export const NullableBytesFieldUpdateOperationsInputSchema: z.ZodType<Prisma.Nul
   set: z.instanceof(Buffer).optional().nullable()
 }).strict() as z.ZodType<Prisma.NullableBytesFieldUpdateOperationsInput>;
 
-export const EnumStatusFieldUpdateOperationsInputSchema: z.ZodType<Prisma.EnumStatusFieldUpdateOperationsInput> = z.object({
-  set: z.lazy(() => StatusSchema).optional()
-}).strict() as z.ZodType<Prisma.EnumStatusFieldUpdateOperationsInput>;
+export const EnumIssueStatusFieldUpdateOperationsInputSchema: z.ZodType<Prisma.EnumIssueStatusFieldUpdateOperationsInput> = z.object({
+  set: z.lazy(() => IssueStatusSchema).optional()
+}).strict() as z.ZodType<Prisma.EnumIssueStatusFieldUpdateOperationsInput>;
 
-export const EnumPriorityFieldUpdateOperationsInputSchema: z.ZodType<Prisma.EnumPriorityFieldUpdateOperationsInput> = z.object({
-  set: z.lazy(() => PrioritySchema).optional()
-}).strict() as z.ZodType<Prisma.EnumPriorityFieldUpdateOperationsInput>;
+export const EnumIssuePriorityFieldUpdateOperationsInputSchema: z.ZodType<Prisma.EnumIssuePriorityFieldUpdateOperationsInput> = z.object({
+  set: z.lazy(() => IssuePrioritySchema).optional()
+}).strict() as z.ZodType<Prisma.EnumIssuePriorityFieldUpdateOperationsInput>;
 
 export const WorkspaceUpdateOneRequiredWithoutIssuesNestedInputSchema: z.ZodType<Prisma.WorkspaceUpdateOneRequiredWithoutIssuesNestedInput> = z.object({
   create: z.union([ z.lazy(() => WorkspaceCreateWithoutIssuesInputSchema),z.lazy(() => WorkspaceUncheckedCreateWithoutIssuesInputSchema) ]).optional(),
@@ -5198,39 +5198,39 @@ export const NestedFloatFilterSchema: z.ZodType<Prisma.NestedFloatFilter> = z.ob
   not: z.union([ z.number(),z.lazy(() => NestedFloatFilterSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.NestedFloatFilter>;
 
-export const NestedEnumRoleFilterSchema: z.ZodType<Prisma.NestedEnumRoleFilter> = z.object({
-  equals: z.lazy(() => RoleSchema).optional(),
-  in: z.lazy(() => RoleSchema).array().optional(),
-  notIn: z.lazy(() => RoleSchema).array().optional(),
-  not: z.union([ z.lazy(() => RoleSchema),z.lazy(() => NestedEnumRoleFilterSchema) ]).optional(),
-}).strict() as z.ZodType<Prisma.NestedEnumRoleFilter>;
+export const NestedEnumWorkspaceRoleFilterSchema: z.ZodType<Prisma.NestedEnumWorkspaceRoleFilter> = z.object({
+  equals: z.lazy(() => WorkspaceRoleSchema).optional(),
+  in: z.lazy(() => WorkspaceRoleSchema).array().optional(),
+  notIn: z.lazy(() => WorkspaceRoleSchema).array().optional(),
+  not: z.union([ z.lazy(() => WorkspaceRoleSchema),z.lazy(() => NestedEnumWorkspaceRoleFilterSchema) ]).optional(),
+}).strict() as z.ZodType<Prisma.NestedEnumWorkspaceRoleFilter>;
 
-export const NestedEnumRoleWithAggregatesFilterSchema: z.ZodType<Prisma.NestedEnumRoleWithAggregatesFilter> = z.object({
-  equals: z.lazy(() => RoleSchema).optional(),
-  in: z.lazy(() => RoleSchema).array().optional(),
-  notIn: z.lazy(() => RoleSchema).array().optional(),
-  not: z.union([ z.lazy(() => RoleSchema),z.lazy(() => NestedEnumRoleWithAggregatesFilterSchema) ]).optional(),
+export const NestedEnumWorkspaceRoleWithAggregatesFilterSchema: z.ZodType<Prisma.NestedEnumWorkspaceRoleWithAggregatesFilter> = z.object({
+  equals: z.lazy(() => WorkspaceRoleSchema).optional(),
+  in: z.lazy(() => WorkspaceRoleSchema).array().optional(),
+  notIn: z.lazy(() => WorkspaceRoleSchema).array().optional(),
+  not: z.union([ z.lazy(() => WorkspaceRoleSchema),z.lazy(() => NestedEnumWorkspaceRoleWithAggregatesFilterSchema) ]).optional(),
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
-  _min: z.lazy(() => NestedEnumRoleFilterSchema).optional(),
-  _max: z.lazy(() => NestedEnumRoleFilterSchema).optional()
-}).strict() as z.ZodType<Prisma.NestedEnumRoleWithAggregatesFilter>;
+  _min: z.lazy(() => NestedEnumWorkspaceRoleFilterSchema).optional(),
+  _max: z.lazy(() => NestedEnumWorkspaceRoleFilterSchema).optional()
+}).strict() as z.ZodType<Prisma.NestedEnumWorkspaceRoleWithAggregatesFilter>;
 
-export const NestedEnumInviteStatusFilterSchema: z.ZodType<Prisma.NestedEnumInviteStatusFilter> = z.object({
-  equals: z.lazy(() => InviteStatusSchema).optional(),
-  in: z.lazy(() => InviteStatusSchema).array().optional(),
-  notIn: z.lazy(() => InviteStatusSchema).array().optional(),
-  not: z.union([ z.lazy(() => InviteStatusSchema),z.lazy(() => NestedEnumInviteStatusFilterSchema) ]).optional(),
-}).strict() as z.ZodType<Prisma.NestedEnumInviteStatusFilter>;
+export const NestedEnumWorkspaceInviteStatusFilterSchema: z.ZodType<Prisma.NestedEnumWorkspaceInviteStatusFilter> = z.object({
+  equals: z.lazy(() => WorkspaceInviteStatusSchema).optional(),
+  in: z.lazy(() => WorkspaceInviteStatusSchema).array().optional(),
+  notIn: z.lazy(() => WorkspaceInviteStatusSchema).array().optional(),
+  not: z.union([ z.lazy(() => WorkspaceInviteStatusSchema),z.lazy(() => NestedEnumWorkspaceInviteStatusFilterSchema) ]).optional(),
+}).strict() as z.ZodType<Prisma.NestedEnumWorkspaceInviteStatusFilter>;
 
-export const NestedEnumInviteStatusWithAggregatesFilterSchema: z.ZodType<Prisma.NestedEnumInviteStatusWithAggregatesFilter> = z.object({
-  equals: z.lazy(() => InviteStatusSchema).optional(),
-  in: z.lazy(() => InviteStatusSchema).array().optional(),
-  notIn: z.lazy(() => InviteStatusSchema).array().optional(),
-  not: z.union([ z.lazy(() => InviteStatusSchema),z.lazy(() => NestedEnumInviteStatusWithAggregatesFilterSchema) ]).optional(),
+export const NestedEnumWorkspaceInviteStatusWithAggregatesFilterSchema: z.ZodType<Prisma.NestedEnumWorkspaceInviteStatusWithAggregatesFilter> = z.object({
+  equals: z.lazy(() => WorkspaceInviteStatusSchema).optional(),
+  in: z.lazy(() => WorkspaceInviteStatusSchema).array().optional(),
+  notIn: z.lazy(() => WorkspaceInviteStatusSchema).array().optional(),
+  not: z.union([ z.lazy(() => WorkspaceInviteStatusSchema),z.lazy(() => NestedEnumWorkspaceInviteStatusWithAggregatesFilterSchema) ]).optional(),
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
-  _min: z.lazy(() => NestedEnumInviteStatusFilterSchema).optional(),
-  _max: z.lazy(() => NestedEnumInviteStatusFilterSchema).optional()
-}).strict() as z.ZodType<Prisma.NestedEnumInviteStatusWithAggregatesFilter>;
+  _min: z.lazy(() => NestedEnumWorkspaceInviteStatusFilterSchema).optional(),
+  _max: z.lazy(() => NestedEnumWorkspaceInviteStatusFilterSchema).optional()
+}).strict() as z.ZodType<Prisma.NestedEnumWorkspaceInviteStatusWithAggregatesFilter>;
 
 export const NestedBytesNullableFilterSchema: z.ZodType<Prisma.NestedBytesNullableFilter> = z.object({
   equals: z.instanceof(Buffer).optional().nullable(),
@@ -5239,19 +5239,19 @@ export const NestedBytesNullableFilterSchema: z.ZodType<Prisma.NestedBytesNullab
   not: z.union([ z.instanceof(Buffer),z.lazy(() => NestedBytesNullableFilterSchema) ]).optional().nullable(),
 }).strict() as z.ZodType<Prisma.NestedBytesNullableFilter>;
 
-export const NestedEnumStatusFilterSchema: z.ZodType<Prisma.NestedEnumStatusFilter> = z.object({
-  equals: z.lazy(() => StatusSchema).optional(),
-  in: z.lazy(() => StatusSchema).array().optional(),
-  notIn: z.lazy(() => StatusSchema).array().optional(),
-  not: z.union([ z.lazy(() => StatusSchema),z.lazy(() => NestedEnumStatusFilterSchema) ]).optional(),
-}).strict() as z.ZodType<Prisma.NestedEnumStatusFilter>;
+export const NestedEnumIssueStatusFilterSchema: z.ZodType<Prisma.NestedEnumIssueStatusFilter> = z.object({
+  equals: z.lazy(() => IssueStatusSchema).optional(),
+  in: z.lazy(() => IssueStatusSchema).array().optional(),
+  notIn: z.lazy(() => IssueStatusSchema).array().optional(),
+  not: z.union([ z.lazy(() => IssueStatusSchema),z.lazy(() => NestedEnumIssueStatusFilterSchema) ]).optional(),
+}).strict() as z.ZodType<Prisma.NestedEnumIssueStatusFilter>;
 
-export const NestedEnumPriorityFilterSchema: z.ZodType<Prisma.NestedEnumPriorityFilter> = z.object({
-  equals: z.lazy(() => PrioritySchema).optional(),
-  in: z.lazy(() => PrioritySchema).array().optional(),
-  notIn: z.lazy(() => PrioritySchema).array().optional(),
-  not: z.union([ z.lazy(() => PrioritySchema),z.lazy(() => NestedEnumPriorityFilterSchema) ]).optional(),
-}).strict() as z.ZodType<Prisma.NestedEnumPriorityFilter>;
+export const NestedEnumIssuePriorityFilterSchema: z.ZodType<Prisma.NestedEnumIssuePriorityFilter> = z.object({
+  equals: z.lazy(() => IssuePrioritySchema).optional(),
+  in: z.lazy(() => IssuePrioritySchema).array().optional(),
+  notIn: z.lazy(() => IssuePrioritySchema).array().optional(),
+  not: z.union([ z.lazy(() => IssuePrioritySchema),z.lazy(() => NestedEnumIssuePriorityFilterSchema) ]).optional(),
+}).strict() as z.ZodType<Prisma.NestedEnumIssuePriorityFilter>;
 
 export const NestedBytesNullableWithAggregatesFilterSchema: z.ZodType<Prisma.NestedBytesNullableWithAggregatesFilter> = z.object({
   equals: z.instanceof(Buffer).optional().nullable(),
@@ -5263,25 +5263,25 @@ export const NestedBytesNullableWithAggregatesFilterSchema: z.ZodType<Prisma.Nes
   _max: z.lazy(() => NestedBytesNullableFilterSchema).optional()
 }).strict() as z.ZodType<Prisma.NestedBytesNullableWithAggregatesFilter>;
 
-export const NestedEnumStatusWithAggregatesFilterSchema: z.ZodType<Prisma.NestedEnumStatusWithAggregatesFilter> = z.object({
-  equals: z.lazy(() => StatusSchema).optional(),
-  in: z.lazy(() => StatusSchema).array().optional(),
-  notIn: z.lazy(() => StatusSchema).array().optional(),
-  not: z.union([ z.lazy(() => StatusSchema),z.lazy(() => NestedEnumStatusWithAggregatesFilterSchema) ]).optional(),
+export const NestedEnumIssueStatusWithAggregatesFilterSchema: z.ZodType<Prisma.NestedEnumIssueStatusWithAggregatesFilter> = z.object({
+  equals: z.lazy(() => IssueStatusSchema).optional(),
+  in: z.lazy(() => IssueStatusSchema).array().optional(),
+  notIn: z.lazy(() => IssueStatusSchema).array().optional(),
+  not: z.union([ z.lazy(() => IssueStatusSchema),z.lazy(() => NestedEnumIssueStatusWithAggregatesFilterSchema) ]).optional(),
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
-  _min: z.lazy(() => NestedEnumStatusFilterSchema).optional(),
-  _max: z.lazy(() => NestedEnumStatusFilterSchema).optional()
-}).strict() as z.ZodType<Prisma.NestedEnumStatusWithAggregatesFilter>;
+  _min: z.lazy(() => NestedEnumIssueStatusFilterSchema).optional(),
+  _max: z.lazy(() => NestedEnumIssueStatusFilterSchema).optional()
+}).strict() as z.ZodType<Prisma.NestedEnumIssueStatusWithAggregatesFilter>;
 
-export const NestedEnumPriorityWithAggregatesFilterSchema: z.ZodType<Prisma.NestedEnumPriorityWithAggregatesFilter> = z.object({
-  equals: z.lazy(() => PrioritySchema).optional(),
-  in: z.lazy(() => PrioritySchema).array().optional(),
-  notIn: z.lazy(() => PrioritySchema).array().optional(),
-  not: z.union([ z.lazy(() => PrioritySchema),z.lazy(() => NestedEnumPriorityWithAggregatesFilterSchema) ]).optional(),
+export const NestedEnumIssuePriorityWithAggregatesFilterSchema: z.ZodType<Prisma.NestedEnumIssuePriorityWithAggregatesFilter> = z.object({
+  equals: z.lazy(() => IssuePrioritySchema).optional(),
+  in: z.lazy(() => IssuePrioritySchema).array().optional(),
+  notIn: z.lazy(() => IssuePrioritySchema).array().optional(),
+  not: z.union([ z.lazy(() => IssuePrioritySchema),z.lazy(() => NestedEnumIssuePriorityWithAggregatesFilterSchema) ]).optional(),
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
-  _min: z.lazy(() => NestedEnumPriorityFilterSchema).optional(),
-  _max: z.lazy(() => NestedEnumPriorityFilterSchema).optional()
-}).strict() as z.ZodType<Prisma.NestedEnumPriorityWithAggregatesFilter>;
+  _min: z.lazy(() => NestedEnumIssuePriorityFilterSchema).optional(),
+  _max: z.lazy(() => NestedEnumIssuePriorityFilterSchema).optional()
+}).strict() as z.ZodType<Prisma.NestedEnumIssuePriorityWithAggregatesFilter>;
 
 export const NestedBoolFilterSchema: z.ZodType<Prisma.NestedBoolFilter> = z.object({
   equals: z.boolean().optional(),
@@ -5362,14 +5362,14 @@ export const SessionCreateManyUserInputEnvelopeSchema: z.ZodType<Prisma.SessionC
 
 export const WorkspaceMemberCreateWithoutUserInputSchema: z.ZodType<Prisma.WorkspaceMemberCreateWithoutUserInput> = z.object({
   id: z.string().cuid().optional(),
-  role: z.lazy(() => RoleSchema).optional(),
+  role: z.lazy(() => WorkspaceRoleSchema).optional(),
   createdAt: z.coerce.date().optional(),
   workspace: z.lazy(() => WorkspaceCreateNestedOneWithoutMembersInputSchema)
 }).strict() as z.ZodType<Prisma.WorkspaceMemberCreateWithoutUserInput>;
 
 export const WorkspaceMemberUncheckedCreateWithoutUserInputSchema: z.ZodType<Prisma.WorkspaceMemberUncheckedCreateWithoutUserInput> = z.object({
   id: z.string().cuid().optional(),
-  role: z.lazy(() => RoleSchema).optional(),
+  role: z.lazy(() => WorkspaceRoleSchema).optional(),
   workspaceId: z.string(),
   createdAt: z.coerce.date().optional()
 }).strict() as z.ZodType<Prisma.WorkspaceMemberUncheckedCreateWithoutUserInput>;
@@ -5389,8 +5389,8 @@ export const IssueCreateWithoutAssigneeInputSchema: z.ZodType<Prisma.IssueCreate
   identifier: z.number().int(),
   title: z.string().trim().min(1).max(255),
   description: z.instanceof(Buffer).optional().nullable(),
-  status: z.lazy(() => StatusSchema).optional(),
-  priority: z.lazy(() => PrioritySchema).optional(),
+  status: z.lazy(() => IssueStatusSchema).optional(),
+  priority: z.lazy(() => IssuePrioritySchema).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   workspace: z.lazy(() => WorkspaceCreateNestedOneWithoutIssuesInputSchema),
@@ -5403,8 +5403,8 @@ export const IssueUncheckedCreateWithoutAssigneeInputSchema: z.ZodType<Prisma.Is
   identifier: z.number().int(),
   title: z.string().trim().min(1).max(255),
   description: z.instanceof(Buffer).optional().nullable(),
-  status: z.lazy(() => StatusSchema).optional(),
-  priority: z.lazy(() => PrioritySchema).optional(),
+  status: z.lazy(() => IssueStatusSchema).optional(),
+  priority: z.lazy(() => IssuePrioritySchema).optional(),
   workspaceId: z.string(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
@@ -5549,7 +5549,7 @@ export const NotificationCreateManySenderInputEnvelopeSchema: z.ZodType<Prisma.N
 export const WorkspaceInviteCreateWithoutInviteeInputSchema: z.ZodType<Prisma.WorkspaceInviteCreateWithoutInviteeInput> = z.object({
   id: z.string().cuid().optional(),
   invitedById: z.string(),
-  status: z.lazy(() => InviteStatusSchema).optional(),
+  status: z.lazy(() => WorkspaceInviteStatusSchema).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   workspace: z.lazy(() => WorkspaceCreateNestedOneWithoutWorkspaceInviteInputSchema)
@@ -5559,7 +5559,7 @@ export const WorkspaceInviteUncheckedCreateWithoutInviteeInputSchema: z.ZodType<
   id: z.string().cuid().optional(),
   workspaceId: z.string(),
   invitedById: z.string(),
-  status: z.lazy(() => InviteStatusSchema).optional(),
+  status: z.lazy(() => WorkspaceInviteStatusSchema).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
 }).strict() as z.ZodType<Prisma.WorkspaceInviteUncheckedCreateWithoutInviteeInput>;
@@ -5657,7 +5657,7 @@ export const WorkspaceMemberScalarWhereInputSchema: z.ZodType<Prisma.WorkspaceMe
   OR: z.lazy(() => WorkspaceMemberScalarWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => WorkspaceMemberScalarWhereInputSchema),z.lazy(() => WorkspaceMemberScalarWhereInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  role: z.union([ z.lazy(() => EnumRoleFilterSchema),z.lazy(() => RoleSchema) ]).optional(),
+  role: z.union([ z.lazy(() => EnumWorkspaceRoleFilterSchema),z.lazy(() => WorkspaceRoleSchema) ]).optional(),
   userId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   workspaceId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
@@ -5687,8 +5687,8 @@ export const IssueScalarWhereInputSchema: z.ZodType<Prisma.IssueScalarWhereInput
   identifier: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   title: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   description: z.union([ z.lazy(() => BytesNullableFilterSchema),z.instanceof(Buffer) ]).optional().nullable(),
-  status: z.union([ z.lazy(() => EnumStatusFilterSchema),z.lazy(() => StatusSchema) ]).optional(),
-  priority: z.union([ z.lazy(() => EnumPriorityFilterSchema),z.lazy(() => PrioritySchema) ]).optional(),
+  status: z.union([ z.lazy(() => EnumIssueStatusFilterSchema),z.lazy(() => IssueStatusSchema) ]).optional(),
+  priority: z.union([ z.lazy(() => EnumIssuePriorityFilterSchema),z.lazy(() => IssuePrioritySchema) ]).optional(),
   workspaceId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   assigneeId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
@@ -5824,7 +5824,7 @@ export const WorkspaceInviteScalarWhereInputSchema: z.ZodType<Prisma.WorkspaceIn
   email: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   workspaceId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   invitedById: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  status: z.union([ z.lazy(() => EnumInviteStatusFilterSchema),z.lazy(() => InviteStatusSchema) ]).optional(),
+  status: z.union([ z.lazy(() => EnumWorkspaceInviteStatusFilterSchema),z.lazy(() => WorkspaceInviteStatusSchema) ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
 }).strict() as z.ZodType<Prisma.WorkspaceInviteScalarWhereInput>;
@@ -6007,14 +6007,14 @@ export const UserUncheckedUpdateWithoutSessionsInputSchema: z.ZodType<Prisma.Use
 
 export const WorkspaceMemberCreateWithoutWorkspaceInputSchema: z.ZodType<Prisma.WorkspaceMemberCreateWithoutWorkspaceInput> = z.object({
   id: z.string().cuid().optional(),
-  role: z.lazy(() => RoleSchema).optional(),
+  role: z.lazy(() => WorkspaceRoleSchema).optional(),
   createdAt: z.coerce.date().optional(),
   user: z.lazy(() => UserCreateNestedOneWithoutWorkspacesInputSchema)
 }).strict() as z.ZodType<Prisma.WorkspaceMemberCreateWithoutWorkspaceInput>;
 
 export const WorkspaceMemberUncheckedCreateWithoutWorkspaceInputSchema: z.ZodType<Prisma.WorkspaceMemberUncheckedCreateWithoutWorkspaceInput> = z.object({
   id: z.string().cuid().optional(),
-  role: z.lazy(() => RoleSchema).optional(),
+  role: z.lazy(() => WorkspaceRoleSchema).optional(),
   userId: z.string(),
   createdAt: z.coerce.date().optional()
 }).strict() as z.ZodType<Prisma.WorkspaceMemberUncheckedCreateWithoutWorkspaceInput>;
@@ -6034,8 +6034,8 @@ export const IssueCreateWithoutWorkspaceInputSchema: z.ZodType<Prisma.IssueCreat
   identifier: z.number().int(),
   title: z.string().trim().min(1).max(255),
   description: z.instanceof(Buffer).optional().nullable(),
-  status: z.lazy(() => StatusSchema).optional(),
-  priority: z.lazy(() => PrioritySchema).optional(),
+  status: z.lazy(() => IssueStatusSchema).optional(),
+  priority: z.lazy(() => IssuePrioritySchema).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   assignee: z.lazy(() => UserCreateNestedOneWithoutIssuesInputSchema),
@@ -6048,8 +6048,8 @@ export const IssueUncheckedCreateWithoutWorkspaceInputSchema: z.ZodType<Prisma.I
   identifier: z.number().int(),
   title: z.string().trim().min(1).max(255),
   description: z.instanceof(Buffer).optional().nullable(),
-  status: z.lazy(() => StatusSchema).optional(),
-  priority: z.lazy(() => PrioritySchema).optional(),
+  status: z.lazy(() => IssueStatusSchema).optional(),
+  priority: z.lazy(() => IssuePrioritySchema).optional(),
   assigneeId: z.string(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
@@ -6070,7 +6070,7 @@ export const IssueCreateManyWorkspaceInputEnvelopeSchema: z.ZodType<Prisma.Issue
 export const WorkspaceInviteCreateWithoutWorkspaceInputSchema: z.ZodType<Prisma.WorkspaceInviteCreateWithoutWorkspaceInput> = z.object({
   id: z.string().cuid().optional(),
   invitedById: z.string(),
-  status: z.lazy(() => InviteStatusSchema).optional(),
+  status: z.lazy(() => WorkspaceInviteStatusSchema).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   invitee: z.lazy(() => UserCreateNestedOneWithoutWorkspacesInvitationsInputSchema).optional()
@@ -6080,7 +6080,7 @@ export const WorkspaceInviteUncheckedCreateWithoutWorkspaceInputSchema: z.ZodTyp
   id: z.string().cuid().optional(),
   email: z.string().email().trim().max(255),
   invitedById: z.string(),
-  status: z.lazy(() => InviteStatusSchema).optional(),
+  status: z.lazy(() => WorkspaceInviteStatusSchema).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
 }).strict() as z.ZodType<Prisma.WorkspaceInviteUncheckedCreateWithoutWorkspaceInput>;
@@ -6720,8 +6720,8 @@ export const IssueCreateWithoutCommentsInputSchema: z.ZodType<Prisma.IssueCreate
   identifier: z.number().int(),
   title: z.string().trim().min(1).max(255),
   description: z.instanceof(Buffer).optional().nullable(),
-  status: z.lazy(() => StatusSchema).optional(),
-  priority: z.lazy(() => PrioritySchema).optional(),
+  status: z.lazy(() => IssueStatusSchema).optional(),
+  priority: z.lazy(() => IssuePrioritySchema).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   workspace: z.lazy(() => WorkspaceCreateNestedOneWithoutIssuesInputSchema),
@@ -6734,8 +6734,8 @@ export const IssueUncheckedCreateWithoutCommentsInputSchema: z.ZodType<Prisma.Is
   identifier: z.number().int(),
   title: z.string().trim().min(1).max(255),
   description: z.instanceof(Buffer).optional().nullable(),
-  status: z.lazy(() => StatusSchema).optional(),
-  priority: z.lazy(() => PrioritySchema).optional(),
+  status: z.lazy(() => IssueStatusSchema).optional(),
+  priority: z.lazy(() => IssuePrioritySchema).optional(),
   workspaceId: z.string(),
   assigneeId: z.string(),
   createdAt: z.coerce.date().optional(),
@@ -6868,8 +6868,8 @@ export const IssueUpdateWithoutCommentsInputSchema: z.ZodType<Prisma.IssueUpdate
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
-  priority: z.union([ z.lazy(() => PrioritySchema),z.lazy(() => EnumPriorityFieldUpdateOperationsInputSchema) ]).optional(),
+  status: z.union([ z.lazy(() => IssueStatusSchema),z.lazy(() => EnumIssueStatusFieldUpdateOperationsInputSchema) ]).optional(),
+  priority: z.union([ z.lazy(() => IssuePrioritySchema),z.lazy(() => EnumIssuePriorityFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   workspace: z.lazy(() => WorkspaceUpdateOneRequiredWithoutIssuesNestedInputSchema).optional(),
@@ -6882,8 +6882,8 @@ export const IssueUncheckedUpdateWithoutCommentsInputSchema: z.ZodType<Prisma.Is
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
-  priority: z.union([ z.lazy(() => PrioritySchema),z.lazy(() => EnumPriorityFieldUpdateOperationsInputSchema) ]).optional(),
+  status: z.union([ z.lazy(() => IssueStatusSchema),z.lazy(() => EnumIssueStatusFieldUpdateOperationsInputSchema) ]).optional(),
+  priority: z.union([ z.lazy(() => IssuePrioritySchema),z.lazy(() => EnumIssuePriorityFieldUpdateOperationsInputSchema) ]).optional(),
   workspaceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   assigneeId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7249,8 +7249,8 @@ export const IssueCreateWithoutNotificationsInputSchema: z.ZodType<Prisma.IssueC
   identifier: z.number().int(),
   title: z.string().trim().min(1).max(255),
   description: z.instanceof(Buffer).optional().nullable(),
-  status: z.lazy(() => StatusSchema).optional(),
-  priority: z.lazy(() => PrioritySchema).optional(),
+  status: z.lazy(() => IssueStatusSchema).optional(),
+  priority: z.lazy(() => IssuePrioritySchema).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   workspace: z.lazy(() => WorkspaceCreateNestedOneWithoutIssuesInputSchema),
@@ -7263,8 +7263,8 @@ export const IssueUncheckedCreateWithoutNotificationsInputSchema: z.ZodType<Pris
   identifier: z.number().int(),
   title: z.string().trim().min(1).max(255),
   description: z.instanceof(Buffer).optional().nullable(),
-  status: z.lazy(() => StatusSchema).optional(),
-  priority: z.lazy(() => PrioritySchema).optional(),
+  status: z.lazy(() => IssueStatusSchema).optional(),
+  priority: z.lazy(() => IssuePrioritySchema).optional(),
   workspaceId: z.string(),
   assigneeId: z.string(),
   createdAt: z.coerce.date().optional(),
@@ -7375,8 +7375,8 @@ export const IssueUpdateWithoutNotificationsInputSchema: z.ZodType<Prisma.IssueU
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
-  priority: z.union([ z.lazy(() => PrioritySchema),z.lazy(() => EnumPriorityFieldUpdateOperationsInputSchema) ]).optional(),
+  status: z.union([ z.lazy(() => IssueStatusSchema),z.lazy(() => EnumIssueStatusFieldUpdateOperationsInputSchema) ]).optional(),
+  priority: z.union([ z.lazy(() => IssuePrioritySchema),z.lazy(() => EnumIssuePriorityFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   workspace: z.lazy(() => WorkspaceUpdateOneRequiredWithoutIssuesNestedInputSchema).optional(),
@@ -7389,8 +7389,8 @@ export const IssueUncheckedUpdateWithoutNotificationsInputSchema: z.ZodType<Pris
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
-  priority: z.union([ z.lazy(() => PrioritySchema),z.lazy(() => EnumPriorityFieldUpdateOperationsInputSchema) ]).optional(),
+  status: z.union([ z.lazy(() => IssueStatusSchema),z.lazy(() => EnumIssueStatusFieldUpdateOperationsInputSchema) ]).optional(),
+  priority: z.union([ z.lazy(() => IssuePrioritySchema),z.lazy(() => EnumIssuePriorityFieldUpdateOperationsInputSchema) ]).optional(),
   workspaceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   assigneeId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7516,7 +7516,7 @@ export const SessionCreateManyUserInputSchema: z.ZodType<Prisma.SessionCreateMan
 
 export const WorkspaceMemberCreateManyUserInputSchema: z.ZodType<Prisma.WorkspaceMemberCreateManyUserInput> = z.object({
   id: z.string().cuid().optional(),
-  role: z.lazy(() => RoleSchema).optional(),
+  role: z.lazy(() => WorkspaceRoleSchema).optional(),
   workspaceId: z.string(),
   createdAt: z.coerce.date().optional()
 }).strict() as z.ZodType<Prisma.WorkspaceMemberCreateManyUserInput>;
@@ -7526,8 +7526,8 @@ export const IssueCreateManyAssigneeInputSchema: z.ZodType<Prisma.IssueCreateMan
   identifier: z.number().int(),
   title: z.string().trim().min(1).max(255),
   description: z.instanceof(Buffer).optional().nullable(),
-  status: z.lazy(() => StatusSchema).optional(),
-  priority: z.lazy(() => PrioritySchema).optional(),
+  status: z.lazy(() => IssueStatusSchema).optional(),
+  priority: z.lazy(() => IssuePrioritySchema).optional(),
   workspaceId: z.string(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
@@ -7577,7 +7577,7 @@ export const WorkspaceInviteCreateManyInviteeInputSchema: z.ZodType<Prisma.Works
   id: z.string().cuid().optional(),
   workspaceId: z.string(),
   invitedById: z.string(),
-  status: z.lazy(() => InviteStatusSchema).optional(),
+  status: z.lazy(() => WorkspaceInviteStatusSchema).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
 }).strict() as z.ZodType<Prisma.WorkspaceInviteCreateManyInviteeInput>;
@@ -7650,21 +7650,21 @@ export const SessionUncheckedUpdateManyWithoutUserInputSchema: z.ZodType<Prisma.
 
 export const WorkspaceMemberUpdateWithoutUserInputSchema: z.ZodType<Prisma.WorkspaceMemberUpdateWithoutUserInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  role: z.union([ z.lazy(() => RoleSchema),z.lazy(() => EnumRoleFieldUpdateOperationsInputSchema) ]).optional(),
+  role: z.union([ z.lazy(() => WorkspaceRoleSchema),z.lazy(() => EnumWorkspaceRoleFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   workspace: z.lazy(() => WorkspaceUpdateOneRequiredWithoutMembersNestedInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceMemberUpdateWithoutUserInput>;
 
 export const WorkspaceMemberUncheckedUpdateWithoutUserInputSchema: z.ZodType<Prisma.WorkspaceMemberUncheckedUpdateWithoutUserInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  role: z.union([ z.lazy(() => RoleSchema),z.lazy(() => EnumRoleFieldUpdateOperationsInputSchema) ]).optional(),
+  role: z.union([ z.lazy(() => WorkspaceRoleSchema),z.lazy(() => EnumWorkspaceRoleFieldUpdateOperationsInputSchema) ]).optional(),
   workspaceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.WorkspaceMemberUncheckedUpdateWithoutUserInput>;
 
 export const WorkspaceMemberUncheckedUpdateManyWithoutUserInputSchema: z.ZodType<Prisma.WorkspaceMemberUncheckedUpdateManyWithoutUserInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  role: z.union([ z.lazy(() => RoleSchema),z.lazy(() => EnumRoleFieldUpdateOperationsInputSchema) ]).optional(),
+  role: z.union([ z.lazy(() => WorkspaceRoleSchema),z.lazy(() => EnumWorkspaceRoleFieldUpdateOperationsInputSchema) ]).optional(),
   workspaceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.WorkspaceMemberUncheckedUpdateManyWithoutUserInput>;
@@ -7674,8 +7674,8 @@ export const IssueUpdateWithoutAssigneeInputSchema: z.ZodType<Prisma.IssueUpdate
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
-  priority: z.union([ z.lazy(() => PrioritySchema),z.lazy(() => EnumPriorityFieldUpdateOperationsInputSchema) ]).optional(),
+  status: z.union([ z.lazy(() => IssueStatusSchema),z.lazy(() => EnumIssueStatusFieldUpdateOperationsInputSchema) ]).optional(),
+  priority: z.union([ z.lazy(() => IssuePrioritySchema),z.lazy(() => EnumIssuePriorityFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   workspace: z.lazy(() => WorkspaceUpdateOneRequiredWithoutIssuesNestedInputSchema).optional(),
@@ -7688,8 +7688,8 @@ export const IssueUncheckedUpdateWithoutAssigneeInputSchema: z.ZodType<Prisma.Is
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
-  priority: z.union([ z.lazy(() => PrioritySchema),z.lazy(() => EnumPriorityFieldUpdateOperationsInputSchema) ]).optional(),
+  status: z.union([ z.lazy(() => IssueStatusSchema),z.lazy(() => EnumIssueStatusFieldUpdateOperationsInputSchema) ]).optional(),
+  priority: z.union([ z.lazy(() => IssuePrioritySchema),z.lazy(() => EnumIssuePriorityFieldUpdateOperationsInputSchema) ]).optional(),
   workspaceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7702,8 +7702,8 @@ export const IssueUncheckedUpdateManyWithoutAssigneeInputSchema: z.ZodType<Prism
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
-  priority: z.union([ z.lazy(() => PrioritySchema),z.lazy(() => EnumPriorityFieldUpdateOperationsInputSchema) ]).optional(),
+  status: z.union([ z.lazy(() => IssueStatusSchema),z.lazy(() => EnumIssueStatusFieldUpdateOperationsInputSchema) ]).optional(),
+  priority: z.union([ z.lazy(() => IssuePrioritySchema),z.lazy(() => EnumIssuePriorityFieldUpdateOperationsInputSchema) ]).optional(),
   workspaceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7836,7 +7836,7 @@ export const NotificationUncheckedUpdateManyWithoutSenderInputSchema: z.ZodType<
 export const WorkspaceInviteUpdateWithoutInviteeInputSchema: z.ZodType<Prisma.WorkspaceInviteUpdateWithoutInviteeInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   invitedById: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  status: z.union([ z.lazy(() => InviteStatusSchema),z.lazy(() => EnumInviteStatusFieldUpdateOperationsInputSchema) ]).optional(),
+  status: z.union([ z.lazy(() => WorkspaceInviteStatusSchema),z.lazy(() => EnumWorkspaceInviteStatusFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   workspace: z.lazy(() => WorkspaceUpdateOneRequiredWithoutWorkspaceInviteNestedInputSchema).optional()
@@ -7846,7 +7846,7 @@ export const WorkspaceInviteUncheckedUpdateWithoutInviteeInputSchema: z.ZodType<
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   workspaceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   invitedById: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  status: z.union([ z.lazy(() => InviteStatusSchema),z.lazy(() => EnumInviteStatusFieldUpdateOperationsInputSchema) ]).optional(),
+  status: z.union([ z.lazy(() => WorkspaceInviteStatusSchema),z.lazy(() => EnumWorkspaceInviteStatusFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.WorkspaceInviteUncheckedUpdateWithoutInviteeInput>;
@@ -7855,14 +7855,14 @@ export const WorkspaceInviteUncheckedUpdateManyWithoutInviteeInputSchema: z.ZodT
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   workspaceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   invitedById: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  status: z.union([ z.lazy(() => InviteStatusSchema),z.lazy(() => EnumInviteStatusFieldUpdateOperationsInputSchema) ]).optional(),
+  status: z.union([ z.lazy(() => WorkspaceInviteStatusSchema),z.lazy(() => EnumWorkspaceInviteStatusFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.WorkspaceInviteUncheckedUpdateManyWithoutInviteeInput>;
 
 export const WorkspaceMemberCreateManyWorkspaceInputSchema: z.ZodType<Prisma.WorkspaceMemberCreateManyWorkspaceInput> = z.object({
   id: z.string().cuid().optional(),
-  role: z.lazy(() => RoleSchema).optional(),
+  role: z.lazy(() => WorkspaceRoleSchema).optional(),
   userId: z.string(),
   createdAt: z.coerce.date().optional()
 }).strict() as z.ZodType<Prisma.WorkspaceMemberCreateManyWorkspaceInput>;
@@ -7872,8 +7872,8 @@ export const IssueCreateManyWorkspaceInputSchema: z.ZodType<Prisma.IssueCreateMa
   identifier: z.number().int(),
   title: z.string().trim().min(1).max(255),
   description: z.instanceof(Buffer).optional().nullable(),
-  status: z.lazy(() => StatusSchema).optional(),
-  priority: z.lazy(() => PrioritySchema).optional(),
+  status: z.lazy(() => IssueStatusSchema).optional(),
+  priority: z.lazy(() => IssuePrioritySchema).optional(),
   assigneeId: z.string(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
@@ -7883,7 +7883,7 @@ export const WorkspaceInviteCreateManyWorkspaceInputSchema: z.ZodType<Prisma.Wor
   id: z.string().cuid().optional(),
   email: z.string().email().trim().max(255),
   invitedById: z.string(),
-  status: z.lazy(() => InviteStatusSchema).optional(),
+  status: z.lazy(() => WorkspaceInviteStatusSchema).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
 }).strict() as z.ZodType<Prisma.WorkspaceInviteCreateManyWorkspaceInput>;
@@ -7897,21 +7897,21 @@ export const GithubAppInstallationCreateManyWorkspaceInputSchema: z.ZodType<Pris
 
 export const WorkspaceMemberUpdateWithoutWorkspaceInputSchema: z.ZodType<Prisma.WorkspaceMemberUpdateWithoutWorkspaceInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  role: z.union([ z.lazy(() => RoleSchema),z.lazy(() => EnumRoleFieldUpdateOperationsInputSchema) ]).optional(),
+  role: z.union([ z.lazy(() => WorkspaceRoleSchema),z.lazy(() => EnumWorkspaceRoleFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   user: z.lazy(() => UserUpdateOneRequiredWithoutWorkspacesNestedInputSchema).optional()
 }).strict() as z.ZodType<Prisma.WorkspaceMemberUpdateWithoutWorkspaceInput>;
 
 export const WorkspaceMemberUncheckedUpdateWithoutWorkspaceInputSchema: z.ZodType<Prisma.WorkspaceMemberUncheckedUpdateWithoutWorkspaceInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  role: z.union([ z.lazy(() => RoleSchema),z.lazy(() => EnumRoleFieldUpdateOperationsInputSchema) ]).optional(),
+  role: z.union([ z.lazy(() => WorkspaceRoleSchema),z.lazy(() => EnumWorkspaceRoleFieldUpdateOperationsInputSchema) ]).optional(),
   userId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.WorkspaceMemberUncheckedUpdateWithoutWorkspaceInput>;
 
 export const WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceInputSchema: z.ZodType<Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  role: z.union([ z.lazy(() => RoleSchema),z.lazy(() => EnumRoleFieldUpdateOperationsInputSchema) ]).optional(),
+  role: z.union([ z.lazy(() => WorkspaceRoleSchema),z.lazy(() => EnumWorkspaceRoleFieldUpdateOperationsInputSchema) ]).optional(),
   userId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceInput>;
@@ -7921,8 +7921,8 @@ export const IssueUpdateWithoutWorkspaceInputSchema: z.ZodType<Prisma.IssueUpdat
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
-  priority: z.union([ z.lazy(() => PrioritySchema),z.lazy(() => EnumPriorityFieldUpdateOperationsInputSchema) ]).optional(),
+  status: z.union([ z.lazy(() => IssueStatusSchema),z.lazy(() => EnumIssueStatusFieldUpdateOperationsInputSchema) ]).optional(),
+  priority: z.union([ z.lazy(() => IssuePrioritySchema),z.lazy(() => EnumIssuePriorityFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   assignee: z.lazy(() => UserUpdateOneRequiredWithoutIssuesNestedInputSchema).optional(),
@@ -7935,8 +7935,8 @@ export const IssueUncheckedUpdateWithoutWorkspaceInputSchema: z.ZodType<Prisma.I
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
-  priority: z.union([ z.lazy(() => PrioritySchema),z.lazy(() => EnumPriorityFieldUpdateOperationsInputSchema) ]).optional(),
+  status: z.union([ z.lazy(() => IssueStatusSchema),z.lazy(() => EnumIssueStatusFieldUpdateOperationsInputSchema) ]).optional(),
+  priority: z.union([ z.lazy(() => IssuePrioritySchema),z.lazy(() => EnumIssuePriorityFieldUpdateOperationsInputSchema) ]).optional(),
   assigneeId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7949,8 +7949,8 @@ export const IssueUncheckedUpdateManyWithoutWorkspaceInputSchema: z.ZodType<Pris
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
-  priority: z.union([ z.lazy(() => PrioritySchema),z.lazy(() => EnumPriorityFieldUpdateOperationsInputSchema) ]).optional(),
+  status: z.union([ z.lazy(() => IssueStatusSchema),z.lazy(() => EnumIssueStatusFieldUpdateOperationsInputSchema) ]).optional(),
+  priority: z.union([ z.lazy(() => IssuePrioritySchema),z.lazy(() => EnumIssuePriorityFieldUpdateOperationsInputSchema) ]).optional(),
   assigneeId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7959,7 +7959,7 @@ export const IssueUncheckedUpdateManyWithoutWorkspaceInputSchema: z.ZodType<Pris
 export const WorkspaceInviteUpdateWithoutWorkspaceInputSchema: z.ZodType<Prisma.WorkspaceInviteUpdateWithoutWorkspaceInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   invitedById: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  status: z.union([ z.lazy(() => InviteStatusSchema),z.lazy(() => EnumInviteStatusFieldUpdateOperationsInputSchema) ]).optional(),
+  status: z.union([ z.lazy(() => WorkspaceInviteStatusSchema),z.lazy(() => EnumWorkspaceInviteStatusFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   invitee: z.lazy(() => UserUpdateOneWithoutWorkspacesInvitationsNestedInputSchema).optional()
@@ -7969,7 +7969,7 @@ export const WorkspaceInviteUncheckedUpdateWithoutWorkspaceInputSchema: z.ZodTyp
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   email: z.union([ z.string().email().trim().max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   invitedById: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  status: z.union([ z.lazy(() => InviteStatusSchema),z.lazy(() => EnumInviteStatusFieldUpdateOperationsInputSchema) ]).optional(),
+  status: z.union([ z.lazy(() => WorkspaceInviteStatusSchema),z.lazy(() => EnumWorkspaceInviteStatusFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.WorkspaceInviteUncheckedUpdateWithoutWorkspaceInput>;
@@ -7978,7 +7978,7 @@ export const WorkspaceInviteUncheckedUpdateManyWithoutWorkspaceInputSchema: z.Zo
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   email: z.union([ z.string().email().trim().max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   invitedById: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  status: z.union([ z.lazy(() => InviteStatusSchema),z.lazy(() => EnumInviteStatusFieldUpdateOperationsInputSchema) ]).optional(),
+  status: z.union([ z.lazy(() => WorkspaceInviteStatusSchema),z.lazy(() => EnumWorkspaceInviteStatusFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.WorkspaceInviteUncheckedUpdateManyWithoutWorkspaceInput>;
