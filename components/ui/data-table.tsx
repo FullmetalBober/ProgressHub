@@ -2,10 +2,15 @@
 
 import {
   ColumnDef,
+  ColumnFiltersState,
+  SortingState,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
+  getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import React from 'react';
 
 import {
   Table,
@@ -15,6 +20,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { cn } from '@/lib/utils';
+import { MoveDown, MoveUp } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 interface DataTableProps<TData, TValue> {
@@ -22,6 +29,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   navigateTo?: string;
   navigateBy?: string;
+  defaultSorting?: SortingState;
 }
 
 export function DataTable<TData, TValue>({
@@ -29,12 +37,28 @@ export function DataTable<TData, TValue>({
   data,
   navigateTo,
   navigateBy = 'id',
+  defaultSorting,
 }: DataTableProps<TData, TValue>) {
   const router = useRouter();
+  const [sorting, setSorting] = React.useState<SortingState>(
+    defaultSorting || []
+  );
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    state: {
+      sorting,
+      columnFilters,
+    },
   });
 
   return (
@@ -46,12 +70,30 @@ export function DataTable<TData, TValue>({
               {headerGroup.headers.map(header => {
                 return (
                   <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
+                    {header.isPlaceholder ? null : (
+                      <div
+                        className={cn(
+                          header.column.getCanSort() &&
+                            'cursor-pointer select-none flex items-center gap-1'
+                        )}
+                        onClick={header.column.getToggleSortingHandler()}
+                      >
+                        {flexRender(
                           header.column.columnDef.header,
                           header.getContext()
                         )}
+                        {header.column.getCanSort() && (
+                          <div className='w-4 h-4 flex items-center justify-center'>
+                            {header.column.getIsSorted() === 'asc' && (
+                              <MoveUp />
+                            )}
+                            {header.column.getIsSorted() === 'desc' && (
+                              <MoveDown />
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </TableHead>
                 );
               })}

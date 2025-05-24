@@ -44,11 +44,6 @@ type TRoleWorkspaceMember = {
 
 const prioritiesIssue: TPriorityIssue[] = [
   {
-    value: 'NO_PRIORITY',
-    label: 'No priority',
-    icon: Ellipsis,
-  },
-  {
     value: 'URGENT',
     label: 'Urgent',
     icon: TriangleAlert,
@@ -68,13 +63,18 @@ const prioritiesIssue: TPriorityIssue[] = [
     label: 'Low',
     icon: SignalLow,
   },
+  {
+    value: 'NO_PRIORITY',
+    label: 'No priority',
+    icon: Ellipsis,
+  },
 ];
 
 const statusesIssue: TStatusIssue[] = [
   {
-    value: 'BACKLOG',
-    label: 'Backlog',
-    icon: CircleDashed,
+    value: 'IN_REVIEW',
+    label: 'In Review',
+    icon: CircleEllipsis,
   },
   {
     value: 'TODO',
@@ -87,9 +87,9 @@ const statusesIssue: TStatusIssue[] = [
     icon: LoaderCircle,
   },
   {
-    value: 'IN_REVIEW',
-    label: 'In Review',
-    icon: CircleEllipsis,
+    value: 'BACKLOG',
+    label: 'Backlog',
+    icon: CircleDashed,
   },
   {
     value: 'DONE',
