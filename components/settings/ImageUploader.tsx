@@ -3,6 +3,9 @@
 import { cn, getImageUrl } from '@/lib/utils';
 import Image, { ImageProps } from 'next/image';
 import { useRef, useState } from 'react';
+import { toast } from 'sonner';
+
+const maxSize = 14 * 1024 * 1024; // 14MB in bytes
 
 export default function ImageUploader({
   id,
@@ -26,13 +29,21 @@ export default function ImageUploader({
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setLoading(true);
     const file = e.target.files?.[0];
+    e.target.value = '';
     if (!file) return;
+
+    if (file.size > maxSize) {
+      setLoading(false);
+      toast.error(
+        'File size exceeds the maximum limit of 14MB. Please choose a smaller file.'
+      );
+      return;
+    }
 
     const imageFormData = new FormData();
     imageFormData.append('image', file);
 
     const response = await action(id, imageFormData);
-
     setValue(getImageUrl(response.image));
   };
 

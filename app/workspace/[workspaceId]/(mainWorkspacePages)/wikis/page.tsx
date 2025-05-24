@@ -1,7 +1,7 @@
 import RepositoriesGroups from '@/components/wikis/RepositoriesGroups';
 import {
   getGithubAppInfo,
-  getRepositoriesWithWikis,
+  getGithubAppRepositories,
 } from '@/lib/actions/githubApp.action';
 import prisma from '@/lib/db/index';
 import { TGithubAccount } from '@/lib/types';
@@ -31,7 +31,7 @@ export default async function DashboardPage(
     githubAppInstallations.map(async githubAppInstallation => {
       const [githubAppInfo, repositories] = await Promise.all([
         getGithubAppInfo(githubAppInstallation.id),
-        getRepositoriesWithWikis(githubAppInstallation.id),
+        getGithubAppRepositories(githubAppInstallation.id),
       ]);
 
       return {

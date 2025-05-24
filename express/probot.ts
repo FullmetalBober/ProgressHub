@@ -1,7 +1,7 @@
 import { statusesIssue } from '@/config/constants';
 import prisma from '@/lib/db';
 import { env } from '@/lib/env.mjs';
-import { StatusType } from '@/prisma/zod';
+import { IssueStatusType } from '@/prisma/zod';
 import { createNodeMiddleware, Probot } from 'probot';
 import { emitToRoomChanges } from './socket';
 
@@ -16,7 +16,7 @@ async function moveIssueTo(
   installationId: number,
   branchName: string,
   message: string,
-  status: StatusType
+  status: IssueStatusType
 ) {
   const issueIdentifier = RegExp(/#(\d+)/).exec(branchName);
 
@@ -69,7 +69,6 @@ async function moveIssueTo(
 
 function handle(app: Probot) {
   app.on('installation.deleted', async context => {
-    console.log(context.payload.installation.id);
     await prisma.githubAppInstallation.delete({
       where: {
         id: context.payload.installation.id,

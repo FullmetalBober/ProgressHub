@@ -1,6 +1,6 @@
 import { ButtonHTMLAttributes, HTMLAttributes, HTMLProps, Ref } from 'react';
 
-import { cn } from '@/tiptap/lib/utils';
+import { cn } from '@/lib/utils';
 import { Button, ButtonProps } from './Button';
 import { Surface } from './Surface';
 import Tooltip from './Tooltip';

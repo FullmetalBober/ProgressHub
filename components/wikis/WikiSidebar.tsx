@@ -35,6 +35,10 @@ export default function WikiSidebar(
   const { currentTiptapEditor } = useTiptapEditor();
   const [isSyncing, setIsSyncing] = useState(false);
 
+  const selectedWikiObserved = props.wikis.find(
+    wiki => wiki.id === selectedWiki?.id
+  );
+
   const handleSyncWikis = async () => {
     if (!selectedWiki || !currentTiptapEditor.current) return;
     setIsSyncing(true);
@@ -72,6 +76,13 @@ export default function WikiSidebar(
     setIsSyncing(false);
   };
 
+  const disableSyncButton =
+    isSyncing ||
+    !selectedWikiObserved ||
+    !(
+      selectedWikiObserved.isModified ||
+      selectedWikiObserved.path !== selectedWikiObserved.previousPath
+    );
   return (
     <>
       <SidebarTrigger className='absolute z-50 right-1 top-1 md:hidden' />
@@ -80,7 +91,10 @@ export default function WikiSidebar(
         <SidebarHeader>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton onClick={handleSyncWikis} disabled={isSyncing}>
+              <SidebarMenuButton
+                onClick={handleSyncWikis}
+                disabled={disableSyncButton}
+              >
                 Синхронізувати з GitHub
               </SidebarMenuButton>
             </SidebarMenuItem>

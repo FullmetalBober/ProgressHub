@@ -7,7 +7,6 @@ import { BubbleMenu, Editor } from '@tiptap/react';
 import { memo } from 'react';
 import { ContentTypePicker } from './components/ContentTypePicker';
 import { EditLinkPopover } from './components/EditLinkPopover';
-import { FontFamilyPicker } from './components/FontFamilyPicker';
 import { useTextmenuCommands } from './hooks/useTextmenuCommands';
 import { useTextmenuContentTypes } from './hooks/useTextmenuContentTypes';
 import { useTextmenuStates } from './hooks/useTextmenuStates';
@@ -16,7 +15,6 @@ import { useTextmenuStates } from './hooks/useTextmenuStates';
 // on every editor state change
 const MemoButton = memo(Toolbar.Button);
 const MemoColorPicker = memo(ColorPicker);
-const MemoFontFamilyPicker = memo(FontFamilyPicker);
 const MemoContentTypePicker = memo(ContentTypePicker);
 
 export type TextMenuProps = {
@@ -38,10 +36,6 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
     >
       <Toolbar.Wrapper>
         <MemoContentTypePicker options={blockOptions} />
-        <MemoFontFamilyPicker
-          onChange={commands.onSetFont}
-          value={states.currentFont || ''}
-        />
         <Toolbar.Divider />
         <MemoButton
           tooltip='Bold'

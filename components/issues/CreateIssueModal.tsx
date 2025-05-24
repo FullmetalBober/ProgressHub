@@ -90,7 +90,6 @@ export default function CreateIssueModal({
               name='title'
               render={({ field }) => (
                 <FormItem>
-                  {/* <FormLabel>Username</FormLabel> */}
                   <FormControl>
                     <Input placeholder='Issue title' {...field} />
                   </FormControl>
@@ -98,23 +97,6 @@ export default function CreateIssueModal({
                 </FormItem>
               )}
             />
-
-            {/* <FormField
-              control={form.control}
-              name='description'
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Textarea
-                      placeholder='Add description...'
-                      className='resize-none'
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
 
             <div className='flex gap-2 flex-wrap'>
               <StatusComboboxFormField form={form} />

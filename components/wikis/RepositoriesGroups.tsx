@@ -28,10 +28,6 @@ export default function RepositoriesGroups(
         <div className='w-full sm:w-[300px] md:w-[400px]'>
           <RepositorySearch onSearch={handleSearch} />
         </div>
-        {/* <RepositorySort
-          onSort={handleSort}
-          repositories={searchActive ? repositories : allRepositories}
-        /> */}
       </div>
 
       <div className='space-y-8'>

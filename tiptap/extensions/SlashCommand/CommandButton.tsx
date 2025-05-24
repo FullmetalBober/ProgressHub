@@ -1,5 +1,5 @@
+import { cn } from '@/lib/utils';
 import { Icon } from '@/tiptap/components/ui/Icon';
-import { cn } from '@/tiptap/lib/utils';
 import { icons } from 'lucide-react';
 
 export type CommandButtonProps = {

@@ -8,13 +8,7 @@ import { ProbotOctokit } from 'probot';
 import prisma from '../db';
 import { env } from '../env.mjs';
 import { protectAction } from '../protection';
-import {
-  deleteMdFile,
-  getGithubWikis,
-  notifyUsers,
-  pushMdFile,
-  zodValidate,
-} from './utils';
+import { notifyUsers, zodValidate } from './utils';
 
 const octokit = new ProbotOctokit({
   auth: {
@@ -55,20 +49,20 @@ export async function removeGithubAppInstallation(id: number) {
     ['OWNER', 'ADMIN']
   );
 
+  await octokit.rest.apps.deleteInstallation({
+    installation_id: id,
+  });
+
   const githubAppInstallation = await prisma.githubAppInstallation.delete({
     where: {
       id,
     },
   });
 
-  await octokit.rest.apps.deleteInstallation({
-    installation_id: githubAppInstallation.id,
-  });
-
   return githubAppInstallation;
 }
 
-export async function getRepositoriesWithWikis(installationId: number) {
+export async function getGithubAppRepositories(installationId: number) {
   await protectAction({
     githubAppInstallationId: installationId,
   });
@@ -88,8 +82,6 @@ export async function getRepositoriesWithWikis(installationId: number) {
     data: { repositories },
   } = await localOctokit.rest.apps.listReposAccessibleToInstallation();
 
-  // const filteredRepos = repositories.filter(repo => repo.has_wiki);
-
   return repositories.map(repo => ({
     id: repo.id,
     name: repo.name,
@@ -99,57 +91,15 @@ export async function getRepositoriesWithWikis(installationId: number) {
   }));
 }
 
-export async function resetLocalGithubRepoWiki(
+export async function checkIfGithubWikiAvailable(
   installationId: number,
   repoId: number
 ) {
-  await protectAction({
-    githubAppInstallationId: installationId,
-  });
+  const res = await fetch(
+    `${env.SOCKET_BASE_URL}/api/github/wiki/${installationId}/${repoId}`
+  );
 
-  const [repoContent, localWiki] = await Promise.all([
-    getGithubWikis(installationId, repoId),
-    prisma.githubWikiFile.findMany({
-      where: {
-        githubRepositoryId: repoId,
-      },
-    }),
-  ]);
-
-  const toDeleteLocalWikiIds = localWiki
-    .filter(
-      localWikiItem =>
-        !repoContent.some(repoItem => repoItem.name === localWikiItem.path)
-    )
-    .map(localWikiItem => localWikiItem.id);
-  const toCreateLocalWiki = repoContent
-    .filter(
-      repoItem =>
-        !localWiki.some(localWikiItem => localWikiItem.path === repoItem.name)
-    )
-    .map(repoItem => ({
-      installationId: installationId,
-      githubRepositoryId: repoId,
-      path: repoItem.name,
-    }));
-
-  await Promise.all([
-    prisma.$transaction([
-      prisma.githubWikiFile.deleteMany({
-        where: {
-          id: {
-            in: toDeleteLocalWikiIds,
-          },
-        },
-      }),
-      prisma.githubWikiFile.createMany({
-        data: toCreateLocalWiki,
-      }),
-    ]),
-    // notifyUsers()
-  ]);
-
-  return;
+  return res.ok;
 }
 
 export async function createGithubWikiFile(body: unknown) {
@@ -187,19 +137,23 @@ export async function updateGithubWikiFile(id: string, body: unknown) {
     }),
   ]);
 
-  const updatedGithubWikiFile = await prisma.githubWikiFile.update({
-    where: {
-      id: githubWikiFile.id,
-    },
-    data,
-  });
-
-  await notifyUsers(
-    String(githubWikiFile.githubRepositoryId),
-    'githubWikiFile',
-    'update',
-    updatedGithubWikiFile
-  );
+  const [updatedGithubWikiFile] = await Promise.all([
+    prisma.githubWikiFile.update({
+      where: {
+        id: githubWikiFile.id,
+      },
+      data,
+    }),
+    notifyUsers(
+      String(githubWikiFile.githubRepositoryId),
+      'githubWikiFile',
+      'update',
+      {
+        id: githubWikiFile.id,
+        ...data,
+      }
+    ),
+  ]);
 
   return updatedGithubWikiFile;
 }
@@ -219,33 +173,43 @@ export async function updateGithubWikiRemoteFile(
     }),
   ]);
 
+  const res = await fetch(
+    `${env.SOCKET_BASE_URL}/api/github/wiki/${githubWikiFile.installationId}/${githubWikiFile.githubRepositoryId}/file`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: githubWikiFile.path,
+        oldName: githubWikiFile.previousPath ?? githubWikiFile.path,
+        content: mdFile,
+      }),
+    }
+  );
+  if (!res.ok) throw new Error('Failed to create wiki file');
+
+  const dataToUpdate = {
+    previousPath: githubWikiFile.path,
+    isModified: false,
+  };
   [githubWikiFile] = await Promise.all([
     prisma.githubWikiFile.update({
       where: {
         id: githubWikiFile.id,
       },
-      data: {
-        previousPath: githubWikiFile.path,
-        isModified: false,
-      },
+      data: dataToUpdate,
     }),
-    pushMdFile(
-      githubWikiFile.installationId,
-      githubWikiFile.githubRepositoryId,
-      githubWikiFile.path,
+    notifyUsers(
+      String(githubWikiFile.githubRepositoryId),
+      'githubWikiFile',
+      'update',
       {
-        oldFileName: githubWikiFile.previousPath ?? githubWikiFile.path,
-        content: mdFile,
+        id: githubWikiFile.id,
+        ...dataToUpdate,
       }
     ),
   ]);
-
-  await notifyUsers(
-    String(githubWikiFile.githubRepositoryId),
-    'githubWikiFile',
-    'update',
-    githubWikiFile
-  );
 
   return githubWikiFile;
 }
@@ -262,6 +226,22 @@ export async function deleteGithubWikiRemoteFile(id: string) {
     }),
   ]);
 
+  if (githubWikiFile.previousPath) {
+    const res = await fetch(
+      `${env.SOCKET_BASE_URL}/api/github/wiki/${githubWikiFile.installationId}/${githubWikiFile.githubRepositoryId}/file`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: githubWikiFile.previousPath,
+        }),
+      }
+    );
+    if (!res.ok) throw new Error('Failed to delete wiki file');
+  }
+
   await Promise.all([
     prisma.githubWikiFile.delete({
       where: {
@@ -273,11 +253,6 @@ export async function deleteGithubWikiRemoteFile(id: string) {
       'githubWikiFile',
       'delete',
       githubWikiFile
-    ),
-    deleteMdFile(
-      githubWikiFile.installationId,
-      githubWikiFile.githubRepositoryId,
-      githubWikiFile.path
     ),
   ]);
 

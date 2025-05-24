@@ -24,46 +24,60 @@ export default async function WorkspaceSideBar({
   workspaceId: string;
 }>) {
   const session = await auth();
-  const [workspaces, userUnreadNotifications] = await Promise.all([
-    prisma.workspace.findMany({
-      where: { members: { some: { userId: session?.user?.id } } },
-      include: {
-        members: {
-          select: { user: true },
-        },
-      },
-    }),
-    prisma.notification.findMany({
-      where: {
-        recipientId: session?.user?.id,
-        issue: {
-          workspaceId,
-        },
-        isRead: false,
-      },
-      select: {
-        id: true,
-        isRead: true,
-      },
-    }),
-  ]);
 
-  const currentWorkspace = workspaces.find(w => w.id === workspaceId);
-  const otherWorkspaces = workspaces.filter(w => w.id !== workspaceId);
+  const user = await prisma.user.findUnique({
+    where: { id: session?.user?.id },
+    include: {
+      workspaces: {
+        include: {
+          workspace: {
+            include: {
+              members: {
+                select: { user: true },
+                where: {
+                  workspaceId,
+                },
+              },
+            },
+          },
+        },
+      },
+      notifications: {
+        where: {
+          issue: {
+            workspaceId,
+          },
+          isRead: false,
+        },
+        select: {
+          id: true,
+          isRead: true,
+        },
+      },
+      workspacesInvitations: {
+        select: {
+          id: true,
+        },
+      },
+    },
+  });
+  if (!user) return <div>You are not logged in</div>;
+
+  const currentWorkspace = user.workspaces.find(
+    w => w.workspace.id === workspaceId
+  )?.workspace;
+  const otherWorkspaces = user.workspaces
+    .filter(w => w.workspace.id !== workspaceId)
+    .map(w => w.workspace);
 
   const workspaceUsers = currentWorkspace?.members.map(m => m.user);
 
-  const user = session?.user;
-  if (!user?.id) return <div>You are not logged in</div>;
   if (!currentWorkspace) return <div>Workspace not found</div>;
   if (!workspaceUsers) return <div>Workspace users not found</div>;
   return (
     <aside className='space-y-4'>
       <div className='pr-4'>
         <div className='space-y-1'>
-          {/* <h2 className='mb-2 px-4 text-lg font-semibold tracking-tight'>
-            Discover
-          </h2> */}
           <div className='flex justify-between'>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -99,7 +113,15 @@ export default async function WorkspaceSideBar({
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link href='/join'>Create or join a workspace</Link>
+                  <Link href='/join' className='relative'>
+                    <span>Create or join a workspace</span>
+                    {user.workspacesInvitations.length > 0 && (
+                      <div className='absolute flex h-3 w-3 right-0 top-0'>
+                        <div className='animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75' />
+                        <div className='rounded-full inline-flex h-full w-full bg-white' />
+                      </div>
+                    )}
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem className='w-full' asChild>
                   <SignOut />
@@ -119,7 +141,7 @@ export default async function WorkspaceSideBar({
               icon={<Inbox />}
               label='Notifications'
               href={`/workspace/${workspaceId}/notifications`}
-              notifications={userUnreadNotifications}
+              notifications={user.notifications}
             />
             <SidebarButton
               icon={<FolderKanban />}
