@@ -37,9 +37,6 @@ importers:
       '@prisma/client':
         specifier: ^6.1.0
         version: 6.1.0(prisma@6.1.0)
-      '@prisma/extension-accelerate':
-        specifier: ^1.2.1
-        version: 1.2.1(@prisma/client@6.1.0(prisma@6.1.0))
       '@radix-ui/react-accordion':
         specifier: ^1.2.10
         version: 1.2.10(@types/react-dom@19.0.3(@types/react@19.0.7))(@types/react@19.0.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -286,9 +283,6 @@ importers:
       sonner:
         specifier: ^2.0.1
         version: 2.0.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      stripe:
-        specifier: ^15.12.0
-        version: 15.12.0
       tailwind-merge:
         specifier: ^2.6.0
         version: 2.6.0
@@ -347,9 +341,6 @@ importers:
       '@types/react-dom':
         specifier: 19.0.3
         version: 19.0.3(@types/react@19.0.7)
-      '@types/turndown':
-        specifier: ^5.0.5
-        version: 5.0.5
       '@types/uuid':
         specifier: ^9.0.8
         version: 9.0.8
@@ -1272,12 +1263,6 @@ packages:
 
   '@prisma/engines@6.1.0':
     resolution: {integrity: sha512-GnYJbCiep3Vyr1P/415ReYrgJUjP79fBNc1wCo7NP6Eia0CzL2Ot9vK7Infczv3oK7JLrCcawOSAxFxNFsAERQ==}
-
-  '@prisma/extension-accelerate@1.2.1':
-    resolution: {integrity: sha512-QicnMeyqL226ilT3vvRsFAqPeIdqHGKR4c25CoK5zZ1tNIv8egfgpD1gCKqOGmfAz0pIKQnMuJU3eNg9KItC7A==}
-    engines: {node: '>=16'}
-    peerDependencies:
-      '@prisma/client': '>=4.16.1'
 
   '@prisma/fetch-engine@6.1.0':
     resolution: {integrity: sha512-asdFi7TvPlEZ8CzSZ/+Du5wZ27q6OJbRSXh+S8ISZguu+S9KtS/gP7NeXceZyb1Jv1SM1S5YfiCv+STDsG6rrg==}
@@ -2457,9 +2442,6 @@ packages:
 
   '@types/tedious@4.0.14':
     resolution: {integrity: sha512-KHPsfX/FoVbUGbyYvk1q9MMQHLPeRZhRJZdO45Q4YjvFkv4hMNghCWTvy7rdKessBsmtz4euWCWAB6/tVpI1Iw==}
-
-  '@types/turndown@5.0.5':
-    resolution: {integrity: sha512-TL2IgGgc7B5j78rIccBtlYAnkuv8nUQqhQc+DSYV5j9Be9XOcm/SKOVRuA47xAVI3680Tk9B1d8flK2GWT2+4w==}
 
   '@types/unist@3.0.3':
     resolution: {integrity: sha512-ko/gIFJRv177XgZsZcBwnqJN5x/Gien8qNOn0D5bQU/zAzVf9Zt3BlcUiLqhV9y4ARk0GbT3tnUiPNgnTXzc/Q==}
@@ -4403,10 +4385,6 @@ packages:
     resolution: {integrity: sha512-+38qI9SOr8tfZ4QmJNplMUxqjbe7LKvvZgWdExBOmd+egZTtjLB67Gu0HRX3u/XOq7UU2Nx6nsjvS16Z9uwfpg==}
     engines: {node: '>=0.6'}
 
-  qs@6.13.1:
-    resolution: {integrity: sha512-EJPeIn0CYrGu+hli1xilKAPXODtJ12T0sP63Ijx2/khC2JtuaN3JyNIpvmnkmaEtha9ocbG4A4cMcr+TvqvwQg==}
-    engines: {node: '>=0.6'}
-
   queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
 
@@ -4758,10 +4736,6 @@ packages:
   strip-json-comments@3.1.1:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
     engines: {node: '>=8'}
-
-  stripe@15.12.0:
-    resolution: {integrity: sha512-slTbYS1WhRJXVB8YXU8fgHizkUrM9KJyrw4Dd8pLEwzKHYyQTIE46EePC2MVbSDZdE24o1GdNtzmJV4PrPpmJA==}
-    engines: {node: '>=12.*'}
 
   styled-jsx@5.1.6:
     resolution: {integrity: sha512-qSVyDTeMotdvQYoHWLNGwRFJHC+i+ZvdBRYosOFgC+Wg1vx4frN2/RG/NA7SYqqvKNLf39P2LSRA2pu6n0XYZA==}
@@ -6030,10 +6004,6 @@ snapshots:
       '@prisma/fetch-engine': 6.1.0
       '@prisma/get-platform': 6.1.0
 
-  '@prisma/extension-accelerate@1.2.1(@prisma/client@6.1.0(prisma@6.1.0))':
-    dependencies:
-      '@prisma/client': 6.1.0(prisma@6.1.0)
-
   '@prisma/fetch-engine@6.1.0':
     dependencies:
       '@prisma/debug': 6.1.0
@@ -7241,8 +7211,6 @@ snapshots:
   '@types/tedious@4.0.14':
     dependencies:
       '@types/node': 20.17.10
-
-  '@types/turndown@5.0.5': {}
 
   '@types/unist@3.0.3': {}
 
@@ -9391,10 +9359,6 @@ snapshots:
     dependencies:
       side-channel: 1.1.0
 
-  qs@6.13.1:
-    dependencies:
-      side-channel: 1.1.0
-
   queue-microtask@1.2.3: {}
 
   quick-format-unescaped@4.0.4: {}
@@ -9842,11 +9806,6 @@ snapshots:
   strip-bom@3.0.0: {}
 
   strip-json-comments@3.1.1: {}
-
-  stripe@15.12.0:
-    dependencies:
-      '@types/node': 20.17.10
-      qs: 6.13.1
 
   styled-jsx@5.1.6(react@19.0.0):
     dependencies:
