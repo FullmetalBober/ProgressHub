@@ -74,7 +74,7 @@ export default async function WorkspaceSettingPage(
           </div>
           <p className='text-sm text-gray-400 mt-2'>
             Pick a logo for your workspace. Recommended size is 256x256px. The
-            max file size is 15MB.
+            max file size is 14MB.
           </p>
         </div>
 

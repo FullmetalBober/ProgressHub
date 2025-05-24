@@ -3,8 +3,7 @@
 import { statusesWorkspaceMember } from '@/config/constants';
 import { useSocketObserver } from '@/hooks/useSocketObserver';
 import {
-  deleteWorkspaceMemberAsAdmin,
-  deleteWorkspaceMemberAsOwner,
+  deleteWorkspaceMember,
   updateWorkspaceMember,
 } from '@/lib/actions/workspaceMember.action';
 import { User, WorkspaceMember } from '@/prisma/zod';
@@ -159,10 +158,6 @@ const columns = (
               <AlertDialogCancel>Cancel</AlertDialogCancel>
               <AlertDialogAction
                 onClick={async () => {
-                  const deleteWorkspaceMember = isSuperEditEnabled
-                    ? deleteWorkspaceMemberAsOwner
-                    : deleteWorkspaceMemberAsAdmin;
-
                   const action = deleteWorkspaceMember(row.original.id);
                   toast.promise(action, {
                     loading: 'Kicking user from workspace...',
