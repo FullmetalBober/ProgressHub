@@ -28,12 +28,12 @@ export async function updateWorkspaceMember(id: string, body: unknown) {
   return response;
 }
 
-export async function deleteWorkspaceMemberAsOwner(id: string) {
+export async function deleteWorkspaceMember(id: string) {
   const { id: userId } = await protectAction(
     {
       workspaceMemberId: id,
     },
-    ['OWNER']
+    ['OWNER', 'ADMIN']
   );
 
   const response = await prisma.workspaceMember.delete({
@@ -58,69 +58,24 @@ export async function deleteWorkspaceMemberAsOwner(id: string) {
   return response;
 }
 
-export async function deleteWorkspaceMemberAsAdmin(id: string) {
+export async function leaveWorkspace(workspaceId: string) {
   const { id: userId } = await protectAction(
     {
-      workspaceMemberId: id,
+      workspaceId,
     },
-    ['ADMIN']
+    ['ADMIN', 'MEMBER']
   );
 
   const response = await prisma.workspaceMember.delete({
     where: {
-      id,
-      role: 'MEMBER',
-      userId: {
-        not: userId,
+      userId_workspaceId: {
+        userId,
+        workspaceId,
       },
     },
   });
 
-  return response;
-}
-
-export async function transferWorkspaceOwnership(id: string) {
-  await protectAction(
-    {
-      workspaceMemberId: id,
-    },
-    ['OWNER']
-  );
-
-  const currentOwner = await prisma.workspaceMember.findFirstOrThrow({
-    where: {
-      role: 'OWNER',
-      workspace: {
-        members: {
-          some: {
-            id,
-          },
-        },
-      },
-    },
-    select: {
-      id: true,
-    },
-  });
-
-  const response = await prisma.$transaction([
-    prisma.workspaceMember.update({
-      where: {
-        id: currentOwner.id,
-      },
-      data: {
-        role: 'ADMIN',
-      },
-    }),
-    prisma.workspaceMember.update({
-      where: {
-        id,
-      },
-      data: {
-        role: 'OWNER',
-      },
-    }),
-  ]);
+  await notifyUsers(workspaceId, 'workspaceMember', 'delete', response);
 
   return response;
 }
