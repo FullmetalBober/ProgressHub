@@ -193,14 +193,20 @@ export default function IssuesTable({
     assignee: User;
   })[];
 }>) {
-  const issuesObservable = useSocketObserver('issue', issues);
-  const workspaceId = issues[0]?.workspaceId;
-
   const [filters, setFilters] = useState<TFilters>({
     global: '',
     status: [],
     priority: [],
+    usersIds: [],
   });
+  const issuesObservable = useSocketObserver('issue', issues);
+  const workspaceId = issues[0]?.workspaceId;
+  const availableUsers = issuesObservable.reduce<User[]>((acc, issue) => {
+    if (issue.assignee && !acc.some(user => user.id === issue.assignee.id)) {
+      acc.push(issue.assignee);
+    }
+    return acc;
+  }, []);
 
   const filteredIssues = issuesObservable.filter(issue => {
     const matchesGlobalFilter =
@@ -215,12 +221,25 @@ export default function IssuesTable({
       filters.priority.length === 0 ||
       filters.priority.includes(issue.priority);
 
-    return matchesGlobalFilter && matchesStatusFilter && matchesPriorityFilter;
+    const matchesAssigneeFilter =
+      filters.usersIds.length === 0 ||
+      filters.usersIds.includes(issue.assignee.id);
+
+    return (
+      matchesGlobalFilter &&
+      matchesStatusFilter &&
+      matchesPriorityFilter &&
+      matchesAssigneeFilter
+    );
   });
 
   return (
     <div className='space-y-4'>
-      <IssueFilters filters={filters} setFilters={setFilters} />
+      <IssueFilters
+        filters={filters}
+        setFilters={setFilters}
+        users={availableUsers}
+      />
 
       <p className='text-sm text-muted-foreground'>
         Showing {filteredIssues.length} of {issuesObservable.length} issues

@@ -1,4 +1,5 @@
 import { prioritiesIssue, statusesIssue } from '@/config/constants';
+import { User } from '@/prisma/zod';
 import { IssuePriority, IssueStatus } from '@prisma/client';
 import { Search, XIcon } from 'lucide-react';
 import { Button } from '../ui/button';
@@ -9,24 +10,28 @@ export type TFilters = {
   global: string;
   status: IssueStatus[];
   priority: IssuePriority[];
+  usersIds: string[];
 };
 
 export function IssueFilters({
   filters,
   setFilters,
+  users,
 }: {
   filters: TFilters;
   setFilters: React.Dispatch<React.SetStateAction<TFilters>>;
+  users: User[];
 }) {
   const clearAllFilters = () => {
     setFilters({
       global: '',
       status: [],
       priority: [],
+      usersIds: [],
     });
   };
   return (
-    <div className='flex sm:flex-row gap-2 flex-wrap'>
+    <div className='flex sm:flex-row gap-2 flex-wrap items-center'>
       <div className='flex items-center border rounded-md px-3 w-full sm:max-w-sm shrink-0'>
         <Search className='h-4 w-4 text-muted-foreground mr-2' />
         <Input
@@ -84,9 +89,28 @@ export function IssueFilters({
         />
       </div>
 
+      <div>
+        <MultiSelect
+          options={users.map(user => ({
+            value: user.id,
+            label: user.name,
+            image: user.image,
+          }))}
+          selected={filters.usersIds}
+          onChange={selected =>
+            setFilters(prev => ({
+              ...prev,
+              usersIds: selected,
+            }))
+          }
+          placeholder='Assignee'
+        />
+      </div>
+
       {(filters.global ||
         filters.status.length > 0 ||
-        filters.priority.length > 0) && (
+        filters.priority.length > 0 ||
+        filters.usersIds.length > 0) && (
         <Button
           variant='ghost'
           size='sm'
