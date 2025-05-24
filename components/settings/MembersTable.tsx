@@ -140,7 +140,6 @@ const columns = (
         row.original.role === 'OWNER'
       )
         return;
-      if (isEditEnabled && row.original.role === 'ADMIN') return;
 
       return (
         <AlertDialog>

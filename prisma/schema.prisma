@@ -33,7 +33,6 @@ model User {
   githubAppInstallation GithubAppInstallation[]
   notifications         Notification[]          @relation("NotificationRecipient")
   notificationsSent     Notification[]          @relation("NotificationSender")
-  workspacesInvitations WorkspaceInvite[]
   createdAt             DateTime                @default(now())
   updatedAt             DateTime                @updatedAt
 }
@@ -123,7 +122,6 @@ model WorkspaceInvite {
   id          String                @id @default(cuid())
   /// @zod.string.email().trim().max(255)
   email       String
-  invitee     User?                 @relation(fields: [email], references: [email])
   workspaceId String
   workspace   Workspace             @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   invitedById String
