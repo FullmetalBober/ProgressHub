@@ -13,45 +13,15 @@ const columns: ColumnDef<
     assignee: User;
   }
 >[] = [
-  // {
-  //   id: 'select',
-  //   header: ({ table }) => (
-  //     <Checkbox
-  //       checked={
-  //         table.getIsAllPageRowsSelected() ||
-  //         (table.getIsSomePageRowsSelected() && 'indeterminate')
-  //       }
-  //       onCheckedChange={value => table.toggleAllPageRowsSelected(!!value)}
-  //       aria-label='Select all'
-  //       className='translate-y-[2px]'
-  //     />
-  //   ),
-  //   cell: ({ row }) => (
-  //     <Checkbox
-  //       checked={row.getIsSelected()}
-  //       onCheckedChange={value => row.toggleSelected(!!value)}
-  //       aria-label='Select row'
-  //       className='translate-y-[2px]'
-  //     />
-  //   ),
-  //   enableSorting: false,
-  //   enableHiding: false,
-  // },
   {
     accessorKey: 'identifier',
     header: 'id',
-    // cell: ({ row }) => <div className='w-[80px]'>{row.getValue('id')}</div>,
     enableSorting: false,
     enableHiding: false,
   },
   {
     accessorKey: 'title',
-    // header: ({ column }) => (
-    //   <DataTableColumnHeader column={column} title='Title' />
-    // ),
     cell: ({ row }) => {
-      // const label = labels.find(label => label.value === row.original.label);
-
       return (
         <Tooltip>
           <TooltipTrigger className='max-w-[225px] md:max-w-[500px] lg:max-w-[800px] truncate font-medium'>
@@ -62,16 +32,10 @@ const columns: ColumnDef<
           </TooltipContent>
         </Tooltip>
       );
-      // <div className='flex space-x-2'>
-      // {label && <Badge variant='outline'>{label.label}</Badge>}
-      // </div>
     },
   },
   {
     accessorKey: 'status',
-    // header: ({ column }) => (
-    //   <DataTableColumnHeader column={column} title='Status' />
-    // ),
     cell: ({ row }) => {
       const status = statusesIssue.find(
         status => status.value === row.getValue('status')
@@ -98,9 +62,6 @@ const columns: ColumnDef<
   },
   {
     accessorKey: 'priority',
-    // header: ({ column }) => (
-    //   <DataTableColumnHeader column={column} title='Priority' />
-    // ),
     cell: ({ row }) => {
       const priority = prioritiesIssue.find(
         priority => priority.value === row.getValue('priority')
@@ -127,9 +88,6 @@ const columns: ColumnDef<
   },
   {
     accessorKey: 'assignee',
-    // header: ({ column }) => (
-    //   <DataTableColumnHeader column={column} title='Priority' />
-    // ),
     cell: ({ row }) => {
       const assignee: User = row.getValue('assignee');
 
@@ -142,10 +100,6 @@ const columns: ColumnDef<
       );
     },
   },
-  // {
-  //   id: 'actions',
-  //   cell: ({ row }) => <DataTableRowActions row={row} />,
-  // },
 ];
 
 const navigateBy: keyof Issue = 'identifier';

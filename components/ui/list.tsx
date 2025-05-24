@@ -5,7 +5,6 @@ import * as React from 'react';
 export const typographyVariants = cva('text-xl', {
   variants: {
     variant: {
-      // blockquote: 'mt-6 border-l-2 pl-6 italic',
       ul: 'my-6 ml-6 list-disc [&>li]:mt-2',
     },
     affects: {

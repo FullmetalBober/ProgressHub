@@ -25,20 +25,6 @@ const columns = (isEditEnabled: boolean): ColumnDef<tableRow>[] => [
     accessorKey: 'email',
     header: 'Email',
   },
-  // {
-  //   accessorKey: 'role',
-  //   header: 'Status',
-  //   cell: ({ row }) => {
-  //     const status = statusesWorkspaceMember.find(
-  //       status => status.value === row.getValue('role')
-  //     );
-
-  //     return status?.label;
-  //   },
-  //   filterFn: (row, id, value) => {
-  //     return value.includes(row.getValue(id));
-  //   },
-  // },
   {
     accessorKey: 'createdAt',
     header: 'Invited on',

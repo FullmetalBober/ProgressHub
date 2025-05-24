@@ -23,11 +23,6 @@ export default function CommentsSection({
       <div className='mt-8'>
         <div className='flex items-center mb-6'>
           <h3 className='text-lg font-medium'>Activity</h3>
-          {/* <div className='ml-auto'>
-            <button className='text-sm text-muted-foreground hover:text-foreground'>
-              Unsubscribe
-            </button>
-          </div> */}
         </div>
 
         <CommentList comments={comments} user={user} />
