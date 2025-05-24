@@ -2,23 +2,14 @@
 
 import { prioritiesIssue, statusesIssue } from '@/config/constants';
 import { useSocketObserver } from '@/hooks/useSocketObserver';
-import { Issue, IssuePriority, IssueStatus, User } from '@prisma/client';
+import { Issue, User } from '@prisma/client';
 import { ColumnDef } from '@tanstack/react-table';
 import { formatDistanceToNow } from 'date-fns';
-import { Filter, Search, XIcon } from 'lucide-react';
 import { useState } from 'react';
-import { BadgeRemovable } from '../BadgeRemovable';
 import CustomAvatar from '../CustomAvatar';
-import { Button } from '../ui/button';
 import { DataTable } from '../ui/data-table';
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from '../ui/dropdown-menu';
-import { Input } from '../ui/input';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
+import { IssueFilters, TFilters } from './IssueFilters';
 
 const columns: ColumnDef<
   Omit<Issue, 'description'> & {
@@ -202,181 +193,34 @@ export default function IssuesTable({
     assignee: User;
   })[];
 }>) {
-  const [globalFilter, setGlobalFilter] = useState('');
-  const [statusFilter, setStatusFilter] = useState<IssueStatus[]>([]);
-  const [priorityFilter, setPriorityFilter] = useState<IssuePriority[]>([]);
-
   const issuesObservable = useSocketObserver('issue', issues);
   const workspaceId = issues[0]?.workspaceId;
 
+  const [filters, setFilters] = useState<TFilters>({
+    global: '',
+    status: [],
+    priority: [],
+  });
+
   const filteredIssues = issuesObservable.filter(issue => {
     const matchesGlobalFilter =
-      globalFilter === '' ||
-      issue.title.toLowerCase().includes(globalFilter.toLowerCase()) ||
-      issue.identifier.toString().includes(globalFilter);
+      filters.global === '' ||
+      issue.title.toLowerCase().includes(filters.global.toLowerCase()) ||
+      issue.identifier.toString().includes(filters.global);
 
     const matchesStatusFilter =
-      statusFilter.length === 0 || statusFilter.includes(issue.status);
+      filters.status.length === 0 || filters.status.includes(issue.status);
 
     const matchesPriorityFilter =
-      priorityFilter.length === 0 || priorityFilter.includes(issue.priority);
+      filters.priority.length === 0 ||
+      filters.priority.includes(issue.priority);
 
     return matchesGlobalFilter && matchesStatusFilter && matchesPriorityFilter;
   });
 
-  const clearAllFilters = () => {
-    setGlobalFilter('');
-    setStatusFilter([]);
-    setPriorityFilter([]);
-  };
-
   return (
     <div className='space-y-4'>
-      <div className='flex flex-col sm:flex-row gap-4'>
-        <div className='flex items-center border rounded-md px-3 w-full sm:max-w-sm'>
-          <Search className='h-4 w-4 text-muted-foreground mr-2' />
-          <Input
-            placeholder='Search issues...'
-            value={globalFilter}
-            onChange={e => setGlobalFilter(e.target.value)}
-            className='border-0 focus-visible:ring-0 focus-visible:ring-offset-0'
-          />
-          {globalFilter && (
-            <button
-              onClick={() => setGlobalFilter('')}
-              className='text-muted-foreground hover:text-foreground'
-            >
-              <XIcon className='h-4 w-4' />
-            </button>
-          )}
-        </div>
-
-        <div className='flex flex-wrap items-center gap-2'>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant='outline' size='sm' className='h-8 gap-1'>
-                <Filter className='h-4 w-4' />
-                Status
-                {statusFilter.length > 0 && (
-                  <span className='ml-1 rounded-full bg-primary w-5 h-5 flex items-center justify-center text-primary-foreground'>
-                    {statusFilter.length}
-                  </span>
-                )}
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align='end' className='w-[200px]'>
-              {statusesIssue.map(status => (
-                <DropdownMenuCheckboxItem
-                  key={status.value}
-                  checked={statusFilter.includes(status.value)}
-                  onSelect={() => {
-                    if (statusFilter.includes(status.value)) {
-                      setStatusFilter(prev =>
-                        prev.filter(s => s !== status.value)
-                      );
-                    } else {
-                      setStatusFilter(prev => [...prev, status.value]);
-                    }
-                  }}
-                >
-                  <div className='flex items-center gap-2'>
-                    <status.icon className='h-4 w-4' />
-                    <span>{status.label}</span>
-                  </div>
-                </DropdownMenuCheckboxItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant='outline' size='sm' className='h-8 gap-1'>
-                <Filter className='h-4 w-4' />
-                Priority
-                {priorityFilter.length > 0 && (
-                  <span className='ml-1 rounded-full bg-primary w-5 h-5 text-[10px] flex items-center justify-center text-primary-foreground'>
-                    {priorityFilter.length}
-                  </span>
-                )}
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align='end' className='w-[200px]'>
-              {prioritiesIssue.map(priority => (
-                <DropdownMenuCheckboxItem
-                  key={priority.value}
-                  checked={priorityFilter.includes(priority.value)}
-                  onSelect={() => {
-                    if (priorityFilter.includes(priority.value)) {
-                      setPriorityFilter(prev =>
-                        prev.filter(p => p !== priority.value)
-                      );
-                    } else {
-                      setPriorityFilter(prev => [...prev, priority.value]);
-                    }
-                  }}
-                >
-                  <div className='flex items-center gap-2'>
-                    <priority.icon className='h-4 w-4' />
-                    <span>{priority.label}</span>
-                  </div>
-                </DropdownMenuCheckboxItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          {(globalFilter ||
-            statusFilter.length > 0 ||
-            priorityFilter.length > 0) && (
-            <Button
-              variant='ghost'
-              size='sm'
-              onClick={clearAllFilters}
-              className='h-8'
-            >
-              Clear all
-            </Button>
-          )}
-        </div>
-      </div>
-
-      {(statusFilter.length > 0 || priorityFilter.length > 0) && (
-        <div className='flex flex-wrap gap-2 mt-2 mb-1'>
-          <div className='text-sm text-muted-foreground mr-1'>
-            Active filters:
-          </div>
-          {statusFilter.map(status => {
-            const statusObj = statusesIssue.find(s => s.value === status);
-            if (!statusObj) return null;
-
-            return (
-              <BadgeRemovable
-                key={status}
-                Icon={statusObj.icon}
-                label={statusObj.label}
-                onRemove={() =>
-                  setStatusFilter(statusFilter.filter(s => s !== status))
-                }
-              />
-            );
-          })}
-
-          {priorityFilter.map(priority => {
-            const priorityObj = prioritiesIssue.find(p => p.value === priority);
-            if (!priorityObj) return null;
-
-            return (
-              <BadgeRemovable
-                key={priority}
-                Icon={priorityObj.icon}
-                label={priorityObj.label}
-                onRemove={() =>
-                  setPriorityFilter(priorityFilter.filter(p => p !== priority))
-                }
-              />
-            );
-          })}
-        </div>
-      )}
+      <IssueFilters filters={filters} setFilters={setFilters} />
 
       <p className='text-sm text-muted-foreground'>
         Showing {filteredIssues.length} of {issuesObservable.length} issues
