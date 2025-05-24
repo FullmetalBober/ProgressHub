@@ -1,4 +1,4 @@
-import { cn } from '@/tiptap/lib/utils';
+import { cn } from '@/lib/utils';
 import React, { HTMLAttributes } from 'react';
 
 export type ButtonVariant =

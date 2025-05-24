@@ -1,7 +1,7 @@
+import { cn } from '@/lib/utils';
 import { Button } from '@/tiptap/components/ui/Button';
 import { Icon } from '@/tiptap/components/ui/Icon';
 import { Spinner } from '@/tiptap/components/ui/Spinner';
-import { cn } from '@/tiptap/lib/utils';
 import { ChangeEvent, useCallback } from 'react';
 import { useDropZone, useFileUpload, useUploader } from './hooks';
 

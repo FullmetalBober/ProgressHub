@@ -1,4 +1,4 @@
-import { cn } from '@/tiptap/lib/utils';
+import { cn } from '@/lib/utils';
 import { icons } from 'lucide-react';
 import { memo } from 'react';
 

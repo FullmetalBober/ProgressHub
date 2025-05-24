@@ -1,6 +1,6 @@
+import { cn } from '@/lib/utils';
 import { WebSocketStatus } from '@hocuspocus/provider';
 import { memo } from 'react';
-import { cn } from '../../../lib/utils';
 import { getConnectionText } from '../../../lib/utils/getConnectionText';
 import Tooltip from '../../ui/Tooltip';
 import { EditorUser } from '../types';

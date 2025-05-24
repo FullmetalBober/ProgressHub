@@ -1,4 +1,4 @@
-import { cn } from '@/tiptap/lib/utils';
+import { cn } from '@/lib/utils';
 
 export const DropdownCategoryTitle = ({
   children,

@@ -1,4 +1,4 @@
-import { cn } from '@/tiptap/lib/utils';
+import { cn } from '@/lib/utils';
 import * as Popover from '@radix-ui/react-popover';
 import { icons } from 'lucide-react';
 import { Surface } from './Surface';
