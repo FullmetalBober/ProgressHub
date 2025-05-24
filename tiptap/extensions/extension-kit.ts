@@ -12,12 +12,10 @@ import {
   Columns,
   Document,
   Dropcursor,
-  Figcaption,
   Focus,
   Heading,
   Highlight,
   HorizontalRule,
-  ImageBlock,
   Link,
   Placeholder,
   Selection,
@@ -37,7 +35,6 @@ import {
   Typography,
   Underline,
 } from '.';
-import { ImageUpload } from './ImageUpload';
 
 const lowlight = createLowlight(common);
 
@@ -87,10 +84,6 @@ export const ExtensionKit = ({
   Highlight.configure({ multicolor: true }),
   Underline,
   CharacterCount.configure({ limit: 50000 }),
-  ImageUpload.configure({
-    clientId: provider?.document?.clientID,
-  }),
-  ImageBlock,
   TextAlign.extend({
     addKeyboardShortcuts() {
       return {};
@@ -112,7 +105,6 @@ export const ExtensionKit = ({
   }),
   SlashCommand,
   Focus,
-  Figcaption,
   BlockquoteFigure,
   Dropcursor.configure({
     width: 2,
