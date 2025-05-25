@@ -9,7 +9,7 @@ import {
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Login',
+  title: 'Логін',
 };
 
 export default function LoginPage() {
@@ -19,9 +19,10 @@ export default function LoginPage() {
         <div className='flex flex-col gap-6'>
           <Card>
             <CardHeader>
-              <CardTitle className='text-2xl'>Login</CardTitle>
+              <CardTitle className='text-2xl'>Логін</CardTitle>
               <CardDescription>
-                Enter your email below to login to your account
+                Введіть свою електронну адресу нижче, щоб увійти до свого
+                облікового запису
               </CardDescription>
             </CardHeader>
             <CardContent>
