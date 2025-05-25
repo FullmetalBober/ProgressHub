@@ -65,7 +65,7 @@ export default function CreateIssueModal({
 
     setOpen(false);
     form.reset();
-    router.push(`/workspace/${workspaceId}/issues/${res?.identifier}`);
+    router.push(`/workspace/${res.workspaceId}/issues/${res.identifier}`);
   }
 
   const isFormDisabled = form.formState.isSubmitting;
