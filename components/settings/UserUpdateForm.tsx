@@ -31,9 +31,9 @@ export default function UserUpdateForm({
   async function onSubmit(data: UserPartial) {
     const action = updateUser(user.id, data);
     toast.promise(action, {
-      loading: 'Updating user...',
-      success: 'User updated successfully',
-      error: 'Failed to update user',
+      loading: 'Оновлення користувача...',
+      success: 'Користувача оновлено!',
+      error: 'Не вдалося оновити користувача',
     });
     await action;
 
@@ -60,7 +60,7 @@ export default function UserUpdateForm({
           )}
         />
         <Button type='submit' disabled={isFormDisabled}>
-          Update
+          Оновити
         </Button>
       </form>
     </Form>

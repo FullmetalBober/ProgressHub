@@ -7,7 +7,7 @@ import jwt from 'jsonwebtoken';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Wiki',
+  title: 'Вікі',
 };
 
 export default async function WikiPage(
@@ -36,9 +36,14 @@ export default async function WikiPage(
     ),
   ]);
 
-  if (!session?.user) return <div>Not authenticated</div>;
+  if (!session?.user) return <div>Не автентифіковано</div>;
   if (!isRepositoryWikiAvailable) {
-    return <div>Repository wiki is not available</div>;
+    return (
+      <div>
+        Вікі репозиторій недоступний, спробуйте створити першу сторінку Wiki
+        вручну, аби активувати можливість редагування
+      </div>
+    );
   }
   return (
     <div>

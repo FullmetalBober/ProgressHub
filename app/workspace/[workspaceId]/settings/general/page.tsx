@@ -56,11 +56,11 @@ export default async function WorkspaceSettingPage(
     <div className='min-h-screen bg-black text-white p-8'>
       <div className='max-w-3xl mx-auto space-y-12'>
         <div>
-          <h1 className='text-2xl font-bold mb-2'>Workspace</h1>
+          <h1 className='text-2xl font-bold mb-2'>Робочий простір</h1>
         </div>
 
         <div>
-          <h2 className='text-xl font-semibold mb-4'>Logo</h2>
+          <h2 className='text-xl font-semibold mb-4'>Логотип</h2>
           <div className='bg-gray-800 w-16 h-16 rounded-md flex items-center justify-center'>
             <ImageTag
               src={getImageUrl(workspace.image)}
@@ -73,13 +73,13 @@ export default async function WorkspaceSettingPage(
             />
           </div>
           <p className='text-sm text-gray-400 mt-2'>
-            Pick a logo for your workspace. Recommended size is 256x256px. The
-            max file size is 14MB.
+            Виберіть логотип для своєї робочої області. Рекомендований розмір –
+            256x256 пікселів. Максимальний розмір файлу – 14 МБ.
           </p>
         </div>
 
         <div>
-          <h2 className='text-xl font-semibold mb-4'>General</h2>
+          <h2 className='text-xl font-semibold mb-4'>Загальне</h2>
           <WorkspaceUpdateForm
             workspace={workspace}
             disabled={!isOwnerOrAdmin}
@@ -89,7 +89,7 @@ export default async function WorkspaceSettingPage(
         <div>
           <h2 className='text-xl font-semibold mb-4'>Github</h2>
           <div className='flex items-center justify-between mb-4'>
-            <h3 className='text-lg'>Connected accounts</h3>
+            <h3 className='text-lg'>Підключені облікові записи</h3>
             <Button variant='ghost' asChild>
               <Link
                 href={`https://github.com/apps/${env.NEXT_PUBLIC_GITHUB_APP_NAME}/installations/select_target?state=${githubState}`}
@@ -103,17 +103,20 @@ export default async function WorkspaceSettingPage(
             githubAppInstallations={workspace.githubAppInstallation}
           />
           <p className='text-sm text-gray-400 mt-2'>
-            Github account cannot be connected to multiple workspaces.
+            Обліковий запис Github не можна підключити до кількох робочих
+            просторів.
           </p>
         </div>
 
         {isOwner && (
           <div>
-            <h2 className='text-xl font-semibold mb-2'>Delete workspace</h2>
+            <h2 className='text-xl font-semibold mb-2'>
+              Видалити робочу область
+            </h2>
             <p className='text-sm text-gray-400 mb-4'>
-              If you want to permanently delete this workspace and all of its
-              data, including but not limited to users, issues, and comments,
-              you can do so below.
+              Якщо ви хочете остаточно видалити цю робочу область та всі її
+              дані, включаючи, але не обмежуючись, користувачів, проблеми та
+              коментарі, ви можете зробити це нижче.
             </p>
             <WorkspaceDelete workspaceId={workspaceId} />
           </div>

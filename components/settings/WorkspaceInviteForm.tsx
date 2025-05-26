@@ -61,9 +61,9 @@ export default function WorkspaceInviteForm({
   async function submitHandler(data: WorkspaceInvite) {
     const action = inviteUserToWorkspace(data);
     toast.promise(action, {
-      loading: 'Inviting user...',
-      success: 'User invited',
-      error: 'Failed to invite user',
+      loading: 'Запрошення користувача...',
+      success: 'Користувача запрошено!',
+      error: 'Не вдалося запросити користувача',
     });
     await action;
 

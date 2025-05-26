@@ -35,7 +35,7 @@ export function IssueFilters({
       <div className='flex items-center border rounded-md px-3 w-full sm:max-w-sm shrink-0'>
         <Search className='h-4 w-4 text-muted-foreground mr-2' />
         <Input
-          placeholder='Search issues...'
+          placeholder='Пошук за назвою...'
           value={filters.global}
           onChange={e =>
             setFilters(prev => ({
@@ -68,7 +68,7 @@ export function IssueFilters({
               status: selected as IssueStatus[],
             }))
           }
-          placeholder='Filter'
+          placeholder='Статус'
         />
       </div>
 
@@ -85,7 +85,7 @@ export function IssueFilters({
               priority: selected as IssuePriority[],
             }))
           }
-          placeholder='Priority'
+          placeholder='Пріоритет'
         />
       </div>
 
@@ -103,7 +103,7 @@ export function IssueFilters({
               usersIds: selected,
             }))
           }
-          placeholder='Assignee'
+          placeholder='Відповідальний'
         />
       </div>
 
@@ -117,7 +117,7 @@ export function IssueFilters({
           onClick={clearAllFilters}
           className='h-8'
         >
-          Clear all
+          Очистити все
         </Button>
       )}
     </div>

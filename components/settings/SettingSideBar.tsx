@@ -12,21 +12,21 @@ export default async function SettingSideBar({
         <div className='space-y-1'>
           <ScrollArea className='lg:h-screen'>
             <h2 className='mb-2 px-4 text-lg font-semibold tracking-tight'>
-              Workspace
+              Робочий простір
             </h2>
             <SidebarButton
-              label='General'
+              label='Загальне'
               href={`/workspace/${workspaceId}/settings/general`}
             />
             <SidebarButton
-              label='Members'
+              label='Учасники'
               href={`/workspace/${workspaceId}/settings/members`}
             />
             <h2 className='mb-2 px-4 text-lg font-semibold tracking-tight'>
-              My Account
+              Мій обліковий запис
             </h2>
             <SidebarButton
-              label='Profile'
+              label='Профіль'
               href={`/workspace/${workspaceId}/settings/profile`}
             />
           </ScrollArea>

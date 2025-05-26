@@ -29,6 +29,7 @@ import {
 } from '../ui/dropdown-menu';
 import CommentCreateForm from './CommentCreateForm';
 import CommentEditForm from './CommentEditForm';
+import { uk } from 'date-fns/locale';
 
 export default function CommentItem({
   comment,
@@ -65,6 +66,7 @@ export default function CommentItem({
             <span className='text-xs text-muted-foreground'>
               {formatDistanceToNow(new Date(comment.createdAt), {
                 addSuffix: true,
+                locale: uk,
               })}
             </span>
             {comment.isEdited && (

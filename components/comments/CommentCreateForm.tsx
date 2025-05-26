@@ -35,9 +35,9 @@ export default function CommentCreateForm({
   async function onSubmit(data: Comment) {
     const action = createComment(data);
     toast.promise(action, {
-      loading: 'Creating comment...',
-      success: 'Comment created',
-      error: 'Error creating comment',
+      loading: 'Створення коментаря...',
+      success: 'Коментар створено!',
+      error: 'Не вдалося створити коментар',
     });
     await action;
 

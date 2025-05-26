@@ -49,9 +49,9 @@ export default function WikiSidebar(
 
     const action = updateGithubWikiRemoteFile(selectedWiki.id, html);
     toast.promise(action, {
-      loading: 'Syncing wiki page...',
-      success: 'Wiki page synced!',
-      error: 'Failed to sync wiki page',
+      loading: 'Синхронізація сторінки вікі...',
+      success: 'Сторінка вікі синхронізована!',
+      error: 'Не вдалося синхронізувати сторінку вікі',
     });
     await action;
 
@@ -67,9 +67,9 @@ export default function WikiSidebar(
     setIsSyncing(true);
     const action = deleteGithubWikiRemoteFile(selectedWiki.id);
     toast.promise(action, {
-      loading: 'Deleting wiki page...',
-      success: 'Wiki page deleted!',
-      error: 'Failed to delete wiki page',
+      loading: 'Видалення сторінки вікі...',
+      success: 'Сторінка вікі видалена!',
+      error: 'Не вдалося видалити сторінку вікі',
     });
     await action;
 

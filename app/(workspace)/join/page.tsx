@@ -14,7 +14,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Join to workspace',
+  title: 'Приєднатися до робочого простору',
 };
 
 export default async function JoinPage() {
@@ -40,7 +40,7 @@ export default async function JoinPage() {
   return (
     <Card className='max-w-lg mx-auto'>
       <CardHeader>
-        <CardTitle>You have access to these workspaces</CardTitle>
+        <CardTitle>Ви маєте доступ до цих робочих просторів</CardTitle>
       </CardHeader>
       <CardContent>
         <ul className='space-y-2'>
@@ -62,7 +62,8 @@ export default async function JoinPage() {
                     {invite.workspace?.name}
                   </p>
                   <p className='text-sm text-muted-foreground'>
-                    {membersCount} {membersCount === 1 ? 'member' : 'members'}
+                    {membersCount}{' '}
+                    {membersCount === 1 ? 'учасник' : 'учасників'}
                   </p>
                 </div>
                 <JoinWorkspaceButton inviteId={invite.id} />
@@ -73,7 +74,7 @@ export default async function JoinPage() {
       </CardContent>
       <CardFooter className='flex justify-between'>
         <Button variant='outline' className='w-full' asChild>
-          <Link href='/create'>Create new workspace</Link>
+          <Link href='/create'>Створити новий робочий простір</Link>
         </Button>
       </CardFooter>
     </Card>

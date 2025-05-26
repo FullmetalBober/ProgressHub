@@ -29,9 +29,9 @@ export default function WorkspaceCreateForm() {
   async function submitHandler(data: Workspace) {
     const action = createWorkspace(data);
     toast.promise(action, {
-      loading: 'Creating workspace...',
-      success: 'Workspace created successfully',
-      error: 'Failed to create workspace',
+      loading: 'Створення робочого простору...',
+      success: 'Робочий простір створено',
+      error: 'Не вдалося створити робочий простір',
     });
     const res = await action;
 
@@ -48,14 +48,17 @@ export default function WorkspaceCreateForm() {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder='Enter workspace name' {...field} />
+                <Input
+                  placeholder='Введіть назву робочого простору'
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
         <Button type='submit' disabled={isFormDisabled} className='w-full'>
-          Create workspace
+          Створити робочий простір
         </Button>
       </form>
     </Form>

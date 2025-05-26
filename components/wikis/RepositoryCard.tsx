@@ -29,12 +29,12 @@ export default function RepositoryCard(
             {isPrivate ? (
               <Badge variant='outline' className='gap-1'>
                 <LockIcon className='h-3 w-3' />
-                <span className='text-xs'>Private</span>
+                <span className='text-xs'>Приватний</span>
               </Badge>
             ) : (
               <Badge variant='outline' className='gap-1'>
                 <GlobeIcon className='h-3 w-3' />
-                <span className='text-xs'>Public</span>
+                <span className='text-xs'>Публічний</span>
               </Badge>
             )}
           </div>

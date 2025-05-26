@@ -43,7 +43,7 @@ const columns = (
 ): ColumnDef<tableRow>[] => [
   {
     accessorKey: 'user',
-    header: 'Name',
+    header: 'Ім’я',
     cell: ({ row }) => {
       const user: User = row.getValue('user');
 
@@ -71,7 +71,7 @@ const columns = (
   },
   {
     accessorKey: 'role',
-    header: 'Status',
+    header: 'Роль',
     cell: ({ row }) => {
       const status = statusesWorkspaceMember.find(
         status => status.value === row.getValue('role')
@@ -91,9 +91,9 @@ const columns = (
               role: value,
             });
             toast.promise(action, {
-              loading: 'Updating user role...',
-              success: 'User role updated successfully!',
-              error: 'Failed to update user role',
+              loading: 'Оновлення ролі користувача...',
+              success: 'Роль користувача оновлено успішно!',
+              error: 'Не вдалося оновити роль користувача :(',
             });
             await action;
           }}
@@ -121,10 +121,10 @@ const columns = (
   },
   {
     accessorKey: 'createdAt',
-    header: 'Joined',
+    header: 'Приєднався',
     cell: ({ row }) => {
       const date = new Date(row.getValue('createdAt'));
-      return date.toLocaleDateString('en-GB', {
+      return date.toLocaleDateString('uk-UA', {
         month: 'short',
         year: 'numeric',
       });
@@ -147,27 +147,27 @@ const columns = (
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogTitle>Ви абсолютно впевнені?</AlertDialogTitle>
               <AlertDialogDescription>
-                This action will kick user{' '}
-                <span className='font-bold'>{row.original.user.name}</span> from
-                workspace.
+                Ця дія призведе до виключення користувача{' '}
+                <span className='font-bold'>{row.original.user.name}</span> з
+                робочого простору.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogCancel>Скасувати</AlertDialogCancel>
               <AlertDialogAction
                 onClick={async () => {
                   const action = deleteWorkspaceMember(row.original.id);
                   toast.promise(action, {
-                    loading: 'Kicking user from workspace...',
-                    success: 'User kicked successfully!',
-                    error: 'Failed to kick user',
+                    loading: 'Викидання користувача...',
+                    success: 'Користувача викинуто успішно!',
+                    error: 'Не вдалося викинути користувача :(',
                   });
                   await action;
                 }}
               >
-                Continue
+                Продовжити
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>

@@ -40,11 +40,7 @@ export default async function WorkspaceSettingPage(
     <div className='min-h-screen bg-black text-white p-8'>
       <div className='max-w-3xl mx-auto space-y-12'>
         <div>
-          <h1 className='text-2xl font-bold mb-2'>Members</h1>
-        </div>
-
-        <div>
-          <h2 className='text-xl font-semibold mb-4'>Members</h2>
+          <h2 className='text-xl font-semibold mb-4'>Учасники</h2>
           <WorkspaceMembersTable
             userId={userId}
             isOwner={isOwner}
@@ -55,7 +51,7 @@ export default async function WorkspaceSettingPage(
 
         {isOwnerOrAdmin && (
           <div className='space-y-4'>
-            <h2 className='text-xl font-semibold mb-4'>Invite</h2>
+            <h2 className='text-xl font-semibold mb-4'>Запрошення</h2>
             <WorkspaceInviteForm
               workspaceInvites={workspace.workspaceInvite.map(
                 ({ id, email }) => ({ id, email })

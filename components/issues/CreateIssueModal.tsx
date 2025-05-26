@@ -57,9 +57,9 @@ export default function CreateIssueModal({
   async function onSubmit(data: Issue) {
     const action = createIssue(data);
     toast.promise(action, {
-      loading: 'Creating issue...',
-      success: 'Issue created!',
-      error: 'Failed to create issue',
+      loading: 'Створення завдання...',
+      success: 'Завдання створено!',
+      error: 'Не вдалося створити завдання',
     });
     const res = await action;
 
@@ -80,9 +80,9 @@ export default function CreateIssueModal({
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
             <DialogHeader>
-              <DialogTitle>Create issue</DialogTitle>
+              <DialogTitle>Створити завдання</DialogTitle>
               <DialogDescription>
-                Create a new issue in the current workspace.
+                Створіть нову задачу в поточному робочому просторі.
               </DialogDescription>
             </DialogHeader>
             <FormField
@@ -91,7 +91,7 @@ export default function CreateIssueModal({
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder='Issue title' {...field} />
+                    <Input placeholder='Назва завдання' {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -106,7 +106,7 @@ export default function CreateIssueModal({
 
             <DialogFooter>
               <Button type='submit' disabled={isFormDisabled}>
-                Create issue
+                Створити завдання
               </Button>
             </DialogFooter>
           </form>

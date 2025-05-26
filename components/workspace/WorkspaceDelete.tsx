@@ -26,9 +26,9 @@ export default function WorkspaceDelete({
   const onDeleteWorkspace = async () => {
     const action = deleteWorkspace(workspaceId);
     toast.promise(action, {
-      loading: 'Deleting workspace...',
-      success: 'Workspace deleted successfully',
-      error: 'Failed to delete workspace',
+      loading: 'Видалення робочого простору...',
+      success: 'Робочий простір видалено',
+      error: 'Не вдалося видалити робочий простір',
     });
     await action;
 
@@ -38,20 +38,20 @@ export default function WorkspaceDelete({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant='destructive'>Delete this workspace</Button>
+        <Button variant='destructive'>Видалити цей робочий простір</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogTitle>Ви абсолютно впевнені?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            workspace and remove your data from our servers.
+            Цю дію неможливо скасувати. Це призведе до остаточного видалення
+            вашої робочої області та видалення ваших даних з наших серверів.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>Відмінити</AlertDialogCancel>
           <AlertDialogAction asChild onClick={onDeleteWorkspace}>
-            <Button variant='destructive'>Continue</Button>
+            <Button variant='destructive'>Продовжити</Button>
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

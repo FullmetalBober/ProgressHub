@@ -45,27 +45,27 @@ type TRoleWorkspaceMember = {
 const prioritiesIssue: TPriorityIssue[] = [
   {
     value: 'URGENT',
-    label: 'Urgent',
+    label: 'Терміново',
     icon: TriangleAlert,
   },
   {
     value: 'HIGH',
-    label: 'High',
+    label: 'Високий',
     icon: SignalHigh,
   },
   {
     value: 'MEDIUM',
-    label: 'Medium',
+    label: 'Середній',
     icon: SignalMedium,
   },
   {
     value: 'LOW',
-    label: 'Low',
+    label: 'Низький',
     icon: SignalLow,
   },
   {
     value: 'NO_PRIORITY',
-    label: 'No priority',
+    label: 'Без пріоритету',
     icon: Ellipsis,
   },
 ];
@@ -73,32 +73,32 @@ const prioritiesIssue: TPriorityIssue[] = [
 const statusesIssue: TStatusIssue[] = [
   {
     value: 'IN_REVIEW',
-    label: 'In Review',
+    label: 'У огляді',
     icon: CircleEllipsis,
   },
   {
     value: 'TODO',
-    label: 'Todo',
+    label: 'Тудушка',
     icon: Circle,
   },
   {
     value: 'IN_PROGRESS',
-    label: 'In Progress',
+    label: 'У процесі',
     icon: LoaderCircle,
   },
   {
     value: 'BACKLOG',
-    label: 'Backlog',
+    label: 'Беклог',
     icon: CircleDashed,
   },
   {
     value: 'DONE',
-    label: 'Done',
+    label: 'Виконано',
     icon: CheckCircle2,
   },
   {
     value: 'CANCELED',
-    label: 'Canceled',
+    label: 'Скасовано',
     icon: XCircle,
   },
 ];
@@ -106,30 +106,30 @@ const statusesIssue: TStatusIssue[] = [
 const statusesWorkspaceInvite: TStatusWorkspaceInvite[] = [
   {
     value: 'PENDING',
-    label: 'Pending',
+    label: 'Очікується',
   },
   {
     value: 'ACCEPTED',
-    label: 'Accepted',
+    label: 'Прийнято',
   },
   {
     value: 'DECLINED',
-    label: 'Declined',
+    label: 'Відхилено',
   },
 ];
 
 const statusesWorkspaceMember: TRoleWorkspaceMember[] = [
   {
     value: 'OWNER',
-    label: 'Owner',
+    label: 'Власник',
   },
   {
     value: 'ADMIN',
-    label: 'Admin',
+    label: 'Адмін',
   },
   {
     value: 'MEMBER',
-    label: 'Member',
+    label: 'Учасник',
   },
 ];
 
