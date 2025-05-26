@@ -21,7 +21,7 @@ export function JoinWorkspaceButton({ inviteId }: { inviteId: string }) {
 
   return (
     <Button disabled={loading} onClick={handleClick} variant='secondary'>
-      Join
+      Приєднатися
     </Button>
   );
 }

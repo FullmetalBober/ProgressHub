@@ -46,7 +46,7 @@ export default function WorkspaceInviteForm({
       WorkspaceInviteUncheckedCreateInputSchema.refine(
         data => !membersEmails.includes(data.email),
         {
-          message: 'User is already a member or has been invited',
+          message: 'Користувач вже є учасником або його запросили',
           path: ['email'],
         }
       )
