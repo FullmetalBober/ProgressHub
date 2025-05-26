@@ -13,21 +13,23 @@ export default function SystemCommentItem({
   const { author } = comment;
 
   return (
-    <div className='flex gap-3 items-center'>
+    <div className='flex gap-3 items-start'>
       <CustomAvatar
         className='h-5 w-5'
         src={author?.image}
         name={author?.name}
       />
-      <span className='font-medium text-sm'>
-        {author?.name} {comment.body}
-      </span>
-      <span className='text-xs text-muted-foreground'>
-        {formatDistanceToNow(new Date(comment.updatedAt), {
-          addSuffix: true,
-          locale: uk,
-        })}
-      </span>
+      <div className='flex-1 min-w-0'>
+        <span className='font-medium text-sm break-words'>
+          {author?.name} {comment.body}
+        </span>
+        <div className='text-xs text-muted-foreground mt-1'>
+          {formatDistanceToNow(new Date(comment.updatedAt), {
+            addSuffix: true,
+            locale: uk,
+          })}
+        </div>
+      </div>
     </div>
   );
 }
