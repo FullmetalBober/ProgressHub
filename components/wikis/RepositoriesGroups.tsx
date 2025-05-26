@@ -24,21 +24,30 @@ export default function RepositoriesGroups(
 
   return (
     <main className='container px-4 py-8'>
-      <div className='mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
-        <div className='w-full sm:w-[300px] md:w-[400px]'>
-          <RepositorySearch onSearch={handleSearch} />
+      {props.accounts.length === 0 && (
+        <div className='text-muted-foreground'>
+          <p>Репозиторії не знайдено.</p>
+          <p>Додайте GitHub App налаштуваннях для відображення репозиторіїв.</p>
         </div>
-      </div>
-
-      <div className='space-y-8'>
-        {discoveredRepos.map(group => (
-          <RepositoryGroupComponent
-            key={group.id}
-            group={group}
-            defaultOpen={true}
-          />
-        ))}
-      </div>
+      )}
+      {props.accounts.length !== 0 && (
+        <>
+          <div className='mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
+            <div className='w-full sm:w-[300px] md:w-[400px]'>
+              <RepositorySearch onSearch={handleSearch} />
+            </div>
+          </div>
+          <div className='space-y-8'>
+            {discoveredRepos.map(group => (
+              <RepositoryGroupComponent
+                key={group.id}
+                group={group}
+                defaultOpen={true}
+              />
+            ))}
+          </div>
+        </>
+      )}
     </main>
   );
 }

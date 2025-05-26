@@ -3,7 +3,7 @@ import prisma from '@/lib/db/index';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Issues',
+  title: 'Список завдань',
 };
 
 export default async function DashboardPage(

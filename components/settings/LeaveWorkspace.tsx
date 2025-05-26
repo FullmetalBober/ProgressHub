@@ -17,9 +17,9 @@ export default function LeaveWorkspace() {
     setIsLeaving(true);
     const action = leaveWorkspace(params.workspaceId);
     toast.promise(action, {
-      loading: 'Leaving workspace...',
-      success: 'You have left the workspace.',
-      error: 'Failed to leave workspace. Please try again.',
+      loading: 'Ви покидаєте робочий простір...',
+      success: 'Ви успішно покинули робочий простір!',
+      error: 'Не вдалося покинути робочий простір :(',
     });
     await action;
     setIsLeaving(false);
@@ -32,7 +32,7 @@ export default function LeaveWorkspace() {
       onClick={handleLeaveWorkspace}
       disabled={isLeaving}
     >
-      Leave Workspace
+      Вийти з робочого простору
     </Button>
   );
 }

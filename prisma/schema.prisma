@@ -19,9 +19,9 @@ datasource db {
 /// @zod.strip()
 model User {
   id                    String                  @id @default(cuid())
-  /// @zod.string.trim().min(1).max(255)
+  /// @zod.string.trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б 1 символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" })
   name                  String
-  /// @zod.string.trim().min(1).max(255)
+  /// @zod.string.trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б 1 символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" })
   email                 String                  @unique
   emailVerified         DateTime?
   image                 String?
@@ -82,7 +82,7 @@ model VerificationToken {
 /// @zod.strip()
 model Workspace {
   id                    String                  @id @default(cuid())
-  /// @zod.string.trim().min(1).max(255)
+  /// @zod.string.trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б 1 символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" })
   name                  String
   image                 String?
   issueCount            Int                     @default(0)
@@ -120,7 +120,7 @@ enum WorkspaceInviteStatus {
 /// @zod.strip()
 model WorkspaceInvite {
   id          String                @id @default(cuid())
-  /// @zod.string.email().trim().max(255)
+  /// @zod.string.trim().email({ message: 'Ви впевнені, що email вірний?' }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" })
   email       String
   workspaceId String
   workspace   Workspace             @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
@@ -153,7 +153,7 @@ enum IssuePriority {
 model Issue {
   id            String         @id @default(cuid())
   identifier    Int
-  /// @zod.string.trim().min(1).max(255)
+  /// @zod.string.trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б 1 символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" })
   title         String
   description   Bytes?
   status        IssueStatus    @default(BACKLOG)
@@ -173,7 +173,7 @@ model Issue {
 /// @zod.strip()
 model Comment {
   id        String    @id @default(cuid())
-  /// @zod.string.trim().min(1).max(1000)
+  /// @zod.string.trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б 1 символ" }).max(4500, { message: "Надто багато! Поле мусить мати не більше 4500 символів" })
   body      String
   isEdited  Boolean   @default(false)
   issueId   String
@@ -203,9 +203,9 @@ model GithubAppInstallation {
 /// @zod.strip()
 model GithubWikiFile {
   id                 String                @id @default(cuid())
-  /// @zod.string.trim().min(1).max(255)
+  /// @zod.string.trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б 1 символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" })
   path               String
-  /// @zod.string.trim().min(1).max(255)
+  /// @zod.string.trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б 1 символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" })
   previousPath       String?
   installationId     Int
   installation       GithubAppInstallation @relation(fields: [installationId], references: [id], onDelete: Cascade)
@@ -221,7 +221,7 @@ model GithubWikiFile {
 /// @zod.strip()
 model Notification {
   id          String   @id @default(cuid())
-  /// @zod.string.trim().min(1).max(1000)
+  /// @zod.string.trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б 1 символ" }).max(500, { message: "Надто багато! Поле мусить мати не більше 500 символів" })
   message     String
   issueId     String?
   issue       Issue?   @relation(fields: [issueId], references: [id], onDelete: Cascade)

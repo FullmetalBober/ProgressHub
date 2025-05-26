@@ -36,8 +36,8 @@ export default function CommentEditForm({
     const action = updateComment(commentId, data);
     toast.promise(action, {
       loading: 'Оновлення коментаря...',
-      success: 'Коментар оновлено',
-      error: 'Помилка при оновленні коментаря',
+      success: 'Коментар оновлено!',
+      error: 'Не вдалося оновити коментар',
     });
     await action;
 

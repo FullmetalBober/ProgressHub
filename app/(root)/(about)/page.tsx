@@ -1,5 +1,3 @@
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -20,11 +18,11 @@ export default async function Home() {
           <div className='flex flex-col items-center justify-center space-y-4'>
             <div className='space-y-2'>
               <h1 className='text-3xl font-bold tracking-tighter sm:text-5xl'>
-                The modern issue tracking platform for teams
+                Сучасна платформа для управління проєктами
               </h1>
               <p className='md:leading-paragraph/loose max-w-[600px] text-gray-500 dark:text-gray-400 md:text-xl lg:text-2xl xl:text-3xl'>
-                ProgressHub makes it easy to track issues, collaborate with your
-                team, and keep projects moving forward.
+                ProgressHub дозволяє легко відстежувати проблеми та
+                співпрацювати з вашою командою.
               </p>
             </div>
             <div className='flex flex-col gap-2 min-[400px]:flex-row'>
@@ -32,7 +30,7 @@ export default async function Home() {
                 className='inline-flex h-10 items-center justify-center rounded-md bg-gray-900 px-8 text-sm font-medium text-gray-50 shadow transition-colors hover:bg-gray-900/90 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus-visible:ring-gray-300'
                 href='/auth/login'
               >
-                Sign up for free
+                Зареєструватися безкоштовно
               </Link>
             </div>
           </div>
@@ -43,48 +41,22 @@ export default async function Home() {
           <div className='flex flex-col justify-center space-y-4'>
             <div className='space-y-2'>
               <h2 className='text-3xl font-bold tracking-tighter sm:text-4xl'>
-                Easy issue tracking
+                Легке відстеження проблем
               </h2>
               <p className='md:leading-paragraph/loose max-w-[500px] text-gray-500 dark:text-gray-400'>
-                ProgressHub&apos;s intuitive interface lets you create, update,
-                and prioritize issues with ease. Add comments, upload files, and
-                link related issues without leaving the platform.
+                Інтуїтивно зрозумілий інтерфейс ProgressHub дозволяє легко
+                створювати, оновлювати та визначати пріоритети проблем.
               </p>
             </div>
           </div>
           <div className='flex flex-col justify-center space-y-4'>
             <div className='space-y-2'>
               <h2 className='text-3xl font-bold tracking-tighter sm:text-4xl'>
-                Collaborate with your team
+                Співпрацюйте зі своєю командою
               </h2>
               <p className='md:leading-paragraph/loose max-w-[500px] text-gray-500 dark:text-gray-400'>
-                ProgressHub&apos;s collaboration features make it simple to work
-                together. Mention team members, assign tasks, and set due dates
-                to keep everyone on the same page.
-              </p>
-            </div>
-          </div>
-          <div className='flex flex-col justify-center space-y-4'>
-            <div className='space-y-2'>
-              <h2 className='text-3xl font-bold tracking-tighter sm:text-4xl'>
-                Powerful project management
-              </h2>
-              <p className='md:leading-paragraph/loose max-w-[500px] text-gray-500 dark:text-gray-400'>
-                ProgressHub integrates issue tracking with project management.
-                Create custom workflows, visualize progress with kanban boards,
-                and automate repetitive tasks with built-in workflows.
-              </p>
-            </div>
-          </div>
-          <div className='flex flex-col justify-center space-y-4'>
-            <div className='space-y-2'>
-              <h2 className='text-3xl font-bold tracking-tighter sm:text-4xl'>
-                Insights at a glance
-              </h2>
-              <p className='md:leading-paragraph/loose max-w-[500px] text-gray-500 dark:text-gray-400'>
-                ProgressHub&apos;s dashboard provides real-time insights into
-                your projects. Track progress, identify bottlenecks, and make
-                data-driven decisions to keep your team moving forward.
+                Функції співпраці ProgressHub спрощують спільну роботу.
+                Призначайте завдання, щоб усі були в курсі подій.
               </p>
             </div>
           </div>
@@ -95,11 +67,11 @@ export default async function Home() {
           <div className='flex flex-col justify-center space-y-4'>
             <div className='space-y-2'>
               <h2 className='text-3xl font-bold tracking-tighter sm:text-4xl'>
-                Trusted by teams of all sizes
+                Довіряють команди будь-якого розміру
               </h2>
               <p className='md:leading-paragraph/loose max-w-[600px] text-gray-500 dark:text-gray-400'>
-                Join the thousands of teams who trust ProgressHub for their
-                issue tracking and project management needs.
+                Приєднуйтесь до тисяч команд, які довіряють ProgressHub для
+                відстеження проблем та управління проєктами.
               </p>
             </div>
           </div>
@@ -119,14 +91,15 @@ export default async function Home() {
           <div className='flex flex-col justify-center space-y-4'>
             <div className='space-y-2'>
               <h2 className='text-3xl font-bold tracking-tighter sm:text-4xl'>
-                Simple. Intuitive. Powerful.
+                Простий. Інтуїтивний. Потужний.
               </h2>
               <p className='md:leading-paragraph/loose max-w-[600px] text-gray-500 dark:text-gray-400'>
-                ProgressHub is designed to help your team focus on what matters
-                — shipping great products. With its user-friendly interface,
-                seamless collaboration features, and integrated project
-                management tools, ProgressHub has everything you need to
-                streamline your workflow and deliver results.
+                ProgressHub розроблено, щоб допомогти вашій команді зосередитися
+                на тому, що важливо — на розробці чудових продуктів. Завдяки
+                зручному інтерфейсу, безперебійним функціям співпраці та
+                інтегрованим інструментам управління проєктами, ProgressHub має
+                все необхідне для оптимізації вашого робочого процесу та
+                досягнення результатів.
               </p>
             </div>
           </div>
@@ -138,27 +111,6 @@ export default async function Home() {
               src='/placeholder.svg'
               width='600'
             />
-          </div>
-        </div>
-      </section>
-      <section className='w-full py-12 lg:py-24 xl:py-32'>
-        <div className='container grid max-w-5xl gap-10 px-4 md:px-6'>
-          <div className='flex flex-col justify-center space-y-4'>
-            <div className='space-y-2'>
-              <h2 className='text-3xl font-bold tracking-tighter sm:text-4xl'>
-                Ready to supercharge your team&apos;s productivity?
-              </h2>
-              <p className='md:leading-paragraph/loose max-w-[600px] text-gray-500 dark:text-gray-400'>
-                Try ProgressHub&apos;s issue tracking and project management
-                platform for free. Sign up now and take the first step towards
-                smoother workflows, better collaboration, and more successful
-                projects.
-              </p>
-            </div>
-            <form className='flex flex-col gap-4 md:flex-row'>
-              <Input placeholder='Enter your email' required type='email' />
-              <Button type='submit'>Sign up for free</Button>
-            </form>
           </div>
         </div>
       </section>

@@ -35,7 +35,7 @@ export default function ImageUploader({
     if (file.size > maxSize) {
       setLoading(false);
       toast.error(
-        'File size exceeds the maximum limit of 14MB. Please choose a smaller file.'
+        'Розмір файлу перевищує максимальний ліміт у 14 МБ. Виберіть менший файл.'
       );
       return;
     }

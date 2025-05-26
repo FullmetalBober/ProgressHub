@@ -79,7 +79,7 @@ export function MultiSelect({
       </PopoverTrigger>
       <PopoverContent className='w-full p-0'>
         <Command>
-          <CommandInput placeholder='Search options...' className='h-9' />
+          <CommandInput placeholder='Пошук значень...' className='h-9' />
           <CommandList>
             <CommandEmpty>{emptyText}</CommandEmpty>
             <CommandGroup>

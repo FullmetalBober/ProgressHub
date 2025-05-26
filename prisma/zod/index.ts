@@ -68,8 +68,8 @@ export type IssuePriorityType = `${z.infer<typeof IssuePrioritySchema>}`
 
 export const UserSchema = z.object({
   id: z.string().cuid(),
-  name: z.string().trim().min(1).max(255),
-  email: z.string().trim().min(1).max(255),
+  name: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
+  email: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   emailVerified: z.coerce.date().nullable(),
   image: z.string().nullable(),
   createdAt: z.coerce.date(),
@@ -327,7 +327,7 @@ export type VerificationTokenPartial = z.infer<typeof VerificationTokenPartialSc
 
 export const WorkspaceSchema = z.object({
   id: z.string().cuid(),
-  name: z.string().trim().min(1).max(255),
+  name: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   image: z.string().nullable(),
   issueCount: z.number().int(),
 })
@@ -471,7 +471,7 @@ export const WorkspaceMemberWithPartialRelationsSchema: z.ZodType<WorkspaceMembe
 export const WorkspaceInviteSchema = z.object({
   status: WorkspaceInviteStatusSchema,
   id: z.string().cuid(),
-  email: z.string().email().trim().max(255),
+  email: z.string().trim().email({ message: 'Ви впевнені, що email вірний?' }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   workspaceId: z.string(),
   invitedById: z.string(),
   createdAt: z.coerce.date(),
@@ -537,7 +537,7 @@ export const IssueSchema = z.object({
   priority: IssuePrioritySchema,
   id: z.string().cuid(),
   identifier: z.number().int(),
-  title: z.string().trim().min(1).max(255),
+  title: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   description: z.instanceof(Buffer).nullable(),
   workspaceId: z.string(),
   assigneeId: z.string(),
@@ -616,7 +616,7 @@ export const IssueWithPartialRelationsSchema: z.ZodType<IssueWithPartialRelation
 
 export const CommentSchema = z.object({
   id: z.string().cuid(),
-  body: z.string().trim().min(1).max(1000),
+  body: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(4500, { message: "Надто багато! Поле мусить мати не більше 4500 символів" }),
   isEdited: z.boolean(),
   issueId: z.string(),
   isSystem: z.boolean(),
@@ -769,8 +769,8 @@ export const GithubAppInstallationWithPartialRelationsSchema: z.ZodType<GithubAp
 
 export const GithubWikiFileSchema = z.object({
   id: z.string().cuid(),
-  path: z.string().trim().min(1).max(255),
-  previousPath: z.string().trim().min(1).max(255).nullable(),
+  path: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
+  previousPath: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }).nullable(),
   installationId: z.number().int(),
   githubRepositoryId: z.number().int(),
   content: z.instanceof(Buffer).nullable(),
@@ -835,7 +835,7 @@ export const GithubWikiFileWithPartialRelationsSchema: z.ZodType<GithubWikiFileW
 
 export const NotificationSchema = z.object({
   id: z.string().cuid(),
-  message: z.string().trim().min(1).max(1000),
+  message: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(500, { message: "Надто багато! Поле мусить мати не більше 500 символів" }),
   issueId: z.string().nullable(),
   isRead: z.boolean(),
   isEmailSent: z.boolean(),
@@ -1327,22 +1327,22 @@ export const UserOrderByWithRelationInputSchema: z.ZodType<Prisma.UserOrderByWit
 export const UserWhereUniqueInputSchema: z.ZodType<Prisma.UserWhereUniqueInput> = z.union([
   z.object({
     id: z.string().cuid(),
-    email: z.string().trim().min(1).max(255)
+    email: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" })
   }),
   z.object({
     id: z.string().cuid(),
   }),
   z.object({
-    email: z.string().trim().min(1).max(255),
+    email: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   }),
 ])
 .and(z.object({
   id: z.string().cuid().optional(),
-  email: z.string().trim().min(1).max(255).optional(),
+  email: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }).optional(),
   AND: z.union([ z.lazy(() => UserWhereInputSchema),z.lazy(() => UserWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => UserWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => UserWhereInputSchema),z.lazy(() => UserWhereInputSchema).array() ]).optional(),
-  name: z.union([ z.lazy(() => StringFilterSchema),z.string().trim().min(1).max(255) ]).optional(),
+  name: z.union([ z.lazy(() => StringFilterSchema),z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }) ]).optional(),
   emailVerified: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
   image: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
@@ -1621,7 +1621,7 @@ export const WorkspaceWhereUniqueInputSchema: z.ZodType<Prisma.WorkspaceWhereUni
   AND: z.union([ z.lazy(() => WorkspaceWhereInputSchema),z.lazy(() => WorkspaceWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => WorkspaceWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => WorkspaceWhereInputSchema),z.lazy(() => WorkspaceWhereInputSchema).array() ]).optional(),
-  name: z.union([ z.lazy(() => StringFilterSchema),z.string().trim().min(1).max(255) ]).optional(),
+  name: z.union([ z.lazy(() => StringFilterSchema),z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }) ]).optional(),
   image: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   issueCount: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
   members: z.lazy(() => WorkspaceMemberListRelationFilterSchema).optional(),
@@ -1766,7 +1766,7 @@ export const WorkspaceInviteWhereUniqueInputSchema: z.ZodType<Prisma.WorkspaceIn
   AND: z.union([ z.lazy(() => WorkspaceInviteWhereInputSchema),z.lazy(() => WorkspaceInviteWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => WorkspaceInviteWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => WorkspaceInviteWhereInputSchema),z.lazy(() => WorkspaceInviteWhereInputSchema).array() ]).optional(),
-  email: z.union([ z.lazy(() => StringFilterSchema),z.string().email().trim().max(255) ]).optional(),
+  email: z.union([ z.lazy(() => StringFilterSchema),z.string().trim().email({ message: 'Ви впевнені, що email вірний?' }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }) ]).optional(),
   workspaceId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   invitedById: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   status: z.union([ z.lazy(() => EnumWorkspaceInviteStatusFilterSchema),z.lazy(() => WorkspaceInviteStatusSchema) ]).optional(),
@@ -1857,7 +1857,7 @@ export const IssueWhereUniqueInputSchema: z.ZodType<Prisma.IssueWhereUniqueInput
   OR: z.lazy(() => IssueWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => IssueWhereInputSchema),z.lazy(() => IssueWhereInputSchema).array() ]).optional(),
   identifier: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
-  title: z.union([ z.lazy(() => StringFilterSchema),z.string().trim().min(1).max(255) ]).optional(),
+  title: z.union([ z.lazy(() => StringFilterSchema),z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }) ]).optional(),
   description: z.union([ z.lazy(() => BytesNullableFilterSchema),z.instanceof(Buffer) ]).optional().nullable(),
   status: z.union([ z.lazy(() => EnumIssueStatusFilterSchema),z.lazy(() => IssueStatusSchema) ]).optional(),
   priority: z.union([ z.lazy(() => EnumIssuePriorityFilterSchema),z.lazy(() => IssuePrioritySchema) ]).optional(),
@@ -1948,7 +1948,7 @@ export const CommentWhereUniqueInputSchema: z.ZodType<Prisma.CommentWhereUniqueI
   AND: z.union([ z.lazy(() => CommentWhereInputSchema),z.lazy(() => CommentWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => CommentWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => CommentWhereInputSchema),z.lazy(() => CommentWhereInputSchema).array() ]).optional(),
-  body: z.union([ z.lazy(() => StringFilterSchema),z.string().trim().min(1).max(1000) ]).optional(),
+  body: z.union([ z.lazy(() => StringFilterSchema),z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(4500, { message: "Надто багато! Поле мусить мати не більше 4500 символів" }) ]).optional(),
   isEdited: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   issueId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   isSystem: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
@@ -2105,8 +2105,8 @@ export const GithubWikiFileWhereUniqueInputSchema: z.ZodType<Prisma.GithubWikiFi
   AND: z.union([ z.lazy(() => GithubWikiFileWhereInputSchema),z.lazy(() => GithubWikiFileWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => GithubWikiFileWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => GithubWikiFileWhereInputSchema),z.lazy(() => GithubWikiFileWhereInputSchema).array() ]).optional(),
-  path: z.union([ z.lazy(() => StringFilterSchema),z.string().trim().min(1).max(255) ]).optional(),
-  previousPath: z.union([ z.lazy(() => StringNullableFilterSchema),z.string().trim().min(1).max(255) ]).optional().nullable(),
+  path: z.union([ z.lazy(() => StringFilterSchema),z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }) ]).optional(),
+  previousPath: z.union([ z.lazy(() => StringNullableFilterSchema),z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }) ]).optional().nullable(),
   installationId: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
   githubRepositoryId: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
   content: z.union([ z.lazy(() => BytesNullableFilterSchema),z.instanceof(Buffer) ]).optional().nullable(),
@@ -2189,7 +2189,7 @@ export const NotificationWhereUniqueInputSchema: z.ZodType<Prisma.NotificationWh
   AND: z.union([ z.lazy(() => NotificationWhereInputSchema),z.lazy(() => NotificationWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => NotificationWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => NotificationWhereInputSchema),z.lazy(() => NotificationWhereInputSchema).array() ]).optional(),
-  message: z.union([ z.lazy(() => StringFilterSchema),z.string().trim().min(1).max(1000) ]).optional(),
+  message: z.union([ z.lazy(() => StringFilterSchema),z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(500, { message: "Надто багато! Поле мусить мати не більше 500 символів" }) ]).optional(),
   issueId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   isRead: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   isEmailSent: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
@@ -2234,8 +2234,8 @@ export const NotificationScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.
 
 export const UserCreateInputSchema: z.ZodType<Prisma.UserCreateInput> = z.object({
   id: z.string().cuid().optional(),
-  name: z.string().trim().min(1).max(255),
-  email: z.string().trim().min(1).max(255),
+  name: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
+  email: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   emailVerified: z.coerce.date().optional().nullable(),
   image: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
@@ -2252,8 +2252,8 @@ export const UserCreateInputSchema: z.ZodType<Prisma.UserCreateInput> = z.object
 
 export const UserUncheckedCreateInputSchema: z.ZodType<Prisma.UserUncheckedCreateInput> = z.object({
   id: z.string().cuid().optional(),
-  name: z.string().trim().min(1).max(255),
-  email: z.string().trim().min(1).max(255),
+  name: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
+  email: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   emailVerified: z.coerce.date().optional().nullable(),
   image: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
@@ -2270,8 +2270,8 @@ export const UserUncheckedCreateInputSchema: z.ZodType<Prisma.UserUncheckedCreat
 
 export const UserUpdateInputSchema: z.ZodType<Prisma.UserUpdateInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   emailVerified: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -2288,8 +2288,8 @@ export const UserUpdateInputSchema: z.ZodType<Prisma.UserUpdateInput> = z.object
 
 export const UserUncheckedUpdateInputSchema: z.ZodType<Prisma.UserUncheckedUpdateInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   emailVerified: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -2306,8 +2306,8 @@ export const UserUncheckedUpdateInputSchema: z.ZodType<Prisma.UserUncheckedUpdat
 
 export const UserCreateManyInputSchema: z.ZodType<Prisma.UserCreateManyInput> = z.object({
   id: z.string().cuid().optional(),
-  name: z.string().trim().min(1).max(255),
-  email: z.string().trim().min(1).max(255),
+  name: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
+  email: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   emailVerified: z.coerce.date().optional().nullable(),
   image: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
@@ -2316,8 +2316,8 @@ export const UserCreateManyInputSchema: z.ZodType<Prisma.UserCreateManyInput> = 
 
 export const UserUpdateManyMutationInputSchema: z.ZodType<Prisma.UserUpdateManyMutationInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   emailVerified: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -2326,8 +2326,8 @@ export const UserUpdateManyMutationInputSchema: z.ZodType<Prisma.UserUpdateManyM
 
 export const UserUncheckedUpdateManyInputSchema: z.ZodType<Prisma.UserUncheckedUpdateManyInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   emailVerified: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -2544,7 +2544,7 @@ export const VerificationTokenUncheckedUpdateManyInputSchema: z.ZodType<Prisma.V
 
 export const WorkspaceCreateInputSchema: z.ZodType<Prisma.WorkspaceCreateInput> = z.object({
   id: z.string().cuid().optional(),
-  name: z.string().trim().min(1).max(255),
+  name: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   image: z.string().optional().nullable(),
   issueCount: z.number().int().optional(),
   members: z.lazy(() => WorkspaceMemberCreateNestedManyWithoutWorkspaceInputSchema).optional(),
@@ -2555,7 +2555,7 @@ export const WorkspaceCreateInputSchema: z.ZodType<Prisma.WorkspaceCreateInput> 
 
 export const WorkspaceUncheckedCreateInputSchema: z.ZodType<Prisma.WorkspaceUncheckedCreateInput> = z.object({
   id: z.string().cuid().optional(),
-  name: z.string().trim().min(1).max(255),
+  name: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   image: z.string().optional().nullable(),
   issueCount: z.number().int().optional(),
   members: z.lazy(() => WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional(),
@@ -2566,7 +2566,7 @@ export const WorkspaceUncheckedCreateInputSchema: z.ZodType<Prisma.WorkspaceUnch
 
 export const WorkspaceUpdateInputSchema: z.ZodType<Prisma.WorkspaceUpdateInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   issueCount: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   members: z.lazy(() => WorkspaceMemberUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
@@ -2577,7 +2577,7 @@ export const WorkspaceUpdateInputSchema: z.ZodType<Prisma.WorkspaceUpdateInput> 
 
 export const WorkspaceUncheckedUpdateInputSchema: z.ZodType<Prisma.WorkspaceUncheckedUpdateInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   issueCount: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   members: z.lazy(() => WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
@@ -2588,21 +2588,21 @@ export const WorkspaceUncheckedUpdateInputSchema: z.ZodType<Prisma.WorkspaceUnch
 
 export const WorkspaceCreateManyInputSchema: z.ZodType<Prisma.WorkspaceCreateManyInput> = z.object({
   id: z.string().cuid().optional(),
-  name: z.string().trim().min(1).max(255),
+  name: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   image: z.string().optional().nullable(),
   issueCount: z.number().int().optional()
 }).strict() as z.ZodType<Prisma.WorkspaceCreateManyInput>;
 
 export const WorkspaceUpdateManyMutationInputSchema: z.ZodType<Prisma.WorkspaceUpdateManyMutationInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   issueCount: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.WorkspaceUpdateManyMutationInput>;
 
 export const WorkspaceUncheckedUpdateManyInputSchema: z.ZodType<Prisma.WorkspaceUncheckedUpdateManyInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   issueCount: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict() as z.ZodType<Prisma.WorkspaceUncheckedUpdateManyInput>;
@@ -2663,7 +2663,7 @@ export const WorkspaceMemberUncheckedUpdateManyInputSchema: z.ZodType<Prisma.Wor
 
 export const WorkspaceInviteCreateInputSchema: z.ZodType<Prisma.WorkspaceInviteCreateInput> = z.object({
   id: z.string().cuid().optional(),
-  email: z.string().email().trim().max(255),
+  email: z.string().trim().email({ message: 'Ви впевнені, що email вірний?' }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   invitedById: z.string(),
   status: z.lazy(() => WorkspaceInviteStatusSchema).optional(),
   createdAt: z.coerce.date().optional(),
@@ -2673,7 +2673,7 @@ export const WorkspaceInviteCreateInputSchema: z.ZodType<Prisma.WorkspaceInviteC
 
 export const WorkspaceInviteUncheckedCreateInputSchema: z.ZodType<Prisma.WorkspaceInviteUncheckedCreateInput> = z.object({
   id: z.string().cuid().optional(),
-  email: z.string().email().trim().max(255),
+  email: z.string().trim().email({ message: 'Ви впевнені, що email вірний?' }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   workspaceId: z.string(),
   invitedById: z.string(),
   status: z.lazy(() => WorkspaceInviteStatusSchema).optional(),
@@ -2683,7 +2683,7 @@ export const WorkspaceInviteUncheckedCreateInputSchema: z.ZodType<Prisma.Workspa
 
 export const WorkspaceInviteUpdateInputSchema: z.ZodType<Prisma.WorkspaceInviteUpdateInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string().email().trim().max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().trim().email({ message: 'Ви впевнені, що email вірний?' }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   invitedById: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   status: z.union([ z.lazy(() => WorkspaceInviteStatusSchema),z.lazy(() => EnumWorkspaceInviteStatusFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -2693,7 +2693,7 @@ export const WorkspaceInviteUpdateInputSchema: z.ZodType<Prisma.WorkspaceInviteU
 
 export const WorkspaceInviteUncheckedUpdateInputSchema: z.ZodType<Prisma.WorkspaceInviteUncheckedUpdateInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string().email().trim().max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().trim().email({ message: 'Ви впевнені, що email вірний?' }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   workspaceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   invitedById: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   status: z.union([ z.lazy(() => WorkspaceInviteStatusSchema),z.lazy(() => EnumWorkspaceInviteStatusFieldUpdateOperationsInputSchema) ]).optional(),
@@ -2703,7 +2703,7 @@ export const WorkspaceInviteUncheckedUpdateInputSchema: z.ZodType<Prisma.Workspa
 
 export const WorkspaceInviteCreateManyInputSchema: z.ZodType<Prisma.WorkspaceInviteCreateManyInput> = z.object({
   id: z.string().cuid().optional(),
-  email: z.string().email().trim().max(255),
+  email: z.string().trim().email({ message: 'Ви впевнені, що email вірний?' }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   workspaceId: z.string(),
   invitedById: z.string(),
   status: z.lazy(() => WorkspaceInviteStatusSchema).optional(),
@@ -2713,7 +2713,7 @@ export const WorkspaceInviteCreateManyInputSchema: z.ZodType<Prisma.WorkspaceInv
 
 export const WorkspaceInviteUpdateManyMutationInputSchema: z.ZodType<Prisma.WorkspaceInviteUpdateManyMutationInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string().email().trim().max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().trim().email({ message: 'Ви впевнені, що email вірний?' }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   invitedById: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   status: z.union([ z.lazy(() => WorkspaceInviteStatusSchema),z.lazy(() => EnumWorkspaceInviteStatusFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -2722,7 +2722,7 @@ export const WorkspaceInviteUpdateManyMutationInputSchema: z.ZodType<Prisma.Work
 
 export const WorkspaceInviteUncheckedUpdateManyInputSchema: z.ZodType<Prisma.WorkspaceInviteUncheckedUpdateManyInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string().email().trim().max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().trim().email({ message: 'Ви впевнені, що email вірний?' }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   workspaceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   invitedById: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   status: z.union([ z.lazy(() => WorkspaceInviteStatusSchema),z.lazy(() => EnumWorkspaceInviteStatusFieldUpdateOperationsInputSchema) ]).optional(),
@@ -2733,7 +2733,7 @@ export const WorkspaceInviteUncheckedUpdateManyInputSchema: z.ZodType<Prisma.Wor
 export const IssueCreateInputSchema: z.ZodType<Prisma.IssueCreateInput> = z.object({
   id: z.string().cuid().optional(),
   identifier: z.number().int(),
-  title: z.string().trim().min(1).max(255),
+  title: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   description: z.instanceof(Buffer).optional().nullable(),
   status: z.lazy(() => IssueStatusSchema).optional(),
   priority: z.lazy(() => IssuePrioritySchema).optional(),
@@ -2748,7 +2748,7 @@ export const IssueCreateInputSchema: z.ZodType<Prisma.IssueCreateInput> = z.obje
 export const IssueUncheckedCreateInputSchema: z.ZodType<Prisma.IssueUncheckedCreateInput> = z.object({
   id: z.string().cuid().optional(),
   identifier: z.number().int(),
-  title: z.string().trim().min(1).max(255),
+  title: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   description: z.instanceof(Buffer).optional().nullable(),
   status: z.lazy(() => IssueStatusSchema).optional(),
   priority: z.lazy(() => IssuePrioritySchema).optional(),
@@ -2763,7 +2763,7 @@ export const IssueUncheckedCreateInputSchema: z.ZodType<Prisma.IssueUncheckedCre
 export const IssueUpdateInputSchema: z.ZodType<Prisma.IssueUpdateInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  title: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => IssueStatusSchema),z.lazy(() => EnumIssueStatusFieldUpdateOperationsInputSchema) ]).optional(),
   priority: z.union([ z.lazy(() => IssuePrioritySchema),z.lazy(() => EnumIssuePriorityFieldUpdateOperationsInputSchema) ]).optional(),
@@ -2778,7 +2778,7 @@ export const IssueUpdateInputSchema: z.ZodType<Prisma.IssueUpdateInput> = z.obje
 export const IssueUncheckedUpdateInputSchema: z.ZodType<Prisma.IssueUncheckedUpdateInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  title: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => IssueStatusSchema),z.lazy(() => EnumIssueStatusFieldUpdateOperationsInputSchema) ]).optional(),
   priority: z.union([ z.lazy(() => IssuePrioritySchema),z.lazy(() => EnumIssuePriorityFieldUpdateOperationsInputSchema) ]).optional(),
@@ -2793,7 +2793,7 @@ export const IssueUncheckedUpdateInputSchema: z.ZodType<Prisma.IssueUncheckedUpd
 export const IssueCreateManyInputSchema: z.ZodType<Prisma.IssueCreateManyInput> = z.object({
   id: z.string().cuid().optional(),
   identifier: z.number().int(),
-  title: z.string().trim().min(1).max(255),
+  title: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   description: z.instanceof(Buffer).optional().nullable(),
   status: z.lazy(() => IssueStatusSchema).optional(),
   priority: z.lazy(() => IssuePrioritySchema).optional(),
@@ -2806,7 +2806,7 @@ export const IssueCreateManyInputSchema: z.ZodType<Prisma.IssueCreateManyInput> 
 export const IssueUpdateManyMutationInputSchema: z.ZodType<Prisma.IssueUpdateManyMutationInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  title: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => IssueStatusSchema),z.lazy(() => EnumIssueStatusFieldUpdateOperationsInputSchema) ]).optional(),
   priority: z.union([ z.lazy(() => IssuePrioritySchema),z.lazy(() => EnumIssuePriorityFieldUpdateOperationsInputSchema) ]).optional(),
@@ -2817,7 +2817,7 @@ export const IssueUpdateManyMutationInputSchema: z.ZodType<Prisma.IssueUpdateMan
 export const IssueUncheckedUpdateManyInputSchema: z.ZodType<Prisma.IssueUncheckedUpdateManyInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  title: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => IssueStatusSchema),z.lazy(() => EnumIssueStatusFieldUpdateOperationsInputSchema) ]).optional(),
   priority: z.union([ z.lazy(() => IssuePrioritySchema),z.lazy(() => EnumIssuePriorityFieldUpdateOperationsInputSchema) ]).optional(),
@@ -2829,7 +2829,7 @@ export const IssueUncheckedUpdateManyInputSchema: z.ZodType<Prisma.IssueUnchecke
 
 export const CommentCreateInputSchema: z.ZodType<Prisma.CommentCreateInput> = z.object({
   id: z.string().cuid().optional(),
-  body: z.string().trim().min(1).max(1000),
+  body: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(4500, { message: "Надто багато! Поле мусить мати не більше 4500 символів" }),
   isEdited: z.boolean().optional(),
   isSystem: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
@@ -2842,7 +2842,7 @@ export const CommentCreateInputSchema: z.ZodType<Prisma.CommentCreateInput> = z.
 
 export const CommentUncheckedCreateInputSchema: z.ZodType<Prisma.CommentUncheckedCreateInput> = z.object({
   id: z.string().cuid().optional(),
-  body: z.string().trim().min(1).max(1000),
+  body: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(4500, { message: "Надто багато! Поле мусить мати не більше 4500 символів" }),
   isEdited: z.boolean().optional(),
   issueId: z.string(),
   isSystem: z.boolean().optional(),
@@ -2855,7 +2855,7 @@ export const CommentUncheckedCreateInputSchema: z.ZodType<Prisma.CommentUnchecke
 
 export const CommentUpdateInputSchema: z.ZodType<Prisma.CommentUpdateInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  body: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  body: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(4500, { message: "Надто багато! Поле мусить мати не більше 4500 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isEdited: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isSystem: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -2868,7 +2868,7 @@ export const CommentUpdateInputSchema: z.ZodType<Prisma.CommentUpdateInput> = z.
 
 export const CommentUncheckedUpdateInputSchema: z.ZodType<Prisma.CommentUncheckedUpdateInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  body: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  body: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(4500, { message: "Надто багато! Поле мусить мати не більше 4500 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isEdited: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   issueId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isSystem: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
@@ -2881,7 +2881,7 @@ export const CommentUncheckedUpdateInputSchema: z.ZodType<Prisma.CommentUnchecke
 
 export const CommentCreateManyInputSchema: z.ZodType<Prisma.CommentCreateManyInput> = z.object({
   id: z.string().cuid().optional(),
-  body: z.string().trim().min(1).max(1000),
+  body: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(4500, { message: "Надто багато! Поле мусить мати не більше 4500 символів" }),
   isEdited: z.boolean().optional(),
   issueId: z.string(),
   isSystem: z.boolean().optional(),
@@ -2893,7 +2893,7 @@ export const CommentCreateManyInputSchema: z.ZodType<Prisma.CommentCreateManyInp
 
 export const CommentUpdateManyMutationInputSchema: z.ZodType<Prisma.CommentUpdateManyMutationInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  body: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  body: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(4500, { message: "Надто багато! Поле мусить мати не більше 4500 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isEdited: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isSystem: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -2902,7 +2902,7 @@ export const CommentUpdateManyMutationInputSchema: z.ZodType<Prisma.CommentUpdat
 
 export const CommentUncheckedUpdateManyInputSchema: z.ZodType<Prisma.CommentUncheckedUpdateManyInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  body: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  body: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(4500, { message: "Надто багато! Поле мусить мати не більше 4500 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isEdited: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   issueId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isSystem: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
@@ -2972,8 +2972,8 @@ export const GithubAppInstallationUncheckedUpdateManyInputSchema: z.ZodType<Pris
 
 export const GithubWikiFileCreateInputSchema: z.ZodType<Prisma.GithubWikiFileCreateInput> = z.object({
   id: z.string().cuid().optional(),
-  path: z.string().trim().min(1).max(255),
-  previousPath: z.string().trim().min(1).max(255).optional().nullable(),
+  path: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
+  previousPath: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }).optional().nullable(),
   githubRepositoryId: z.number().int(),
   content: z.instanceof(Buffer).optional().nullable(),
   isModified: z.boolean().optional(),
@@ -2984,8 +2984,8 @@ export const GithubWikiFileCreateInputSchema: z.ZodType<Prisma.GithubWikiFileCre
 
 export const GithubWikiFileUncheckedCreateInputSchema: z.ZodType<Prisma.GithubWikiFileUncheckedCreateInput> = z.object({
   id: z.string().cuid().optional(),
-  path: z.string().trim().min(1).max(255),
-  previousPath: z.string().trim().min(1).max(255).optional().nullable(),
+  path: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
+  previousPath: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }).optional().nullable(),
   installationId: z.number().int(),
   githubRepositoryId: z.number().int(),
   content: z.instanceof(Buffer).optional().nullable(),
@@ -2996,8 +2996,8 @@ export const GithubWikiFileUncheckedCreateInputSchema: z.ZodType<Prisma.GithubWi
 
 export const GithubWikiFileUpdateInputSchema: z.ZodType<Prisma.GithubWikiFileUpdateInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  path: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  previousPath: z.union([ z.string().trim().min(1).max(255),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  path: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  previousPath: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   githubRepositoryId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   content: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   isModified: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
@@ -3008,8 +3008,8 @@ export const GithubWikiFileUpdateInputSchema: z.ZodType<Prisma.GithubWikiFileUpd
 
 export const GithubWikiFileUncheckedUpdateInputSchema: z.ZodType<Prisma.GithubWikiFileUncheckedUpdateInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  path: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  previousPath: z.union([ z.string().trim().min(1).max(255),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  path: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  previousPath: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   installationId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   githubRepositoryId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   content: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -3020,8 +3020,8 @@ export const GithubWikiFileUncheckedUpdateInputSchema: z.ZodType<Prisma.GithubWi
 
 export const GithubWikiFileCreateManyInputSchema: z.ZodType<Prisma.GithubWikiFileCreateManyInput> = z.object({
   id: z.string().cuid().optional(),
-  path: z.string().trim().min(1).max(255),
-  previousPath: z.string().trim().min(1).max(255).optional().nullable(),
+  path: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
+  previousPath: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }).optional().nullable(),
   installationId: z.number().int(),
   githubRepositoryId: z.number().int(),
   content: z.instanceof(Buffer).optional().nullable(),
@@ -3032,8 +3032,8 @@ export const GithubWikiFileCreateManyInputSchema: z.ZodType<Prisma.GithubWikiFil
 
 export const GithubWikiFileUpdateManyMutationInputSchema: z.ZodType<Prisma.GithubWikiFileUpdateManyMutationInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  path: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  previousPath: z.union([ z.string().trim().min(1).max(255),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  path: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  previousPath: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   githubRepositoryId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   content: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   isModified: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
@@ -3043,8 +3043,8 @@ export const GithubWikiFileUpdateManyMutationInputSchema: z.ZodType<Prisma.Githu
 
 export const GithubWikiFileUncheckedUpdateManyInputSchema: z.ZodType<Prisma.GithubWikiFileUncheckedUpdateManyInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  path: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  previousPath: z.union([ z.string().trim().min(1).max(255),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  path: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  previousPath: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   installationId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   githubRepositoryId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   content: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -3055,7 +3055,7 @@ export const GithubWikiFileUncheckedUpdateManyInputSchema: z.ZodType<Prisma.Gith
 
 export const NotificationCreateInputSchema: z.ZodType<Prisma.NotificationCreateInput> = z.object({
   id: z.string().cuid().optional(),
-  message: z.string().trim().min(1).max(1000),
+  message: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(500, { message: "Надто багато! Поле мусить мати не більше 500 символів" }),
   isRead: z.boolean().optional(),
   isEmailSent: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
@@ -3067,7 +3067,7 @@ export const NotificationCreateInputSchema: z.ZodType<Prisma.NotificationCreateI
 
 export const NotificationUncheckedCreateInputSchema: z.ZodType<Prisma.NotificationUncheckedCreateInput> = z.object({
   id: z.string().cuid().optional(),
-  message: z.string().trim().min(1).max(1000),
+  message: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(500, { message: "Надто багато! Поле мусить мати не більше 500 символів" }),
   issueId: z.string().optional().nullable(),
   isRead: z.boolean().optional(),
   isEmailSent: z.boolean().optional(),
@@ -3079,7 +3079,7 @@ export const NotificationUncheckedCreateInputSchema: z.ZodType<Prisma.Notificati
 
 export const NotificationUpdateInputSchema: z.ZodType<Prisma.NotificationUpdateInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  message: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  message: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(500, { message: "Надто багато! Поле мусить мати не більше 500 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isRead: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isEmailSent: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -3091,7 +3091,7 @@ export const NotificationUpdateInputSchema: z.ZodType<Prisma.NotificationUpdateI
 
 export const NotificationUncheckedUpdateInputSchema: z.ZodType<Prisma.NotificationUncheckedUpdateInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  message: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  message: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(500, { message: "Надто багато! Поле мусить мати не більше 500 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   issueId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   isRead: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isEmailSent: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
@@ -3103,7 +3103,7 @@ export const NotificationUncheckedUpdateInputSchema: z.ZodType<Prisma.Notificati
 
 export const NotificationCreateManyInputSchema: z.ZodType<Prisma.NotificationCreateManyInput> = z.object({
   id: z.string().cuid().optional(),
-  message: z.string().trim().min(1).max(1000),
+  message: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(500, { message: "Надто багато! Поле мусить мати не більше 500 символів" }),
   issueId: z.string().optional().nullable(),
   isRead: z.boolean().optional(),
   isEmailSent: z.boolean().optional(),
@@ -3115,7 +3115,7 @@ export const NotificationCreateManyInputSchema: z.ZodType<Prisma.NotificationCre
 
 export const NotificationUpdateManyMutationInputSchema: z.ZodType<Prisma.NotificationUpdateManyMutationInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  message: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  message: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(500, { message: "Надто багато! Поле мусить мати не більше 500 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isRead: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isEmailSent: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -3124,7 +3124,7 @@ export const NotificationUpdateManyMutationInputSchema: z.ZodType<Prisma.Notific
 
 export const NotificationUncheckedUpdateManyInputSchema: z.ZodType<Prisma.NotificationUncheckedUpdateManyInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  message: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  message: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(500, { message: "Надто багато! Поле мусить мати не більше 500 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   issueId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   isRead: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isEmailSent: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
@@ -5305,7 +5305,7 @@ export const WorkspaceMemberCreateManyUserInputEnvelopeSchema: z.ZodType<Prisma.
 export const IssueCreateWithoutAssigneeInputSchema: z.ZodType<Prisma.IssueCreateWithoutAssigneeInput> = z.object({
   id: z.string().cuid().optional(),
   identifier: z.number().int(),
-  title: z.string().trim().min(1).max(255),
+  title: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   description: z.instanceof(Buffer).optional().nullable(),
   status: z.lazy(() => IssueStatusSchema).optional(),
   priority: z.lazy(() => IssuePrioritySchema).optional(),
@@ -5319,7 +5319,7 @@ export const IssueCreateWithoutAssigneeInputSchema: z.ZodType<Prisma.IssueCreate
 export const IssueUncheckedCreateWithoutAssigneeInputSchema: z.ZodType<Prisma.IssueUncheckedCreateWithoutAssigneeInput> = z.object({
   id: z.string().cuid().optional(),
   identifier: z.number().int(),
-  title: z.string().trim().min(1).max(255),
+  title: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   description: z.instanceof(Buffer).optional().nullable(),
   status: z.lazy(() => IssueStatusSchema).optional(),
   priority: z.lazy(() => IssuePrioritySchema).optional(),
@@ -5342,7 +5342,7 @@ export const IssueCreateManyAssigneeInputEnvelopeSchema: z.ZodType<Prisma.IssueC
 
 export const CommentCreateWithoutAuthorInputSchema: z.ZodType<Prisma.CommentCreateWithoutAuthorInput> = z.object({
   id: z.string().cuid().optional(),
-  body: z.string().trim().min(1).max(1000),
+  body: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(4500, { message: "Надто багато! Поле мусить мати не більше 4500 символів" }),
   isEdited: z.boolean().optional(),
   isSystem: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
@@ -5354,7 +5354,7 @@ export const CommentCreateWithoutAuthorInputSchema: z.ZodType<Prisma.CommentCrea
 
 export const CommentUncheckedCreateWithoutAuthorInputSchema: z.ZodType<Prisma.CommentUncheckedCreateWithoutAuthorInput> = z.object({
   id: z.string().cuid().optional(),
-  body: z.string().trim().min(1).max(1000),
+  body: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(4500, { message: "Надто багато! Поле мусить мати не більше 4500 символів" }),
   isEdited: z.boolean().optional(),
   issueId: z.string(),
   isSystem: z.boolean().optional(),
@@ -5402,7 +5402,7 @@ export const GithubAppInstallationCreateManyCreatedByInputEnvelopeSchema: z.ZodT
 
 export const NotificationCreateWithoutRecipientInputSchema: z.ZodType<Prisma.NotificationCreateWithoutRecipientInput> = z.object({
   id: z.string().cuid().optional(),
-  message: z.string().trim().min(1).max(1000),
+  message: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(500, { message: "Надто багато! Поле мусить мати не більше 500 символів" }),
   isRead: z.boolean().optional(),
   isEmailSent: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
@@ -5413,7 +5413,7 @@ export const NotificationCreateWithoutRecipientInputSchema: z.ZodType<Prisma.Not
 
 export const NotificationUncheckedCreateWithoutRecipientInputSchema: z.ZodType<Prisma.NotificationUncheckedCreateWithoutRecipientInput> = z.object({
   id: z.string().cuid().optional(),
-  message: z.string().trim().min(1).max(1000),
+  message: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(500, { message: "Надто багато! Поле мусить мати не більше 500 символів" }),
   issueId: z.string().optional().nullable(),
   isRead: z.boolean().optional(),
   isEmailSent: z.boolean().optional(),
@@ -5434,7 +5434,7 @@ export const NotificationCreateManyRecipientInputEnvelopeSchema: z.ZodType<Prism
 
 export const NotificationCreateWithoutSenderInputSchema: z.ZodType<Prisma.NotificationCreateWithoutSenderInput> = z.object({
   id: z.string().cuid().optional(),
-  message: z.string().trim().min(1).max(1000),
+  message: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(500, { message: "Надто багато! Поле мусить мати не більше 500 символів" }),
   isRead: z.boolean().optional(),
   isEmailSent: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
@@ -5445,7 +5445,7 @@ export const NotificationCreateWithoutSenderInputSchema: z.ZodType<Prisma.Notifi
 
 export const NotificationUncheckedCreateWithoutSenderInputSchema: z.ZodType<Prisma.NotificationUncheckedCreateWithoutSenderInput> = z.object({
   id: z.string().cuid().optional(),
-  message: z.string().trim().min(1).max(1000),
+  message: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(500, { message: "Надто багато! Поле мусить мати не більше 500 символів" }),
   issueId: z.string().optional().nullable(),
   isRead: z.boolean().optional(),
   isEmailSent: z.boolean().optional(),
@@ -5692,8 +5692,8 @@ export const NotificationUpdateManyWithWhereWithoutSenderInputSchema: z.ZodType<
 
 export const UserCreateWithoutAccountsInputSchema: z.ZodType<Prisma.UserCreateWithoutAccountsInput> = z.object({
   id: z.string().cuid().optional(),
-  name: z.string().trim().min(1).max(255),
-  email: z.string().trim().min(1).max(255),
+  name: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
+  email: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   emailVerified: z.coerce.date().optional().nullable(),
   image: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
@@ -5709,8 +5709,8 @@ export const UserCreateWithoutAccountsInputSchema: z.ZodType<Prisma.UserCreateWi
 
 export const UserUncheckedCreateWithoutAccountsInputSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutAccountsInput> = z.object({
   id: z.string().cuid().optional(),
-  name: z.string().trim().min(1).max(255),
-  email: z.string().trim().min(1).max(255),
+  name: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
+  email: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   emailVerified: z.coerce.date().optional().nullable(),
   image: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
@@ -5742,8 +5742,8 @@ export const UserUpdateToOneWithWhereWithoutAccountsInputSchema: z.ZodType<Prism
 
 export const UserUpdateWithoutAccountsInputSchema: z.ZodType<Prisma.UserUpdateWithoutAccountsInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   emailVerified: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -5759,8 +5759,8 @@ export const UserUpdateWithoutAccountsInputSchema: z.ZodType<Prisma.UserUpdateWi
 
 export const UserUncheckedUpdateWithoutAccountsInputSchema: z.ZodType<Prisma.UserUncheckedUpdateWithoutAccountsInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   emailVerified: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -5776,8 +5776,8 @@ export const UserUncheckedUpdateWithoutAccountsInputSchema: z.ZodType<Prisma.Use
 
 export const UserCreateWithoutSessionsInputSchema: z.ZodType<Prisma.UserCreateWithoutSessionsInput> = z.object({
   id: z.string().cuid().optional(),
-  name: z.string().trim().min(1).max(255),
-  email: z.string().trim().min(1).max(255),
+  name: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
+  email: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   emailVerified: z.coerce.date().optional().nullable(),
   image: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
@@ -5793,8 +5793,8 @@ export const UserCreateWithoutSessionsInputSchema: z.ZodType<Prisma.UserCreateWi
 
 export const UserUncheckedCreateWithoutSessionsInputSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutSessionsInput> = z.object({
   id: z.string().cuid().optional(),
-  name: z.string().trim().min(1).max(255),
-  email: z.string().trim().min(1).max(255),
+  name: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
+  email: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   emailVerified: z.coerce.date().optional().nullable(),
   image: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
@@ -5826,8 +5826,8 @@ export const UserUpdateToOneWithWhereWithoutSessionsInputSchema: z.ZodType<Prism
 
 export const UserUpdateWithoutSessionsInputSchema: z.ZodType<Prisma.UserUpdateWithoutSessionsInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   emailVerified: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -5843,8 +5843,8 @@ export const UserUpdateWithoutSessionsInputSchema: z.ZodType<Prisma.UserUpdateWi
 
 export const UserUncheckedUpdateWithoutSessionsInputSchema: z.ZodType<Prisma.UserUncheckedUpdateWithoutSessionsInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   emailVerified: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -5885,7 +5885,7 @@ export const WorkspaceMemberCreateManyWorkspaceInputEnvelopeSchema: z.ZodType<Pr
 export const IssueCreateWithoutWorkspaceInputSchema: z.ZodType<Prisma.IssueCreateWithoutWorkspaceInput> = z.object({
   id: z.string().cuid().optional(),
   identifier: z.number().int(),
-  title: z.string().trim().min(1).max(255),
+  title: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   description: z.instanceof(Buffer).optional().nullable(),
   status: z.lazy(() => IssueStatusSchema).optional(),
   priority: z.lazy(() => IssuePrioritySchema).optional(),
@@ -5899,7 +5899,7 @@ export const IssueCreateWithoutWorkspaceInputSchema: z.ZodType<Prisma.IssueCreat
 export const IssueUncheckedCreateWithoutWorkspaceInputSchema: z.ZodType<Prisma.IssueUncheckedCreateWithoutWorkspaceInput> = z.object({
   id: z.string().cuid().optional(),
   identifier: z.number().int(),
-  title: z.string().trim().min(1).max(255),
+  title: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   description: z.instanceof(Buffer).optional().nullable(),
   status: z.lazy(() => IssueStatusSchema).optional(),
   priority: z.lazy(() => IssuePrioritySchema).optional(),
@@ -5922,7 +5922,7 @@ export const IssueCreateManyWorkspaceInputEnvelopeSchema: z.ZodType<Prisma.Issue
 
 export const WorkspaceInviteCreateWithoutWorkspaceInputSchema: z.ZodType<Prisma.WorkspaceInviteCreateWithoutWorkspaceInput> = z.object({
   id: z.string().cuid().optional(),
-  email: z.string().email().trim().max(255),
+  email: z.string().trim().email({ message: 'Ви впевнені, що email вірний?' }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   invitedById: z.string(),
   status: z.lazy(() => WorkspaceInviteStatusSchema).optional(),
   createdAt: z.coerce.date().optional(),
@@ -5931,7 +5931,7 @@ export const WorkspaceInviteCreateWithoutWorkspaceInputSchema: z.ZodType<Prisma.
 
 export const WorkspaceInviteUncheckedCreateWithoutWorkspaceInputSchema: z.ZodType<Prisma.WorkspaceInviteUncheckedCreateWithoutWorkspaceInput> = z.object({
   id: z.string().cuid().optional(),
-  email: z.string().email().trim().max(255),
+  email: z.string().trim().email({ message: 'Ви впевнені, що email вірний?' }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   invitedById: z.string(),
   status: z.lazy(() => WorkspaceInviteStatusSchema).optional(),
   createdAt: z.coerce.date().optional(),
@@ -6053,8 +6053,8 @@ export const GithubAppInstallationUpdateManyWithWhereWithoutWorkspaceInputSchema
 
 export const UserCreateWithoutWorkspacesInputSchema: z.ZodType<Prisma.UserCreateWithoutWorkspacesInput> = z.object({
   id: z.string().cuid().optional(),
-  name: z.string().trim().min(1).max(255),
-  email: z.string().trim().min(1).max(255),
+  name: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
+  email: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   emailVerified: z.coerce.date().optional().nullable(),
   image: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
@@ -6070,8 +6070,8 @@ export const UserCreateWithoutWorkspacesInputSchema: z.ZodType<Prisma.UserCreate
 
 export const UserUncheckedCreateWithoutWorkspacesInputSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutWorkspacesInput> = z.object({
   id: z.string().cuid().optional(),
-  name: z.string().trim().min(1).max(255),
-  email: z.string().trim().min(1).max(255),
+  name: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
+  email: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   emailVerified: z.coerce.date().optional().nullable(),
   image: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
@@ -6092,7 +6092,7 @@ export const UserCreateOrConnectWithoutWorkspacesInputSchema: z.ZodType<Prisma.U
 
 export const WorkspaceCreateWithoutMembersInputSchema: z.ZodType<Prisma.WorkspaceCreateWithoutMembersInput> = z.object({
   id: z.string().cuid().optional(),
-  name: z.string().trim().min(1).max(255),
+  name: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   image: z.string().optional().nullable(),
   issueCount: z.number().int().optional(),
   issues: z.lazy(() => IssueCreateNestedManyWithoutWorkspaceInputSchema).optional(),
@@ -6102,7 +6102,7 @@ export const WorkspaceCreateWithoutMembersInputSchema: z.ZodType<Prisma.Workspac
 
 export const WorkspaceUncheckedCreateWithoutMembersInputSchema: z.ZodType<Prisma.WorkspaceUncheckedCreateWithoutMembersInput> = z.object({
   id: z.string().cuid().optional(),
-  name: z.string().trim().min(1).max(255),
+  name: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   image: z.string().optional().nullable(),
   issueCount: z.number().int().optional(),
   issues: z.lazy(() => IssueUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional(),
@@ -6128,8 +6128,8 @@ export const UserUpdateToOneWithWhereWithoutWorkspacesInputSchema: z.ZodType<Pri
 
 export const UserUpdateWithoutWorkspacesInputSchema: z.ZodType<Prisma.UserUpdateWithoutWorkspacesInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   emailVerified: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -6145,8 +6145,8 @@ export const UserUpdateWithoutWorkspacesInputSchema: z.ZodType<Prisma.UserUpdate
 
 export const UserUncheckedUpdateWithoutWorkspacesInputSchema: z.ZodType<Prisma.UserUncheckedUpdateWithoutWorkspacesInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   emailVerified: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -6173,7 +6173,7 @@ export const WorkspaceUpdateToOneWithWhereWithoutMembersInputSchema: z.ZodType<P
 
 export const WorkspaceUpdateWithoutMembersInputSchema: z.ZodType<Prisma.WorkspaceUpdateWithoutMembersInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   issueCount: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   issues: z.lazy(() => IssueUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
@@ -6183,7 +6183,7 @@ export const WorkspaceUpdateWithoutMembersInputSchema: z.ZodType<Prisma.Workspac
 
 export const WorkspaceUncheckedUpdateWithoutMembersInputSchema: z.ZodType<Prisma.WorkspaceUncheckedUpdateWithoutMembersInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   issueCount: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   issues: z.lazy(() => IssueUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
@@ -6193,7 +6193,7 @@ export const WorkspaceUncheckedUpdateWithoutMembersInputSchema: z.ZodType<Prisma
 
 export const WorkspaceCreateWithoutWorkspaceInviteInputSchema: z.ZodType<Prisma.WorkspaceCreateWithoutWorkspaceInviteInput> = z.object({
   id: z.string().cuid().optional(),
-  name: z.string().trim().min(1).max(255),
+  name: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   image: z.string().optional().nullable(),
   issueCount: z.number().int().optional(),
   members: z.lazy(() => WorkspaceMemberCreateNestedManyWithoutWorkspaceInputSchema).optional(),
@@ -6203,7 +6203,7 @@ export const WorkspaceCreateWithoutWorkspaceInviteInputSchema: z.ZodType<Prisma.
 
 export const WorkspaceUncheckedCreateWithoutWorkspaceInviteInputSchema: z.ZodType<Prisma.WorkspaceUncheckedCreateWithoutWorkspaceInviteInput> = z.object({
   id: z.string().cuid().optional(),
-  name: z.string().trim().min(1).max(255),
+  name: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   image: z.string().optional().nullable(),
   issueCount: z.number().int().optional(),
   members: z.lazy(() => WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional(),
@@ -6229,7 +6229,7 @@ export const WorkspaceUpdateToOneWithWhereWithoutWorkspaceInviteInputSchema: z.Z
 
 export const WorkspaceUpdateWithoutWorkspaceInviteInputSchema: z.ZodType<Prisma.WorkspaceUpdateWithoutWorkspaceInviteInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   issueCount: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   members: z.lazy(() => WorkspaceMemberUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
@@ -6239,7 +6239,7 @@ export const WorkspaceUpdateWithoutWorkspaceInviteInputSchema: z.ZodType<Prisma.
 
 export const WorkspaceUncheckedUpdateWithoutWorkspaceInviteInputSchema: z.ZodType<Prisma.WorkspaceUncheckedUpdateWithoutWorkspaceInviteInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   issueCount: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   members: z.lazy(() => WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
@@ -6249,7 +6249,7 @@ export const WorkspaceUncheckedUpdateWithoutWorkspaceInviteInputSchema: z.ZodTyp
 
 export const WorkspaceCreateWithoutIssuesInputSchema: z.ZodType<Prisma.WorkspaceCreateWithoutIssuesInput> = z.object({
   id: z.string().cuid().optional(),
-  name: z.string().trim().min(1).max(255),
+  name: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   image: z.string().optional().nullable(),
   issueCount: z.number().int().optional(),
   members: z.lazy(() => WorkspaceMemberCreateNestedManyWithoutWorkspaceInputSchema).optional(),
@@ -6259,7 +6259,7 @@ export const WorkspaceCreateWithoutIssuesInputSchema: z.ZodType<Prisma.Workspace
 
 export const WorkspaceUncheckedCreateWithoutIssuesInputSchema: z.ZodType<Prisma.WorkspaceUncheckedCreateWithoutIssuesInput> = z.object({
   id: z.string().cuid().optional(),
-  name: z.string().trim().min(1).max(255),
+  name: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   image: z.string().optional().nullable(),
   issueCount: z.number().int().optional(),
   members: z.lazy(() => WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional(),
@@ -6274,8 +6274,8 @@ export const WorkspaceCreateOrConnectWithoutIssuesInputSchema: z.ZodType<Prisma.
 
 export const UserCreateWithoutIssuesInputSchema: z.ZodType<Prisma.UserCreateWithoutIssuesInput> = z.object({
   id: z.string().cuid().optional(),
-  name: z.string().trim().min(1).max(255),
-  email: z.string().trim().min(1).max(255),
+  name: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
+  email: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   emailVerified: z.coerce.date().optional().nullable(),
   image: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
@@ -6291,8 +6291,8 @@ export const UserCreateWithoutIssuesInputSchema: z.ZodType<Prisma.UserCreateWith
 
 export const UserUncheckedCreateWithoutIssuesInputSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutIssuesInput> = z.object({
   id: z.string().cuid().optional(),
-  name: z.string().trim().min(1).max(255),
-  email: z.string().trim().min(1).max(255),
+  name: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
+  email: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   emailVerified: z.coerce.date().optional().nullable(),
   image: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
@@ -6313,7 +6313,7 @@ export const UserCreateOrConnectWithoutIssuesInputSchema: z.ZodType<Prisma.UserC
 
 export const CommentCreateWithoutIssueInputSchema: z.ZodType<Prisma.CommentCreateWithoutIssueInput> = z.object({
   id: z.string().cuid().optional(),
-  body: z.string().trim().min(1).max(1000),
+  body: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(4500, { message: "Надто багато! Поле мусить мати не більше 4500 символів" }),
   isEdited: z.boolean().optional(),
   isSystem: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
@@ -6325,7 +6325,7 @@ export const CommentCreateWithoutIssueInputSchema: z.ZodType<Prisma.CommentCreat
 
 export const CommentUncheckedCreateWithoutIssueInputSchema: z.ZodType<Prisma.CommentUncheckedCreateWithoutIssueInput> = z.object({
   id: z.string().cuid().optional(),
-  body: z.string().trim().min(1).max(1000),
+  body: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(4500, { message: "Надто багато! Поле мусить мати не більше 4500 символів" }),
   isEdited: z.boolean().optional(),
   isSystem: z.boolean().optional(),
   authorId: z.string().optional().nullable(),
@@ -6347,7 +6347,7 @@ export const CommentCreateManyIssueInputEnvelopeSchema: z.ZodType<Prisma.Comment
 
 export const NotificationCreateWithoutIssueInputSchema: z.ZodType<Prisma.NotificationCreateWithoutIssueInput> = z.object({
   id: z.string().cuid().optional(),
-  message: z.string().trim().min(1).max(1000),
+  message: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(500, { message: "Надто багато! Поле мусить мати не більше 500 символів" }),
   isRead: z.boolean().optional(),
   isEmailSent: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
@@ -6358,7 +6358,7 @@ export const NotificationCreateWithoutIssueInputSchema: z.ZodType<Prisma.Notific
 
 export const NotificationUncheckedCreateWithoutIssueInputSchema: z.ZodType<Prisma.NotificationUncheckedCreateWithoutIssueInput> = z.object({
   id: z.string().cuid().optional(),
-  message: z.string().trim().min(1).max(1000),
+  message: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(500, { message: "Надто багато! Поле мусить мати не більше 500 символів" }),
   isRead: z.boolean().optional(),
   isEmailSent: z.boolean().optional(),
   senderId: z.string(),
@@ -6390,7 +6390,7 @@ export const WorkspaceUpdateToOneWithWhereWithoutIssuesInputSchema: z.ZodType<Pr
 
 export const WorkspaceUpdateWithoutIssuesInputSchema: z.ZodType<Prisma.WorkspaceUpdateWithoutIssuesInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   issueCount: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   members: z.lazy(() => WorkspaceMemberUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
@@ -6400,7 +6400,7 @@ export const WorkspaceUpdateWithoutIssuesInputSchema: z.ZodType<Prisma.Workspace
 
 export const WorkspaceUncheckedUpdateWithoutIssuesInputSchema: z.ZodType<Prisma.WorkspaceUncheckedUpdateWithoutIssuesInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   issueCount: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   members: z.lazy(() => WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
@@ -6421,8 +6421,8 @@ export const UserUpdateToOneWithWhereWithoutIssuesInputSchema: z.ZodType<Prisma.
 
 export const UserUpdateWithoutIssuesInputSchema: z.ZodType<Prisma.UserUpdateWithoutIssuesInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   emailVerified: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -6438,8 +6438,8 @@ export const UserUpdateWithoutIssuesInputSchema: z.ZodType<Prisma.UserUpdateWith
 
 export const UserUncheckedUpdateWithoutIssuesInputSchema: z.ZodType<Prisma.UserUncheckedUpdateWithoutIssuesInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   emailVerified: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -6488,7 +6488,7 @@ export const NotificationUpdateManyWithWhereWithoutIssueInputSchema: z.ZodType<P
 export const IssueCreateWithoutCommentsInputSchema: z.ZodType<Prisma.IssueCreateWithoutCommentsInput> = z.object({
   id: z.string().cuid().optional(),
   identifier: z.number().int(),
-  title: z.string().trim().min(1).max(255),
+  title: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   description: z.instanceof(Buffer).optional().nullable(),
   status: z.lazy(() => IssueStatusSchema).optional(),
   priority: z.lazy(() => IssuePrioritySchema).optional(),
@@ -6502,7 +6502,7 @@ export const IssueCreateWithoutCommentsInputSchema: z.ZodType<Prisma.IssueCreate
 export const IssueUncheckedCreateWithoutCommentsInputSchema: z.ZodType<Prisma.IssueUncheckedCreateWithoutCommentsInput> = z.object({
   id: z.string().cuid().optional(),
   identifier: z.number().int(),
-  title: z.string().trim().min(1).max(255),
+  title: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   description: z.instanceof(Buffer).optional().nullable(),
   status: z.lazy(() => IssueStatusSchema).optional(),
   priority: z.lazy(() => IssuePrioritySchema).optional(),
@@ -6520,8 +6520,8 @@ export const IssueCreateOrConnectWithoutCommentsInputSchema: z.ZodType<Prisma.Is
 
 export const UserCreateWithoutCommentsInputSchema: z.ZodType<Prisma.UserCreateWithoutCommentsInput> = z.object({
   id: z.string().cuid().optional(),
-  name: z.string().trim().min(1).max(255),
-  email: z.string().trim().min(1).max(255),
+  name: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
+  email: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   emailVerified: z.coerce.date().optional().nullable(),
   image: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
@@ -6537,8 +6537,8 @@ export const UserCreateWithoutCommentsInputSchema: z.ZodType<Prisma.UserCreateWi
 
 export const UserUncheckedCreateWithoutCommentsInputSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutCommentsInput> = z.object({
   id: z.string().cuid().optional(),
-  name: z.string().trim().min(1).max(255),
-  email: z.string().trim().min(1).max(255),
+  name: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
+  email: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   emailVerified: z.coerce.date().optional().nullable(),
   image: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
@@ -6559,7 +6559,7 @@ export const UserCreateOrConnectWithoutCommentsInputSchema: z.ZodType<Prisma.Use
 
 export const CommentCreateWithoutChildrenInputSchema: z.ZodType<Prisma.CommentCreateWithoutChildrenInput> = z.object({
   id: z.string().cuid().optional(),
-  body: z.string().trim().min(1).max(1000),
+  body: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(4500, { message: "Надто багато! Поле мусить мати не більше 4500 символів" }),
   isEdited: z.boolean().optional(),
   isSystem: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
@@ -6571,7 +6571,7 @@ export const CommentCreateWithoutChildrenInputSchema: z.ZodType<Prisma.CommentCr
 
 export const CommentUncheckedCreateWithoutChildrenInputSchema: z.ZodType<Prisma.CommentUncheckedCreateWithoutChildrenInput> = z.object({
   id: z.string().cuid().optional(),
-  body: z.string().trim().min(1).max(1000),
+  body: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(4500, { message: "Надто багато! Поле мусить мати не більше 4500 символів" }),
   isEdited: z.boolean().optional(),
   issueId: z.string(),
   isSystem: z.boolean().optional(),
@@ -6588,7 +6588,7 @@ export const CommentCreateOrConnectWithoutChildrenInputSchema: z.ZodType<Prisma.
 
 export const CommentCreateWithoutParentInputSchema: z.ZodType<Prisma.CommentCreateWithoutParentInput> = z.object({
   id: z.string().cuid().optional(),
-  body: z.string().trim().min(1).max(1000),
+  body: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(4500, { message: "Надто багато! Поле мусить мати не більше 4500 символів" }),
   isEdited: z.boolean().optional(),
   isSystem: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
@@ -6600,7 +6600,7 @@ export const CommentCreateWithoutParentInputSchema: z.ZodType<Prisma.CommentCrea
 
 export const CommentUncheckedCreateWithoutParentInputSchema: z.ZodType<Prisma.CommentUncheckedCreateWithoutParentInput> = z.object({
   id: z.string().cuid().optional(),
-  body: z.string().trim().min(1).max(1000),
+  body: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(4500, { message: "Надто багато! Поле мусить мати не більше 4500 символів" }),
   isEdited: z.boolean().optional(),
   issueId: z.string(),
   isSystem: z.boolean().optional(),
@@ -6634,7 +6634,7 @@ export const IssueUpdateToOneWithWhereWithoutCommentsInputSchema: z.ZodType<Pris
 export const IssueUpdateWithoutCommentsInputSchema: z.ZodType<Prisma.IssueUpdateWithoutCommentsInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  title: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => IssueStatusSchema),z.lazy(() => EnumIssueStatusFieldUpdateOperationsInputSchema) ]).optional(),
   priority: z.union([ z.lazy(() => IssuePrioritySchema),z.lazy(() => EnumIssuePriorityFieldUpdateOperationsInputSchema) ]).optional(),
@@ -6648,7 +6648,7 @@ export const IssueUpdateWithoutCommentsInputSchema: z.ZodType<Prisma.IssueUpdate
 export const IssueUncheckedUpdateWithoutCommentsInputSchema: z.ZodType<Prisma.IssueUncheckedUpdateWithoutCommentsInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  title: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => IssueStatusSchema),z.lazy(() => EnumIssueStatusFieldUpdateOperationsInputSchema) ]).optional(),
   priority: z.union([ z.lazy(() => IssuePrioritySchema),z.lazy(() => EnumIssuePriorityFieldUpdateOperationsInputSchema) ]).optional(),
@@ -6672,8 +6672,8 @@ export const UserUpdateToOneWithWhereWithoutCommentsInputSchema: z.ZodType<Prism
 
 export const UserUpdateWithoutCommentsInputSchema: z.ZodType<Prisma.UserUpdateWithoutCommentsInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   emailVerified: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -6689,8 +6689,8 @@ export const UserUpdateWithoutCommentsInputSchema: z.ZodType<Prisma.UserUpdateWi
 
 export const UserUncheckedUpdateWithoutCommentsInputSchema: z.ZodType<Prisma.UserUncheckedUpdateWithoutCommentsInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   emailVerified: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -6717,7 +6717,7 @@ export const CommentUpdateToOneWithWhereWithoutChildrenInputSchema: z.ZodType<Pr
 
 export const CommentUpdateWithoutChildrenInputSchema: z.ZodType<Prisma.CommentUpdateWithoutChildrenInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  body: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  body: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(4500, { message: "Надто багато! Поле мусить мати не більше 4500 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isEdited: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isSystem: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -6729,7 +6729,7 @@ export const CommentUpdateWithoutChildrenInputSchema: z.ZodType<Prisma.CommentUp
 
 export const CommentUncheckedUpdateWithoutChildrenInputSchema: z.ZodType<Prisma.CommentUncheckedUpdateWithoutChildrenInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  body: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  body: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(4500, { message: "Надто багато! Поле мусить мати не більше 4500 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isEdited: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   issueId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isSystem: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
@@ -6757,7 +6757,7 @@ export const CommentUpdateManyWithWhereWithoutParentInputSchema: z.ZodType<Prism
 
 export const WorkspaceCreateWithoutGithubAppInstallationInputSchema: z.ZodType<Prisma.WorkspaceCreateWithoutGithubAppInstallationInput> = z.object({
   id: z.string().cuid().optional(),
-  name: z.string().trim().min(1).max(255),
+  name: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   image: z.string().optional().nullable(),
   issueCount: z.number().int().optional(),
   members: z.lazy(() => WorkspaceMemberCreateNestedManyWithoutWorkspaceInputSchema).optional(),
@@ -6767,7 +6767,7 @@ export const WorkspaceCreateWithoutGithubAppInstallationInputSchema: z.ZodType<P
 
 export const WorkspaceUncheckedCreateWithoutGithubAppInstallationInputSchema: z.ZodType<Prisma.WorkspaceUncheckedCreateWithoutGithubAppInstallationInput> = z.object({
   id: z.string().cuid().optional(),
-  name: z.string().trim().min(1).max(255),
+  name: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   image: z.string().optional().nullable(),
   issueCount: z.number().int().optional(),
   members: z.lazy(() => WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInputSchema).optional(),
@@ -6782,8 +6782,8 @@ export const WorkspaceCreateOrConnectWithoutGithubAppInstallationInputSchema: z.
 
 export const UserCreateWithoutGithubAppInstallationInputSchema: z.ZodType<Prisma.UserCreateWithoutGithubAppInstallationInput> = z.object({
   id: z.string().cuid().optional(),
-  name: z.string().trim().min(1).max(255),
-  email: z.string().trim().min(1).max(255),
+  name: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
+  email: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   emailVerified: z.coerce.date().optional().nullable(),
   image: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
@@ -6799,8 +6799,8 @@ export const UserCreateWithoutGithubAppInstallationInputSchema: z.ZodType<Prisma
 
 export const UserUncheckedCreateWithoutGithubAppInstallationInputSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutGithubAppInstallationInput> = z.object({
   id: z.string().cuid().optional(),
-  name: z.string().trim().min(1).max(255),
-  email: z.string().trim().min(1).max(255),
+  name: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
+  email: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   emailVerified: z.coerce.date().optional().nullable(),
   image: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
@@ -6821,8 +6821,8 @@ export const UserCreateOrConnectWithoutGithubAppInstallationInputSchema: z.ZodTy
 
 export const GithubWikiFileCreateWithoutInstallationInputSchema: z.ZodType<Prisma.GithubWikiFileCreateWithoutInstallationInput> = z.object({
   id: z.string().cuid().optional(),
-  path: z.string().trim().min(1).max(255),
-  previousPath: z.string().trim().min(1).max(255).optional().nullable(),
+  path: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
+  previousPath: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }).optional().nullable(),
   githubRepositoryId: z.number().int(),
   content: z.instanceof(Buffer).optional().nullable(),
   isModified: z.boolean().optional(),
@@ -6832,8 +6832,8 @@ export const GithubWikiFileCreateWithoutInstallationInputSchema: z.ZodType<Prism
 
 export const GithubWikiFileUncheckedCreateWithoutInstallationInputSchema: z.ZodType<Prisma.GithubWikiFileUncheckedCreateWithoutInstallationInput> = z.object({
   id: z.string().cuid().optional(),
-  path: z.string().trim().min(1).max(255),
-  previousPath: z.string().trim().min(1).max(255).optional().nullable(),
+  path: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
+  previousPath: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }).optional().nullable(),
   githubRepositoryId: z.number().int(),
   content: z.instanceof(Buffer).optional().nullable(),
   isModified: z.boolean().optional(),
@@ -6864,7 +6864,7 @@ export const WorkspaceUpdateToOneWithWhereWithoutGithubAppInstallationInputSchem
 
 export const WorkspaceUpdateWithoutGithubAppInstallationInputSchema: z.ZodType<Prisma.WorkspaceUpdateWithoutGithubAppInstallationInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   issueCount: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   members: z.lazy(() => WorkspaceMemberUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
@@ -6874,7 +6874,7 @@ export const WorkspaceUpdateWithoutGithubAppInstallationInputSchema: z.ZodType<P
 
 export const WorkspaceUncheckedUpdateWithoutGithubAppInstallationInputSchema: z.ZodType<Prisma.WorkspaceUncheckedUpdateWithoutGithubAppInstallationInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   issueCount: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   members: z.lazy(() => WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInputSchema).optional(),
@@ -6895,8 +6895,8 @@ export const UserUpdateToOneWithWhereWithoutGithubAppInstallationInputSchema: z.
 
 export const UserUpdateWithoutGithubAppInstallationInputSchema: z.ZodType<Prisma.UserUpdateWithoutGithubAppInstallationInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   emailVerified: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -6912,8 +6912,8 @@ export const UserUpdateWithoutGithubAppInstallationInputSchema: z.ZodType<Prisma
 
 export const UserUncheckedUpdateWithoutGithubAppInstallationInputSchema: z.ZodType<Prisma.UserUncheckedUpdateWithoutGithubAppInstallationInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   emailVerified: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7009,7 +7009,7 @@ export const GithubAppInstallationUncheckedUpdateWithoutGithubWikiFileInputSchem
 export const IssueCreateWithoutNotificationsInputSchema: z.ZodType<Prisma.IssueCreateWithoutNotificationsInput> = z.object({
   id: z.string().cuid().optional(),
   identifier: z.number().int(),
-  title: z.string().trim().min(1).max(255),
+  title: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   description: z.instanceof(Buffer).optional().nullable(),
   status: z.lazy(() => IssueStatusSchema).optional(),
   priority: z.lazy(() => IssuePrioritySchema).optional(),
@@ -7023,7 +7023,7 @@ export const IssueCreateWithoutNotificationsInputSchema: z.ZodType<Prisma.IssueC
 export const IssueUncheckedCreateWithoutNotificationsInputSchema: z.ZodType<Prisma.IssueUncheckedCreateWithoutNotificationsInput> = z.object({
   id: z.string().cuid().optional(),
   identifier: z.number().int(),
-  title: z.string().trim().min(1).max(255),
+  title: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   description: z.instanceof(Buffer).optional().nullable(),
   status: z.lazy(() => IssueStatusSchema).optional(),
   priority: z.lazy(() => IssuePrioritySchema).optional(),
@@ -7041,8 +7041,8 @@ export const IssueCreateOrConnectWithoutNotificationsInputSchema: z.ZodType<Pris
 
 export const UserCreateWithoutNotificationsSentInputSchema: z.ZodType<Prisma.UserCreateWithoutNotificationsSentInput> = z.object({
   id: z.string().cuid().optional(),
-  name: z.string().trim().min(1).max(255),
-  email: z.string().trim().min(1).max(255),
+  name: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
+  email: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   emailVerified: z.coerce.date().optional().nullable(),
   image: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
@@ -7058,8 +7058,8 @@ export const UserCreateWithoutNotificationsSentInputSchema: z.ZodType<Prisma.Use
 
 export const UserUncheckedCreateWithoutNotificationsSentInputSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutNotificationsSentInput> = z.object({
   id: z.string().cuid().optional(),
-  name: z.string().trim().min(1).max(255),
-  email: z.string().trim().min(1).max(255),
+  name: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
+  email: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   emailVerified: z.coerce.date().optional().nullable(),
   image: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
@@ -7080,8 +7080,8 @@ export const UserCreateOrConnectWithoutNotificationsSentInputSchema: z.ZodType<P
 
 export const UserCreateWithoutNotificationsInputSchema: z.ZodType<Prisma.UserCreateWithoutNotificationsInput> = z.object({
   id: z.string().cuid().optional(),
-  name: z.string().trim().min(1).max(255),
-  email: z.string().trim().min(1).max(255),
+  name: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
+  email: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   emailVerified: z.coerce.date().optional().nullable(),
   image: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
@@ -7097,8 +7097,8 @@ export const UserCreateWithoutNotificationsInputSchema: z.ZodType<Prisma.UserCre
 
 export const UserUncheckedCreateWithoutNotificationsInputSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutNotificationsInput> = z.object({
   id: z.string().cuid().optional(),
-  name: z.string().trim().min(1).max(255),
-  email: z.string().trim().min(1).max(255),
+  name: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
+  email: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   emailVerified: z.coerce.date().optional().nullable(),
   image: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
@@ -7131,7 +7131,7 @@ export const IssueUpdateToOneWithWhereWithoutNotificationsInputSchema: z.ZodType
 export const IssueUpdateWithoutNotificationsInputSchema: z.ZodType<Prisma.IssueUpdateWithoutNotificationsInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  title: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => IssueStatusSchema),z.lazy(() => EnumIssueStatusFieldUpdateOperationsInputSchema) ]).optional(),
   priority: z.union([ z.lazy(() => IssuePrioritySchema),z.lazy(() => EnumIssuePriorityFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7145,7 +7145,7 @@ export const IssueUpdateWithoutNotificationsInputSchema: z.ZodType<Prisma.IssueU
 export const IssueUncheckedUpdateWithoutNotificationsInputSchema: z.ZodType<Prisma.IssueUncheckedUpdateWithoutNotificationsInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  title: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => IssueStatusSchema),z.lazy(() => EnumIssueStatusFieldUpdateOperationsInputSchema) ]).optional(),
   priority: z.union([ z.lazy(() => IssuePrioritySchema),z.lazy(() => EnumIssuePriorityFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7169,8 +7169,8 @@ export const UserUpdateToOneWithWhereWithoutNotificationsSentInputSchema: z.ZodT
 
 export const UserUpdateWithoutNotificationsSentInputSchema: z.ZodType<Prisma.UserUpdateWithoutNotificationsSentInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   emailVerified: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7186,8 +7186,8 @@ export const UserUpdateWithoutNotificationsSentInputSchema: z.ZodType<Prisma.Use
 
 export const UserUncheckedUpdateWithoutNotificationsSentInputSchema: z.ZodType<Prisma.UserUncheckedUpdateWithoutNotificationsSentInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   emailVerified: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7214,8 +7214,8 @@ export const UserUpdateToOneWithWhereWithoutNotificationsInputSchema: z.ZodType<
 
 export const UserUpdateWithoutNotificationsInputSchema: z.ZodType<Prisma.UserUpdateWithoutNotificationsInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   emailVerified: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7231,8 +7231,8 @@ export const UserUpdateWithoutNotificationsInputSchema: z.ZodType<Prisma.UserUpd
 
 export const UserUncheckedUpdateWithoutNotificationsInputSchema: z.ZodType<Prisma.UserUncheckedUpdateWithoutNotificationsInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   emailVerified: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7278,7 +7278,7 @@ export const WorkspaceMemberCreateManyUserInputSchema: z.ZodType<Prisma.Workspac
 export const IssueCreateManyAssigneeInputSchema: z.ZodType<Prisma.IssueCreateManyAssigneeInput> = z.object({
   id: z.string().cuid().optional(),
   identifier: z.number().int(),
-  title: z.string().trim().min(1).max(255),
+  title: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   description: z.instanceof(Buffer).optional().nullable(),
   status: z.lazy(() => IssueStatusSchema).optional(),
   priority: z.lazy(() => IssuePrioritySchema).optional(),
@@ -7289,7 +7289,7 @@ export const IssueCreateManyAssigneeInputSchema: z.ZodType<Prisma.IssueCreateMan
 
 export const CommentCreateManyAuthorInputSchema: z.ZodType<Prisma.CommentCreateManyAuthorInput> = z.object({
   id: z.string().cuid().optional(),
-  body: z.string().trim().min(1).max(1000),
+  body: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(4500, { message: "Надто багато! Поле мусить мати не більше 4500 символів" }),
   isEdited: z.boolean().optional(),
   issueId: z.string(),
   isSystem: z.boolean().optional(),
@@ -7307,7 +7307,7 @@ export const GithubAppInstallationCreateManyCreatedByInputSchema: z.ZodType<Pris
 
 export const NotificationCreateManyRecipientInputSchema: z.ZodType<Prisma.NotificationCreateManyRecipientInput> = z.object({
   id: z.string().cuid().optional(),
-  message: z.string().trim().min(1).max(1000),
+  message: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(500, { message: "Надто багато! Поле мусить мати не більше 500 символів" }),
   issueId: z.string().optional().nullable(),
   isRead: z.boolean().optional(),
   isEmailSent: z.boolean().optional(),
@@ -7318,7 +7318,7 @@ export const NotificationCreateManyRecipientInputSchema: z.ZodType<Prisma.Notifi
 
 export const NotificationCreateManySenderInputSchema: z.ZodType<Prisma.NotificationCreateManySenderInput> = z.object({
   id: z.string().cuid().optional(),
-  message: z.string().trim().min(1).max(1000),
+  message: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(500, { message: "Надто багато! Поле мусить мати не більше 500 символів" }),
   issueId: z.string().optional().nullable(),
   isRead: z.boolean().optional(),
   isEmailSent: z.boolean().optional(),
@@ -7417,7 +7417,7 @@ export const WorkspaceMemberUncheckedUpdateManyWithoutUserInputSchema: z.ZodType
 export const IssueUpdateWithoutAssigneeInputSchema: z.ZodType<Prisma.IssueUpdateWithoutAssigneeInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  title: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => IssueStatusSchema),z.lazy(() => EnumIssueStatusFieldUpdateOperationsInputSchema) ]).optional(),
   priority: z.union([ z.lazy(() => IssuePrioritySchema),z.lazy(() => EnumIssuePriorityFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7431,7 +7431,7 @@ export const IssueUpdateWithoutAssigneeInputSchema: z.ZodType<Prisma.IssueUpdate
 export const IssueUncheckedUpdateWithoutAssigneeInputSchema: z.ZodType<Prisma.IssueUncheckedUpdateWithoutAssigneeInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  title: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => IssueStatusSchema),z.lazy(() => EnumIssueStatusFieldUpdateOperationsInputSchema) ]).optional(),
   priority: z.union([ z.lazy(() => IssuePrioritySchema),z.lazy(() => EnumIssuePriorityFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7445,7 +7445,7 @@ export const IssueUncheckedUpdateWithoutAssigneeInputSchema: z.ZodType<Prisma.Is
 export const IssueUncheckedUpdateManyWithoutAssigneeInputSchema: z.ZodType<Prisma.IssueUncheckedUpdateManyWithoutAssigneeInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  title: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => IssueStatusSchema),z.lazy(() => EnumIssueStatusFieldUpdateOperationsInputSchema) ]).optional(),
   priority: z.union([ z.lazy(() => IssuePrioritySchema),z.lazy(() => EnumIssuePriorityFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7456,7 +7456,7 @@ export const IssueUncheckedUpdateManyWithoutAssigneeInputSchema: z.ZodType<Prism
 
 export const CommentUpdateWithoutAuthorInputSchema: z.ZodType<Prisma.CommentUpdateWithoutAuthorInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  body: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  body: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(4500, { message: "Надто багато! Поле мусить мати не більше 4500 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isEdited: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isSystem: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7468,7 +7468,7 @@ export const CommentUpdateWithoutAuthorInputSchema: z.ZodType<Prisma.CommentUpda
 
 export const CommentUncheckedUpdateWithoutAuthorInputSchema: z.ZodType<Prisma.CommentUncheckedUpdateWithoutAuthorInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  body: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  body: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(4500, { message: "Надто багато! Поле мусить мати не більше 4500 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isEdited: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   issueId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isSystem: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7480,7 +7480,7 @@ export const CommentUncheckedUpdateWithoutAuthorInputSchema: z.ZodType<Prisma.Co
 
 export const CommentUncheckedUpdateManyWithoutAuthorInputSchema: z.ZodType<Prisma.CommentUncheckedUpdateManyWithoutAuthorInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  body: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  body: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(4500, { message: "Надто багато! Поле мусить мати не більше 4500 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isEdited: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   issueId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isSystem: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7514,7 +7514,7 @@ export const GithubAppInstallationUncheckedUpdateManyWithoutCreatedByInputSchema
 
 export const NotificationUpdateWithoutRecipientInputSchema: z.ZodType<Prisma.NotificationUpdateWithoutRecipientInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  message: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  message: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(500, { message: "Надто багато! Поле мусить мати не більше 500 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isRead: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isEmailSent: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7525,7 +7525,7 @@ export const NotificationUpdateWithoutRecipientInputSchema: z.ZodType<Prisma.Not
 
 export const NotificationUncheckedUpdateWithoutRecipientInputSchema: z.ZodType<Prisma.NotificationUncheckedUpdateWithoutRecipientInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  message: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  message: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(500, { message: "Надто багато! Поле мусить мати не більше 500 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   issueId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   isRead: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isEmailSent: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7536,7 +7536,7 @@ export const NotificationUncheckedUpdateWithoutRecipientInputSchema: z.ZodType<P
 
 export const NotificationUncheckedUpdateManyWithoutRecipientInputSchema: z.ZodType<Prisma.NotificationUncheckedUpdateManyWithoutRecipientInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  message: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  message: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(500, { message: "Надто багато! Поле мусить мати не більше 500 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   issueId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   isRead: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isEmailSent: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7547,7 +7547,7 @@ export const NotificationUncheckedUpdateManyWithoutRecipientInputSchema: z.ZodTy
 
 export const NotificationUpdateWithoutSenderInputSchema: z.ZodType<Prisma.NotificationUpdateWithoutSenderInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  message: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  message: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(500, { message: "Надто багато! Поле мусить мати не більше 500 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isRead: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isEmailSent: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7558,7 +7558,7 @@ export const NotificationUpdateWithoutSenderInputSchema: z.ZodType<Prisma.Notifi
 
 export const NotificationUncheckedUpdateWithoutSenderInputSchema: z.ZodType<Prisma.NotificationUncheckedUpdateWithoutSenderInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  message: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  message: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(500, { message: "Надто багато! Поле мусить мати не більше 500 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   issueId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   isRead: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isEmailSent: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7569,7 +7569,7 @@ export const NotificationUncheckedUpdateWithoutSenderInputSchema: z.ZodType<Pris
 
 export const NotificationUncheckedUpdateManyWithoutSenderInputSchema: z.ZodType<Prisma.NotificationUncheckedUpdateManyWithoutSenderInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  message: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  message: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(500, { message: "Надто багато! Поле мусить мати не більше 500 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   issueId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   isRead: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isEmailSent: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7588,7 +7588,7 @@ export const WorkspaceMemberCreateManyWorkspaceInputSchema: z.ZodType<Prisma.Wor
 export const IssueCreateManyWorkspaceInputSchema: z.ZodType<Prisma.IssueCreateManyWorkspaceInput> = z.object({
   id: z.string().cuid().optional(),
   identifier: z.number().int(),
-  title: z.string().trim().min(1).max(255),
+  title: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   description: z.instanceof(Buffer).optional().nullable(),
   status: z.lazy(() => IssueStatusSchema).optional(),
   priority: z.lazy(() => IssuePrioritySchema).optional(),
@@ -7599,7 +7599,7 @@ export const IssueCreateManyWorkspaceInputSchema: z.ZodType<Prisma.IssueCreateMa
 
 export const WorkspaceInviteCreateManyWorkspaceInputSchema: z.ZodType<Prisma.WorkspaceInviteCreateManyWorkspaceInput> = z.object({
   id: z.string().cuid().optional(),
-  email: z.string().email().trim().max(255),
+  email: z.string().trim().email({ message: 'Ви впевнені, що email вірний?' }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
   invitedById: z.string(),
   status: z.lazy(() => WorkspaceInviteStatusSchema).optional(),
   createdAt: z.coerce.date().optional(),
@@ -7637,7 +7637,7 @@ export const WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceInputSchema: z.Zo
 export const IssueUpdateWithoutWorkspaceInputSchema: z.ZodType<Prisma.IssueUpdateWithoutWorkspaceInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  title: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => IssueStatusSchema),z.lazy(() => EnumIssueStatusFieldUpdateOperationsInputSchema) ]).optional(),
   priority: z.union([ z.lazy(() => IssuePrioritySchema),z.lazy(() => EnumIssuePriorityFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7651,7 +7651,7 @@ export const IssueUpdateWithoutWorkspaceInputSchema: z.ZodType<Prisma.IssueUpdat
 export const IssueUncheckedUpdateWithoutWorkspaceInputSchema: z.ZodType<Prisma.IssueUncheckedUpdateWithoutWorkspaceInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  title: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => IssueStatusSchema),z.lazy(() => EnumIssueStatusFieldUpdateOperationsInputSchema) ]).optional(),
   priority: z.union([ z.lazy(() => IssuePrioritySchema),z.lazy(() => EnumIssuePriorityFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7665,7 +7665,7 @@ export const IssueUncheckedUpdateWithoutWorkspaceInputSchema: z.ZodType<Prisma.I
 export const IssueUncheckedUpdateManyWithoutWorkspaceInputSchema: z.ZodType<Prisma.IssueUncheckedUpdateManyWithoutWorkspaceInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   identifier: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  title: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  title: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => IssueStatusSchema),z.lazy(() => EnumIssueStatusFieldUpdateOperationsInputSchema) ]).optional(),
   priority: z.union([ z.lazy(() => IssuePrioritySchema),z.lazy(() => EnumIssuePriorityFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7676,7 +7676,7 @@ export const IssueUncheckedUpdateManyWithoutWorkspaceInputSchema: z.ZodType<Pris
 
 export const WorkspaceInviteUpdateWithoutWorkspaceInputSchema: z.ZodType<Prisma.WorkspaceInviteUpdateWithoutWorkspaceInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string().email().trim().max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().trim().email({ message: 'Ви впевнені, що email вірний?' }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   invitedById: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   status: z.union([ z.lazy(() => WorkspaceInviteStatusSchema),z.lazy(() => EnumWorkspaceInviteStatusFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7685,7 +7685,7 @@ export const WorkspaceInviteUpdateWithoutWorkspaceInputSchema: z.ZodType<Prisma.
 
 export const WorkspaceInviteUncheckedUpdateWithoutWorkspaceInputSchema: z.ZodType<Prisma.WorkspaceInviteUncheckedUpdateWithoutWorkspaceInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string().email().trim().max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().trim().email({ message: 'Ви впевнені, що email вірний?' }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   invitedById: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   status: z.union([ z.lazy(() => WorkspaceInviteStatusSchema),z.lazy(() => EnumWorkspaceInviteStatusFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7694,7 +7694,7 @@ export const WorkspaceInviteUncheckedUpdateWithoutWorkspaceInputSchema: z.ZodTyp
 
 export const WorkspaceInviteUncheckedUpdateManyWithoutWorkspaceInputSchema: z.ZodType<Prisma.WorkspaceInviteUncheckedUpdateManyWithoutWorkspaceInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  email: z.union([ z.string().email().trim().max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email: z.union([ z.string().trim().email({ message: 'Ви впевнені, що email вірний?' }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   invitedById: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   status: z.union([ z.lazy(() => WorkspaceInviteStatusSchema),z.lazy(() => EnumWorkspaceInviteStatusFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7726,7 +7726,7 @@ export const GithubAppInstallationUncheckedUpdateManyWithoutWorkspaceInputSchema
 
 export const CommentCreateManyIssueInputSchema: z.ZodType<Prisma.CommentCreateManyIssueInput> = z.object({
   id: z.string().cuid().optional(),
-  body: z.string().trim().min(1).max(1000),
+  body: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(4500, { message: "Надто багато! Поле мусить мати не більше 4500 символів" }),
   isEdited: z.boolean().optional(),
   isSystem: z.boolean().optional(),
   authorId: z.string().optional().nullable(),
@@ -7737,7 +7737,7 @@ export const CommentCreateManyIssueInputSchema: z.ZodType<Prisma.CommentCreateMa
 
 export const NotificationCreateManyIssueInputSchema: z.ZodType<Prisma.NotificationCreateManyIssueInput> = z.object({
   id: z.string().cuid().optional(),
-  message: z.string().trim().min(1).max(1000),
+  message: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(500, { message: "Надто багато! Поле мусить мати не більше 500 символів" }),
   isRead: z.boolean().optional(),
   isEmailSent: z.boolean().optional(),
   senderId: z.string(),
@@ -7748,7 +7748,7 @@ export const NotificationCreateManyIssueInputSchema: z.ZodType<Prisma.Notificati
 
 export const CommentUpdateWithoutIssueInputSchema: z.ZodType<Prisma.CommentUpdateWithoutIssueInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  body: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  body: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(4500, { message: "Надто багато! Поле мусить мати не більше 4500 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isEdited: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isSystem: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7760,7 +7760,7 @@ export const CommentUpdateWithoutIssueInputSchema: z.ZodType<Prisma.CommentUpdat
 
 export const CommentUncheckedUpdateWithoutIssueInputSchema: z.ZodType<Prisma.CommentUncheckedUpdateWithoutIssueInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  body: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  body: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(4500, { message: "Надто багато! Поле мусить мати не більше 4500 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isEdited: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isSystem: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   authorId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -7772,7 +7772,7 @@ export const CommentUncheckedUpdateWithoutIssueInputSchema: z.ZodType<Prisma.Com
 
 export const CommentUncheckedUpdateManyWithoutIssueInputSchema: z.ZodType<Prisma.CommentUncheckedUpdateManyWithoutIssueInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  body: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  body: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(4500, { message: "Надто багато! Поле мусить мати не більше 4500 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isEdited: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isSystem: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   authorId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -7783,7 +7783,7 @@ export const CommentUncheckedUpdateManyWithoutIssueInputSchema: z.ZodType<Prisma
 
 export const NotificationUpdateWithoutIssueInputSchema: z.ZodType<Prisma.NotificationUpdateWithoutIssueInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  message: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  message: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(500, { message: "Надто багато! Поле мусить мати не більше 500 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isRead: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isEmailSent: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7794,7 +7794,7 @@ export const NotificationUpdateWithoutIssueInputSchema: z.ZodType<Prisma.Notific
 
 export const NotificationUncheckedUpdateWithoutIssueInputSchema: z.ZodType<Prisma.NotificationUncheckedUpdateWithoutIssueInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  message: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  message: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(500, { message: "Надто багато! Поле мусить мати не більше 500 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isRead: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isEmailSent: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   senderId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7805,7 +7805,7 @@ export const NotificationUncheckedUpdateWithoutIssueInputSchema: z.ZodType<Prism
 
 export const NotificationUncheckedUpdateManyWithoutIssueInputSchema: z.ZodType<Prisma.NotificationUncheckedUpdateManyWithoutIssueInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  message: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  message: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(500, { message: "Надто багато! Поле мусить мати не більше 500 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isRead: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isEmailSent: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   senderId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7816,7 +7816,7 @@ export const NotificationUncheckedUpdateManyWithoutIssueInputSchema: z.ZodType<P
 
 export const CommentCreateManyParentInputSchema: z.ZodType<Prisma.CommentCreateManyParentInput> = z.object({
   id: z.string().cuid().optional(),
-  body: z.string().trim().min(1).max(1000),
+  body: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(4500, { message: "Надто багато! Поле мусить мати не більше 4500 символів" }),
   isEdited: z.boolean().optional(),
   issueId: z.string(),
   isSystem: z.boolean().optional(),
@@ -7827,7 +7827,7 @@ export const CommentCreateManyParentInputSchema: z.ZodType<Prisma.CommentCreateM
 
 export const CommentUpdateWithoutParentInputSchema: z.ZodType<Prisma.CommentUpdateWithoutParentInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  body: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  body: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(4500, { message: "Надто багато! Поле мусить мати не більше 4500 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isEdited: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isSystem: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7839,7 +7839,7 @@ export const CommentUpdateWithoutParentInputSchema: z.ZodType<Prisma.CommentUpda
 
 export const CommentUncheckedUpdateWithoutParentInputSchema: z.ZodType<Prisma.CommentUncheckedUpdateWithoutParentInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  body: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  body: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(4500, { message: "Надто багато! Поле мусить мати не більше 4500 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isEdited: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   issueId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isSystem: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7851,7 +7851,7 @@ export const CommentUncheckedUpdateWithoutParentInputSchema: z.ZodType<Prisma.Co
 
 export const CommentUncheckedUpdateManyWithoutParentInputSchema: z.ZodType<Prisma.CommentUncheckedUpdateManyWithoutParentInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  body: z.union([ z.string().trim().min(1).max(1000),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  body: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(4500, { message: "Надто багато! Поле мусить мати не більше 4500 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isEdited: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   issueId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isSystem: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7862,8 +7862,8 @@ export const CommentUncheckedUpdateManyWithoutParentInputSchema: z.ZodType<Prism
 
 export const GithubWikiFileCreateManyInstallationInputSchema: z.ZodType<Prisma.GithubWikiFileCreateManyInstallationInput> = z.object({
   id: z.string().cuid().optional(),
-  path: z.string().trim().min(1).max(255),
-  previousPath: z.string().trim().min(1).max(255).optional().nullable(),
+  path: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),
+  previousPath: z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }).optional().nullable(),
   githubRepositoryId: z.number().int(),
   content: z.instanceof(Buffer).optional().nullable(),
   isModified: z.boolean().optional(),
@@ -7873,8 +7873,8 @@ export const GithubWikiFileCreateManyInstallationInputSchema: z.ZodType<Prisma.G
 
 export const GithubWikiFileUpdateWithoutInstallationInputSchema: z.ZodType<Prisma.GithubWikiFileUpdateWithoutInstallationInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  path: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  previousPath: z.union([ z.string().trim().min(1).max(255),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  path: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  previousPath: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   githubRepositoryId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   content: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   isModified: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7884,8 +7884,8 @@ export const GithubWikiFileUpdateWithoutInstallationInputSchema: z.ZodType<Prism
 
 export const GithubWikiFileUncheckedUpdateWithoutInstallationInputSchema: z.ZodType<Prisma.GithubWikiFileUncheckedUpdateWithoutInstallationInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  path: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  previousPath: z.union([ z.string().trim().min(1).max(255),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  path: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  previousPath: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   githubRepositoryId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   content: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   isModified: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7895,8 +7895,8 @@ export const GithubWikiFileUncheckedUpdateWithoutInstallationInputSchema: z.ZodT
 
 export const GithubWikiFileUncheckedUpdateManyWithoutInstallationInputSchema: z.ZodType<Prisma.GithubWikiFileUncheckedUpdateManyWithoutInstallationInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  path: z.union([ z.string().trim().min(1).max(255),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  previousPath: z.union([ z.string().trim().min(1).max(255),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  path: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  previousPath: z.union([ z.string().trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б один символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" }),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   githubRepositoryId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   content: z.union([ z.instanceof(Buffer),z.lazy(() => NullableBytesFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   isModified: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),

@@ -4,6 +4,7 @@ import { deleteComment } from '@/lib/actions/comments.action';
 import { cn } from '@/lib/utils';
 import { Comment, User } from '@/prisma/zod';
 import { formatDistanceToNow } from 'date-fns';
+import { uk } from 'date-fns/locale';
 import { EllipsisVertical, Reply } from 'lucide-react';
 import type { User as SessionUser } from 'next-auth';
 import { useState } from 'react';
@@ -65,6 +66,7 @@ export default function CommentItem({
             <span className='text-xs text-muted-foreground'>
               {formatDistanceToNow(new Date(comment.createdAt), {
                 addSuffix: true,
+                locale: uk,
               })}
             </span>
             {comment.isEdited && (

@@ -5,6 +5,7 @@ import { useSocketObserver } from '@/hooks/useSocketObserver';
 import { Issue, User } from '@prisma/client';
 import { ColumnDef } from '@tanstack/react-table';
 import { formatDistanceToNow } from 'date-fns';
+import { uk } from 'date-fns/locale';
 import { useState } from 'react';
 import CustomAvatar from '../CustomAvatar';
 import { DataTable } from '../ui/data-table';
@@ -24,7 +25,7 @@ const columns: ColumnDef<
   },
   {
     accessorKey: 'title',
-    header: 'Title',
+    header: 'Назва',
     enableSorting: true,
     sortingFn: 'text',
     cell: ({ row }) => {
@@ -42,7 +43,7 @@ const columns: ColumnDef<
   },
   {
     accessorKey: 'status',
-    header: 'Status',
+    header: 'Статус',
     enableSorting: true,
     sortingFn: (rowA, rowB, columnId) => {
       const statusA = rowA.getValue(columnId);
@@ -79,7 +80,7 @@ const columns: ColumnDef<
   },
   {
     accessorKey: 'priority',
-    header: 'Priority',
+    header: 'Пріоритет',
     enableSorting: true,
     sortingFn: (rowA, rowB, columnId) => {
       const priorityA = rowA.getValue(columnId);
@@ -120,7 +121,7 @@ const columns: ColumnDef<
   },
   {
     accessorKey: 'assignee',
-    header: 'Assignee',
+    header: 'Виконавець',
     enableSorting: false,
     cell: ({ row }) => {
       const assignee: User = row.getValue('assignee');
@@ -136,13 +137,15 @@ const columns: ColumnDef<
   },
   {
     accessorKey: 'createdAt',
-    header: 'Created',
+    header: 'Створено',
     enableSorting: true,
     sortingFn: 'datetime',
     cell: ({ row }) => {
       const createdAt = row.getValue('createdAt');
       if (!(createdAt instanceof Date)) return null;
-      const formattedDate = formatDistanceToNow(createdAt);
+      const formattedDate = formatDistanceToNow(createdAt, {
+        locale: uk,
+      });
 
       return (
         <Tooltip>
@@ -160,13 +163,15 @@ const columns: ColumnDef<
   },
   {
     accessorKey: 'updatedAt',
-    header: 'Updated',
+    header: 'Оновлено',
     enableSorting: true,
     sortingFn: 'datetime',
     cell: ({ row }) => {
       const updatedAt = row.getValue('updatedAt');
       if (!(updatedAt instanceof Date)) return null;
-      const formattedDate = formatDistanceToNow(updatedAt);
+      const formattedDate = formatDistanceToNow(updatedAt, {
+        locale: uk,
+      });
 
       return (
         <Tooltip>
@@ -242,7 +247,7 @@ export default function IssuesTable({
       />
 
       <p className='text-sm text-muted-foreground'>
-        Showing {filteredIssues.length} of {issuesObservable.length} issues
+        Показ {filteredIssues.length} з {issuesObservable.length} завдань
       </p>
 
       <DataTable

@@ -27,10 +27,10 @@ const columns = (isEditEnabled: boolean): ColumnDef<tableRow>[] => [
   },
   {
     accessorKey: 'createdAt',
-    header: 'Invited on',
+    header: 'Дата запрошення',
     cell: ({ row }) => {
       const date = new Date(row.getValue('createdAt'));
-      return date.toLocaleDateString('en-GB', {
+      return date.toLocaleDateString('uk-UA', {
         month: 'short',
         year: 'numeric',
       });

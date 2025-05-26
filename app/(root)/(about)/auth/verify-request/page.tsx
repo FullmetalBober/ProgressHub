@@ -8,7 +8,7 @@ import {
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Verify Request',
+  title: 'Запит на перевірку',
 };
 
 export default function VerifyRequestPage() {
@@ -18,14 +18,15 @@ export default function VerifyRequestPage() {
         <div className='flex flex-col gap-6'>
           <Card>
             <CardHeader>
-              <CardTitle className='text-2xl'>Verify Request</CardTitle>
+              <CardTitle className='text-2xl'>Запит на перевірку</CardTitle>
               <CardDescription>
-                Check your email for a verification link
+                Перевірте свою електронну пошту, щоб отримати посилання для
+                підтвердження
               </CardDescription>
             </CardHeader>
             <CardContent>
-              If you did not receive the email, you can request another
-              verification link by returning to the login page.
+              Якщо ви не отримали електронного листа, ви можете запросити інше
+              посилання для підтвердження, повернувшись на сторінку входу.
             </CardContent>
           </Card>
         </div>

@@ -59,9 +59,9 @@ export async function createIssue(body: unknown) {
     }),
   ]);
 
-  createSystemComment(response.id, 'created the issue', user.id);
+  createSystemComment(response.id, 'створив завдання', user.id);
   upsertNotification(response.id, response.assigneeId, user.id, {
-    main: 'assigned you the issue',
+    main: 'доручив вам завдання',
     sub: response.title,
   });
 
@@ -91,13 +91,13 @@ export async function updateIssue(id: string, body: unknown) {
     createOrUpdateSystemComment(
       id,
       {
-        main: 'assigned the issue to',
+        main: 'доручив завдання для',
         sub,
       },
       user.id
     );
     upsertNotification(id, response.assigneeId, user.id, {
-      main: 'assigned you the issue',
+      main: 'доручив вам завдання',
       sub,
     });
   }
@@ -106,13 +106,13 @@ export async function updateIssue(id: string, body: unknown) {
     createOrUpdateSystemComment(
       id,
       {
-        main: 'changed the status to',
+        main: 'змінив статус на',
         sub,
       },
       user.id
     );
     upsertNotification(id, response.assigneeId, user.id, {
-      main: 'changed the status to',
+      main: 'змінив статус на',
       sub,
     });
   }
@@ -121,25 +121,30 @@ export async function updateIssue(id: string, body: unknown) {
     createOrUpdateSystemComment(
       id,
       {
-        main: 'changed the priority to',
+        main: 'змінив пріоритет на',
         sub,
       },
       user.id
     );
     upsertNotification(id, response.assigneeId, user.id, {
-      main: 'changed the priority to',
+      main: 'змінив пріоритет на',
       sub,
     });
   }
   if (data.title) {
+    const sub = String(data.title);
     createOrUpdateSystemComment(
       id,
       {
-        main: 'changed the title to',
-        sub: String(data.title),
+        main: 'змінив назву на',
+        sub,
       },
       user.id
     );
+    upsertNotification(id, response.assigneeId, user.id, {
+      main: 'змінив назву на',
+      sub,
+    });
   }
 
   const notifyData = {

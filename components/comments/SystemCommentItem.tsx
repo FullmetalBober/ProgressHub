@@ -1,5 +1,6 @@
 import { Comment, User } from '@/prisma/zod';
 import { formatDistanceToNow } from 'date-fns';
+import { uk } from 'date-fns/locale';
 import CustomAvatar from '../CustomAvatar';
 
 export default function SystemCommentItem({
@@ -25,6 +26,7 @@ export default function SystemCommentItem({
         <div className='text-xs text-muted-foreground mt-1'>
           {formatDistanceToNow(new Date(comment.updatedAt), {
             addSuffix: true,
+            locale: uk,
           })}
         </div>
       </div>

@@ -7,7 +7,7 @@ import prisma from '@/lib/db';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Issue',
+  title: 'Завдання',
 };
 
 export default async function IssuePage(

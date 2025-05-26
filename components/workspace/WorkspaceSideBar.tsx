@@ -25,7 +25,7 @@ export default async function WorkspaceSideBar({
 }>) {
   const session = await auth();
   if (!session?.user?.id || !session?.user?.email)
-    return <div>You are not logged in</div>;
+    return <div>Ви не ввійшли в систему</div>;
 
   const [user, workspaceInvitation] = await Promise.all([
     prisma.user.findUnique({
@@ -68,7 +68,7 @@ export default async function WorkspaceSideBar({
       },
     }),
   ]);
-  if (!user) return <div>You are not logged in</div>;
+  if (!user) return <div>Ви не ввійшли в систему</div>;
 
   const currentWorkspace = user.workspaces.find(
     w => w.workspace.id === workspaceId
@@ -79,8 +79,9 @@ export default async function WorkspaceSideBar({
 
   const workspaceUsers = currentWorkspace?.members.map(m => m.user);
 
-  if (!currentWorkspace) return <div>Workspace not found</div>;
-  if (!workspaceUsers) return <div>Workspace users not found</div>;
+  if (!currentWorkspace) return <div>Робочу область не знайдено</div>;
+  if (!workspaceUsers)
+    return <div>Користувачів робочої області не знайдено</div>;
   return (
     <aside className='space-y-4'>
       <div className='pr-4'>
@@ -115,13 +116,13 @@ export default async function WorkspaceSideBar({
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                   <Link href={`/workspace/${workspaceId}/settings`}>
-                    Settings
+                    Налаштування
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                   <Link href='/join' className='relative'>
-                    <span>Create or join a workspace</span>
+                    <span>Створити/приєднатися до робочого простору</span>
                     {workspaceInvitation && (
                       <div className='absolute flex h-3 w-3 right-0 top-0'>
                         <div className='animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75' />
@@ -146,18 +147,18 @@ export default async function WorkspaceSideBar({
           <ScrollArea>
             <SidebarButtonNotification
               icon={<Inbox />}
-              label='Notifications'
+              label='Сповіщення'
               href={`/workspace/${workspaceId}/notifications`}
               notifications={user.notifications}
             />
             <SidebarButton
               icon={<FolderKanban />}
-              label='Issues'
+              label='Завдання'
               href={`/workspace/${workspaceId}/issues`}
             />
             <SidebarButton
               icon={<BookOpen />}
-              label='Wiki'
+              label='Вікі'
               href={`/workspace/${workspaceId}/wikis`}
             />
           </ScrollArea>

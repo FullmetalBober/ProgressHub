@@ -22,7 +22,7 @@ export default function CommentsSection({
     <SocketRoomEmitterProvider room={issueId}>
       <div className='mt-8'>
         <div className='flex items-center mb-6'>
-          <h3 className='text-lg font-medium'>Activity</h3>
+          <h3 className='text-lg font-medium'>Активність</h3>
         </div>
 
         <CommentList comments={comments} user={user} />

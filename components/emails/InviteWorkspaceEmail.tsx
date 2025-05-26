@@ -2,20 +2,23 @@ import { env } from '@/lib/env.mjs';
 
 const InviteWorkspaceEmail = ({ workspaceName }: { workspaceName: string }) => (
   <div>
-    <h1>Welcome!</h1>
+    <h1>Ласкаво просимо!</h1>
     <p>
-      You have been invited to join the workspace{' '}
+      Вас запросили приєднатися до робочого простору{' '}
       <strong>{workspaceName}</strong>.
     </p>
     <hr />
     <p>
-      Click the link below to join the workspace and get started with your new
-      team!
+      Натисніть на посилання нижче, щоб приєднатися до робочого простору та
+      почати роботу з вашою новою командою!
     </p>
-    <a href={`${env.WEB_DEPLOYMENT_URL}/join`}>Join Workspace</a>
+    <a href={`${env.WEB_DEPLOYMENT_URL}/join`}>
+      Приєднатися до Робочого Простору
+    </a>
     <hr />
     <p>
-      You should be logged in using this email address to join the workspace.
+      Ви повинні увійти в систему, використовуючи цю адресу електронної пошти,
+      щоб приєднатися до робочого простору.
     </p>
   </div>
 );

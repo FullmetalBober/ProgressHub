@@ -37,9 +37,9 @@ export default function WorkspaceUpdateForm({
   async function onSubmit(data: WorkspacePartial) {
     const action = updateWorkspace(workspace.id, data);
     toast.promise(action, {
-      loading: 'Updating workspace...',
-      success: 'Workspace updated successfully',
-      error: 'Failed to update workspace',
+      loading: 'Оновлення робочого простору...',
+      success: 'Робочий простір оновлено',
+      error: 'Не вдалося оновити робочий простір',
     });
     await action;
 
@@ -55,7 +55,7 @@ export default function WorkspaceUpdateForm({
           name='name'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Workspace name</FormLabel>
+              <FormLabel>Назва робочого простору</FormLabel>
               <FormControl>
                 <Input {...field} disabled={disabled} />
               </FormControl>
@@ -65,7 +65,7 @@ export default function WorkspaceUpdateForm({
         />
         {!disabled && (
           <Button type='submit' disabled={isFormDisabled}>
-            Update
+            Зберегти зміни
           </Button>
         )}
       </form>

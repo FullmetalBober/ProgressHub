@@ -69,7 +69,7 @@ export default function ComboboxFormField({
             </PopoverTrigger>
             <PopoverContent className='p-0'>
               <Command>
-                <CommandInput placeholder='Change status...' />
+                <CommandInput placeholder='Змінити значення...' />
                 <CommandList>
                   <CommandGroup>
                     {properties.map(status => (

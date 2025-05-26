@@ -30,9 +30,9 @@ export function GithubApp(
   const removeHandler = async () => {
     const action = removeGithubAppInstallation(props.id);
     toast.promise(action, {
-      loading: 'Deleting Github App...',
-      success: 'Github App deleted successfully!',
-      error: 'Github App deletion failed',
+      loading: 'Видалення Github App...',
+      success: 'Github App видалено успішно!',
+      error: 'Github App не вдалося видалити.',
     });
     await action;
     setIsDeleted(true);
@@ -50,8 +50,8 @@ export function GithubApp(
         <div>
           <h1 className='text-base font-bold'>{props.info.name}</h1>
           <span className='text-sm text-gray-500'>
-            Enabled by {props.createdBy}{' '}
-            {props.date.toLocaleDateString('en-US', {
+            Увімкнено завдяки {props.createdBy}{' '}
+            {props.date.toLocaleDateString('uk-UA', {
               year: 'numeric',
               month: 'short',
               day: '2-digit',
@@ -61,17 +61,15 @@ export function GithubApp(
       </div>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant='outline'>Actions</Button>
+          <Button variant='outline'>Дії</Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuItem asChild>
             <Link href={configureLink} target='_blank'>
-              Configure
+              Налаштувати
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={removeHandler}>
-            Disconnect
-          </DropdownMenuItem>
+          <DropdownMenuItem onClick={removeHandler}>Видалити</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

@@ -61,9 +61,9 @@ export default function CreateWikiModal({
   async function onSubmit(data: GithubWikiFile) {
     const action = createGithubWikiFile(data);
     toast.promise(action, {
-      loading: 'Creating wiki page...',
-      success: 'Wiki page created!',
-      error: 'Failed to create wiki page',
+      loading: 'Створення вікі сторінки...',
+      success: 'Сторінку вікі створено!',
+      error: 'Не вдалося створити сторінку вікі',
     });
     await action;
 
@@ -97,7 +97,7 @@ export default function CreateWikiModal({
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder='Wiki path' {...field} />
+                    <Input placeholder='Wiki назва' {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

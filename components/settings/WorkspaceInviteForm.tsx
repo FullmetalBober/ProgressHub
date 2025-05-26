@@ -46,7 +46,7 @@ export default function WorkspaceInviteForm({
       WorkspaceInviteUncheckedCreateInputSchema.refine(
         data => !membersEmails.includes(data.email),
         {
-          message: 'User is already a member or has been invited',
+          message: 'Користувач вже є учасником або його запросили',
           path: ['email'],
         }
       )
@@ -61,9 +61,9 @@ export default function WorkspaceInviteForm({
   async function submitHandler(data: WorkspaceInvite) {
     const action = inviteUserToWorkspace(data);
     toast.promise(action, {
-      loading: 'Inviting user...',
-      success: 'User invited',
-      error: 'Failed to invite user',
+      loading: 'Запрошення користувача...',
+      success: 'Користувача запрошено!',
+      error: 'Не вдалося запросити користувача',
     });
     await action;
 

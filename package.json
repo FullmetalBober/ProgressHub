@@ -120,7 +120,7 @@
     "ws": "^8.18.0",
     "yjs": "^13.6.21",
     "zod": "^3.24.1",
-    "zod-prisma-types": "^3.2.1"
+    "zod-prisma-types": "^3.2.4"
   },
   "devDependencies": {
     "@eslint/eslintrc": "3",

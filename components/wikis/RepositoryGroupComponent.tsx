@@ -31,7 +31,7 @@ export default function RepositoryGroupComponent({
               <span className='text-xl font-medium'>{name}</span>
               <span className='text-sm text-muted-foreground'>
                 ({repositories.length}{' '}
-                {repositories.length === 1 ? 'repository' : 'repositories'})
+                {repositories.length === 1 ? 'репозиторій' : 'репозиторіїв'})
               </span>
             </div>
           </div>
