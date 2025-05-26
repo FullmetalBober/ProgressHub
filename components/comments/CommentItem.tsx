@@ -4,6 +4,7 @@ import { deleteComment } from '@/lib/actions/comments.action';
 import { cn } from '@/lib/utils';
 import { Comment, User } from '@/prisma/zod';
 import { formatDistanceToNow } from 'date-fns';
+import { uk } from 'date-fns/locale';
 import { EllipsisVertical, Reply } from 'lucide-react';
 import type { User as SessionUser } from 'next-auth';
 import { useState } from 'react';
@@ -29,7 +30,6 @@ import {
 } from '../ui/dropdown-menu';
 import CommentCreateForm from './CommentCreateForm';
 import CommentEditForm from './CommentEditForm';
-import { uk } from 'date-fns/locale';
 
 export default function CommentItem({
   comment,
