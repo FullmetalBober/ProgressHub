@@ -3,6 +3,9 @@ import path from 'path';
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
+  compiler: {
+    removeConsole: false,
+  },
   images: {
     remotePatterns: [
       {
