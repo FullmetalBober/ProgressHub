@@ -17,6 +17,20 @@ export const sendEmail = async (
   subject: string,
   react: JSX.Element
 ) => {
+  console.log({
+    host: env.SMTP_HOST,
+    port: env.SMTP_PORT,
+    auth: {
+      user: env.SMTP_USER,
+      pass: env.SMTP_PASSWORD,
+    },
+  });
+  console.log({
+    from: `ProgressHub <${env.SMTP_USER}>`,
+    to,
+    subject,
+  });
+  console.log(await render(react));
   const mail = {
     from: `ProgressHub <${env.SMTP_USER}>`,
     to,
