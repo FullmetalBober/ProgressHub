@@ -47,14 +47,14 @@ const columns = (isEditEnabled: boolean): ColumnDef<tableRow>[] => [
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogTitle>Ви абсолютно впевнені?</AlertDialogTitle>
               <AlertDialogDescription>
-                This action will cancel the invite of user{' '}
+                Ця дія скасує запрошення користувача{' '}
                 <span className='font-bold'>{row.original.email}</span>.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogCancel>Скасувати</AlertDialogCancel>
               <AlertDialogAction
                 onClick={async () => {
                   const { id } = row.original;
@@ -62,7 +62,7 @@ const columns = (isEditEnabled: boolean): ColumnDef<tableRow>[] => [
                   await cancelWorkspaceInvite(id);
                 }}
               >
-                Continue
+                Продовжити
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
