@@ -25,7 +25,14 @@ export async function inviteUserToWorkspace(body: unknown) {
       workspace: true,
     },
   });
-
+  console.log(response.email, 'Hello, you have been invited to a workspace!');
+  console.log(
+    (response.email,
+    'Hello, you have been invited to a workspace!',
+    InviteWorkspaceEmail({
+      workspaceName: response.workspace.name,
+    }))
+  );
   await Promise.all([
     notifyUsers(response.workspaceId, 'workspaceInvite', 'create', response),
     sendEmail(
