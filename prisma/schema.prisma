@@ -21,7 +21,7 @@ model User {
   id                    String                  @id @default(cuid())
   /// @zod.string.trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б 1 символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" })
   name                  String
-  /// @zod.string.trim().min(1, { message: "Надто коротко! Поле мусить мати хоча б 1 символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" })
+  /// @zod.string.trim().email({ message: 'Ви впевнені, що email вірний?' }).min(1, { message: "Надто коротко! Поле мусить мати хоча б 1 символ" }).max(255, { message: "Надто багато! Поле мусить мати не більше 255 символів" })
   email                 String                  @unique
   emailVerified         DateTime?
   image                 String?
