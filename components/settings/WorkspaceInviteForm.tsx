@@ -80,14 +80,14 @@ export default function WorkspaceInviteForm({
           render={({ field }) => (
             <FormItem className='flex-1'>
               <FormControl>
-                <Input placeholder='Enter email' {...field} />
+                <Input placeholder='Ввести email' {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
         <Button type='submit' className='basis-1/4' disabled={isFormDisabled}>
-          Invite
+          Запросити
         </Button>
       </form>
     </Form>
