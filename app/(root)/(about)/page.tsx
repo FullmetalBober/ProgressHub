@@ -11,8 +11,10 @@ export default async function Home() {
               alt='ProgressHub'
               className='aspect-[2/1] overflow-hidden rounded-lg object-cover'
               height='250'
-              src='/placeholder.svg'
+              src='/images/trusted_by.webp'
               width='500'
+              priority
+              loading='eager'
             />
           </div>
           <div className='flex flex-col items-center justify-center space-y-4'>
@@ -67,30 +69,6 @@ export default async function Home() {
           <div className='flex flex-col justify-center space-y-4'>
             <div className='space-y-2'>
               <h2 className='text-3xl font-bold tracking-tighter sm:text-4xl'>
-                Довіряють команди будь-якого розміру
-              </h2>
-              <p className='md:leading-paragraph/loose max-w-[600px] text-gray-500 dark:text-gray-400'>
-                Приєднуйтесь до тисяч команд, які довіряють ProgressHub для
-                відстеження проблем та управління проєктами.
-              </p>
-            </div>
-          </div>
-          <div className='flex items-center justify-center'>
-            <Image
-              alt='Users'
-              className='aspect-[2/1] overflow-hidden rounded-lg object-cover'
-              height='300'
-              src='/placeholder.svg'
-              width='600'
-            />
-          </div>
-        </div>
-      </section>
-      <section className='w-full py-12 lg:py-24 xl:py-32'>
-        <div className='container grid gap-10 px-4 md:grid-cols-2 md:gap-10 md:px-6'>
-          <div className='flex flex-col justify-center space-y-4'>
-            <div className='space-y-2'>
-              <h2 className='text-3xl font-bold tracking-tighter sm:text-4xl'>
                 Простий. Інтуїтивний. Потужний.
               </h2>
               <p className='md:leading-paragraph/loose max-w-[600px] text-gray-500 dark:text-gray-400'>
@@ -105,10 +83,34 @@ export default async function Home() {
           </div>
           <div className='flex items-center justify-center'>
             <Image
+              alt='Users'
+              className='aspect-[2/1] overflow-hidden rounded-lg object-cover'
+              height='300'
+              src='/images/issue.webp'
+              width='600'
+            />
+          </div>
+        </div>
+      </section>
+      <section className='w-full py-12 lg:py-24 xl:py-32'>
+        <div className='container grid gap-10 px-4 md:grid-cols-2 md:gap-10 md:px-6'>
+          <div className='flex flex-col justify-center space-y-4'>
+            <div className='space-y-2'>
+              <h2 className='text-3xl font-bold tracking-tighter sm:text-4xl'>
+                Довіряють команди будь-якого розміру
+              </h2>
+              <p className='md:leading-paragraph/loose max-w-[600px] text-gray-500 dark:text-gray-400'>
+                Приєднуйтесь до тисяч команд, які довіряють ProgressHub для
+                відстеження проблем та управління проєктами.
+              </p>
+            </div>
+          </div>
+          <div className='flex items-center justify-center'>
+            <Image
               alt='Laptop'
               className='aspect-[16/9] overflow-hidden rounded-lg object-cover'
               height='300'
-              src='/placeholder.svg'
+              src='/images/team.webp'
               width='600'
             />
           </div>
