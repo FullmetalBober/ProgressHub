@@ -70,7 +70,7 @@ export default function CommentItem({
               })}
             </span>
             {comment.isEdited && (
-              <span className='text-xs text-muted-foreground'>(edited)</span>
+              <span className='text-xs text-muted-foreground'>(Змінено)</span>
             )}
           </div>
           <div
