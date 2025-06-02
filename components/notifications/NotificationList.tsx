@@ -42,14 +42,14 @@ export default function NotificationList({
   return (
     <div className='flex flex-col gap-4'>
       <div className='flex justify-between items-center'>
-        <h1 className='text-2xl font-bold'>Notifications</h1>
+        <h1 className='text-2xl font-bold'>Сповіщення</h1>
         <Button
           variant='outline'
           size='sm'
           onClick={handleMarkAllAsRead}
           disabled={markAllAsReadButtonDisabled}
         >
-          Mark all as read
+          Відмітити все як прочитане
         </Button>
       </div>
       <div className='flex flex-col gap-2'>
