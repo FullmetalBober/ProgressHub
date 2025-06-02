@@ -19,6 +19,12 @@ export async function checkGithubWikiExists(
   repoFullName: string,
   token: string
 ) {
+  const dirExists = await fs
+    .access(basePath)
+    .then(() => true)
+    .catch(() => false);
+  if (!dirExists) await fs.mkdir(basePath, { recursive: true });
+
   const gitClone = simpleGit(basePath, gitBaseConfig);
   await gitClone.raw(
     'ls-remote',

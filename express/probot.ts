@@ -51,7 +51,7 @@ async function moveIssueTo(
 
     prisma.comment.create({
       data: {
-        body: `${message}, issue moved to '${
+        body: `${message}, завдання переміщено у '${
           statusesIssue.find(s => s.value === status)?.label
         }'`,
         issueId: issue.id,
@@ -85,7 +85,7 @@ function handle(app: Probot) {
       moveIssueTo(
         installation.id,
         branchName,
-        `Branch ${branchName} created`,
+        `Вітку ${branchName} створено`,
         'IN_PROGRESS'
       );
     }
@@ -98,7 +98,7 @@ function handle(app: Probot) {
     moveIssueTo(
       installation.id,
       branchName,
-      `Pull request for ${branchName} opened`,
+      `Pull request для ${branchName} відкрито`,
       'IN_REVIEW'
     );
   });
@@ -111,14 +111,14 @@ function handle(app: Probot) {
       moveIssueTo(
         installation.id,
         branchName,
-        `Pull request for ${branchName} merged`,
+        `Pull request для ${branchName} змерджено`,
         'DONE'
       );
     } else {
       moveIssueTo(
         installation.id,
         branchName,
-        `Pull request for ${branchName} closed without merging`,
+        `Pull request для ${branchName} закрито без мерджу`,
         'IN_PROGRESS'
       );
     }
