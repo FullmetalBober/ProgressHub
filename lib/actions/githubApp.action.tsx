@@ -8,7 +8,7 @@ import { ProbotOctokit } from 'probot';
 import prisma from '../db';
 import { env } from '../env.mjs';
 import { protectAction } from '../protection';
-import { notifyUsers, zodValidate } from './utils';
+import { notifyUsers, revalidateCache, zodValidate } from './utils';
 
 const octokit = new ProbotOctokit({
   auth: {
@@ -59,6 +59,7 @@ export async function removeGithubAppInstallation(id: number) {
     },
   });
 
+  revalidateCache();
   return githubAppInstallation;
 }
 
@@ -121,6 +122,7 @@ export async function createGithubWikiFile(body: unknown) {
     githubWikiFile
   );
 
+  revalidateCache();
   return githubWikiFile;
 }
 
@@ -155,6 +157,7 @@ export async function updateGithubWikiFile(id: string, body: unknown) {
     ),
   ]);
 
+  revalidateCache();
   return updatedGithubWikiFile;
 }
 
@@ -211,6 +214,7 @@ export async function updateGithubWikiRemoteFile(
     ),
   ]);
 
+  revalidateCache();
   return githubWikiFile;
 }
 
@@ -256,5 +260,6 @@ export async function deleteGithubWikiRemoteFile(id: string) {
     ),
   ]);
 
+  revalidateCache();
   return githubWikiFile;
 }

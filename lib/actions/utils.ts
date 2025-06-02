@@ -1,12 +1,26 @@
+import { revalidatePath } from 'next/cache';
 import { ZodType } from 'zod';
-import { auth } from '../auth/utils';
 import { env } from '../env.mjs';
 
-export async function setUserForm(formData: FormData, field: string) {
-  const session = await auth();
-  if (!session?.user?.id) return;
-
-  formData.append(field, session.user.id);
+const pageEndpoints = [
+  '/(workspace)/join',
+  '/workspace/[workspaceId]/settings/general',
+  '/workspace/[workspaceId]/settings/members',
+  '/workspace/[workspaceId]/settings/profile',
+  '/workspace/[workspaceId]/(mainWorkspacePages)/issues',
+  '/workspace/[workspaceId]/(mainWorkspacePages)/issues/[issueId]',
+  '/workspace/[workspaceId]/(mainWorkspacePages)/notifications',
+  '/workspace/[workspaceId]/(mainWorkspacePages)/wikis',
+  '/workspace/[workspaceId]/(mainWorkspacePages)/wikis/[installationId]/[repositoryId]',
+];
+const layoutEndpoints = ['/workspace/[workspaceId]'];
+export function revalidateCache() {
+  pageEndpoints.forEach(endpoint => {
+    revalidatePath(endpoint, 'page');
+  });
+  layoutEndpoints.forEach(endpoint => {
+    revalidatePath(endpoint, 'layout');
+  });
 }
 
 export function notifyUsers(

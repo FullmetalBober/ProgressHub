@@ -3,7 +3,7 @@
 import prisma from '@/lib/db/index';
 import { WorkspaceMemberUncheckedUpdateInputSchema } from '@/prisma/zod';
 import { protectAction } from '../protection';
-import { notifyUsers, zodValidate } from './utils';
+import { notifyUsers, revalidateCache, zodValidate } from './utils';
 
 export async function updateWorkspaceMember(id: string, body: unknown) {
   const data = zodValidate(WorkspaceMemberUncheckedUpdateInputSchema, body);
@@ -25,6 +25,7 @@ export async function updateWorkspaceMember(id: string, body: unknown) {
     data,
   });
 
+  revalidateCache();
   return response;
 }
 
@@ -55,6 +56,7 @@ export async function deleteWorkspaceMember(id: string) {
     response
   );
 
+  revalidateCache();
   return response;
 }
 
@@ -77,5 +79,6 @@ export async function leaveWorkspace(workspaceId: string) {
 
   await notifyUsers(workspaceId, 'workspaceMember', 'delete', response);
 
+  revalidateCache();
   return response;
 }

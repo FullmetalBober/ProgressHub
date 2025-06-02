@@ -12,7 +12,7 @@ import {
   createSystemComment,
 } from './comments.action';
 import { upsertNotification } from './notifications.action';
-import { notifyUsers, zodValidate } from './utils';
+import { notifyUsers, revalidateCache, zodValidate } from './utils';
 
 export async function createIssue(body: unknown) {
   const data = zodValidate(IssueUncheckedCreateInputSchema, body);
@@ -67,6 +67,7 @@ export async function createIssue(body: unknown) {
 
   await notifyUsers(response.workspaceId, 'issue', 'create', response);
 
+  revalidateCache();
   return response;
 }
 
@@ -154,5 +155,6 @@ export async function updateIssue(id: string, body: unknown) {
 
   await notifyUsers(response.workspaceId, 'issue', 'update', notifyData, id);
 
+  revalidateCache()
   return response;
 }

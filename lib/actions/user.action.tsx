@@ -4,7 +4,7 @@ import { UserUpdateInputSchema } from '@/prisma/zod';
 import prisma from '../db';
 import { protectAction } from '../protection';
 import { deleteImage, uploadImage } from '../store';
-import { zodValidate } from './utils';
+import { revalidateCache, zodValidate } from './utils';
 
 export async function updateUser(id: string, body: unknown) {
   const data = zodValidate(UserUpdateInputSchema, body);
@@ -19,6 +19,7 @@ export async function updateUser(id: string, body: unknown) {
     data,
   });
 
+  revalidateCache();
   return response;
 }
 export async function updateUserImage(id: string, imageFormData: FormData) {
@@ -54,5 +55,6 @@ export async function updateUserImage(id: string, imageFormData: FormData) {
     deleteImage(user.image),
   ]);
 
+  revalidateCache();
   return response;
 }

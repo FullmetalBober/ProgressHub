@@ -8,7 +8,7 @@ import {
 import { revalidatePath } from 'next/cache';
 import { protectAction } from '../protection';
 import { deleteImage, uploadImage } from '../store';
-import { notifyUsers, zodValidate } from './utils';
+import { notifyUsers, revalidateCache, zodValidate } from './utils';
 
 export async function createWorkspace(body: unknown) {
   const data = zodValidate(WorkspaceCreateInputSchema, body);
@@ -28,6 +28,7 @@ export async function createWorkspace(body: unknown) {
 
   await notifyUsers(response.id, 'workspace', 'create', response);
 
+  revalidateCache();
   return response;
 }
 
@@ -50,6 +51,7 @@ export async function updateWorkspace(id: string, body: unknown) {
 
   await notifyUsers(response.id, 'workspace', 'update', data, response.id);
 
+  revalidateCache();
   return response;
 }
 
@@ -70,6 +72,7 @@ export async function deleteWorkspace(id: string) {
 
   await notifyUsers(response.id, 'workspace', 'delete', response);
 
+  revalidateCache();
   return response;
 }
 
@@ -112,5 +115,6 @@ export async function updateWorkspaceImage(
     deleteImage(workspace.image),
   ]);
 
+  revalidateCache();
   return response;
 }

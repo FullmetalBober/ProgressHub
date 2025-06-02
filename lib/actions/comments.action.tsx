@@ -6,7 +6,7 @@ import {
 } from '@/prisma/zod';
 import prisma from '../db';
 import { protectAction } from '../protection';
-import { notifyUsers, zodValidate } from './utils';
+import { notifyUsers, revalidateCache, zodValidate } from './utils';
 
 export async function createComment(body: unknown) {
   const data = zodValidate(CommentUncheckedCreateInputSchema, body);
@@ -33,6 +33,7 @@ export async function createComment(body: unknown) {
 
   await notifyUsers(response.issueId, 'comment', 'create', response);
 
+  revalidateCache();
   return response;
 }
 
@@ -53,6 +54,7 @@ export async function updateComment(id: string, body: unknown) {
 
   await notifyUsers(response.issueId, 'comment', 'update', data, id);
 
+  revalidateCache();
   return response;
 }
 
@@ -68,6 +70,7 @@ export async function deleteComment(id: string) {
 
   await notifyUsers(response.issueId, 'comment', 'delete', response);
 
+  revalidateCache();
   return response;
 }
 
@@ -129,6 +132,7 @@ export async function createSystemComment(
   });
   await notifyUsers(issueId, 'comment', 'create', response);
 
+  revalidateCache();
   return response;
 }
 
@@ -158,5 +162,6 @@ export async function updateSystemComment(id: string, body: string) {
     updatedAt: response.updatedAt,
   });
 
+  revalidateCache();
   return response;
 }

@@ -5,7 +5,7 @@ import prisma from '@/lib/db/index';
 import { WorkspaceInviteUncheckedCreateInputSchema } from '@/prisma/zod';
 import { sendEmail } from '../email';
 import { protectAction } from '../protection';
-import { notifyUsers, zodValidate } from './utils';
+import { notifyUsers, revalidateCache, zodValidate } from './utils';
 
 export async function inviteUserToWorkspace(body: unknown) {
   const data = zodValidate(WorkspaceInviteUncheckedCreateInputSchema, body);
@@ -37,6 +37,7 @@ export async function inviteUserToWorkspace(body: unknown) {
     ),
   ]);
 
+  revalidateCache();
   return response;
 }
 
@@ -61,6 +62,7 @@ export async function cancelWorkspaceInvite(id: string) {
     response
   );
 
+  revalidateCache();
   return response;
 }
 
@@ -90,5 +92,6 @@ export async function acceptWorkspaceInvite(id: string) {
     }),
   ]);
 
+  revalidateCache();
   return workspaceMember;
 }

@@ -3,7 +3,7 @@
 import { Prisma } from '@prisma/client';
 import prisma from '../db';
 import { protectAction } from '../protection';
-import { notifyUsers } from './utils';
+import { notifyUsers, revalidateCache } from './utils';
 
 // Should be used only in the server
 
@@ -47,6 +47,7 @@ export async function createNotification(
     response
   );
 
+  revalidateCache();
   return response;
 }
 
@@ -73,6 +74,7 @@ export async function updateNotification(
     }
   );
 
+  revalidateCache();
   return response;
 }
 
@@ -93,6 +95,7 @@ export async function deleteNotification(id: string) {
     }
   );
 
+  revalidateCache();
   return response;
 }
 
@@ -182,6 +185,7 @@ export async function markAllNotificationsAsRead() {
     )
   );
 
+  revalidateCache();
   return notifications;
 }
 
@@ -222,5 +226,6 @@ export async function markAllNotificationsAsReadByIssue(issueId: string) {
     )
   );
 
+  revalidateCache();
   return notifications;
 }
