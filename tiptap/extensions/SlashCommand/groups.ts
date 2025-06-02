@@ -3,11 +3,11 @@ import { Group } from './types';
 export const GROUPS: Group[] = [
   {
     name: 'format',
-    title: 'Format',
+    title: 'Формат',
     commands: [
       {
         name: 'heading1',
-        label: 'Heading 1',
+        label: 'Заголовок 1',
         iconName: 'Heading1',
         description: 'High priority section title',
         aliases: ['h1'],
@@ -17,7 +17,7 @@ export const GROUPS: Group[] = [
       },
       {
         name: 'heading2',
-        label: 'Heading 2',
+        label: 'Заголовок 2',
         iconName: 'Heading2',
         description: 'Medium priority section title',
         aliases: ['h2'],
@@ -27,7 +27,7 @@ export const GROUPS: Group[] = [
       },
       {
         name: 'heading3',
-        label: 'Heading 3',
+        label: 'Заголовок 3',
         iconName: 'Heading3',
         description: 'Low priority section title',
         aliases: ['h3'],
@@ -37,7 +37,7 @@ export const GROUPS: Group[] = [
       },
       {
         name: 'bulletList',
-        label: 'Bullet List',
+        label: 'Маркований список',
         iconName: 'List',
         description: 'Unordered list of items',
         aliases: ['ul'],
@@ -47,7 +47,7 @@ export const GROUPS: Group[] = [
       },
       {
         name: 'numberedList',
-        label: 'Numbered List',
+        label: 'Нумерований список',
         iconName: 'ListOrdered',
         description: 'Ordered list of items',
         aliases: ['ol'],
@@ -57,7 +57,7 @@ export const GROUPS: Group[] = [
       },
       {
         name: 'taskList',
-        label: 'Task List',
+        label: 'Список завдань',
         iconName: 'ListTodo',
         description: 'Task list with todo items',
         aliases: ['todo'],
@@ -67,7 +67,7 @@ export const GROUPS: Group[] = [
       },
       {
         name: 'blockquote',
-        label: 'Blockquote',
+        label: 'Блокова цитата',
         iconName: 'Quote',
         description: 'Element for quoting',
         action: editor => {
@@ -76,7 +76,7 @@ export const GROUPS: Group[] = [
       },
       {
         name: 'codeBlock',
-        label: 'Code Block',
+        label: 'Блок коду',
         iconName: 'Code',
         description: 'Code block with syntax highlighting',
         shouldBeHidden: editor => editor.isActive('columns'),
@@ -88,11 +88,11 @@ export const GROUPS: Group[] = [
   },
   {
     name: 'insert',
-    title: 'Insert',
+    title: 'Вставка',
     commands: [
       {
         name: 'table',
-        label: 'Table',
+        label: 'Таблиця',
         iconName: 'Table',
         description: 'Insert a table',
         shouldBeHidden: editor => editor.isActive('columns'),
@@ -106,7 +106,7 @@ export const GROUPS: Group[] = [
       },
       {
         name: 'columns',
-        label: 'Columns',
+        label: 'Колонки',
         iconName: 'Columns2',
         description: 'Add two column content',
         aliases: ['cols'],
@@ -122,7 +122,7 @@ export const GROUPS: Group[] = [
       },
       {
         name: 'horizontalRule',
-        label: 'Horizontal Rule',
+        label: 'Розділювач',
         iconName: 'Minus',
         description: 'Insert a horizontal divider',
         aliases: ['hr'],

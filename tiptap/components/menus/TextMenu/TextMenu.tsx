@@ -38,7 +38,7 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
         <MemoContentTypePicker options={blockOptions} />
         <Toolbar.Divider />
         <MemoButton
-          tooltip='Bold'
+          tooltip='Жирний'
           tooltipShortcut={['Mod', 'B']}
           onClick={commands.onBold}
           active={states.isBold}
@@ -46,7 +46,7 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
           <Icon name='Bold' />
         </MemoButton>
         <MemoButton
-          tooltip='Italic'
+          tooltip='Курсив'
           tooltipShortcut={['Mod', 'I']}
           onClick={commands.onItalic}
           active={states.isItalic}
@@ -54,7 +54,7 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
           <Icon name='Italic' />
         </MemoButton>
         <MemoButton
-          tooltip='Underline'
+          tooltip='Підкреслений'
           tooltipShortcut={['Mod', 'U']}
           onClick={commands.onUnderline}
           active={states.isUnderline}
@@ -62,7 +62,7 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
           <Icon name='Underline' />
         </MemoButton>
         <MemoButton
-          tooltip='Strikehrough'
+          tooltip='Закреслений'
           tooltipShortcut={['Mod', 'Shift', 'S']}
           onClick={commands.onStrike}
           active={states.isStrike}
@@ -70,14 +70,14 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
           <Icon name='Strikethrough' />
         </MemoButton>
         <MemoButton
-          tooltip='Code'
+          tooltip='Код'
           tooltipShortcut={['Mod', 'E']}
           onClick={commands.onCode}
           active={states.isCode}
         >
           <Icon name='Code' />
         </MemoButton>
-        <MemoButton tooltip='Code block' onClick={commands.onCodeBlock}>
+        <MemoButton tooltip='Блок коду' onClick={commands.onCodeBlock}>
           <Icon name='Code' />
         </MemoButton>
         <EditLinkPopover onSetLink={commands.onLink} />
@@ -85,7 +85,7 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
           <Popover.Trigger asChild>
             <MemoButton
               active={!!states.currentHighlight}
-              tooltip='Highlight text'
+              tooltip='Виділити текст'
             >
               <Icon name='Highlighter' />
             </MemoButton>
@@ -102,7 +102,7 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
         </Popover.Root>
         <Popover.Root>
           <Popover.Trigger asChild>
-            <MemoButton active={!!states.currentColor} tooltip='Text color'>
+            <MemoButton active={!!states.currentColor} tooltip='Колір тексту'>
               <Icon name='Palette' />
             </MemoButton>
           </Popover.Trigger>
@@ -118,14 +118,14 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
         </Popover.Root>
         <Popover.Root>
           <Popover.Trigger asChild>
-            <MemoButton tooltip='More options'>
+            <MemoButton tooltip='Додаткові опції'>
               <Icon name='MoveVertical' />
             </MemoButton>
           </Popover.Trigger>
           <Popover.Content side='top' asChild>
             <Toolbar.Wrapper>
               <MemoButton
-                tooltip='Subscript'
+                tooltip='Нижній індекс'
                 tooltipShortcut={['Mod', '.']}
                 onClick={commands.onSubscript}
                 active={states.isSubscript}
@@ -133,7 +133,7 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
                 <Icon name='Subscript' />
               </MemoButton>
               <MemoButton
-                tooltip='Superscript'
+                tooltip='Верхній індекс'
                 tooltipShortcut={['Mod', ',']}
                 onClick={commands.onSuperscript}
                 active={states.isSuperscript}
@@ -142,7 +142,7 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
               </MemoButton>
               <Toolbar.Divider />
               <MemoButton
-                tooltip='Align left'
+                tooltip='Вирівняти ліворуч'
                 tooltipShortcut={['Shift', 'Mod', 'L']}
                 onClick={commands.onAlignLeft}
                 active={states.isAlignLeft}
@@ -150,7 +150,7 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
                 <Icon name='AlignLeft' />
               </MemoButton>
               <MemoButton
-                tooltip='Align center'
+                tooltip='Вирівняти по центру'
                 tooltipShortcut={['Shift', 'Mod', 'E']}
                 onClick={commands.onAlignCenter}
                 active={states.isAlignCenter}
@@ -158,7 +158,7 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
                 <Icon name='AlignCenter' />
               </MemoButton>
               <MemoButton
-                tooltip='Align right'
+                tooltip='Вирівняти праворуч'
                 tooltipShortcut={['Shift', 'Mod', 'R']}
                 onClick={commands.onAlignRight}
                 active={states.isAlignRight}
@@ -166,7 +166,7 @@ export const TextMenu = ({ editor }: TextMenuProps) => {
                 <Icon name='AlignRight' />
               </MemoButton>
               <MemoButton
-                tooltip='Justify'
+                tooltip='Вирівняти по ширині'
                 tooltipShortcut={['Shift', 'Mod', 'J']}
                 onClick={commands.onAlignJustify}
                 active={states.isAlignJustify}

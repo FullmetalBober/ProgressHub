@@ -53,19 +53,19 @@ export const TableRowMenu = React.memo(
           <PopoverMenu.Item
             iconComponent={<Icon name='ArrowUpToLine' />}
             close={false}
-            label='Add row before'
+            label='Додати рядок перед'
             onClick={onAddRowBefore}
           />
           <PopoverMenu.Item
             iconComponent={<Icon name='ArrowDownToLine' />}
             close={false}
-            label='Add row after'
+            label='Додати рядок після'
             onClick={onAddRowAfter}
           />
           <PopoverMenu.Item
             icon='Trash'
             close={false}
-            label='Delete row'
+            label='Видалити рядок'
             onClick={onDeleteRow}
           />
         </Toolbar.Wrapper>
