@@ -226,6 +226,5 @@ export async function markAllNotificationsAsReadByIssue(issueId: string) {
     )
   );
 
-  revalidateCache();
   return notifications;
 }
