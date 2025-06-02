@@ -3,11 +3,42 @@ import { Editor } from '@tiptap/react';
 import { useCallback } from 'react';
 import { ShouldShowProps } from '../../types';
 
+const isTableGripSelected = (view: any, from: number): boolean => {
+  const domAtPos = view.domAtPos(from).node as HTMLElement;
+  const nodeDOM = view.nodeDOM(from) as HTMLElement;
+  const node = nodeDOM || domAtPos;
+
+  if (!node) {
+    return false;
+  }
+
+  let container = node;
+
+  while (container && !['TD', 'TH'].includes(container.tagName)) {
+    container = container.parentElement!;
+  }
+
+  if (container) {
+    const gripColumn = container.querySelector?.('a.grip-column.selected');
+    const gripRow = container.querySelector?.('a.grip-row.selected');
+
+    return !!(gripColumn || gripRow);
+  }
+
+  return false;
+};
+
 export const useTextmenuStates = (editor: Editor) => {
   const shouldShow = useCallback(
-    ({ view }: ShouldShowProps) => {
-      if (!view) {
+    ({ view, state, from }: ShouldShowProps) => {
+      if (!view || !state) {
         return false;
+      }
+
+      if (editor.isActive('table') && from !== undefined) {
+        if (isTableGripSelected(view, from)) {
+          return false;
+        }
       }
 
       return isTextSelected({ editor });
