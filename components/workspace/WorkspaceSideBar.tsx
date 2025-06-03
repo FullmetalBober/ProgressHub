@@ -2,6 +2,7 @@ import { auth } from '@/lib/auth/utils';
 import prisma from '@/lib/db/index';
 import { BookOpen, FolderKanban, Inbox } from 'lucide-react';
 import Link from 'next/link';
+import AlertMessage from '../AlertMessage';
 import CustomAvatar from '../CustomAvatar';
 import SignOut from '../auth/SignOut';
 import CreateIssueModal from '../issues/CreateIssueModal';
@@ -25,7 +26,7 @@ export default async function WorkspaceSideBar({
 }>) {
   const session = await auth();
   if (!session?.user?.id || !session?.user?.email)
-    return <div>Ви не ввійшли в систему</div>;
+    return <AlertMessage title='Ви не автентифіковані' variant='destructive' />;
 
   const [user, workspaceInvitation] = await Promise.all([
     prisma.user.findUnique({
@@ -68,7 +69,8 @@ export default async function WorkspaceSideBar({
       },
     }),
   ]);
-  if (!user) return <div>Ви не ввійшли в систему</div>;
+  if (!user)
+    return <AlertMessage title='Ви не автентифіковані' variant='destructive' />;
 
   const currentWorkspace = user.workspaces.find(
     w => w.workspace.id === workspaceId
