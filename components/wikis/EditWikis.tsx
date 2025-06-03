@@ -2,12 +2,13 @@
 
 import { useWiki, WikiProvider } from '@/context/WikiContext';
 import { useSocketObserver } from '@/hooks/useSocketObserver';
+import { cn } from '@/lib/utils';
 import { SocketRoomEmitterProvider } from '@/providers/SocketRoomProvider';
 import TiptapEditor from '@/tiptap/TiptapEditor';
 import { GithubWikiFile } from '@prisma/client';
 import { User as SessionUser } from 'next-auth';
 import { useParams, useSearchParams } from 'next/navigation';
-import { SidebarInset, SidebarProvider } from '../ui/sidebar';
+import { SidebarInset, SidebarProvider, useSidebar } from '../ui/sidebar';
 import EditWikiTitle from './EditWikiTitle';
 import WikiSidebar from './WikiSidebar';
 
@@ -42,6 +43,7 @@ export default function EditWikis(props: TEditWikisProps) {
 
 function EditWikisComponent({ wikis, user, tiptapToken }: TEditWikisProps) {
   const { selectedWiki } = useWiki();
+  const { state, isMobile } = useSidebar();
 
   const roomDescription = `githubWikiFile.${selectedWiki?.id}`;
 
@@ -49,7 +51,15 @@ function EditWikisComponent({ wikis, user, tiptapToken }: TEditWikisProps) {
     <>
       <SidebarInset>
         {selectedWiki && (
-          <div key={selectedWiki.id}>
+          <div
+            key={selectedWiki.id}
+            className={cn(
+              'transition-all duration-300',
+              state === 'expanded' && !isMobile
+                ? `w-[calc(100%-16rem)]`
+                : 'w-full'
+            )}
+          >
             <EditWikiTitle
               wiki={selectedWiki}
               wikiPaths={wikis
