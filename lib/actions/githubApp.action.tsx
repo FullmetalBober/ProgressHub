@@ -83,7 +83,11 @@ export async function getGithubAppRepositories(installationId: number) {
     data: { repositories },
   } = await localOctokit.rest.apps.listReposAccessibleToInstallation();
 
-  return repositories.map(repo => ({
+  const filteredRepos = repositories.filter(
+    repo => !repo.archived && !repo.disabled && repo.has_wiki
+  );
+
+  return filteredRepos.map(repo => ({
     id: repo.id,
     name: repo.name,
     image: repo.owner.avatar_url,
