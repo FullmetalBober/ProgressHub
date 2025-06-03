@@ -8,7 +8,7 @@ import TiptapEditor from '@/tiptap/TiptapEditor';
 import { GithubWikiFile } from '@prisma/client';
 import { User as SessionUser } from 'next-auth';
 import { useParams, useSearchParams } from 'next/navigation';
-import { SidebarInset, SidebarProvider, useSidebar } from '../ui/sidebar';
+import { SidebarProvider, useSidebar } from '../ui/sidebar';
 import EditWikiTitle from './EditWikiTitle';
 import WikiSidebar from './WikiSidebar';
 
@@ -49,37 +49,35 @@ function EditWikisComponent({ wikis, user, tiptapToken }: TEditWikisProps) {
 
   return (
     <>
-      <SidebarInset>
-        {selectedWiki && (
-          <div
-            key={selectedWiki.id}
-            className={cn(
-              'transition-all duration-300',
-              state === 'expanded' && !isMobile
-                ? `w-[calc(100%-16rem)]`
-                : 'w-full'
-            )}
-          >
-            <EditWikiTitle
-              wiki={selectedWiki}
-              wikiPaths={wikis
-                .map(wiki => {
-                  const paths = [wiki.path];
-                  if (wiki.previousPath) paths.push(wiki.previousPath);
+      {selectedWiki && (
+        <div
+          key={selectedWiki.id}
+          className={cn(
+            'transition-all duration-300',
+            state === 'expanded' && !isMobile
+              ? `w-[calc(100%-16rem)]`
+              : 'w-full'
+          )}
+        >
+          <EditWikiTitle
+            wiki={selectedWiki}
+            wikiPaths={wikis
+              .map(wiki => {
+                const paths = [wiki.path];
+                if (wiki.previousPath) paths.push(wiki.previousPath);
 
-                  return paths;
-                })
-                .flat()
-                .filter(path => path !== selectedWiki.path)}
-            />
-            <TiptapEditor
-              room={roomDescription}
-              user={user}
-              collabToken={tiptapToken}
-            />
-          </div>
-        )}
-      </SidebarInset>
+                return paths;
+              })
+              .flat()
+              .filter(path => path !== selectedWiki.path)}
+          />
+          <TiptapEditor
+            room={roomDescription}
+            user={user}
+            collabToken={tiptapToken}
+          />
+        </div>
+      )}
       <WikiSidebar wikis={wikis} />
     </>
   );
