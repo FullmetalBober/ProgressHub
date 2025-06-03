@@ -1,3 +1,4 @@
+import AlertMessage from '@/components/AlertMessage';
 import EditWikis from '@/components/wikis/EditWikis';
 import { checkIfGithubWikiAvailable } from '@/lib/actions/githubApp.action';
 import { auth } from '@/lib/auth/utils';
@@ -36,13 +37,14 @@ export default async function WikiPage(
     ),
   ]);
 
-  if (!session?.user) return <div>Не автентифіковано</div>;
+  if (!session?.user)
+    return <AlertMessage title='Ви не автентифіковані' variant='destructive' />;
   if (!isRepositoryWikiAvailable) {
     return (
-      <div>
+      <AlertMessage title='Вікі недоступне' variant='destructive'>
         Вікі репозиторій недоступний, спробуйте створити першу сторінку Wiki
         вручну, аби активувати можливість редагування
-      </div>
+      </AlertMessage>
     );
   }
   return (

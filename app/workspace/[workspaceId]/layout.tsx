@@ -3,6 +3,7 @@ import prisma from '@/lib/db';
 import { SocketRoomEmitterProvider } from '@/providers/SocketRoomProvider';
 import { SocketWorkspaceEmitterProvider } from '@/providers/SocketWorkspaceProvider';
 import type { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 
 export const metadata: Metadata = {
   title: 'Home',
@@ -24,7 +25,7 @@ export default async function RootLayout(
 
   const userId = session?.user?.id;
 
-  if (!userId) return <main>You must be logged in to view this page</main>;
+  if (!userId) return redirect(`/`);
 
   const workspaceUsers = await prisma.workspaceMember.findFirst({
     where: {
@@ -36,8 +37,7 @@ export default async function RootLayout(
     },
   });
 
-  if (!workspaceUsers)
-    return <main>You are not a member of this workspace</main>;
+  if (!workspaceUsers) return redirect(`/`);
 
   return (
     <SocketWorkspaceEmitterProvider room={params.workspaceId}>
