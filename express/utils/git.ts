@@ -24,6 +24,10 @@ async function buildFilePath(repoId: number, fileName: string) {
   return filePath;
 }
 
+function buildGitUrl(repoFullName: string, token: string) {
+  return `https://x-access-token:${token}@github.com/${repoFullName}.wiki.git`;
+}
+
 export async function checkGithubWikiExists(
   repoFullName: string,
   token: string
@@ -35,10 +39,7 @@ export async function checkGithubWikiExists(
   if (!dirExists) await fs.mkdir(basePath, { recursive: true });
 
   const gitClone = simpleGit(basePath, gitBaseConfig);
-  await gitClone.raw(
-    'ls-remote',
-    `https://x-access-token:${token}@github.com/${repoFullName}.wiki.git`
-  );
+  await gitClone.raw('ls-remote', buildGitUrl(repoFullName, token));
 }
 
 export async function pullGithubWiki(
@@ -57,12 +58,12 @@ export async function pullGithubWiki(
     await fs.mkdir(path, { recursive: true });
 
     const gitClone = simpleGit(basePath, gitBaseConfig);
-    await gitClone.clone(
-      `https://x-access-token:${token}@github.com/${repoFullName}.wiki.git`,
-      path
-    );
+    await gitClone.clone(buildGitUrl(repoFullName, token), path);
   } else {
     const gitMain = simpleGit(path);
+    const gitUrl = buildGitUrl(repoFullName, token);
+    gitMain.remote(['set-url', 'origin', gitUrl]);
+
     await gitMain.pull();
   }
 }
@@ -86,9 +87,11 @@ export async function pushGithubWiki(
   await gitMain.commit(
     `update wiki via ProgressHub ${new Date().toISOString()}`
   );
-  await gitMain.push(
-    `https://x-access-token:${token}@github.com/${repoFullName}.wiki.git`
-  );
+
+  const gitUrl = buildGitUrl(repoFullName, token);
+  gitMain.remote(['set-url', 'origin', gitUrl]);
+
+  await gitMain.push();
 }
 
 export async function createGithubWikiFile(
