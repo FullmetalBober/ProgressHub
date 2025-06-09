@@ -24,6 +24,13 @@ export async function updateWorkspaceMember(id: string, body: unknown) {
     },
     data,
   });
+  await notifyUsers(
+    response.workspaceId,
+    'workspaceMember',
+    'update',
+    data,
+    id
+  );
 
   revalidateCache();
   return response;
