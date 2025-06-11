@@ -40,7 +40,4 @@ as
 asd
 asd
 sa
-da
-dsa
-dasdad
 asdasdsadsda
