@@ -200,7 +200,7 @@ export default function IssuesTable({
 }>) {
   const [filters, setFilters] = useState<TFilters>({
     global: '',
-    status: [],
+    status: ['TODO', 'IN_PROGRESS', 'IN_REVIEW'],
     priority: [],
     usersIds: [],
   });
